@@ -55,16 +55,24 @@ export function Dialog({
     return () => previouslyFocused?.focus();
   }, [open]);
 
+  useEffect(() => {
+    if (!open || !dismissible) {
+      return undefined;
+    }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [open, dismissible, onClose]);
+
   if (!open) {
     return null;
   }
 
   function handleKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
-    if (event.key === "Escape" && dismissible) {
-      event.stopPropagation();
-      onClose();
-      return;
-    }
     if (event.key !== "Tab") {
       return;
     }

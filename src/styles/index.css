@@ -140,6 +140,10 @@ button {
   user-select: text;
 }
 
+.font-mono {
+  font-variant-ligatures: none;
+}
+
 .tok-keyword,
 .tok-modifier,
 .tok-controlKeyword,
