@@ -189,7 +189,7 @@ pub fn parse_status(bytes: &[u8]) -> AppResult<StatusSnapshot> {
 
     snapshot
         .entries
-        .sort_by(|left, right| left.path.to_lowercase().cmp(&right.path.to_lowercase()));
+        .sort_by_cached_key(|entry| entry.path.to_lowercase());
     Ok(snapshot)
 }
 

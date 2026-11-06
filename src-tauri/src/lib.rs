@@ -1,10 +1,50 @@
+pub mod commands;
 pub mod error;
 pub mod git;
 pub mod jobs;
+pub mod state;
+pub mod watcher;
+
+use commands::{branch, commit, history, job, remote, repo, status, watch};
+use state::AppState;
 
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
+        .manage(AppState::default())
+        .invoke_handler(tauri::generate_handler![
+            repo::repo_open,
+            repo::repo_init,
+            repo::repo_clone,
+            status::status_get,
+            status::diff_file,
+            status::changes_stage,
+            status::changes_unstage,
+            status::changes_discard,
+            status::changes_stage_selection,
+            status::changes_unstage_selection,
+            commit::commit_head,
+            commit::commit_create,
+            commit::commit_undo,
+            branch::branch_list,
+            branch::branch_create,
+            branch::branch_switch,
+            branch::branch_rename,
+            branch::branch_delete,
+            branch::branch_publish,
+            remote::remote_list,
+            remote::remote_fetch,
+            remote::remote_pull,
+            remote::remote_push,
+            remote::merge_abort,
+            history::history_list,
+            history::history_detail,
+            history::history_files,
+            history::history_file_diff,
+            job::job_cancel,
+            watch::watch_start,
+            watch::watch_stop,
+        ])
         .run(tauri::generate_context!())
         .expect("failed to run application");
 }

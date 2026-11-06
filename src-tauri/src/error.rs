@@ -224,7 +224,10 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     if has("already exists and is not an empty directory") {
         return ErrorKind::DestinationNotEmpty;
     }
-    if has("does not have any commits yet") || has("bad default revision") {
+    if has("does not have any commits yet")
+        || has("bad default revision")
+        || has("bad revision 'head'")
+    {
         return ErrorKind::NoCommits;
     }
     if has("refusing to merge unrelated histories") {
@@ -293,6 +296,18 @@ mod tests {
         assert_eq!(
             classify_failure("*** Please tell me who you are.\nfatal: unable to auto-detect email address"),
             ErrorKind::IdentityMissing
+        );
+    }
+
+    #[test]
+    fn detects_repository_without_commits() {
+        assert_eq!(
+            classify_failure("fatal: bad revision 'HEAD'"),
+            ErrorKind::NoCommits
+        );
+        assert_eq!(
+            classify_failure("fatal: your current branch 'main' does not have any commits yet"),
+            ErrorKind::NoCommits
         );
     }
 
