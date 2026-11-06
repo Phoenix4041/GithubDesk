@@ -1,0 +1,426 @@
+{
+  "common": {
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "done": "Listo",
+    "clearSearch": "Limpiar búsqueda"
+  },
+  "confirm": {
+    "whatYouLose": "Qué se pierde"
+  },
+  "layout": {
+    "resizeSidebar": "Cambiar el ancho de la barra lateral",
+    "resizeChanges": "Cambiar el ancho del panel central"
+  },
+  "unavailable": {
+    "backToStart": "Volver al inicio",
+    "forget": "Quitar de recientes"
+  },
+  "sidebar": {
+    "label": "Repositorios y ramas"
+  },
+  "toolbar": {
+    "detached": "HEAD separado",
+    "unknownBranch": "Sin rama",
+    "currentBranch": "Rama actual"
+  },
+  "tabs": {
+    "label": "Vistas del repositorio",
+    "changes": "Cambios",
+    "history": "Historial"
+  },
+  "welcome": {
+    "title": "Bienvenido a GithubDesk",
+    "subtitle": "Abre un repositorio para empezar.",
+    "actions": "Acciones iniciales",
+    "openDescription": "Elige una carpeta que ya tenga un repositorio de Git.",
+    "createDescription": "Empieza un proyecto nuevo desde cero.",
+    "cloneDescription": "Descarga un repositorio desde su dirección.",
+    "recents": "Repositorios recientes"
+  },
+  "repositories": {
+    "title": "Repositorios",
+    "search": "Buscar repositorio",
+    "add": "Añadir repositorio",
+    "openExisting": "Abrir repositorio",
+    "createNew": "Crear repositorio",
+    "cloneFromUrl": "Clonar repositorio",
+    "openPickerTitle": "Elige la carpeta del repositorio",
+    "forget": "Quitar {{name}} de la lista",
+    "empty": {
+      "title": "Aún no hay repositorios",
+      "description": "Abre, crea o clona uno y aparecerá aquí."
+    },
+    "noResults": {
+      "title": "Sin resultados",
+      "description": "Ningún repositorio coincide con la búsqueda."
+    },
+    "clone": {
+      "title": "Clonar repositorio",
+      "description": "Descarga una copia del repositorio en tu equipo.",
+      "url": "Dirección del repositorio",
+      "location": "Carpeta de destino",
+      "locationPlaceholder": "Elige dónde guardarlo",
+      "chooseFolder": "Elegir carpeta",
+      "folderName": "Nombre de la carpeta",
+      "destination": "Se guardará en {{path}}",
+      "submit": "Clonar",
+      "progress": "Progreso de la clonación",
+      "connecting": "Conectando con el servidor..."
+    },
+    "create": {
+      "title": "Crear repositorio",
+      "description": "Crea una carpeta nueva con un repositorio de Git vacío.",
+      "name": "Nombre del proyecto",
+      "location": "Ubicación",
+      "locationPlaceholder": "Elige dónde crearlo",
+      "chooseFolder": "Elegir carpeta",
+      "destination": "Se creará en {{path}}",
+      "initialBranch": "Rama inicial",
+      "submit": "Crear"
+    }
+  },
+  "branches": {
+    "title": "Ramas",
+    "new": "Nueva rama",
+    "search": "Buscar rama",
+    "local": "Locales",
+    "remote": "Remotas",
+    "current": "Rama actual",
+    "upstreamGone": "Eliminada en el remoto",
+    "publish": "Publicar la rama {{name}}",
+    "rename": "Renombrar la rama {{name}}",
+    "delete": "Eliminar la rama {{name}}",
+    "created": "Rama {{name}} creada",
+    "renamed": "Rama renombrada de {{oldName}} a {{newName}}",
+    "deleted": "Rama {{name}} eliminada",
+    "empty": {
+      "title": "Aún no hay ramas",
+      "description": "Haz tu primer commit y la rama aparecerá aquí."
+    },
+    "noResults": {
+      "title": "Sin resultados",
+      "description": "Ninguna rama coincide con la búsqueda."
+    },
+    "createDialog": {
+      "title": "Nueva rama",
+      "description": "Crea una rama a partir de tu posición actual.",
+      "name": "Nombre de la rama",
+      "checkout": "Cambiar a la nueva rama",
+      "submit": "Crear rama"
+    },
+    "renameDialog": {
+      "title": "Renombrar {{name}}",
+      "description": "El nuevo nombre solo cambia en tu equipo hasta que publiques la rama.",
+      "name": "Nuevo nombre",
+      "submit": "Renombrar"
+    },
+    "deleteDialog": {
+      "title": "Eliminar la rama {{name}}",
+      "description": "La rama se quitará de tu equipo. Los commits siguen a salvo mientras estén en otra rama.",
+      "loss": "La rama dejará de existir en tu equipo. La copia del remoto, si existe, no se toca.",
+      "confirm": "Eliminar rama"
+    },
+    "forceDelete": {
+      "title": "Forzar la eliminación de {{name}}",
+      "description": "Git avisó de que esta rama tiene commits que no están en ninguna otra rama.",
+      "loss": "Los commits que solo existen en esta rama quedarán sin referencia y se perderán.",
+      "noUndo": "No podrás recuperarlos desde la aplicación.",
+      "confirm": "Eliminar de todos modos"
+    }
+  },
+  "changes": {
+    "listLabel": "Archivos modificados",
+    "sections": {
+      "conflicts": "Conflictos",
+      "staged": "Preparados",
+      "unstaged": "Sin preparar"
+    },
+    "kind": {
+      "unmodified": "Sin cambios",
+      "modified": "Modificado",
+      "added": "Añadido",
+      "deleted": "Eliminado",
+      "renamed": "Renombrado",
+      "copied": "Copiado",
+      "typeChanged": "Tipo cambiado",
+      "unmerged": "Con conflicto",
+      "untracked": "Nuevo"
+    },
+    "stageFile": "Preparar {{path}}",
+    "unstageFile": "Quitar {{path}} de los preparados",
+    "markResolved": "Marcar {{path}} como resuelto",
+    "discardFile": "Descartar los cambios de {{path}}",
+    "stageAll": "Preparar todo",
+    "unstageAll": "Quitar todo",
+    "discardAll": "Descartar todos los cambios",
+    "mergeAborted": "Merge cancelado",
+    "discard": {
+      "title_one": "Descartar los cambios de {{count}} archivo",
+      "title_other": "Descartar los cambios de {{count}} archivos",
+      "descriptionOne": "Los cambios sin preparar de {{path}} se descartarán.",
+      "descriptionMany": "Se descartarán los cambios sin preparar de {{count}} archivos.",
+      "lossTracked_one": "{{count}} archivo volverá a como estaba en su último estado preparado o guardado.",
+      "lossTracked_other": "{{count}} archivos volverán a como estaban en su último estado preparado o guardado.",
+      "lossUntracked_one": "{{count}} archivo nuevo se eliminará del disco.",
+      "lossUntracked_other": "{{count}} archivos nuevos se eliminarán del disco.",
+      "noUndo": "Esta acción no se puede deshacer.",
+      "confirm": "Descartar cambios"
+    },
+    "conflictBanner": {
+      "title_one": "{{count}} archivo con conflicto",
+      "title_other": "{{count}} archivos con conflictos",
+      "description": "Edita los archivos para resolver los conflictos y márcalos como resueltos. También puedes cancelar el merge.",
+      "abort": "Cancelar merge"
+    },
+    "abortMerge": {
+      "title": "Cancelar el merge",
+      "description": "Volverás al estado que tenías antes de empezar el merge.",
+      "loss": "Se descartará la resolución de conflictos que hayas hecho hasta ahora.",
+      "confirm": "Cancelar merge"
+    },
+    "empty": {
+      "title": "No hay cambios",
+      "description": "Tu carpeta de trabajo coincide con el último commit.",
+      "ahead_one": "Tienes {{count}} commit sin publicar. Usa Push para enviarlo.",
+      "ahead_other": "Tienes {{count}} commits sin publicar. Usa Push para enviarlos."
+    }
+  },
+  "commit": {
+    "label": "Crear commit",
+    "titleLabel": "Resumen del commit",
+    "titlePlaceholder": "Resumen (obligatorio)",
+    "titleTooLong": "El resumen tiene {{count}} caracteres; lo recomendado es {{limit}} o menos.",
+    "descriptionLabel": "Descripción del commit",
+    "descriptionPlaceholder": "Descripción (opcional)",
+    "amend": "Modificar el último commit",
+    "resolveConflictsFirst": "Resuelve los conflictos antes de hacer commit.",
+    "submit": "Hacer commit en {{branch}}",
+    "submitAmend": "Modificar commit",
+    "currentBranch": "la rama actual",
+    "lastCommit": "Último commit:",
+    "created": "Commit creado",
+    "amended": "Commit modificado",
+    "undone": "Commit deshecho",
+    "undo": {
+      "action": "Deshacer",
+      "title": "Deshacer el último commit",
+      "description": "El commit «{{title}}» saldrá del historial. Sus cambios volverán a quedar preparados y su mensaje se recupera en el cuadro de commit.",
+      "pushedWarning": "Este commit ya está publicado. Para reflejar el cambio en el remoto tendrás que hacer un force push, que reescribe el historial compartido.",
+      "confirm": "Deshacer commit"
+    }
+  },
+  "diff": {
+    "label": "Diferencias de {{path}}",
+    "nothingSelected": {
+      "title": "Selecciona un archivo",
+      "description": "Elige un archivo de la lista para ver sus diferencias."
+    },
+    "binary": {
+      "title": "Archivo binario",
+      "description": "No se pueden mostrar las diferencias de este tipo de archivo."
+    },
+    "tooLarge": {
+      "title": "Archivo demasiado grande",
+      "description": "Las diferencias superan el límite para mostrarse sin ralentizar la aplicación."
+    },
+    "noContentChanges": {
+      "title": "Sin cambios de contenido",
+      "description": "Solo cambió algo como el modo del archivo."
+    },
+    "stageHunk": "Preparar bloque",
+    "unstageHunk": "Quitar bloque",
+    "selectLine": "Seleccionar línea",
+    "stageSelection": "Preparar selección",
+    "unstageSelection": "Quitar selección",
+    "clearSelection": "Limpiar",
+    "selectedLines_one": "{{count}} línea seleccionada",
+    "selectedLines_other": "{{count}} líneas seleccionadas",
+    "noNewline": "Sin salto de línea al final del archivo"
+  },
+  "history": {
+    "listLabel": "Historial de commits",
+    "filesLabel": "Archivos del commit",
+    "changedFiles_one": "{{count}} archivo modificado",
+    "changedFiles_other": "{{count}} archivos modificados",
+    "empty": {
+      "title": "Aún no hay commits",
+      "description": "Haz tu primer commit y aparecerá aquí."
+    },
+    "selectFile": "Elige un archivo del commit para ver sus diferencias."
+  },
+  "sync": {
+    "fetch": "Fetch",
+    "pull": "Pull ↓{{count}}",
+    "push": "Push ↑{{count}}",
+    "publish": "Publicar rama",
+    "noRemote": "Sin remoto",
+    "noRemoteHint": "Este repositorio no tiene un remoto configurado.",
+    "noCommitsHint": "Haz un primer commit para poder sincronizar.",
+    "running": {
+      "fetch": "Buscando novedades...",
+      "pull": "Descargando cambios...",
+      "push": "Enviando commits...",
+      "publish": "Publicando la rama..."
+    },
+    "done": {
+      "pull": "Pull completado",
+      "push": "Push completado",
+      "publish": "Rama publicada"
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "theme": {
+      "label": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "languageLabel": "Idioma",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "progress": {
+    "counting-objects": "Contando objetos",
+    "enumerating-objects": "Enumerando objetos",
+    "compressing-objects": "Comprimiendo objetos",
+    "receiving-objects": "Recibiendo objetos",
+    "resolving-deltas": "Resolviendo deltas",
+    "writing-objects": "Enviando objetos",
+    "updating-files": "Actualizando archivos",
+    "checking-out-files": "Preparando archivos"
+  },
+  "errors": {
+    "actions": {
+      "pull": "Hacer pull",
+      "publishBranch": "Publicar rama",
+      "retry": "Reintentar",
+      "showChanges": "Ver cambios",
+      "forceDelete": "Forzar eliminación"
+    },
+    "gitNotFound": {
+      "title": "Git no está instalado",
+      "message": "No encontramos Git en tu equipo. Instálalo y reinicia la aplicación."
+    },
+    "notARepository": {
+      "title": "Esta carpeta no es un repositorio",
+      "message": "La carpeta no contiene un repositorio de Git. Elige otra o crea uno nuevo."
+    },
+    "unsafeDirectory": {
+      "title": "Git no confía en esta carpeta",
+      "message": "Git bloqueó la carpeta porque pertenece a otro usuario. Márcala como segura con git config --global --add safe.directory."
+    },
+    "authenticationFailed": {
+      "title": "No pudimos iniciar sesión",
+      "message": "El servidor rechazó tus credenciales. Revisa tu sesión en el Git Credential Manager y vuelve a intentarlo."
+    },
+    "networkUnavailable": {
+      "title": "Sin conexión con el servidor",
+      "message": "No se pudo contactar con el remoto. Revisa tu conexión a internet."
+    },
+    "remoteNotFound": {
+      "title": "No se encontró el repositorio remoto",
+      "message": "La dirección no existe o no tienes permiso para verla."
+    },
+    "remoteAhead": {
+      "title": "Tu rama está atrasada",
+      "message": "El remoto tiene commits que tú no tienes. Haz pull antes de enviar tus cambios."
+    },
+    "noUpstream": {
+      "title": "La rama aún no está publicada",
+      "message": "Publica la rama para poder enviar y recibir cambios."
+    },
+    "noRemote": {
+      "title": "No hay remoto configurado",
+      "message": "Este repositorio no está conectado a ningún remoto."
+    },
+    "mergeConflict": {
+      "title": "Hay conflictos",
+      "message": "Git no pudo combinar los cambios automáticamente. Revisa los archivos con conflicto."
+    },
+    "unmergedFiles": {
+      "title": "Hay archivos sin resolver",
+      "message": "Resuelve los conflictos pendientes antes de continuar."
+    },
+    "localChangesWouldBeOverwritten": {
+      "title": "Tienes cambios sin guardar",
+      "message": "Esta acción sobrescribiría tus cambios locales. Haz commit o descártalos antes de continuar."
+    },
+    "branchAlreadyExists": {
+      "title": "Esa rama ya existe",
+      "message": "Elige otro nombre para la rama."
+    },
+    "branchNotFullyMerged": {
+      "title": "La rama tiene commits sin fusionar",
+      "message": "Eliminarla haría que se pierdan commits que no están en ninguna otra rama."
+    },
+    "branchCheckedOut": {
+      "title": "No se puede eliminar la rama actual",
+      "message": "Cambia a otra rama y vuelve a intentarlo."
+    },
+    "branchNotFound": {
+      "title": "No se encontró la rama",
+      "message": "La rama ya no existe. Actualiza la lista."
+    },
+    "invalidName": {
+      "title": "Nombre no válido",
+      "message": "Usa un nombre sin espacios ni caracteres especiales como ~ ^ : ? * [ o \\."
+    },
+    "nothingToCommit": {
+      "title": "No hay nada que guardar",
+      "message": "Prepara al menos un cambio antes de hacer commit."
+    },
+    "emptyCommitMessage": {
+      "title": "Falta el resumen",
+      "message": "Escribe un resumen para el commit."
+    },
+    "identityMissing": {
+      "title": "Git no sabe quién eres",
+      "message": "Configura tu nombre y tu correo con git config --global user.name y git config --global user.email."
+    },
+    "hookRejected": {
+      "title": "Un hook rechazó el commit",
+      "message": "Un script de Git impidió la operación."
+    },
+    "destinationNotEmpty": {
+      "title": "La carpeta de destino no está vacía",
+      "message": "Elige una carpeta vacía o un nombre distinto."
+    },
+    "repositoryLocked": {
+      "title": "El repositorio está ocupado",
+      "message": "Otro proceso de Git está trabajando en esta carpeta. Espera unos segundos."
+    },
+    "unrelatedHistories": {
+      "title": "Historiales sin relación",
+      "message": "Las dos ramas no comparten historia y Git no las combina por defecto."
+    },
+    "patchRejected": {
+      "title": "El archivo cambió mientras elegías",
+      "message": "Las líneas seleccionadas ya no coinciden con el archivo. Vuelve a seleccionarlas."
+    },
+    "noCommits": {
+      "title": "Aún no hay commits",
+      "message": "Haz tu primer commit para usar esta función."
+    },
+    "cancelled": {
+      "title": "Operación cancelada",
+      "message": "Cancelaste la operación."
+    },
+    "invalidInput": {
+      "title": "Datos no válidos",
+      "message": "Revisa los datos e inténtalo de nuevo."
+    },
+    "io": {
+      "title": "Error de archivos",
+      "message": "No se pudo leer o escribir en el disco."
+    },
+    "unknown": {
+      "title": "Algo salió mal",
+      "message": "Git devolvió un error inesperado."
+    }
+  }
+}

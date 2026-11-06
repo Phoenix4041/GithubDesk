@@ -1,1 +1,246 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  --canvas: #f7f8fa;
+  --surface: #ffffff;
+  --subtle: #f0f2f5;
+  --line: #e3e6eb;
+  --fg: #14161a;
+  --muted: #6a7280;
+  --accent: #5b63d3;
+  --accent-hover: #4d55c4;
+  --accent-fg: #ffffff;
+  --accent-soft: #eceefc;
+  --danger: #d6342c;
+  --danger-soft: #fdecea;
+  --success: #1f9d55;
+  --warning: #b7791f;
+  --add: #1a7f37;
+  --add-bg: #e6f6ea;
+  --add-strong: #b9e6c4;
+  --del: #c4262e;
+  --del-bg: #fdecee;
+  --del-strong: #f7c1c6;
+  --hunk-bg: #eef1f8;
+  --syn-keyword: #8250df;
+  --syn-string: #0a7a52;
+  --syn-comment: #8a93a2;
+  --syn-number: #b35900;
+  --syn-type: #0b6bcb;
+  --syn-property: #1f5fbf;
+  --syn-function: #6639ba;
+  --syn-operator: #6a7280;
+}
+
+:root.dark {
+  color-scheme: dark;
+  --canvas: #0d0e12;
+  --surface: #14161b;
+  --subtle: #1b1e25;
+  --line: #262a33;
+  --fg: #e7e9ee;
+  --muted: #8c94a3;
+  --accent: #7b84ec;
+  --accent-hover: #929af2;
+  --accent-fg: #0d0e12;
+  --accent-soft: #232650;
+  --danger: #f0605a;
+  --danger-soft: #3a1c1d;
+  --success: #3fbf79;
+  --warning: #e0a63d;
+  --add: #5fd38a;
+  --add-bg: #14281c;
+  --add-strong: #1f4a2d;
+  --del: #f27d84;
+  --del-bg: #2c1618;
+  --del-strong: #5a2429;
+  --hunk-bg: #191d2a;
+  --syn-keyword: #c3a1ff;
+  --syn-string: #7ee0b0;
+  --syn-comment: #6e7788;
+  --syn-number: #f0b36b;
+  --syn-type: #6cb6ff;
+  --syn-property: #8fb8ff;
+  --syn-function: #c9a8ff;
+  --syn-operator: #9aa3b2;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-add: var(--add);
+  --color-add-bg: var(--add-bg);
+  --color-add-strong: var(--add-strong);
+  --color-del: var(--del);
+  --color-del-bg: var(--del-bg);
+  --color-del-strong: var(--del-strong);
+  --color-hunk-bg: var(--hunk-bg);
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", "SF Mono", Consolas, ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--canvas);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+input,
+textarea {
+  user-select: text;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.selectable {
+  user-select: text;
+}
+
+.tok-keyword,
+.tok-modifier,
+.tok-controlKeyword,
+.tok-operatorKeyword,
+.tok-definitionKeyword,
+.tok-moduleKeyword {
+  color: var(--syn-keyword);
+}
+
+.tok-string,
+.tok-string2,
+.tok-regexp {
+  color: var(--syn-string);
+}
+
+.tok-comment,
+.tok-lineComment,
+.tok-blockComment {
+  color: var(--syn-comment);
+  font-style: italic;
+}
+
+.tok-number,
+.tok-bool,
+.tok-atom,
+.tok-null {
+  color: var(--syn-number);
+}
+
+.tok-typeName,
+.tok-className,
+.tok-namespace {
+  color: var(--syn-type);
+}
+
+.tok-propertyName,
+.tok-attributeName {
+  color: var(--syn-property);
+}
+
+.tok-variableName.tok-function,
+.tok-function {
+  color: var(--syn-function);
+}
+
+.tok-operator,
+.tok-punctuation {
+  color: var(--syn-operator);
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

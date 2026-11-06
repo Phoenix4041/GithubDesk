@@ -24,6 +24,7 @@ export default defineConfig(
       "@typescript-eslint/no-floating-promises": "error",
       "@typescript-eslint/no-misused-promises": ["error", { checksVoidReturn: { attributes: false } }],
       "no-inline-comments": "error",
+      "react-hooks/incompatible-library": "off",
       eqeqeq: "error",
     },
   },

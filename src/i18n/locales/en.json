@@ -1,0 +1,426 @@
+{
+  "common": {
+    "retry": "Retry",
+    "close": "Close",
+    "cancel": "Cancel",
+    "done": "Done",
+    "clearSearch": "Clear search"
+  },
+  "confirm": {
+    "whatYouLose": "What you lose"
+  },
+  "layout": {
+    "resizeSidebar": "Resize the sidebar",
+    "resizeChanges": "Resize the middle panel"
+  },
+  "unavailable": {
+    "backToStart": "Back to start",
+    "forget": "Remove from recents"
+  },
+  "sidebar": {
+    "label": "Repositories and branches"
+  },
+  "toolbar": {
+    "detached": "Detached HEAD",
+    "unknownBranch": "No branch",
+    "currentBranch": "Current branch"
+  },
+  "tabs": {
+    "label": "Repository views",
+    "changes": "Changes",
+    "history": "History"
+  },
+  "welcome": {
+    "title": "Welcome to GithubDesk",
+    "subtitle": "Open a repository to get started.",
+    "actions": "Getting started actions",
+    "openDescription": "Pick a folder that already has a Git repository.",
+    "createDescription": "Start a new project from scratch.",
+    "cloneDescription": "Download a repository from its address.",
+    "recents": "Recent repositories"
+  },
+  "repositories": {
+    "title": "Repositories",
+    "search": "Search repositories",
+    "add": "Add repository",
+    "openExisting": "Open repository",
+    "createNew": "Create repository",
+    "cloneFromUrl": "Clone repository",
+    "openPickerTitle": "Choose the repository folder",
+    "forget": "Remove {{name}} from the list",
+    "empty": {
+      "title": "No repositories yet",
+      "description": "Open, create or clone one and it will show up here."
+    },
+    "noResults": {
+      "title": "No results",
+      "description": "No repository matches your search."
+    },
+    "clone": {
+      "title": "Clone repository",
+      "description": "Download a copy of the repository to your computer.",
+      "url": "Repository address",
+      "location": "Destination folder",
+      "locationPlaceholder": "Choose where to save it",
+      "chooseFolder": "Choose folder",
+      "folderName": "Folder name",
+      "destination": "It will be saved in {{path}}",
+      "submit": "Clone",
+      "progress": "Clone progress",
+      "connecting": "Connecting to the server..."
+    },
+    "create": {
+      "title": "Create repository",
+      "description": "Create a new folder with an empty Git repository.",
+      "name": "Project name",
+      "location": "Location",
+      "locationPlaceholder": "Choose where to create it",
+      "chooseFolder": "Choose folder",
+      "destination": "It will be created in {{path}}",
+      "initialBranch": "Initial branch",
+      "submit": "Create"
+    }
+  },
+  "branches": {
+    "title": "Branches",
+    "new": "New branch",
+    "search": "Search branches",
+    "local": "Local",
+    "remote": "Remote",
+    "current": "Current branch",
+    "upstreamGone": "Deleted on remote",
+    "publish": "Publish branch {{name}}",
+    "rename": "Rename branch {{name}}",
+    "delete": "Delete branch {{name}}",
+    "created": "Branch {{name}} created",
+    "renamed": "Branch renamed from {{oldName}} to {{newName}}",
+    "deleted": "Branch {{name}} deleted",
+    "empty": {
+      "title": "No branches yet",
+      "description": "Make your first commit and the branch will show up here."
+    },
+    "noResults": {
+      "title": "No results",
+      "description": "No branch matches your search."
+    },
+    "createDialog": {
+      "title": "New branch",
+      "description": "Create a branch from where you are now.",
+      "name": "Branch name",
+      "checkout": "Switch to the new branch",
+      "submit": "Create branch"
+    },
+    "renameDialog": {
+      "title": "Rename {{name}}",
+      "description": "The new name only changes on your computer until you publish the branch.",
+      "name": "New name",
+      "submit": "Rename"
+    },
+    "deleteDialog": {
+      "title": "Delete branch {{name}}",
+      "description": "The branch will be removed from your computer. Commits stay safe as long as they are in another branch.",
+      "loss": "The branch will stop existing on your computer. The remote copy, if any, is not touched.",
+      "confirm": "Delete branch"
+    },
+    "forceDelete": {
+      "title": "Force delete {{name}}",
+      "description": "Git warned that this branch has commits that are not in any other branch.",
+      "loss": "Commits that only exist in this branch will lose their reference and be lost.",
+      "noUndo": "You will not be able to recover them from the app.",
+      "confirm": "Delete anyway"
+    }
+  },
+  "changes": {
+    "listLabel": "Changed files",
+    "sections": {
+      "conflicts": "Conflicts",
+      "staged": "Staged",
+      "unstaged": "Unstaged"
+    },
+    "kind": {
+      "unmodified": "Unchanged",
+      "modified": "Modified",
+      "added": "Added",
+      "deleted": "Deleted",
+      "renamed": "Renamed",
+      "copied": "Copied",
+      "typeChanged": "Type changed",
+      "unmerged": "Conflicted",
+      "untracked": "New"
+    },
+    "stageFile": "Stage {{path}}",
+    "unstageFile": "Unstage {{path}}",
+    "markResolved": "Mark {{path}} as resolved",
+    "discardFile": "Discard changes in {{path}}",
+    "stageAll": "Stage all",
+    "unstageAll": "Unstage all",
+    "discardAll": "Discard all changes",
+    "mergeAborted": "Merge cancelled",
+    "discard": {
+      "title_one": "Discard changes in {{count}} file",
+      "title_other": "Discard changes in {{count}} files",
+      "descriptionOne": "The unstaged changes in {{path}} will be discarded.",
+      "descriptionMany": "The unstaged changes in {{count}} files will be discarded.",
+      "lossTracked_one": "{{count}} file will go back to how it was in its last staged or committed state.",
+      "lossTracked_other": "{{count}} files will go back to how they were in their last staged or committed state.",
+      "lossUntracked_one": "{{count}} new file will be deleted from disk.",
+      "lossUntracked_other": "{{count}} new files will be deleted from disk.",
+      "noUndo": "This action cannot be undone.",
+      "confirm": "Discard changes"
+    },
+    "conflictBanner": {
+      "title_one": "{{count}} conflicted file",
+      "title_other": "{{count}} conflicted files",
+      "description": "Edit the files to resolve the conflicts and mark them as resolved. You can also cancel the merge.",
+      "abort": "Cancel merge"
+    },
+    "abortMerge": {
+      "title": "Cancel the merge",
+      "description": "You will go back to the state you had before starting the merge.",
+      "loss": "Any conflict resolution you have done so far will be discarded.",
+      "confirm": "Cancel merge"
+    },
+    "empty": {
+      "title": "No changes",
+      "description": "Your working folder matches the last commit.",
+      "ahead_one": "You have {{count}} unpublished commit. Use Push to send it.",
+      "ahead_other": "You have {{count}} unpublished commits. Use Push to send them."
+    }
+  },
+  "commit": {
+    "label": "Create commit",
+    "titleLabel": "Commit summary",
+    "titlePlaceholder": "Summary (required)",
+    "titleTooLong": "The summary has {{count}} characters; {{limit}} or fewer is recommended.",
+    "descriptionLabel": "Commit description",
+    "descriptionPlaceholder": "Description (optional)",
+    "amend": "Amend the last commit",
+    "resolveConflictsFirst": "Resolve the conflicts before committing.",
+    "submit": "Commit to {{branch}}",
+    "submitAmend": "Amend commit",
+    "currentBranch": "the current branch",
+    "lastCommit": "Last commit:",
+    "created": "Commit created",
+    "amended": "Commit amended",
+    "undone": "Commit undone",
+    "undo": {
+      "action": "Undo",
+      "title": "Undo the last commit",
+      "description": "The commit \"{{title}}\" will leave the history. Its changes will be staged again and its message restored in the commit box.",
+      "pushedWarning": "This commit is already published. To reflect the change on the remote you will need to force push, which rewrites shared history.",
+      "confirm": "Undo commit"
+    }
+  },
+  "diff": {
+    "label": "Differences in {{path}}",
+    "nothingSelected": {
+      "title": "Select a file",
+      "description": "Pick a file from the list to see its differences."
+    },
+    "binary": {
+      "title": "Binary file",
+      "description": "Differences for this kind of file cannot be shown."
+    },
+    "tooLarge": {
+      "title": "File too large",
+      "description": "The differences exceed the limit for showing them without slowing down the app."
+    },
+    "noContentChanges": {
+      "title": "No content changes",
+      "description": "Only something like the file mode changed."
+    },
+    "stageHunk": "Stage hunk",
+    "unstageHunk": "Unstage hunk",
+    "selectLine": "Select line",
+    "stageSelection": "Stage selection",
+    "unstageSelection": "Unstage selection",
+    "clearSelection": "Clear",
+    "selectedLines_one": "{{count}} line selected",
+    "selectedLines_other": "{{count}} lines selected",
+    "noNewline": "No newline at end of file"
+  },
+  "history": {
+    "listLabel": "Commit history",
+    "filesLabel": "Commit files",
+    "changedFiles_one": "{{count}} changed file",
+    "changedFiles_other": "{{count}} changed files",
+    "empty": {
+      "title": "No commits yet",
+      "description": "Make your first commit and it will show up here."
+    },
+    "selectFile": "Pick a file from the commit to see its differences."
+  },
+  "sync": {
+    "fetch": "Fetch",
+    "pull": "Pull ↓{{count}}",
+    "push": "Push ↑{{count}}",
+    "publish": "Publish branch",
+    "noRemote": "No remote",
+    "noRemoteHint": "This repository has no remote configured.",
+    "noCommitsHint": "Make a first commit to be able to sync.",
+    "running": {
+      "fetch": "Looking for updates...",
+      "pull": "Downloading changes...",
+      "push": "Sending commits...",
+      "publish": "Publishing the branch..."
+    },
+    "done": {
+      "pull": "Pull completed",
+      "push": "Push completed",
+      "publish": "Branch published"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": {
+      "label": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "languageLabel": "Language",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "progress": {
+    "counting-objects": "Counting objects",
+    "enumerating-objects": "Enumerating objects",
+    "compressing-objects": "Compressing objects",
+    "receiving-objects": "Receiving objects",
+    "resolving-deltas": "Resolving deltas",
+    "writing-objects": "Sending objects",
+    "updating-files": "Updating files",
+    "checking-out-files": "Preparing files"
+  },
+  "errors": {
+    "actions": {
+      "pull": "Pull now",
+      "publishBranch": "Publish branch",
+      "retry": "Retry",
+      "showChanges": "View changes",
+      "forceDelete": "Force delete"
+    },
+    "gitNotFound": {
+      "title": "Git is not installed",
+      "message": "We could not find Git on your computer. Install it and restart the app."
+    },
+    "notARepository": {
+      "title": "This folder is not a repository",
+      "message": "The folder does not contain a Git repository. Pick another one or create a new one."
+    },
+    "unsafeDirectory": {
+      "title": "Git does not trust this folder",
+      "message": "Git blocked the folder because it belongs to another user. Mark it as safe with git config --global --add safe.directory."
+    },
+    "authenticationFailed": {
+      "title": "We could not sign you in",
+      "message": "The server rejected your credentials. Check your session in Git Credential Manager and try again."
+    },
+    "networkUnavailable": {
+      "title": "No connection to the server",
+      "message": "The remote could not be reached. Check your internet connection."
+    },
+    "remoteNotFound": {
+      "title": "Remote repository not found",
+      "message": "The address does not exist or you do not have permission to see it."
+    },
+    "remoteAhead": {
+      "title": "Your branch is behind",
+      "message": "The remote has commits you do not have. Pull before sending your changes."
+    },
+    "noUpstream": {
+      "title": "The branch is not published yet",
+      "message": "Publish the branch to be able to send and receive changes."
+    },
+    "noRemote": {
+      "title": "No remote configured",
+      "message": "This repository is not connected to any remote."
+    },
+    "mergeConflict": {
+      "title": "There are conflicts",
+      "message": "Git could not combine the changes automatically. Review the conflicted files."
+    },
+    "unmergedFiles": {
+      "title": "There are unresolved files",
+      "message": "Resolve the pending conflicts before continuing."
+    },
+    "localChangesWouldBeOverwritten": {
+      "title": "You have unsaved changes",
+      "message": "This action would overwrite your local changes. Commit or discard them before continuing."
+    },
+    "branchAlreadyExists": {
+      "title": "That branch already exists",
+      "message": "Choose another name for the branch."
+    },
+    "branchNotFullyMerged": {
+      "title": "The branch has unmerged commits",
+      "message": "Deleting it would lose commits that are not in any other branch."
+    },
+    "branchCheckedOut": {
+      "title": "The current branch cannot be deleted",
+      "message": "Switch to another branch and try again."
+    },
+    "branchNotFound": {
+      "title": "Branch not found",
+      "message": "The branch no longer exists. Refresh the list."
+    },
+    "invalidName": {
+      "title": "Invalid name",
+      "message": "Use a name without spaces or special characters such as ~ ^ : ? * [ or \\."
+    },
+    "nothingToCommit": {
+      "title": "Nothing to commit",
+      "message": "Stage at least one change before committing."
+    },
+    "emptyCommitMessage": {
+      "title": "Missing summary",
+      "message": "Write a summary for the commit."
+    },
+    "identityMissing": {
+      "title": "Git does not know who you are",
+      "message": "Set your name and email with git config --global user.name and git config --global user.email."
+    },
+    "hookRejected": {
+      "title": "A hook rejected the commit",
+      "message": "A Git script prevented the operation."
+    },
+    "destinationNotEmpty": {
+      "title": "The destination folder is not empty",
+      "message": "Choose an empty folder or a different name."
+    },
+    "repositoryLocked": {
+      "title": "The repository is busy",
+      "message": "Another Git process is working in this folder. Wait a few seconds."
+    },
+    "unrelatedHistories": {
+      "title": "Unrelated histories",
+      "message": "The two branches share no history and Git does not combine them by default."
+    },
+    "patchRejected": {
+      "title": "The file changed while you were choosing",
+      "message": "The selected lines no longer match the file. Select them again."
+    },
+    "noCommits": {
+      "title": "No commits yet",
+      "message": "Make your first commit to use this feature."
+    },
+    "cancelled": {
+      "title": "Operation cancelled",
+      "message": "You cancelled the operation."
+    },
+    "invalidInput": {
+      "title": "Invalid data",
+      "message": "Check the data and try again."
+    },
+    "io": {
+      "title": "File error",
+      "message": "Could not read from or write to disk."
+    },
+    "unknown": {
+      "title": "Something went wrong",
+      "message": "Git returned an unexpected error."
+    }
+  }
+}
