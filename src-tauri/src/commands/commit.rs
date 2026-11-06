@@ -39,9 +39,12 @@ pub async fn head_commit(repo: &Path) -> AppResult<Option<HeadCommit>> {
         return Err(AppError::new(ErrorKind::Unknown, "unexpected log output"));
     }
 
-    let pushed = git_unchecked(repo, &["merge-base", "--is-ancestor", "HEAD", "@{upstream}"])
-        .await?
-        .success();
+    let pushed = git_unchecked(
+        repo,
+        &["merge-base", "--is-ancestor", "HEAD", "@{upstream}"],
+    )
+    .await?
+    .success();
 
     Ok(Some(HeadCommit {
         hash: fields[0].trim().to_string(),
@@ -112,6 +115,9 @@ mod tests {
     #[test]
     fn joins_title_and_description_with_blank_line() {
         assert_eq!(build_message(" Title ", ""), "Title\n");
-        assert_eq!(build_message("Title", "  body text \n"), "Title\n\nbody text\n");
+        assert_eq!(
+            build_message("Title", "  body text \n"),
+            "Title\n\nbody text\n"
+        );
     }
 }

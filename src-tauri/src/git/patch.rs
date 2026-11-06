@@ -105,14 +105,10 @@ pub fn build_patch(
         }
 
         let (old_start, new_start) = match direction {
-            PatchDirection::Stage => (
-                i64::from(hunk.old_start),
-                i64::from(hunk.old_start) + delta,
-            ),
-            PatchDirection::Unstage => (
-                i64::from(hunk.new_start) - delta,
-                i64::from(hunk.new_start),
-            ),
+            PatchDirection::Stage => (i64::from(hunk.old_start), i64::from(hunk.old_start) + delta),
+            PatchDirection::Unstage => {
+                (i64::from(hunk.new_start) - delta, i64::from(hunk.new_start))
+            }
         };
         body.push_str(&format!(
             "@@ -{old_start},{old_count} +{new_start},{new_count} @@\n"
@@ -213,7 +209,9 @@ mod tests {
             line_indices: vec![3],
         }];
         let patch = build_patch(&diff, &selections, PatchDirection::Stage).expect("patch");
-        assert!(patch.contains(" b\n\\ No newline at end of file\n+c\n\\ No newline at end of file\n"));
+        assert!(
+            patch.contains(" b\n\\ No newline at end of file\n+c\n\\ No newline at end of file\n")
+        );
 
         let stage_removed_only = vec![LineSelection {
             hunk_index: 0,

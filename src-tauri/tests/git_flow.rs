@@ -119,7 +119,10 @@ async fn stages_commits_and_reports_clean_status() {
     commit::create_commit(repo, "Add a", "details", false)
         .await
         .expect("commit");
-    let head = commit::head_commit(repo).await.expect("head").expect("some");
+    let head = commit::head_commit(repo)
+        .await
+        .expect("head")
+        .expect("some");
     assert_eq!(head.title, "Add a");
     assert_eq!(head.description, "details");
     assert!(!head.pushed);
@@ -327,7 +330,11 @@ async fn discards_tracked_and_untracked_changes() {
         "original\n"
     );
     assert!(!repo.join("temp/scratch.txt").exists());
-    assert!(status::get_status(repo).await.expect("status").entries.is_empty());
+    assert!(status::get_status(repo)
+        .await
+        .expect("status")
+        .entries
+        .is_empty());
 }
 
 #[tokio::test]
@@ -340,7 +347,10 @@ async fn amends_and_undoes_the_last_commit() {
     commit::create_commit(repo, "second amended", "body", true)
         .await
         .expect("amend");
-    let head = commit::head_commit(repo).await.expect("head").expect("some");
+    let head = commit::head_commit(repo)
+        .await
+        .expect("head")
+        .expect("some");
     assert_eq!(head.title, "second amended");
     assert_eq!(head.description, "body");
 
@@ -351,7 +361,10 @@ async fn amends_and_undoes_the_last_commit() {
     assert_eq!(snapshot.entries[0].path, "b.txt");
     assert_eq!(snapshot.entries[0].index, ChangeKind::Added);
 
-    let head = commit::head_commit(repo).await.expect("head").expect("some");
+    let head = commit::head_commit(repo)
+        .await
+        .expect("head")
+        .expect("some");
     assert_eq!(head.title, "first");
 
     commit::undo_last_commit(repo).await.expect("undo root");
@@ -391,7 +404,9 @@ async fn manages_branches() {
     assert!(branches[0].is_current);
     assert_eq!(branches.len(), 2);
 
-    branch::switch_branch(repo, "main", false).await.expect("switch");
+    branch::switch_branch(repo, "main", false)
+        .await
+        .expect("switch");
     branch::rename_branch(repo, "feature/login", "feature/signin")
         .await
         .expect("rename");
@@ -408,16 +423,22 @@ async fn manages_branches() {
         .await
         .expect("delete merged branch");
 
-    branch::create_branch(repo, "topic", None, true).await.expect("create");
+    branch::create_branch(repo, "topic", None, true)
+        .await
+        .expect("create");
     commit_file(repo, "topic.txt", "t\n", "topic work").await;
-    branch::switch_branch(repo, "main", false).await.expect("switch");
+    branch::switch_branch(repo, "main", false)
+        .await
+        .expect("switch");
 
     let error = branch::delete_branch(repo, "topic", false)
         .await
         .expect_err("unmerged");
     assert_eq!(error.kind, ErrorKind::BranchNotFullyMerged);
     assert_eq!(error.suggested_action, Some(SuggestedAction::ForceDelete));
-    branch::delete_branch(repo, "topic", true).await.expect("force delete");
+    branch::delete_branch(repo, "topic", true)
+        .await
+        .expect("force delete");
 
     let error = branch::create_branch(repo, "bad name", None, false)
         .await
@@ -451,7 +472,9 @@ async fn reads_paginated_history_and_commit_files() {
     assert!(first_page[0].refs.iter().any(|label| label.name == "main"));
     assert_eq!(first_page[0].parents.len(), 1);
 
-    let all = history::history_page(repo, None, 0, 100).await.expect("page");
+    let all = history::history_page(repo, None, 0, 100)
+        .await
+        .expect("page");
     assert_eq!(all.len(), 5);
     let root = all.last().expect("root commit");
     assert!(root.parents.is_empty());
@@ -463,7 +486,9 @@ async fn reads_paginated_history_and_commit_files() {
     assert_eq!(files[0].path, "file-5.txt");
     assert_eq!(files[0].status, ChangeKind::Added);
 
-    let root_files = history::commit_files(repo, &root.hash).await.expect("files");
+    let root_files = history::commit_files(repo, &root.hash)
+        .await
+        .expect("files");
     assert_eq!(root_files[0].path, "file-1.txt");
 
     let diff = history::commit_file_diff(repo, &first_page[0].hash, "file-5.txt", None)
@@ -510,7 +535,10 @@ async fn syncs_through_a_remote_with_progress() {
     commit_file(&first_path, "a.txt", "1\n", "first").await;
     git_output(&first_path, &["remote", "add", "origin", &remote_url]);
     assert_eq!(
-        remote::list_remotes(&first_path).await.expect("remotes").len(),
+        remote::list_remotes(&first_path)
+            .await
+            .expect("remotes")
+            .len(),
         1
     );
 
@@ -650,14 +678,9 @@ async fn cancelled_clone_leaves_no_partial_directory() {
     assert!(registry.cancel("clone-job"));
 
     let destination = root.path().join("cloned");
-    let error = repo::clone_repository(
-        &source.path,
-        &destination,
-        guard.token(),
-        &ignore_progress,
-    )
-    .await
-    .expect_err("cancelled");
+    let error = repo::clone_repository(&source.path, &destination, guard.token(), &ignore_progress)
+        .await
+        .expect_err("cancelled");
     assert_eq!(error.kind, ErrorKind::Cancelled);
     assert!(!destination.exists());
 }

@@ -3,7 +3,8 @@ use serde::Serialize;
 use crate::git::parse::status::ChangeKind;
 
 pub const LOG_FORMAT: &str = "--format=%H%x1f%P%x1f%an%x1f%ae%x1f%at%x1f%D%x1f%s";
-pub const DETAIL_FORMAT: &str = "--format=%H%x1f%P%x1f%an%x1f%ae%x1f%at%x1f%D%x1f%s%x1f%cn%x1f%ct%x1f%b";
+pub const DETAIL_FORMAT: &str =
+    "--format=%H%x1f%P%x1f%an%x1f%ae%x1f%at%x1f%D%x1f%s%x1f%cn%x1f%ct%x1f%b";
 const FIELD_SEPARATOR: char = '\u{1f}';
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -54,7 +55,11 @@ pub struct CommitFile {
 
 pub fn parse_decorations(raw: &str) -> Vec<RefLabel> {
     let mut labels = Vec::new();
-    for item in raw.split(", ").map(str::trim).filter(|item| !item.is_empty()) {
+    for item in raw
+        .split(", ")
+        .map(str::trim)
+        .filter(|item| !item.is_empty())
+    {
         if let Some(target) = item.strip_prefix("HEAD -> ") {
             labels.push(RefLabel {
                 name: "HEAD".to_string(),
@@ -109,10 +114,7 @@ fn summary_from_fields(fields: &[&str]) -> Option<CommitSummary> {
     Some(CommitSummary {
         hash: hash.to_string(),
         short_hash: short(hash),
-        parents: fields[1]
-            .split_whitespace()
-            .map(str::to_string)
-            .collect(),
+        parents: fields[1].split_whitespace().map(str::to_string).collect(),
         author_name: fields[2].to_string(),
         author_email: fields[3].to_string(),
         author_time: fields[4].parse().unwrap_or(0),
@@ -244,7 +246,8 @@ mod tests {
 
     #[test]
     fn parses_decorations_without_remote_head() {
-        let labels = parse_decorations("HEAD, refs/remotes/origin/HEAD, refs/heads/feature/x, refs/stash");
+        let labels =
+            parse_decorations("HEAD, refs/remotes/origin/HEAD, refs/heads/feature/x, refs/stash");
         let names: Vec<&str> = labels.iter().map(|label| label.name.as_str()).collect();
         assert_eq!(names, vec!["HEAD", "feature/x"]);
     }

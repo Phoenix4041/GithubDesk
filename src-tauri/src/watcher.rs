@@ -35,7 +35,10 @@ pub struct RepoWatcher {
 }
 
 pub fn is_relevant_change(repo: &Path, changed: &Path) -> bool {
-    if changed.extension().is_some_and(|extension| extension == "lock") {
+    if changed
+        .extension()
+        .is_some_and(|extension| extension == "lock")
+    {
         return false;
     }
     let Ok(relative) = changed.strip_prefix(repo) else {
@@ -97,19 +100,34 @@ mod tests {
     #[test]
     fn ignores_object_store_and_lock_files() {
         let repo = Path::new("/work/repo");
-        assert!(!is_relevant_change(repo, Path::new("/work/repo/.git/objects/ab/cdef")));
-        assert!(!is_relevant_change(repo, Path::new("/work/repo/.git/index.lock")));
-        assert!(!is_relevant_change(repo, Path::new("/work/repo/.git/refs/heads/main.lock")));
+        assert!(!is_relevant_change(
+            repo,
+            Path::new("/work/repo/.git/objects/ab/cdef")
+        ));
+        assert!(!is_relevant_change(
+            repo,
+            Path::new("/work/repo/.git/index.lock")
+        ));
+        assert!(!is_relevant_change(
+            repo,
+            Path::new("/work/repo/.git/refs/heads/main.lock")
+        ));
         assert!(!is_relevant_change(repo, Path::new("/elsewhere/file.txt")));
     }
 
     #[test]
     fn accepts_worktree_files_and_git_state() {
         let repo = Path::new("/work/repo");
-        assert!(is_relevant_change(repo, Path::new("/work/repo/src/main.rs")));
+        assert!(is_relevant_change(
+            repo,
+            Path::new("/work/repo/src/main.rs")
+        ));
         assert!(is_relevant_change(repo, Path::new("/work/repo/.git/HEAD")));
         assert!(is_relevant_change(repo, Path::new("/work/repo/.git/index")));
-        assert!(is_relevant_change(repo, Path::new("/work/repo/.git/refs/heads/main")));
+        assert!(is_relevant_change(
+            repo,
+            Path::new("/work/repo/.git/refs/heads/main")
+        ));
         assert!(is_relevant_change(repo, Path::new("/work/repo/.gitignore")));
     }
 }

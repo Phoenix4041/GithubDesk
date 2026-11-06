@@ -227,13 +227,13 @@ mod tests {
 
     #[test]
     fn parses_unborn_and_detached_heads() {
-        let unborn = parse_status(&join(&["# branch.oid (initial)", "# branch.head main"]))
-            .expect("status");
+        let unborn =
+            parse_status(&join(&["# branch.oid (initial)", "# branch.head main"])).expect("status");
         assert!(unborn.branch.unborn);
         assert!(unborn.branch.oid.is_none());
 
-        let detached = parse_status(&join(&["# branch.oid abc", "# branch.head (detached)"]))
-            .expect("status");
+        let detached =
+            parse_status(&join(&["# branch.oid abc", "# branch.head (detached)"])).expect("status");
         assert!(detached.branch.detached);
         assert!(detached.branch.head.is_none());
     }

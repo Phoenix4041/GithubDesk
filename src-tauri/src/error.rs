@@ -261,7 +261,8 @@ mod tests {
 
     #[test]
     fn detects_authentication_before_network() {
-        let output = "fatal: unable to access 'https://x/y.git/': The requested URL returned error: 403";
+        let output =
+            "fatal: unable to access 'https://x/y.git/': The requested URL returned error: 403";
         assert_eq!(classify_failure(output), ErrorKind::AuthenticationFailed);
     }
 
@@ -273,7 +274,8 @@ mod tests {
 
     #[test]
     fn detects_merge_conflict_from_stdout() {
-        let output = "CONFLICT (content): Merge conflict in a.txt\nAutomatic merge failed; fix conflicts";
+        let output =
+            "CONFLICT (content): Merge conflict in a.txt\nAutomatic merge failed; fix conflicts";
         assert_eq!(classify_failure(output), ErrorKind::MergeConflict);
     }
 
@@ -294,7 +296,9 @@ mod tests {
             ErrorKind::NothingToCommit
         );
         assert_eq!(
-            classify_failure("*** Please tell me who you are.\nfatal: unable to auto-detect email address"),
+            classify_failure(
+                "*** Please tell me who you are.\nfatal: unable to auto-detect email address"
+            ),
             ErrorKind::IdentityMissing
         );
     }

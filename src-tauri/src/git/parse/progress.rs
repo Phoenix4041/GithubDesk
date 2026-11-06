@@ -71,8 +71,8 @@ mod tests {
 
     #[test]
     fn parses_remote_prefixed_line() {
-        let progress =
-            parse_progress_line("remote: Compressing objects: 100% (50/50), done.").expect("progress");
+        let progress = parse_progress_line("remote: Compressing objects: 100% (50/50), done.")
+            .expect("progress");
         assert_eq!(progress.phase, "compressing-objects");
         assert_eq!(progress.percent, 100);
     }

@@ -19,7 +19,9 @@ pub async fn ensure_valid_branch_name(repo: &Path, name: &str) -> AppResult<()> 
 pub fn ensure_revision(value: &str) -> AppResult<()> {
     let candidate = value.trim();
     if candidate.is_empty() || candidate.starts_with('-') || candidate.contains('\0') {
-        return Err(AppError::invalid_input(format!("invalid revision: {value}")));
+        return Err(AppError::invalid_input(format!(
+            "invalid revision: {value}"
+        )));
     }
     Ok(())
 }
@@ -29,7 +31,9 @@ pub fn ensure_commit_hash(value: &str) -> AppResult<()> {
     if valid {
         Ok(())
     } else {
-        Err(AppError::invalid_input(format!("invalid commit hash: {value}")))
+        Err(AppError::invalid_input(format!(
+            "invalid commit hash: {value}"
+        )))
     }
 }
 
@@ -54,7 +58,9 @@ pub fn ensure_folder_name(value: &str) -> AppResult<()> {
     let valid = !trimmed.is_empty()
         && trimmed != "."
         && trimmed != ".."
-        && !trimmed.chars().any(|character| forbidden.contains(&character))
+        && !trimmed
+            .chars()
+            .any(|character| forbidden.contains(&character))
         && !trimmed.ends_with('.');
     if valid {
         Ok(())

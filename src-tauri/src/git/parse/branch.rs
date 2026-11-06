@@ -56,7 +56,9 @@ pub fn parse_branches(text: &str) -> Vec<Branch> {
         };
 
         let (ahead, behind, upstream_gone) = parse_track(fields[4]);
-        let upstream = Some(fields[3]).filter(|value| !value.is_empty()).map(str::to_string);
+        let upstream = Some(fields[3])
+            .filter(|value| !value.is_empty())
+            .map(str::to_string);
 
         branches.push(Branch {
             name,
@@ -94,11 +96,32 @@ mod tests {
     #[test]
     fn parses_local_and_remote_branches() {
         let text = [
-            line(&["refs/heads/feature/x", " ", "aaa", "origin/feature/x", "ahead 2, behind 1", "1700000000"]),
-            line(&["refs/heads/main", "*", "bbb", "origin/main", "", "1700000100"]),
+            line(&[
+                "refs/heads/feature/x",
+                " ",
+                "aaa",
+                "origin/feature/x",
+                "ahead 2, behind 1",
+                "1700000000",
+            ]),
+            line(&[
+                "refs/heads/main",
+                "*",
+                "bbb",
+                "origin/main",
+                "",
+                "1700000100",
+            ]),
             line(&["refs/remotes/origin/main", " ", "bbb", "", "", "1700000100"]),
             line(&["refs/remotes/origin/HEAD", " ", "bbb", "", "", "1700000100"]),
-            line(&["refs/heads/old", " ", "ccc", "origin/old", "gone", "1600000000"]),
+            line(&[
+                "refs/heads/old",
+                " ",
+                "ccc",
+                "origin/old",
+                "gone",
+                "1600000000",
+            ]),
         ]
         .concat();
         let branches = parse_branches(&text);
@@ -126,7 +149,10 @@ mod tests {
 
     #[test]
     fn ignores_unknown_refs_and_short_lines() {
-        let text = format!("{}short\0line\n", line(&["refs/tags/v1", " ", "a", "", "", "1"]));
+        let text = format!(
+            "{}short\0line\n",
+            line(&["refs/tags/v1", " ", "a", "", "", "1"])
+        );
         assert!(parse_branches(&text).is_empty());
     }
 }

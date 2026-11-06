@@ -268,5 +268,11 @@ pub async fn changes_unstage_selection(
     diff: FileDiff,
     selections: Vec<LineSelection>,
 ) -> AppResult<()> {
-    apply_selection(Path::new(&path), &diff, &selections, PatchDirection::Unstage).await
+    apply_selection(
+        Path::new(&path),
+        &diff,
+        &selections,
+        PatchDirection::Unstage,
+    )
+    .await
 }

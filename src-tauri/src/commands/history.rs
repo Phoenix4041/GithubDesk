@@ -17,7 +17,10 @@ pub async fn history_page(
     skip: u32,
     limit: u32,
 ) -> AppResult<Vec<CommitSummary>> {
-    let revision = revision.map(str::trim).filter(|value| !value.is_empty()).unwrap_or("HEAD");
+    let revision = revision
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .unwrap_or("HEAD");
     ensure_revision(revision)?;
 
     let count_argument = format!("--max-count={}", limit.clamp(1, MAX_PAGE_SIZE));
@@ -63,7 +66,8 @@ async fn diff_base(repo: &Path, hash: &str) -> AppResult<String> {
     if parent.success() {
         return Ok(parent.trimmed());
     }
-    let empty_tree = git_with_input(repo, &["hash-object", "-t", "tree", "--stdin"], Vec::new()).await?;
+    let empty_tree =
+        git_with_input(repo, &["hash-object", "-t", "tree", "--stdin"], Vec::new()).await?;
     Ok(empty_tree.trimmed())
 }
 
@@ -72,7 +76,15 @@ pub async fn commit_files(repo: &Path, hash: &str) -> AppResult<Vec<CommitFile>>
     let base = diff_base(repo, hash).await?;
     let output = git(
         repo,
-        &["diff", "--name-status", "-z", "-M", "--no-color", &base, hash],
+        &[
+            "diff",
+            "--name-status",
+            "-z",
+            "-M",
+            "--no-color",
+            &base,
+            hash,
+        ],
     )
     .await?;
     Ok(parse_name_status(&output.stdout))

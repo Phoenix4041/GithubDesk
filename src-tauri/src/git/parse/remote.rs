@@ -66,8 +66,14 @@ mod tests {
                 url: "b".into(),
             },
         ];
-        assert_eq!(preferred_remote(&remotes).map(|r| r.name.as_str()), Some("origin"));
-        assert_eq!(preferred_remote(&remotes[..1]).map(|r| r.name.as_str()), Some("fork"));
+        assert_eq!(
+            preferred_remote(&remotes).map(|r| r.name.as_str()),
+            Some("origin")
+        );
+        assert_eq!(
+            preferred_remote(&remotes[..1]).map(|r| r.name.as_str()),
+            Some("fork")
+        );
         assert!(preferred_remote(&[]).is_none());
     }
 }
