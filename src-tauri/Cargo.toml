@@ -1,6 +1,6 @@
 [package]
 name = "githubdesk"
-version = "0.1.0"
+version = "0.5.0"
 description = "Cliente de Git y GitHub de escritorio"
 edition = "2021"
 rust-version = "1.81"
