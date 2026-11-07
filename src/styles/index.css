@@ -33,6 +33,14 @@
   --syn-property: #1f5fbf;
   --syn-function: #6639ba;
   --syn-operator: #6a7280;
+  --graph-0: #5b63d3;
+  --graph-1: #1f9d55;
+  --graph-2: #d9822b;
+  --graph-3: #c2418c;
+  --graph-4: #0b8fb3;
+  --graph-5: #8250df;
+  --graph-6: #c4262e;
+  --graph-7: #6b7a2a;
 }
 
 :root.dark {
@@ -66,6 +74,14 @@
   --syn-property: #8fb8ff;
   --syn-function: #c9a8ff;
   --syn-operator: #9aa3b2;
+  --graph-0: #8b93ff;
+  --graph-1: #4cc380;
+  --graph-2: #f0a04b;
+  --graph-3: #e86ab0;
+  --graph-4: #4cc3e6;
+  --graph-5: #b58cff;
+  --graph-6: #ff7a80;
+  --graph-7: #b3c25a;
 }
 
 @theme inline {

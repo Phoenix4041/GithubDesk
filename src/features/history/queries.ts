@@ -1,16 +1,31 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { repoKeys } from "@/shared/lib/query-client";
-import { getCommitDetail, getCommitFileDiff, getCommitFiles, listHistory } from "./api";
+import type { HistoryQuery } from "@/shared/types/git";
+import { getCommitDetail, getCommitFileDiff, getCommitFiles, listHistory, prepareGraph } from "./api";
 
 export const HISTORY_PAGE_SIZE = 200;
 
-export function useHistory(repoPath: string) {
+export function useHistory(repoPath: string, query: HistoryQuery, enabled: boolean) {
   return useInfiniteQuery({
-    queryKey: repoKeys.history(repoPath),
-    queryFn: ({ pageParam }) => listHistory(repoPath, null, pageParam, HISTORY_PAGE_SIZE),
+    queryKey: [...repoKeys.history(repoPath), query],
+    queryFn: ({ pageParam, signal }) => listHistory(repoPath, query, pageParam, HISTORY_PAGE_SIZE, signal),
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.length < HISTORY_PAGE_SIZE ? undefined : allPages.length * HISTORY_PAGE_SIZE,
+    enabled,
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useGraphPreparation(repoPath: string, wanted: boolean) {
+  return useQuery({
+    queryKey: [...repoKeys.history(repoPath), "graph-ready"],
+    queryFn: async () => {
+      await prepareGraph(repoPath);
+      return true;
+    },
+    enabled: wanted,
+    staleTime: Infinity,
   });
 }
 

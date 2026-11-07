@@ -256,7 +256,34 @@
       "title": "No commits yet",
       "description": "Make your first commit and it will show up here."
     },
-    "selectFile": "Pick a file from the commit to see its differences."
+    "selectFile": "Pick a file from the commit to see its differences.",
+    "search": {
+      "text": "Search commit messages",
+      "filters": "More filters",
+      "author": "Author",
+      "path": "File or folder",
+      "content": "Text that changed in the code",
+      "contentHint": "Finds commits that added or removed that text. It can take a while on large repos.",
+      "since": "From",
+      "until": "To",
+      "regex": "Use regular expression",
+      "allBranches": "All branches",
+      "follow": "Follow renames",
+      "clear": "Clear filters",
+      "noResults": {
+        "title": "No results",
+        "description": "No commit matches your search."
+      }
+    },
+    "view": {
+      "label": "History view",
+      "list": "List",
+      "graph": "Graph",
+      "graphDisabled": "Graph (turns on when filters are cleared)"
+    },
+    "fileMenu": {
+      "history": "Show history of this file"
+    }
   },
   "sync": {
     "fetch": "Fetch",

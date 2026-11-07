@@ -256,7 +256,34 @@
       "title": "Aún no hay commits",
       "description": "Haz tu primer commit y aparecerá aquí."
     },
-    "selectFile": "Elige un archivo del commit para ver sus diferencias."
+    "selectFile": "Elige un archivo del commit para ver sus diferencias.",
+    "search": {
+      "text": "Buscar en los mensajes de commit",
+      "filters": "Más filtros",
+      "author": "Autor",
+      "path": "Archivo o carpeta",
+      "content": "Texto que cambió en el código",
+      "contentHint": "Encuentra los commits que agregaron o quitaron ese texto. En repos grandes puede tardar.",
+      "since": "Desde",
+      "until": "Hasta",
+      "regex": "Usar expresión regular",
+      "allBranches": "Todas las ramas",
+      "follow": "Seguir renombrados",
+      "clear": "Limpiar filtros",
+      "noResults": {
+        "title": "Sin resultados",
+        "description": "Ningún commit coincide con tu búsqueda."
+      }
+    },
+    "view": {
+      "label": "Vista del historial",
+      "list": "Lista",
+      "graph": "Grafo",
+      "graphDisabled": "Grafo (se activa al quitar los filtros)"
+    },
+    "fileMenu": {
+      "history": "Ver historial de este archivo"
+    }
   },
   "sync": {
     "fetch": "Fetch",

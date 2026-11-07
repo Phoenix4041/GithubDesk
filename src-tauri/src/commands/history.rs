@@ -1,15 +1,18 @@
 use std::path::Path;
 
+use tauri::State;
+
 use crate::error::{AppResult, ErrorKind};
+use crate::git::history_query::{build_log_arguments, HistoryQuery};
 use crate::git::parse::diff::{parse_unified_diff, FileDiff};
 use crate::git::parse::log::{
     parse_commit_detail, parse_log, parse_name_status, CommitDetail, CommitFile, CommitSummary,
-    DETAIL_FORMAT, LOG_FORMAT,
+    DETAIL_FORMAT,
 };
-use crate::git::runner::{git, git_unchecked, git_with_input};
-use crate::git::validate::{ensure_commit_hash, ensure_relative_path, ensure_revision};
-
-const MAX_PAGE_SIZE: u32 = 500;
+use crate::git::runner::{git, git_streaming, git_unchecked, git_with_input};
+use crate::git::validate::{ensure_commit_hash, ensure_relative_path};
+use crate::jobs::CancelToken;
+use crate::state::AppState;
 
 pub async fn history_page(
     repo: &Path,
@@ -17,37 +20,53 @@ pub async fn history_page(
     skip: u32,
     limit: u32,
 ) -> AppResult<Vec<CommitSummary>> {
-    let revision = revision
-        .map(str::trim)
-        .filter(|value| !value.is_empty())
-        .unwrap_or("HEAD");
-    ensure_revision(revision)?;
+    let query = HistoryQuery {
+        revision: revision.map(str::to_string),
+        ..HistoryQuery::default()
+    };
+    history_search(repo, &query, skip, limit, None).await
+}
 
-    let count_argument = format!("--max-count={}", limit.clamp(1, MAX_PAGE_SIZE));
-    let skip_argument = format!("--skip={skip}");
-    let output = git_unchecked(
+pub async fn history_search(
+    repo: &Path,
+    query: &HistoryQuery,
+    skip: u32,
+    limit: u32,
+    cancel: Option<CancelToken>,
+) -> AppResult<Vec<CommitSummary>> {
+    let arguments = build_log_arguments(query, skip, limit)?;
+    let borrowed: Vec<&str> = arguments.iter().map(String::as_str).collect();
+    let result = match cancel {
+        Some(token) => git_streaming(Some(repo), &borrowed, token, &|_| {}).await,
+        None => git(repo, &borrowed).await,
+    };
+    match result {
+        Ok(output) => Ok(parse_log(&output.stdout)),
+        Err(error) if error.kind == ErrorKind::NoCommits => Ok(Vec::new()),
+        Err(error) => Err(error),
+    }
+}
+
+pub async fn prepare_commit_graph(repo: &Path) -> AppResult<()> {
+    let probe = git(
         repo,
-        &[
-            "log",
-            "-z",
-            "--decorate=full",
-            LOG_FORMAT,
-            &count_argument,
-            &skip_argument,
-            revision,
-            "--",
-        ],
+        &["rev-parse", "--git-path", "objects/info/commit-graph"],
     )
     .await?;
-
-    if output.success() {
-        return Ok(parse_log(&output.stdout));
+    let single = repo.join(probe.trimmed());
+    let split = repo.join(
+        git(
+            repo,
+            &["rev-parse", "--git-path", "objects/info/commit-graphs"],
+        )
+        .await?
+        .trimmed(),
+    );
+    if single.exists() || split.exists() {
+        return Ok(());
     }
-    let error = crate::error::AppError::from_git_failure(&output.text(), &output.stderr);
-    if error.kind == ErrorKind::NoCommits {
-        return Ok(Vec::new());
-    }
-    Err(error)
+    let _ = git_unchecked(repo, &["commit-graph", "write", "--reachable"]).await?;
+    Ok(())
 }
 
 pub async fn commit_detail(repo: &Path, hash: &str) -> AppResult<Option<CommitDetail>> {
@@ -129,12 +148,27 @@ pub async fn commit_file_diff(
 
 #[tauri::command]
 pub async fn history_list(
+    state: State<'_, AppState>,
     path: String,
-    revision: Option<String>,
+    query: HistoryQuery,
     skip: u32,
     limit: u32,
+    job_id: Option<String>,
 ) -> AppResult<Vec<CommitSummary>> {
-    history_page(Path::new(&path), revision.as_deref(), skip, limit).await
+    let guard = job_id.as_deref().map(|id| state.jobs.register(id));
+    history_search(
+        Path::new(&path),
+        &query,
+        skip,
+        limit,
+        guard.as_ref().map(|guard| guard.token()),
+    )
+    .await
+}
+
+#[tauri::command]
+pub async fn history_prepare_graph(path: String) -> AppResult<()> {
+    prepare_commit_graph(Path::new(&path)).await
 }
 
 #[tauri::command]

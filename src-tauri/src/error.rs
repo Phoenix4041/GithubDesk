@@ -271,6 +271,7 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     }
     if has("does not have any commits yet")
         || has("bad default revision")
+        || has("ambiguous argument 'head'")
         || has("bad revision 'head'")
     {
         return ErrorKind::NoCommits;

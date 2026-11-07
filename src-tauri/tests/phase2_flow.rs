@@ -2,12 +2,14 @@ mod common;
 
 use std::path::Path;
 
-use common::{commit_file, git_output, git_try, new_repository, write_file, Workspace};
+use common::{commit_file, git_as, git_output, git_try, new_repository, write_file, Workspace};
 use githubdesk_lib::commands::commit_ops::{self, ResetMode};
 use githubdesk_lib::commands::operation::{self, OperationAction};
 use githubdesk_lib::commands::{history, remote, stash, status, tag};
 use githubdesk_lib::error::ErrorKind;
+use githubdesk_lib::git::history_query::{ContentMode, HistoryQuery, HistoryScope};
 use githubdesk_lib::git::parse::diff::LineKind;
+use githubdesk_lib::git::parse::log::CommitSummary;
 use githubdesk_lib::git::parse::status::ChangeKind;
 use githubdesk_lib::git::repo_state::OperationKind;
 use githubdesk_lib::jobs::CancelToken;
@@ -634,4 +636,287 @@ async fn branch_can_be_created_from_a_stash() {
         "work in progress\n"
     );
     assert!(stash::list_stashes(repo).await.expect("list").is_empty());
+}
+
+async fn searchable_repository() -> Workspace {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "alpha.txt", "first line\n", "Add alpha file").await;
+    commit_file(
+        repo,
+        "beta.txt",
+        "needle in a haystack\n",
+        "Add beta with needle",
+    )
+    .await;
+    git_as(
+        repo,
+        "Grace Hopper",
+        "grace@example.com",
+        &["commit", "--allow-empty", "-m", "Compiler tweak by Grace"],
+    );
+    commit_file(
+        repo,
+        "alpha.txt",
+        "first line\nsecond line\n",
+        "Extend alpha",
+    )
+    .await;
+    workspace
+}
+
+fn subjects(commits: &[CommitSummary]) -> Vec<&str> {
+    commits
+        .iter()
+        .map(|commit| commit.subject.as_str())
+        .collect()
+}
+
+#[tokio::test]
+async fn history_search_filters_by_message_and_author() {
+    let workspace = searchable_repository().await;
+    let repo = workspace.path.as_path();
+
+    let by_message = history::history_search(
+        repo,
+        &HistoryQuery {
+            text: Some("ALPHA".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("message search");
+    assert_eq!(
+        subjects(&by_message),
+        vec!["Extend alpha", "Add alpha file"]
+    );
+
+    let by_author = history::history_search(
+        repo,
+        &HistoryQuery {
+            author: Some("grace".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("author search");
+    assert_eq!(subjects(&by_author), vec!["Compiler tweak by Grace"]);
+
+    let both = history::history_search(
+        repo,
+        &HistoryQuery {
+            text: Some("alpha".into()),
+            author: Some("Test User".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("combined");
+    assert_eq!(subjects(&both), vec!["Extend alpha", "Add alpha file"]);
+}
+
+#[tokio::test]
+async fn history_search_finds_content_changes_with_text_and_regex() {
+    let workspace = searchable_repository().await;
+    let repo = workspace.path.as_path();
+
+    let pickaxe = history::history_search(
+        repo,
+        &HistoryQuery {
+            content: Some("needle".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        Some(CancelToken::never()),
+    )
+    .await
+    .expect("pickaxe");
+    assert_eq!(subjects(&pickaxe), vec!["Add beta with needle"]);
+
+    let regex = history::history_search(
+        repo,
+        &HistoryQuery {
+            content: Some("sec.nd line".into()),
+            content_mode: ContentMode::Regex,
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("regex");
+    assert_eq!(subjects(&regex), vec!["Extend alpha"]);
+}
+
+#[tokio::test]
+async fn history_search_limits_by_path_and_follows_renames() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(
+        repo,
+        "old.txt",
+        "content that stays the same\nmore\n",
+        "Create old",
+    )
+    .await;
+    git_output(repo, &["mv", "old.txt", "new.txt"]);
+    git_output(repo, &["commit", "-m", "Rename to new"]);
+    commit_file(
+        repo,
+        "new.txt",
+        "content that stays the same\nmore\nextra\n",
+        "Edit new",
+    )
+    .await;
+
+    let plain = history::history_search(
+        repo,
+        &HistoryQuery {
+            path: Some("new.txt".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("path");
+    assert_eq!(subjects(&plain), vec!["Edit new", "Rename to new"]);
+
+    let followed = history::history_search(
+        repo,
+        &HistoryQuery {
+            path: Some("new.txt".into()),
+            follow: true,
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("follow");
+    assert_eq!(
+        subjects(&followed),
+        vec!["Edit new", "Rename to new", "Create old"]
+    );
+}
+
+#[tokio::test]
+async fn history_search_filters_by_date_range() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    write_file(repo, "a.txt", "a\n");
+    git_output(repo, &["add", "a.txt"]);
+    git_output(
+        repo,
+        &["commit", "-m", "old commit", "--date=2020-03-10T12:00:00"],
+    );
+    let old_date = "2020-03-10T12:00:00";
+    git_output(
+        repo,
+        &[
+            "commit",
+            "--amend",
+            "--no-edit",
+            &format!("--date={old_date}"),
+        ],
+    );
+    commit_file(repo, "b.txt", "b\n", "recent commit").await;
+
+    let recent_only = history::history_search(
+        repo,
+        &HistoryQuery {
+            since: Some("2024-01-01".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("since");
+    assert!(subjects(&recent_only).contains(&"recent commit"));
+}
+
+#[tokio::test]
+async fn history_search_all_scope_includes_other_branches() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "a.txt", "a\n", "on main").await;
+    git_output(repo, &["checkout", "-b", "side"]);
+    commit_file(repo, "b.txt", "b\n", "on side").await;
+    git_output(repo, &["checkout", "main"]);
+
+    let current = history::history_search(repo, &HistoryQuery::default(), 0, 50, None)
+        .await
+        .expect("current");
+    assert_eq!(subjects(&current), vec!["on main"]);
+
+    let all = history::history_search(
+        repo,
+        &HistoryQuery {
+            scope: HistoryScope::All,
+            topo_order: true,
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("all");
+    assert_eq!(all.len(), 2);
+    let side = all
+        .iter()
+        .find(|commit| commit.subject == "on side")
+        .expect("side commit");
+    assert_eq!(side.parents.len(), 1);
+}
+
+#[tokio::test]
+async fn history_search_on_a_repository_without_commits_is_empty() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let all = history::history_search(
+        repo,
+        &HistoryQuery {
+            scope: HistoryScope::All,
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("empty");
+    assert!(all.is_empty());
+}
+
+#[tokio::test]
+async fn prepare_commit_graph_writes_the_file_once() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "a.txt", "a\n", "one").await;
+    let graph_file = repo
+        .join(".git")
+        .join("objects")
+        .join("info")
+        .join("commit-graph");
+    assert!(!graph_file.exists());
+
+    history::prepare_commit_graph(repo).await.expect("prepare");
+    assert!(graph_file.exists());
+    history::prepare_commit_graph(repo).await.expect("again");
 }

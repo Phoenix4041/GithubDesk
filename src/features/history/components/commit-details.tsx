@@ -1,7 +1,10 @@
+import { History } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { formatDateTime } from "@/shared/lib/format";
+import { openContextMenu } from "@/shared/ui/context-menu";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { VirtualList } from "@/shared/ui/virtual-list";
+import { useHistoryFilterStore } from "../filter-store";
 import { useCommitDetail, useCommitFiles } from "../queries";
 import { useHistoryStore } from "../store";
 import { CommitFileRow } from "./commit-file-row";
@@ -19,6 +22,7 @@ export function CommitDetails({ repoPath, hash }: CommitDetailsProps) {
   const files = useCommitFiles(repoPath, hash);
   const selectedFile = useHistoryStore((state) => state.selectedFile);
   const selectFile = useHistoryStore((state) => state.selectFile);
+  const showFileHistory = useHistoryFilterStore((state) => state.showFileHistory);
 
   const commit = detail.data;
 
@@ -57,6 +61,15 @@ export function CommitDetails({ repoPath, hash }: CommitDetailsProps) {
               file={file}
               selected={selectedFile?.path === file.path}
               onSelect={(chosen) => selectFile({ path: chosen.path, oldPath: chosen.oldPath })}
+              onContextMenu={(chosen, event) =>
+                openContextMenu(event, [
+                  {
+                    label: t("history.fileMenu.history"),
+                    icon: <History className="size-4" />,
+                    onSelect: () => showFileHistory(chosen.path),
+                  },
+                ])
+              }
             />
           )}
         />

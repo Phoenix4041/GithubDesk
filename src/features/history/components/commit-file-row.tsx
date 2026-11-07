@@ -1,3 +1,4 @@
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { ChangeKindBadge } from "@/features/changes/components/change-badge";
 import { cn } from "@/shared/lib/cn";
@@ -8,9 +9,10 @@ interface CommitFileRowProps {
   file: CommitFile;
   selected: boolean;
   onSelect: (file: CommitFile) => void;
+  onContextMenu?: (file: CommitFile, event: ReactMouseEvent) => void;
 }
 
-export function CommitFileRow({ file, selected, onSelect }: CommitFileRowProps) {
+export function CommitFileRow({ file, selected, onSelect, onContextMenu }: CommitFileRowProps) {
   const { t } = useTranslation();
   const { directory, fileName } = splitPath(file.path);
   return (
@@ -18,6 +20,7 @@ export function CommitFileRow({ file, selected, onSelect }: CommitFileRowProps) 
       type="button"
       aria-current={selected ? "true" : undefined}
       onClick={() => onSelect(file)}
+      onContextMenu={onContextMenu ? (event) => onContextMenu(file, event) : undefined}
       title={file.oldPath ? `${file.oldPath} -> ${file.path}` : file.path}
       className={cn(
         "mx-1.5 flex h-[calc(100%-2px)] w-[calc(100%-12px)] cursor-pointer items-center gap-2 rounded-md px-2 text-left transition-colors duration-150",

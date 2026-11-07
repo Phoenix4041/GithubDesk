@@ -41,6 +41,7 @@ pub fn run() {
             operation::operation_state,
             operation::operation_run,
             history::history_list,
+            history::history_prepare_graph,
             history::history_detail,
             history::history_files,
             history::history_file_diff,

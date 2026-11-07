@@ -218,3 +218,20 @@ export interface Stash {
   message: string;
   time: number;
 }
+
+export type HistoryScope = "current" | "all";
+
+export type ContentMode = "text" | "regex";
+
+export interface HistoryQuery {
+  scope: HistoryScope;
+  text: string | null;
+  author: string | null;
+  content: string | null;
+  contentMode: ContentMode;
+  path: string | null;
+  follow: boolean;
+  since: string | null;
+  until: string | null;
+  topoOrder: boolean;
+}

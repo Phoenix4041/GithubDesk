@@ -1,13 +1,29 @@
-import { call } from "@/shared/lib/tauri-client";
-import type { CommitDetail, CommitFile, CommitSummary, FileDiff, ResetMode } from "@/shared/types/git";
+import { call, cancelJob } from "@/shared/lib/tauri-client";
+import type { CommitDetail, CommitFile, CommitSummary, FileDiff, HistoryQuery, ResetMode } from "@/shared/types/git";
 
-export function listHistory(
+export async function listHistory(
   path: string,
-  revision: string | null,
+  query: HistoryQuery,
   skip: number,
   limit: number,
+  signal?: AbortSignal,
 ): Promise<CommitSummary[]> {
-  return call<CommitSummary[]>("history_list", { path, revision, skip, limit });
+  const jobId = query.content !== null ? crypto.randomUUID() : null;
+  const abort = () => {
+    if (jobId) {
+      void cancelJob(jobId);
+    }
+  };
+  signal?.addEventListener("abort", abort, { once: true });
+  try {
+    return await call<CommitSummary[]>("history_list", { path, query, skip, limit, jobId });
+  } finally {
+    signal?.removeEventListener("abort", abort);
+  }
+}
+
+export function prepareGraph(path: string): Promise<void> {
+  return call<void>("history_prepare_graph", { path });
 }
 
 export function getCommitDetail(path: string, hash: string): Promise<CommitDetail | null> {
