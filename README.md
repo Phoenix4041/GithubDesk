@@ -22,6 +22,14 @@ Cliente de Git y GitHub de escritorio hecho con Tauri 2, React y TypeScript.
 - Pull requests: lista, conversación, archivos con diff, comprobaciones, revisiones, combinar (merge, squash o rebase), cerrar, reabrir y traer la rama a tu equipo.
 - Issues: lista con búsqueda y etiquetas, conversación, crear, comentar, cerrar con motivo y reabrir.
 - Actions: ejecuciones con filtros, jobs y pasos, registro de cada job, volver a ejecutar, cancelar y lanzar un workflow a mano.
+- Paleta de comandos (Ctrl+K) con todas las acciones y atajos de teclado que se pueden cambiar uno por uno.
+- Terminal integrada abierta en la carpeta del repositorio, con una terminal real (PowerShell, Git Bash, cmd, bash o zsh).
+- Worktrees: crear, abrir, bloquear y eliminar carpetas de trabajo adicionales del mismo repositorio.
+- Submódulos: agregar, inicializar, actualizar y eliminar, con progreso y cancelación.
+- Firma de commits con GPG o SSH, detección de claves, prueba de firma e insignia de firma válida en cada commit.
+- Git LFS: activar en el repositorio, elegir qué tipos de archivo van a LFS, ver los archivos y descargarlos.
+- Editor de .gitignore con plantillas, comprobación de rutas y opción de dejar de seguir archivos que ya se ignoran.
+- Abrir el repositorio o un archivo en el editor externo (VS Code, Cursor, Sublime, Zed, Notepad++ u otro) y mostrarlo en el explorador de archivos.
 
 ## Conectar GitHub
 
@@ -33,6 +41,22 @@ Abre Ajustes y elige Agregar cuenta. Hay dos formas:
 Los tokens se guardan en el almacén de credenciales del sistema (Administrador de credenciales en Windows), nunca en archivos de la aplicación ni en el registro.
 
 Las secciones Pull requests, Issues y Actions aparecen cuando algún remoto del repositorio apunta a GitHub o a un servidor para el que hay una cuenta conectada. Con el chip junto al nombre del repositorio se elige la cuenta que usa y, de forma opcional, si git (fetch, pull y push) usa también el token de esa cuenta en lugar de las credenciales guardadas del sistema.
+
+## Atajos principales
+
+Todos se pueden cambiar en Ajustes, Personalizar atajos, o desde la paleta de comandos.
+
+| Atajo | Acción |
+| --- | --- |
+| Ctrl+K | Paleta de comandos |
+| Ctrl+J | Mostrar u ocultar la terminal |
+| Ctrl+1 a Ctrl+5 | Cambios, Historial, Pull requests, Issues y Actions |
+| Ctrl+Shift+F, Ctrl+Shift+L, Ctrl+P | Fetch, pull y push |
+| Ctrl+Shift+N | Crear una rama |
+| Ctrl+Shift+S | Guardar los cambios en un stash |
+| Ctrl+Shift+E | Abrir el repositorio en el editor externo |
+| Ctrl+Shift+X | Mostrar el repositorio en el explorador |
+| Ctrl+, | Ajustes |
 
 ## Requisitos
 
@@ -68,6 +92,7 @@ pnpm tauri build
 - `src-tauri/`: backend en Rust. Ejecuta el binario `git` del sistema y parsea salidas de formato estable.
 - `src-tauri/src/commands/`: un módulo por área, todos asíncronos para no bloquear la ventana.
 - `src-tauri/src/git/parse/`: parsers de la salida de git, con pruebas unitarias.
+- `src-tauri/src/pty.rs`: sesiones de terminal con pseudoconsola real y eventos hacia la interfaz.
 - `src-tauri/src/github/`: cliente de la API REST de GitHub (paginación, caché por ETag, errores tipados), cuentas, flujo de dispositivo, pull requests, issues y Actions.
 - `src-tauri/tests/`: pruebas de integración que usan repositorios reales y un servidor HTTP local que imita a GitHub.
 - `src/features/`: una carpeta por funcionalidad de la interfaz.
@@ -80,6 +105,15 @@ pnpm tauri build
 - Las ejecuciones de Actions que están en curso se refrescan solas cada pocos segundos hasta que terminan.
 - El registro de un job muestra como máximo los últimos 400 KB.
 - Al lanzar un workflow a mano, el workflow necesita el disparador `workflow_dispatch`.
+
+## Notas de la Fase 4
+
+- La terminal usa ConPTY en Windows. xterm.js se carga solo la primera vez que se abre la terminal.
+- Firma con GPG: la aplicación usa el `gpg` de tu PATH, el configurado en `gpg.program` o, en Windows, el que trae Git for Windows. Si la clave tiene contraseña, GPG necesita un programa de ingreso gráfico (pinentry), como el de Gpg4win.
+- Firma con SSH: git necesita `ssh-keygen`. Para ver "Firma válida" en esta aplicación hace falta un archivo de firmantes permitidos; GitHub verifica las firmas SSH por su cuenta.
+- Git LFS requiere tener instalado `git-lfs`. Activarlo en un repositorio solo cambia la configuración local de ese repositorio.
+- Los submódulos con direcciones `file://` los bloquea git por seguridad desde la versión 2.38.1.
+- Las secciones Worktrees, Submódulos y Git LFS se consultan solo cuando se abren en la barra lateral.
 
 ## Notas de rendimiento
 
