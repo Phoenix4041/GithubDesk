@@ -1,8 +1,8 @@
 use std::path::{Component, Path, PathBuf};
 use std::time::Duration;
 
-use notify::{EventKind, RecommendedWatcher, RecursiveMode};
-use notify_debouncer_full::{new_debouncer, DebounceEventResult, Debouncer, RecommendedCache};
+use notify::{Config, EventKind, RecommendedWatcher, RecursiveMode};
+use notify_debouncer_full::{new_debouncer_opt, DebounceEventResult, Debouncer, NoCache};
 use serde::Serialize;
 use tauri::{AppHandle, Emitter};
 
@@ -31,7 +31,7 @@ struct RepoChanged {
 }
 
 pub struct RepoWatcher {
-    _debouncer: Debouncer<RecommendedWatcher, RecommendedCache>,
+    _debouncer: Debouncer<RecommendedWatcher, NoCache>,
 }
 
 pub fn is_relevant_change(repo: &Path, changed: &Path) -> bool {
@@ -82,8 +82,14 @@ pub fn start_watching(app: AppHandle, repo: PathBuf) -> AppResult<RepoWatcher> {
         }
     };
 
-    let mut debouncer = new_debouncer(Duration::from_millis(DEBOUNCE_MILLISECONDS), None, handler)
-        .map_err(|error| AppError::new(ErrorKind::Io, error.to_string()))?;
+    let mut debouncer = new_debouncer_opt::<_, RecommendedWatcher, NoCache>(
+        Duration::from_millis(DEBOUNCE_MILLISECONDS),
+        None,
+        handler,
+        NoCache::new(),
+        Config::default(),
+    )
+    .map_err(|error| AppError::new(ErrorKind::Io, error.to_string()))?;
     debouncer
         .watch(&repo, RecursiveMode::Recursive)
         .map_err(|error| AppError::new(ErrorKind::Io, error.to_string()))?;
