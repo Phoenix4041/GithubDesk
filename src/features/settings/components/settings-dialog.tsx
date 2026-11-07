@@ -4,8 +4,10 @@ import { useId } from "react";
 import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGUAGES, changeLanguage, isLanguage } from "@/i18n";
 import { cn } from "@/shared/lib/cn";
+import { IS_MAC } from "@/shared/lib/platform";
 import { Button } from "@/shared/ui/button";
 import { useCommandUiStore } from "@/features/commands/command-ui-store";
+import { formatCombo } from "@/features/commands/shortcut-model";
 import { useEditors } from "@/features/external/queries";
 import { AccountsSection } from "@/features/github/components/accounts-section";
 import { Dialog } from "@/shared/ui/dialog";
@@ -111,7 +113,9 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
         />
         <div className="flex flex-col gap-2">
           <span className="text-xs font-medium">{t("settings.shortcuts.label")}</span>
-          <p className="text-xs text-muted">{t("settings.shortcuts.description")}</p>
+          <p className="text-xs text-muted">
+            {t("settings.shortcuts.description", { shortcut: formatCombo("Mod+K", IS_MAC) })}
+          </p>
           <Button
             className="w-fit"
             onClick={() => {

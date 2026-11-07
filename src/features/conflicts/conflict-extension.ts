@@ -66,9 +66,9 @@ const conflictPlugin = ViewPlugin.fromClass(
 );
 
 const conflictTheme = EditorView.baseTheme({
-  ".cm-conflict-ours": { backgroundColor: "color-mix(in srgb, var(--add) 14%, transparent)" },
-  ".cm-conflict-theirs": { backgroundColor: "color-mix(in srgb, var(--accent) 16%, transparent)" },
-  ".cm-conflict-base": { backgroundColor: "color-mix(in srgb, var(--muted) 14%, transparent)" },
+  ".cm-conflict-ours": { backgroundColor: "var(--conflict-ours)" },
+  ".cm-conflict-theirs": { backgroundColor: "var(--conflict-theirs)" },
+  ".cm-conflict-base": { backgroundColor: "var(--conflict-base)" },
   ".cm-conflict-marker": {
     backgroundColor: "var(--hunk-bg)",
     color: "var(--muted)",

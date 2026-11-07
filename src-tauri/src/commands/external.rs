@@ -126,8 +126,61 @@ fn locate(editor: &KnownEditor) -> Option<PathBuf> {
                 return Some(path);
             }
         }
+    } else {
+        for location in unix_locations(editor.id) {
+            let candidate = PathBuf::from(location);
+            if candidate.is_file() {
+                return Some(candidate);
+            }
+        }
     }
     None
+}
+
+fn unix_locations(id: &str) -> &'static [&'static str] {
+    if cfg!(target_os = "macos") {
+        match id {
+            "vscode" => &[
+                "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code",
+                "/opt/homebrew/bin/code",
+                "/usr/local/bin/code",
+            ],
+            "vscode-insiders" => &[
+                "/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code-insiders",
+                "/opt/homebrew/bin/code-insiders",
+                "/usr/local/bin/code-insiders",
+            ],
+            "cursor" => &["/Applications/Cursor.app/Contents/Resources/app/bin/cursor"],
+            "zed" => &[
+                "/Applications/Zed.app/Contents/MacOS/cli",
+                "/opt/homebrew/bin/zed",
+                "/usr/local/bin/zed",
+            ],
+            "sublime" => &[
+                "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl",
+                "/opt/homebrew/bin/subl",
+                "/usr/local/bin/subl",
+            ],
+            _ => &[],
+        }
+    } else {
+        match id {
+            "vscode" => &[
+                "/usr/bin/code",
+                "/snap/bin/code",
+                "/usr/share/code/bin/code",
+            ],
+            "vscode-insiders" => &["/usr/bin/code-insiders", "/snap/bin/code-insiders"],
+            "cursor" => &["/usr/bin/cursor", "/opt/Cursor/cursor"],
+            "zed" => &["/usr/bin/zed", "/usr/local/bin/zed"],
+            "sublime" => &[
+                "/usr/bin/subl",
+                "/snap/bin/subl",
+                "/opt/sublime_text/sublime_text",
+            ],
+            _ => &[],
+        }
+    }
 }
 
 pub fn detect_editors() -> Vec<EditorOption> {
@@ -307,6 +360,17 @@ mod tests {
             None
         );
         assert_eq!(expand_variables("plain"), Some(PathBuf::from("plain")));
+    }
+
+    #[test]
+    fn unix_locations_are_absolute_and_cover_every_cross_platform_editor() {
+        for editor in KNOWN_EDITORS.iter().filter(|item| item.id != "notepad++") {
+            let locations = unix_locations(editor.id);
+            assert!(!locations.is_empty(), "no unix location for {}", editor.id);
+            assert!(locations.iter().all(|path| path.starts_with('/')));
+        }
+        assert!(unix_locations("notepad++").is_empty());
+        assert!(unix_locations("unknown").is_empty());
     }
 
     #[test]

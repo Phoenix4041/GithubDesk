@@ -157,9 +157,12 @@ pub async fn write_signing_config(repo: &Path, update: &SigningUpdate) -> AppRes
 }
 
 fn home_directory() -> Option<PathBuf> {
-    std::env::var_os("USERPROFILE")
-        .or_else(|| std::env::var_os("HOME"))
-        .map(PathBuf::from)
+    let home = std::env::var_os("HOME");
+    if cfg!(windows) {
+        std::env::var_os("USERPROFILE").or(home).map(PathBuf::from)
+    } else {
+        home.map(PathBuf::from)
+    }
 }
 
 async fn run_tool(program: &str, args: &[&str]) -> Option<String> {

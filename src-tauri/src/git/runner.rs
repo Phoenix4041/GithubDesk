@@ -149,8 +149,18 @@ async fn kill_process_tree(pid: u32) {
     let _ = killer.status().await;
 }
 
+#[cfg(not(windows))]
+async fn kill_process_tree(pid: u32) {
+    let mut killer = Command::new("kill");
+    killer
+        .args(["-KILL", "--", &format!("-{pid}")])
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null());
+    let _ = killer.status().await;
+}
+
 async fn terminate(child: &mut Child) {
-    #[cfg(windows)]
     if let Some(pid) = child.id() {
         kill_process_tree(pid).await;
     }
@@ -180,6 +190,8 @@ pub async fn git_streaming(
         .stderr(Stdio::piped())
         .stdin(Stdio::null())
         .kill_on_drop(true);
+    #[cfg(unix)]
+    command.process_group(0);
 
     let mut child = command.spawn().map_err(spawn_error)?;
     let mut stdout = child.stdout.take().expect("stdout is piped");

@@ -3,6 +3,7 @@ pub mod error;
 pub mod git;
 pub mod github;
 pub mod jobs;
+pub mod platform;
 pub mod pty;
 pub mod state;
 pub mod watcher;
@@ -17,6 +18,7 @@ use state::AppState;
 use tauri::Manager;
 
 pub fn run() {
+    platform::extend_search_path();
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())

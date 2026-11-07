@@ -48,8 +48,8 @@ const editorTheme = EditorView.theme({
   },
   ".cm-lineNumbers .cm-gutterElement": { padding: "0 10px 0 12px" },
   ".cm-cursor, .cm-dropCursor": { borderLeftColor: "var(--fg)" },
-  ".cm-selectionBackground": { backgroundColor: "color-mix(in srgb, var(--accent) 22%, transparent)" },
-  "&.cm-focused .cm-selectionBackground": { backgroundColor: "color-mix(in srgb, var(--accent) 32%, transparent)" },
+  ".cm-selectionBackground": { backgroundColor: "var(--selection)" },
+  "&.cm-focused .cm-selectionBackground": { backgroundColor: "var(--selection-focus)" },
 });
 
 export function CodeEditor({

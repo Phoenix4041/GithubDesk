@@ -71,7 +71,12 @@ function ShortcutsBody() {
         return;
       }
       if (!isValidCombo(combo)) {
-        setHint(t("commands.shortcuts.invalid"));
+        setHint(
+          t("commands.shortcuts.invalid", {
+            modifier: IS_MAC ? "Cmd" : "Ctrl",
+            alt: IS_MAC ? "Option" : "Alt",
+          }),
+        );
         return;
       }
       const result = assignShortcut(commands, useSettingsStore.getState().shortcuts, targetId, combo);

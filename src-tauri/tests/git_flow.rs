@@ -97,7 +97,12 @@ async fn rejects_paths_outside_the_repository() {
         .expect_err("must reject");
     assert_eq!(error.kind, ErrorKind::InvalidInput);
 
-    let error = status::discard_changes(repo, &[], &["..\\escape.txt".to_string()])
+    let escaping = if cfg!(windows) {
+        "..\\escape.txt"
+    } else {
+        "nested/../../escape.txt"
+    };
+    let error = status::discard_changes(repo, &[], &[escaping.to_string()])
         .await
         .expect_err("must reject");
     assert_eq!(error.kind, ErrorKind::InvalidInput);

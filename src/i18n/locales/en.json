@@ -345,7 +345,7 @@
     },
     "shortcuts": {
       "label": "Keyboard shortcuts",
-      "description": "Ctrl+K opens the palette with every action. You can change each shortcut.",
+      "description": "{{shortcut}} opens the palette with every action. You can change each shortcut.",
       "open": "Customize shortcuts"
     },
     "editor": {
@@ -1322,7 +1322,7 @@
       "search": "Search action",
       "pressKeys": "Press the keys...",
       "none": "No shortcut",
-      "invalid": "Use Ctrl or Alt with another key, or a function key.",
+      "invalid": "Use {{modifier}} or {{alt}} with another key, or a function key.",
       "reassigned": "That shortcut was removed from: {{names}}",
       "record": "Change the shortcut of {{command}}",
       "reset": "Restore the shortcut of {{command}}",

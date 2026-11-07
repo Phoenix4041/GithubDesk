@@ -345,7 +345,7 @@
     },
     "shortcuts": {
       "label": "Atajos de teclado",
-      "description": "Ctrl+K abre la paleta con todas las acciones. Puedes cambiar cada atajo.",
+      "description": "{{shortcut}} abre la paleta con todas las acciones. Puedes cambiar cada atajo.",
       "open": "Personalizar atajos"
     },
     "editor": {
@@ -1322,7 +1322,7 @@
       "search": "Buscar acción",
       "pressKeys": "Pulsa las teclas...",
       "none": "Sin atajo",
-      "invalid": "Usa Ctrl o Alt junto con otra tecla, o una tecla de función.",
+      "invalid": "Usa {{modifier}} o {{alt}} junto con otra tecla, o una tecla de función.",
       "reassigned": "Se quitó ese atajo a: {{names}}",
       "record": "Cambiar el atajo de {{command}}",
       "reset": "Restaurar el atajo de {{command}}",

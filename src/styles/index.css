@@ -84,6 +84,24 @@
   --graph-7: #b3c25a;
 }
 
+:root {
+  --selection: var(--accent-soft);
+  --selection-focus: var(--accent-soft);
+  --conflict-ours: var(--add-bg);
+  --conflict-theirs: var(--accent-soft);
+  --conflict-base: var(--subtle);
+}
+
+@supports (background: color-mix(in srgb, red 10%, transparent)) {
+  :root {
+    --selection: color-mix(in srgb, var(--accent) 22%, transparent);
+    --selection-focus: color-mix(in srgb, var(--accent) 32%, transparent);
+    --conflict-ours: color-mix(in srgb, var(--add) 14%, transparent);
+    --conflict-theirs: color-mix(in srgb, var(--accent) 16%, transparent);
+    --conflict-base: color-mix(in srgb, var(--muted) 14%, transparent);
+  }
+}
+
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
@@ -154,6 +172,28 @@ button {
 
 .scrollbar-hidden {
   scrollbar-width: none;
+}
+
+@supports not (scrollbar-width: thin) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--line);
+    background-clip: content-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .selectable {
