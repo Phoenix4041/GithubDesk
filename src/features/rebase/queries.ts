@@ -6,6 +6,7 @@ export function useRebasePlan(repoPath: string, base: string) {
   return useQuery({
     queryKey: repoKeys.rebasePlan(repoPath, base),
     queryFn: () => getRebasePlan(repoPath, base),
+    enabled: base !== "",
     staleTime: Infinity,
     gcTime: 0,
     refetchOnWindowFocus: false,
