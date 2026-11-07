@@ -60,7 +60,7 @@ export function HistoryToolbar({ fields }: HistoryToolbarProps) {
         </div>
       </div>
       {panelOpen ? (
-        <div className="flex flex-col gap-2.5 rounded-lg border border-line bg-canvas p-3">
+        <div className="flex max-h-[45vh] flex-col gap-2.5 overflow-y-auto rounded-lg border border-line bg-canvas p-3">
           <div className="grid grid-cols-2 gap-2.5">
             <TextField
               label={t("history.search.author")}
@@ -77,7 +77,7 @@ export function HistoryToolbar({ fields }: HistoryToolbarProps) {
           </div>
           <TextField
             label={t("history.search.content")}
-            hint={t("history.search.contentHint")}
+            title={t("history.search.contentHint")}
             value={fields.content}
             onChange={(event) => patch({ content: event.target.value })}
             spellCheck={false}

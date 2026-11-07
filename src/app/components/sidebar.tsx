@@ -48,7 +48,7 @@ export function Sidebar({ repoPath }: SidebarProps) {
       </section>
       <section className="flex min-h-0 flex-1 flex-col gap-2 border-t border-line pt-2">
         <div className="flex items-center justify-between gap-2 px-3">
-          <div role="tablist" aria-label={t("sidebar.sectionsLabel")} className="flex items-center gap-1">
+          <div role="tablist" aria-label={t("sidebar.sectionsLabel")} className="flex min-w-0 items-center gap-0.5">
             {tabs.map((item) => {
               const selected = item.id === sidebarTab;
               return (
@@ -59,12 +59,12 @@ export function Sidebar({ repoPath }: SidebarProps) {
                   aria-selected={selected}
                   onClick={() => setSidebarTab(item.id)}
                   className={cn(
-                    "flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-[11px] font-semibold tracking-wide uppercase transition-colors duration-150",
+                    "flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-xs font-medium transition-colors duration-150",
                     selected ? "bg-subtle text-fg" : "text-muted hover:text-fg",
                   )}
                 >
                   {item.label}
-                  {item.count > 0 ? <span className="rounded-full bg-canvas px-1.5 py-px text-[10px] tabular-nums">{item.count}</span> : null}
+                  {selected && item.count > 0 ? <span className="rounded-full bg-canvas px-1.5 py-px text-[10px] tabular-nums">{item.count}</span> : null}
                 </button>
               );
             })}
