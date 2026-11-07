@@ -24,6 +24,7 @@ interface SettingsState {
   githubClientId: string;
   repoAccounts: Record<string, RepoAccountChoice>;
   shortcuts: ShortcutOverrides;
+  terminalShell: string | null;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -33,6 +34,7 @@ interface SettingsState {
   setGithubClientId: (clientId: string) => void;
   setRepoAccount: (repoPath: string, choice: RepoAccountChoice | null) => void;
   setShortcuts: (shortcuts: ShortcutOverrides) => void;
+  setTerminalShell: (shell: string | null) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -47,6 +49,7 @@ export const useSettingsStore = create<SettingsState>()(
       githubClientId: "",
       repoAccounts: {},
       shortcuts: {},
+      terminalShell: null,
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
@@ -65,6 +68,7 @@ export const useSettingsStore = create<SettingsState>()(
           return { repoAccounts: next };
         }),
       setShortcuts: (shortcuts) => set({ shortcuts }),
+      setTerminalShell: (terminalShell) => set({ terminalShell }),
     }),
     { name: "githubdesk.settings" },
   ),

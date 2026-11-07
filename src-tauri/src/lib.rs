@@ -3,13 +3,14 @@ pub mod error;
 pub mod git;
 pub mod github;
 pub mod jobs;
+pub mod pty;
 pub mod state;
 pub mod watcher;
 
 use commands::{
     blame, branch, commit, commit_ops, compare, conflict, github_account, github_actions,
     github_issues, github_pulls, github_repo, history, job, operation, rebase, reflog, remote,
-    repo, stash, status, tag, watch,
+    repo, stash, status, tag, terminal, watch,
 };
 use state::AppState;
 use tauri::Manager;
@@ -115,6 +116,11 @@ pub fn run() {
             tag::tag_delete,
             tag::tag_push,
             tag::tag_delete_remote,
+            terminal::terminal_shells,
+            terminal::terminal_open,
+            terminal::terminal_write,
+            terminal::terminal_resize,
+            terminal::terminal_close,
             job::job_cancel,
             watch::watch_start,
             watch::watch_stop,

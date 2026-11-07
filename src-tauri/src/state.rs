@@ -5,6 +5,7 @@ use crate::github::accounts::AccountStore;
 use crate::github::client::EtagCache;
 use crate::github::secrets::{KeyringStore, SecretStore};
 use crate::jobs::JobRegistry;
+use crate::pty::TerminalRegistry;
 use crate::watcher::RepoWatcher;
 
 pub struct AppState {
@@ -12,6 +13,7 @@ pub struct AppState {
     pub watcher: Mutex<Option<RepoWatcher>>,
     pub accounts: AccountStore,
     pub etags: Arc<EtagCache>,
+    pub terminals: TerminalRegistry,
 }
 
 impl AppState {
@@ -26,6 +28,7 @@ impl AppState {
             watcher: Mutex::new(None),
             accounts: AccountStore::new(accounts_directory, secrets),
             etags: Arc::new(EtagCache::default()),
+            terminals: TerminalRegistry::default(),
         }
     }
 }

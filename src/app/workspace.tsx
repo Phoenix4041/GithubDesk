@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BranchDialogs } from "@/features/branches/components/branch-dialogs";
 import { ChangesDiffPanel } from "@/features/changes/components/changes-diff-panel";
@@ -28,6 +28,7 @@ import { StashPanel } from "@/features/stash/components/stash-panel";
 import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
 import { TagDialogs } from "@/features/tags/components/tag-dialogs";
+import { useTerminalStore } from "@/features/terminal/store";
 import { CommandError } from "@/shared/lib/tauri-client";
 import { useUiStore } from "@/shared/lib/ui-store";
 import { ResizeHandle } from "@/shared/ui/resize-handle";
@@ -35,6 +36,10 @@ import { RepositoryUnavailable } from "./components/repository-unavailable";
 import { Sidebar } from "./components/sidebar";
 import { Toolbar } from "./components/toolbar";
 import { WorkspaceTabs } from "./components/workspace-tabs";
+
+const TerminalPanel = lazy(() =>
+  import("@/features/terminal/components/terminal-panel").then((module) => ({ default: module.TerminalPanel })),
+);
 
 interface WorkspaceProps {
   repoPath: string;
@@ -44,6 +49,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   const { t } = useTranslation();
   const status = useStatus(repoPath);
   const tab = useUiStore((state) => state.tab);
+  const terminalMounted = useTerminalStore((state) => state.mounted);
   const blameOpen = useBlameStore((state) => state.target !== null);
   const sidebarWidth = useSettingsStore((state) => state.sidebarWidth);
   const changesWidth = useSettingsStore((state) => state.changesWidth);
@@ -114,6 +120,11 @@ export function Workspace({ repoPath }: WorkspaceProps) {
           {!blameOpen && tab === "actions" ? <RunDetailPanel repoPath={repoPath} /> : null}
         </main>
       </div>
+      {terminalMounted ? (
+        <Suspense fallback={null}>
+          <TerminalPanel repoPath={repoPath} />
+        </Suspense>
+      ) : null}
       <BranchDialogs repoPath={repoPath} />
       <TagDialogs repoPath={repoPath} />
       <StashDialogs repoPath={repoPath} />

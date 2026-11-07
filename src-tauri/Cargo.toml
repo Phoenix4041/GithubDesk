@@ -25,6 +25,7 @@ notify-debouncer-full = "0.6"
 reqwest = { version = "0.13", default-features = false, features = ["native-tls", "json", "query", "form", "gzip", "http2", "system-proxy"] }
 base64 = "0.22"
 url = "2"
+portable-pty = "0.9.0"
 
 [target.'cfg(windows)'.dependencies]
 keyring = { version = "3.6", features = ["windows-native"] }

@@ -575,6 +575,34 @@
     "credentialStoreUnavailable": {
       "title": "No se pudo usar el almacén de credenciales",
       "message": "El sistema no permitió guardar o leer el token."
+    },
+    "terminalUnavailable": {
+      "title": "No se pudo abrir la terminal",
+      "message": "El sistema no permitió crear la sesión."
+    },
+    "terminalNotFound": {
+      "title": "La terminal ya no está abierta",
+      "message": "Reiníciala para continuar."
+    },
+    "worktreeHasChanges": {
+      "title": "El worktree tiene cambios",
+      "message": "Hay archivos modificados o sin seguimiento. Si continúas se pierden."
+    },
+    "signingFailed": {
+      "title": "No se pudo firmar el commit",
+      "message": "Revisa tu clave de firma y que el programa de firma esté disponible."
+    },
+    "signingKeyMissing": {
+      "title": "No se encontró la clave de firma",
+      "message": "Elige una clave en la configuración de firma del repositorio."
+    },
+    "lfsNotInstalled": {
+      "title": "Git LFS no está instalado",
+      "message": "Instala Git LFS para usar archivos grandes."
+    },
+    "editorNotFound": {
+      "title": "No se encontró el editor",
+      "message": "Revisa el editor externo en Ajustes."
     }
   },
   "operation": {
@@ -1303,7 +1331,26 @@
         "issueNew": "Crear un issue",
         "pullNew": "Crear una pull request",
         "workflowRun": "Ejecutar un workflow"
+      },
+      "terminal": {
+        "toggle": "Mostrar u ocultar la terminal"
       }
+    }
+  },
+  "terminal": {
+    "title": "Terminal",
+    "toggle": "Mostrar u ocultar la terminal",
+    "hide": "Ocultar la terminal",
+    "restart": "Reiniciar la terminal",
+    "resize": "Cambiar el alto de la terminal",
+    "shell": "Intérprete de comandos",
+    "defaultShell": "Predeterminado",
+    "exited": "El proceso terminó. Reinicia la terminal para abrir otra sesión.",
+    "status": {
+      "starting": "Iniciando...",
+      "running": "En ejecución",
+      "exited": "Terminó",
+      "error": "No se pudo abrir"
     }
   }
 }

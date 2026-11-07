@@ -575,6 +575,34 @@
     "credentialStoreUnavailable": {
       "title": "The credential store is unavailable",
       "message": "The system did not allow saving or reading the token."
+    },
+    "terminalUnavailable": {
+      "title": "The terminal could not be opened",
+      "message": "The system did not allow the session to be created."
+    },
+    "terminalNotFound": {
+      "title": "The terminal is no longer open",
+      "message": "Restart it to continue."
+    },
+    "worktreeHasChanges": {
+      "title": "The worktree has changes",
+      "message": "There are modified or untracked files. If you continue they are lost."
+    },
+    "signingFailed": {
+      "title": "The commit could not be signed",
+      "message": "Check your signing key and that the signing program is available."
+    },
+    "signingKeyMissing": {
+      "title": "The signing key was not found",
+      "message": "Pick a key in the signing settings of the repository."
+    },
+    "lfsNotInstalled": {
+      "title": "Git LFS is not installed",
+      "message": "Install Git LFS to use large files."
+    },
+    "editorNotFound": {
+      "title": "The editor was not found",
+      "message": "Check the external editor in Settings."
     }
   },
   "operation": {
@@ -1303,7 +1331,26 @@
         "issueNew": "Create an issue",
         "pullNew": "Create a pull request",
         "workflowRun": "Run a workflow"
+      },
+      "terminal": {
+        "toggle": "Show or hide the terminal"
       }
+    }
+  },
+  "terminal": {
+    "title": "Terminal",
+    "toggle": "Show or hide the terminal",
+    "hide": "Hide the terminal",
+    "restart": "Restart the terminal",
+    "resize": "Change the terminal height",
+    "shell": "Shell",
+    "defaultShell": "Default",
+    "exited": "The process ended. Restart the terminal to open a new session.",
+    "status": {
+      "starting": "Starting...",
+      "running": "Running",
+      "exited": "Ended",
+      "error": "Could not open"
     }
   }
 }

@@ -9,6 +9,7 @@ import { useReflogDialogStore } from "@/features/reflog/store";
 import { pickAndOpenRepository } from "@/features/repositories/actions";
 import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
 import { useSettingsStore } from "@/features/settings/store";
+import { useTerminalStore } from "@/features/terminal/store";
 import type { ThemePreference } from "@/features/settings/store";
 import { useStashDialogStore } from "@/features/stash/store";
 import { runSyncOperation } from "@/features/sync/operations";
@@ -277,6 +278,15 @@ function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount
       keywords: "deshacer ultima operacion undo",
       enabled: true,
       run: () => useReflogDialogStore.getState().show({ kind: "undo" }),
+    },
+    {
+      id: "terminal.toggle",
+      titleKey: "commands.items.terminal.toggle",
+      group: "tools",
+      keywords: "terminal consola shell powershell bash linea de comandos",
+      defaultShortcut: "Mod+J",
+      enabled: true,
+      run: () => useTerminalStore.getState().toggle(),
     },
     {
       id: "github.issue.new",

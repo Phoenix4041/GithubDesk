@@ -14,6 +14,9 @@ const DETAILED_KINDS: ReadonlySet<ErrorKind> = new Set<ErrorKind>([
   "githubNotMergeable",
   "githubForbidden",
   "githubNotConfigured",
+  "terminalUnavailable",
+  "signingFailed",
+  "editorNotFound",
 ]);
 
 export interface ErrorHandlers {
