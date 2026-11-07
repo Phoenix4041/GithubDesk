@@ -32,4 +32,9 @@ export default defineConfig(
     files: ["eslint.config.js", "vite.config.ts"],
     ...tseslint.configs.disableTypeChecked,
   },
+  {
+    files: ["scripts/**/*.mjs"],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: { globals: globals.node },
+  },
 );

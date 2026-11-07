@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
+    "smoke": "node scripts/smoke.mjs",
     "tauri": "tauri"
   },
   "dependencies": {

@@ -31,7 +31,8 @@ function CreateWorktreeDialog({ repoPath, onClose, branch }: DialogProps & { bra
   const branches = useBranches(repoPath);
   const worktrees = useWorktrees(repoPath);
   const available = branchesWithoutWorktree(branches.data ?? [], worktrees.data ?? []);
-  const [mode, setMode] = useState<Mode>(branch === undefined && available.length === 0 ? "new" : "existing");
+  const [chosenMode, setChosenMode] = useState<Mode | null>(null);
+  const mode: Mode = chosenMode ?? (branch === undefined && available.length === 0 ? "new" : "existing");
   const [chosen, setChosen] = useState<string | null>(branch ?? null);
   const [newBranch, setNewBranch] = useState("");
   const [startPoint, setStartPoint] = useState("");
@@ -106,7 +107,7 @@ function CreateWorktreeDialog({ repoPath, onClose, branch }: DialogProps & { bra
               type="button"
               role="radio"
               aria-checked={mode === item.id}
-              onClick={() => setMode(item.id)}
+              onClick={() => setChosenMode(item.id)}
               className={cn(
                 "h-7 cursor-pointer rounded-md px-3 text-xs font-medium transition-colors duration-150",
                 mode === item.id ? "bg-surface text-fg shadow-sm" : "text-muted hover:text-fg",
