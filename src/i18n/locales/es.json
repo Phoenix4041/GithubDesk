@@ -34,7 +34,8 @@
     "label": "Vistas del repositorio",
     "changes": "Cambios",
     "history": "Historial",
-    "stash": "Stash"
+    "stash": "Stash",
+    "compare": "Comparar"
   },
   "welcome": {
     "title": "Bienvenido a GithubDesk",
@@ -657,6 +658,39 @@
       "description": "Se eliminará \"{{message}}\".",
       "loss": "Los cambios guardados en este stash se perderán.",
       "confirm": "Eliminar"
+    }
+  },
+  "compare": {
+    "base": "Base",
+    "head": "Comparar con",
+    "swap": "Intercambiar ramas",
+    "close": "Cerrar comparación",
+    "mergeBase": "Ancestro común:",
+    "viewsLabel": "Vistas de la comparación",
+    "views": {
+      "files": "Archivos ({{count}})",
+      "headCommits": "Solo en la segunda ({{count}})",
+      "baseCommits": "Solo en la base ({{count}})"
+    },
+    "pick": {
+      "title": "Elige dos ramas",
+      "description": "Selecciona la base y la rama que quieres comparar con ella."
+    },
+    "same": {
+      "title": "Es la misma rama",
+      "description": "Elige dos ramas distintas para ver sus diferencias."
+    },
+    "noChanges": {
+      "title": "Sin diferencias de archivos",
+      "description": "La segunda rama no cambia nada respecto al ancestro común."
+    },
+    "noCommits": {
+      "title": "Sin commits propios",
+      "description": "Todos sus commits ya están en la otra rama."
+    },
+    "limited": "Se muestran los primeros {{count}} commits.",
+    "menu": {
+      "withCurrent": "Comparar con la rama actual"
     }
   }
 }

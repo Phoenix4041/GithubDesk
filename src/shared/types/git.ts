@@ -224,6 +224,7 @@ export type HistoryScope = "current" | "all";
 export type ContentMode = "text" | "regex";
 
 export interface HistoryQuery {
+  revision?: string | null;
   scope: HistoryScope;
   text: string | null;
   author: string | null;
@@ -234,4 +235,10 @@ export interface HistoryQuery {
   since: string | null;
   until: string | null;
   topoOrder: boolean;
+}
+
+export interface CompareSummary {
+  onlyInBase: number;
+  onlyInHead: number;
+  mergeBase: string | null;
 }

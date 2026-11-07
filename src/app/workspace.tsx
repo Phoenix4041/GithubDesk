@@ -6,6 +6,9 @@ import { ChangesView } from "@/features/changes/components/changes-view";
 import { useStatus } from "@/features/changes/queries";
 import { useChangesStore } from "@/features/changes/store";
 import { CommitDialogs } from "@/features/history/components/commit-dialogs";
+import { CompareDiffPanel } from "@/features/compare/components/compare-diff-panel";
+import { ComparePanel } from "@/features/compare/components/compare-panel";
+import { useCompareStore } from "@/features/compare/store";
 import { HistoryDiffPanel } from "@/features/history/components/history-diff-panel";
 import { HistoryView } from "@/features/history/components/history-view";
 import { useHistoryStore } from "@/features/history/store";
@@ -44,6 +47,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
     useChangesStore.getState().reset();
     useHistoryStore.getState().reset();
     useStashStore.getState().select(null);
+    useCompareStore.getState().close();
   }, []);
 
   if (status.isError && status.error instanceof CommandError && status.error.appError.kind === "notARepository") {
@@ -75,6 +79,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
             {tab === "changes" ? <ChangesView repoPath={repoPath} /> : null}
             {tab === "history" ? <HistoryView repoPath={repoPath} /> : null}
             {tab === "stash" ? <StashPanel repoPath={repoPath} /> : null}
+            {tab === "compare" ? <ComparePanel repoPath={repoPath} /> : null}
           </div>
         </section>
         <ResizeHandle
@@ -88,6 +93,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
           {tab === "changes" ? <ChangesDiffPanel repoPath={repoPath} /> : null}
           {tab === "history" ? <HistoryDiffPanel repoPath={repoPath} /> : null}
           {tab === "stash" ? <StashDiffPanel repoPath={repoPath} /> : null}
+          {tab === "compare" ? <CompareDiffPanel repoPath={repoPath} /> : null}
         </main>
       </div>
       <BranchDialogs repoPath={repoPath} />

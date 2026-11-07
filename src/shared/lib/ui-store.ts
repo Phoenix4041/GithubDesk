@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type WorkspaceTab = "changes" | "history" | "stash";
+export type WorkspaceTab = "changes" | "history" | "stash" | "compare";
 export type SidebarTab = "branches" | "tags" | "stashes";
 
 interface UiState {

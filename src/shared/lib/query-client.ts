@@ -21,6 +21,7 @@ export const repoKeys = {
   headCommit: (path: string) => ["repo", path, "head-commit"] as const,
   operation: (path: string) => ["repo", path, "operation"] as const,
   tags: (path: string) => ["repo", path, "tags"] as const,
+  compare: (path: string) => ["repo", path, "compare"] as const,
   stashes: (path: string) => ["repo", path, "stashes"] as const,
   stashFiles: (path: string, hash: string) => ["repo", path, "stash-files", hash] as const,
   stashDiff: (path: string, hash: string, file: string, ignoreWhitespace: boolean) =>

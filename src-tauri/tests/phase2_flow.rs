@@ -5,7 +5,7 @@ use std::path::Path;
 use common::{commit_file, git_as, git_output, git_try, new_repository, write_file, Workspace};
 use githubdesk_lib::commands::commit_ops::{self, ResetMode};
 use githubdesk_lib::commands::operation::{self, OperationAction};
-use githubdesk_lib::commands::{history, remote, stash, status, tag};
+use githubdesk_lib::commands::{compare, history, remote, stash, status, tag};
 use githubdesk_lib::error::ErrorKind;
 use githubdesk_lib::git::history_query::{ContentMode, HistoryQuery, HistoryScope};
 use githubdesk_lib::git::parse::diff::LineKind;
@@ -919,4 +919,96 @@ async fn prepare_commit_graph_writes_the_file_once() {
     history::prepare_commit_graph(repo).await.expect("prepare");
     assert!(graph_file.exists());
     history::prepare_commit_graph(repo).await.expect("again");
+}
+
+#[tokio::test]
+async fn compare_reports_commits_and_files_unique_to_each_side() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let base_commit = commit_file(repo, "shared.txt", "shared\n", "shared").await;
+    git_output(repo, &["checkout", "-b", "feature"]);
+    commit_file(repo, "feature.txt", "f1\n", "feature one").await;
+    commit_file(repo, "feature.txt", "f1\nf2\n", "feature two").await;
+    commit_file(
+        repo,
+        "shared.txt",
+        "shared\nfrom feature\n",
+        "feature touches shared",
+    )
+    .await;
+    git_output(repo, &["checkout", "main"]);
+    commit_file(repo, "main-only.txt", "m\n", "main only").await;
+
+    let summary = compare::compare_summary(repo, "main", "feature")
+        .await
+        .expect("summary");
+    assert_eq!(summary.only_in_base, 1);
+    assert_eq!(summary.only_in_head, 3);
+    assert_eq!(summary.merge_base.as_deref(), Some(base_commit.as_str()));
+
+    let files = compare::compare_files(repo, "main", "feature")
+        .await
+        .expect("files");
+    let mut paths: Vec<&str> = files.iter().map(|file| file.path.as_str()).collect();
+    paths.sort_unstable();
+    assert_eq!(paths, vec!["feature.txt", "shared.txt"]);
+
+    let diff = compare::compare_file_diff(repo, "main", "feature", "shared.txt", None, false)
+        .await
+        .expect("diff");
+    assert!(diff.hunks[0]
+        .lines
+        .iter()
+        .any(|line| line.kind == LineKind::Added && line.content == "from feature"));
+
+    let only_head = history::history_search(
+        repo,
+        &HistoryQuery {
+            revision: Some("main..feature".into()),
+            ..HistoryQuery::default()
+        },
+        0,
+        50,
+        None,
+    )
+    .await
+    .expect("range log");
+    assert_eq!(
+        subjects(&only_head),
+        vec!["feature touches shared", "feature two", "feature one"]
+    );
+}
+
+#[tokio::test]
+async fn compare_of_identical_branches_is_empty() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "a.txt", "a\n", "one").await;
+    git_output(repo, &["branch", "copy"]);
+
+    let summary = compare::compare_summary(repo, "main", "copy")
+        .await
+        .expect("summary");
+    assert_eq!((summary.only_in_base, summary.only_in_head), (0, 0));
+    assert!(compare::compare_files(repo, "main", "copy")
+        .await
+        .expect("files")
+        .is_empty());
+}
+
+#[tokio::test]
+async fn compare_rejects_option_like_revisions_and_unknown_branches() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "a.txt", "a\n", "one").await;
+
+    let injected = compare::compare_summary(repo, "--output=evil", "main")
+        .await
+        .expect_err("option-like");
+    assert_eq!(injected.kind, ErrorKind::InvalidInput);
+
+    let missing = compare::compare_summary(repo, "main", "nope")
+        .await
+        .expect_err("unknown");
+    assert_ne!(missing.kind, ErrorKind::InvalidInput);
 }

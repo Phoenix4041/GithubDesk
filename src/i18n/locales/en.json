@@ -34,7 +34,8 @@
     "label": "Repository views",
     "changes": "Changes",
     "history": "History",
-    "stash": "Stash"
+    "stash": "Stash",
+    "compare": "Compare"
   },
   "welcome": {
     "title": "Welcome to GithubDesk",
@@ -657,6 +658,39 @@
       "description": "\"{{message}}\" will be deleted.",
       "loss": "The changes saved in this stash will be lost.",
       "confirm": "Delete"
+    }
+  },
+  "compare": {
+    "base": "Base",
+    "head": "Compare with",
+    "swap": "Swap branches",
+    "close": "Close comparison",
+    "mergeBase": "Common ancestor:",
+    "viewsLabel": "Comparison views",
+    "views": {
+      "files": "Files ({{count}})",
+      "headCommits": "Only in the second ({{count}})",
+      "baseCommits": "Only in the base ({{count}})"
+    },
+    "pick": {
+      "title": "Pick two branches",
+      "description": "Select the base and the branch you want to compare with it."
+    },
+    "same": {
+      "title": "It is the same branch",
+      "description": "Pick two different branches to see their differences."
+    },
+    "noChanges": {
+      "title": "No file differences",
+      "description": "The second branch changes nothing compared to the common ancestor."
+    },
+    "noCommits": {
+      "title": "No exclusive commits",
+      "description": "All its commits are already in the other branch."
+    },
+    "limited": "Showing the first {{count}} commits.",
+    "menu": {
+      "withCurrent": "Compare with current branch"
     }
   }
 }

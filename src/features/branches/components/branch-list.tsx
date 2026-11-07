@@ -1,11 +1,13 @@
-import { Check, Cloud, CloudUpload, GitBranch, Pencil, SearchX, Trash2 } from "lucide-react";
+import { ArrowLeftRight, Check, Cloud, CloudUpload, GitBranch, Pencil, SearchX, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { openCompare } from "@/features/compare/actions";
 import { runSyncOperation } from "@/features/sync/operations";
 import { describeError } from "@/shared/lib/report-error";
 import { cn } from "@/shared/lib/cn";
 import type { Branch } from "@/shared/types/git";
 import { Button } from "@/shared/ui/button";
+import { openContextMenu } from "@/shared/ui/context-menu";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { ErrorState } from "@/shared/ui/error-state";
 import { IconButton } from "@/shared/ui/icon-button";
@@ -66,8 +68,23 @@ export function BranchList({ repoPath }: BranchListProps) {
       );
     }
     const { branch } = row;
+    const current = allBranches.find((candidate) => candidate.isCurrent);
     return (
       <div
+        onContextMenu={(event) =>
+          openContextMenu(event, [
+            {
+              label: t("compare.menu.withCurrent"),
+              icon: <ArrowLeftRight className="size-4" />,
+              disabled: !current || branch.isCurrent,
+              onSelect: () => {
+                if (current) {
+                  openCompare(current.name, branch.name);
+                }
+              },
+            },
+          ])
+        }
         className={cn(
           "group mx-1.5 flex h-[calc(100%-2px)] items-center gap-1 rounded-md pr-1 transition-colors duration-150",
           branch.isCurrent ? "bg-accent-soft" : "hover:bg-subtle",
