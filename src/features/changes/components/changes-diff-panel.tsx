@@ -2,6 +2,7 @@ import { FileSearch } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DiffHeader } from "@/features/diff/components/diff-header";
+import { ConflictEditor } from "@/features/conflicts/components/conflict-editor";
 import { DiffViewer } from "@/features/diff/components/diff-viewer";
 import type { StagingControls } from "@/features/diff/staging-controls";
 import { useSettingsStore } from "@/features/settings/store";
@@ -42,7 +43,8 @@ export function ChangesDiffPanel({ repoPath }: ChangesDiffPanelProps) {
       }
     : null;
 
-  const diffQuery = useFileDiff(repoPath, target, ignoreWhitespace);
+  const isConflict = row?.section === "conflicts";
+  const diffQuery = useFileDiff(repoPath, isConflict ? null : target, ignoreWhitespace);
   const showSkeleton = useSkeletonVisible(diffQuery.isPending && target !== null);
 
   if (!row || !target) {
@@ -53,6 +55,10 @@ export function ChangesDiffPanel({ repoPath }: ChangesDiffPanelProps) {
         description={t("diff.nothingSelected.description")}
       />
     );
+  }
+
+  if (isConflict) {
+    return <ConflictEditor key={row.entry.path} repoPath={repoPath} path={row.entry.path} />;
   }
 
   const kind = effectiveChange(row.section, row.entry);

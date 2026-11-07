@@ -4,6 +4,7 @@ use std::path::Path;
 
 use common::{commit_file, git_as, git_output, git_try, new_repository, write_file, Workspace};
 use githubdesk_lib::commands::commit_ops::{self, ResetMode};
+use githubdesk_lib::commands::conflict::{self, ConflictKind, ConflictSide, LineEnding};
 use githubdesk_lib::commands::operation::{self, OperationAction};
 use githubdesk_lib::commands::{compare, history, remote, stash, status, tag};
 use githubdesk_lib::error::ErrorKind;
@@ -1011,4 +1012,205 @@ async fn compare_rejects_option_like_revisions_and_unknown_branches() {
         .await
         .expect_err("unknown");
     assert_ne!(missing.kind, ErrorKind::InvalidInput);
+}
+
+#[tokio::test]
+async fn conflict_exposes_the_three_versions_and_the_marked_file() {
+    let workspace = diverged_repository().await;
+    let repo = workspace.path.as_path();
+    git_try(repo, &["merge", "feature"]);
+
+    let file = conflict::read_conflict(repo, "f.txt").await.expect("read");
+    assert_eq!(file.kind, ConflictKind::BothModified);
+    assert!(!file.binary);
+    assert_eq!(file.base.as_deref(), Some("base\n"));
+    assert_eq!(file.ours.as_deref(), Some("main\n"));
+    assert_eq!(file.theirs.as_deref(), Some("feature\n"));
+    let working = file.working.expect("working copy");
+    assert!(working.contains("<<<<<<<"));
+    assert!(working.contains("======="));
+    assert!(working.contains(">>>>>>>"));
+}
+
+#[tokio::test]
+async fn resolving_with_content_stages_the_file_and_lets_the_merge_finish() {
+    let workspace = diverged_repository().await;
+    let repo = workspace.path.as_path();
+    git_try(repo, &["merge", "feature"]);
+
+    conflict::resolve_with_content(repo, "f.txt", "main and feature\n", LineEnding::Lf)
+        .await
+        .expect("resolve");
+    let snapshot = status::get_status(repo).await.expect("status");
+    assert!(!snapshot.entries.iter().any(|entry| entry.conflicted));
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "main and feature\n"
+    );
+
+    operation::run_operation_action(repo, OperationAction::Continue)
+        .await
+        .expect("continue");
+    assert_eq!(current_kind(repo).await, None);
+}
+
+#[tokio::test]
+async fn resolving_keeps_windows_line_endings() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "one\r\ntwo\r\n", "base").await;
+    git_output(repo, &["checkout", "-b", "feature"]);
+    commit_file(repo, "f.txt", "one\r\nfeature\r\n", "feature edit").await;
+    git_output(repo, &["checkout", "main"]);
+    commit_file(repo, "f.txt", "one\r\nmain\r\n", "main edit").await;
+    git_try(repo, &["merge", "feature"]);
+
+    let file = conflict::read_conflict(repo, "f.txt").await.expect("read");
+    assert_eq!(file.line_ending, LineEnding::Crlf);
+    assert!(!file.working.as_deref().unwrap_or_default().contains('\r'));
+
+    conflict::resolve_with_content(repo, "f.txt", "one\nboth\n", LineEnding::Crlf)
+        .await
+        .expect("resolve");
+    let bytes = std::fs::read(repo.join("f.txt")).expect("read");
+    assert_eq!(bytes, b"one\r\nboth\r\n");
+}
+
+#[tokio::test]
+async fn choosing_a_side_takes_that_version_wholesale() {
+    let workspace = diverged_repository().await;
+    let repo = workspace.path.as_path();
+    git_try(repo, &["merge", "feature"]);
+    conflict::resolve_with_side(repo, "f.txt", ConflictSide::Theirs)
+        .await
+        .expect("theirs");
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "feature\n"
+    );
+    assert!(!status::get_status(repo)
+        .await
+        .expect("status")
+        .entries
+        .iter()
+        .any(|entry| entry.conflicted));
+
+    operation::run_operation_action(repo, OperationAction::Abort)
+        .await
+        .expect("abort");
+    git_try(repo, &["merge", "feature"]);
+    conflict::resolve_with_side(repo, "f.txt", ConflictSide::Ours)
+        .await
+        .expect("ours");
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "main\n"
+    );
+}
+
+#[tokio::test]
+async fn delete_modify_conflicts_can_keep_or_remove_the_file() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "base\n", "base").await;
+    git_output(repo, &["checkout", "-b", "feature"]);
+    commit_file(repo, "f.txt", "changed\n", "modify").await;
+    git_output(repo, &["checkout", "main"]);
+    git_output(repo, &["rm", "f.txt"]);
+    git_output(repo, &["commit", "-m", "delete"]);
+    git_try(repo, &["merge", "feature"]);
+
+    let file = conflict::read_conflict(repo, "f.txt").await.expect("read");
+    assert_eq!(file.kind, ConflictKind::DeletedByUs);
+    assert_eq!(file.ours, None);
+    assert_eq!(file.theirs.as_deref(), Some("changed\n"));
+
+    conflict::resolve_with_side(repo, "f.txt", ConflictSide::Ours)
+        .await
+        .expect("keep the deletion");
+    assert!(!repo.join("f.txt").exists());
+    assert!(!status::get_status(repo)
+        .await
+        .expect("status")
+        .entries
+        .iter()
+        .any(|entry| entry.conflicted));
+
+    operation::run_operation_action(repo, OperationAction::Abort)
+        .await
+        .expect("abort");
+    git_try(repo, &["merge", "feature"]);
+    conflict::resolve_with_side(repo, "f.txt", ConflictSide::Theirs)
+        .await
+        .expect("keep the file");
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "changed\n"
+    );
+}
+
+#[tokio::test]
+async fn add_add_conflicts_have_no_base() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "keep.txt", "k\n", "root").await;
+    git_output(repo, &["checkout", "-b", "feature"]);
+    commit_file(repo, "new.txt", "from feature\n", "add on feature").await;
+    git_output(repo, &["checkout", "main"]);
+    commit_file(repo, "new.txt", "from main\n", "add on main").await;
+    git_try(repo, &["merge", "feature"]);
+
+    let file = conflict::read_conflict(repo, "new.txt")
+        .await
+        .expect("read");
+    assert_eq!(file.kind, ConflictKind::BothAdded);
+    assert_eq!(file.base, None);
+    assert_eq!(file.ours.as_deref(), Some("from main\n"));
+    assert_eq!(file.theirs.as_deref(), Some("from feature\n"));
+}
+
+#[tokio::test]
+async fn binary_conflicts_hide_their_contents_but_can_pick_a_side() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    std::fs::write(repo.join("data.bin"), b"base\0bytes").expect("write");
+    git_output(repo, &["add", "data.bin"]);
+    git_output(repo, &["commit", "-m", "base"]);
+    git_output(repo, &["checkout", "-b", "feature"]);
+    std::fs::write(repo.join("data.bin"), b"feature\0bytes").expect("write");
+    git_output(repo, &["commit", "-am", "feature"]);
+    git_output(repo, &["checkout", "main"]);
+    std::fs::write(repo.join("data.bin"), b"main\0bytes").expect("write");
+    git_output(repo, &["commit", "-am", "main"]);
+    git_try(repo, &["merge", "feature"]);
+
+    let file = conflict::read_conflict(repo, "data.bin")
+        .await
+        .expect("read");
+    assert!(file.binary);
+    assert_eq!(file.working, None);
+    assert_eq!(file.ours, None);
+
+    conflict::resolve_with_side(repo, "data.bin", ConflictSide::Theirs)
+        .await
+        .expect("theirs");
+    assert_eq!(
+        std::fs::read(repo.join("data.bin")).expect("read"),
+        b"feature\0bytes"
+    );
+}
+
+#[tokio::test]
+async fn reading_a_clean_file_as_a_conflict_is_rejected() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "one\n", "one").await;
+    let error = conflict::read_conflict(repo, "f.txt")
+        .await
+        .expect_err("not conflicted");
+    assert_eq!(error.kind, ErrorKind::InvalidInput);
+    let unsafe_path = conflict::read_conflict(repo, "../outside")
+        .await
+        .expect_err("unsafe");
+    assert_eq!(unsafe_path.kind, ErrorKind::InvalidInput);
 }

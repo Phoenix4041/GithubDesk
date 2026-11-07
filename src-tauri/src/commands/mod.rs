@@ -2,6 +2,7 @@ pub mod branch;
 pub mod commit;
 pub mod commit_ops;
 pub mod compare;
+pub mod conflict;
 pub mod history;
 pub mod job;
 pub mod operation;

@@ -242,3 +242,21 @@ export interface CompareSummary {
   onlyInHead: number;
   mergeBase: string | null;
 }
+
+export type ConflictKind = "bothModified" | "bothAdded" | "deletedByUs" | "deletedByThem" | "bothDeleted";
+
+export type ConflictSide = "ours" | "theirs";
+
+export type LineEnding = "lf" | "crlf";
+
+export interface ConflictFile {
+  path: string;
+  kind: ConflictKind;
+  binary: boolean;
+  tooLarge: boolean;
+  lineEnding: LineEnding;
+  base: string | null;
+  ours: string | null;
+  theirs: string | null;
+  working: string | null;
+}

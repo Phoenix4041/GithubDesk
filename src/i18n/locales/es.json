@@ -692,5 +692,53 @@
     "menu": {
       "withCurrent": "Comparar con la rama actual"
     }
+  },
+  "conflicts": {
+    "editorLabel": "Editor de conflictos de {{path}}",
+    "remaining_one": "{{count}} conflicto por resolver",
+    "remaining_other": "{{count}} conflictos por resolver",
+    "noneLeft": "Sin conflictos pendientes",
+    "useAllMine": "Usar todo lo mío",
+    "useAllTheirs": "Usar todo lo entrante",
+    "reset": "Reiniciar",
+    "markResolved": "Marcar como resuelto",
+    "unresolvedHint": "Resuelve todos los conflictos para poder marcar el archivo.",
+    "panes": {
+      "ours": "Actual",
+      "theirs": "Entrante",
+      "result": "Resultado"
+    },
+    "region": {
+      "title": "Conflicto {{number}}",
+      "ours": "Actual",
+      "theirs": "Entrante",
+      "both": "Ambas"
+    },
+    "resolvedToast": "{{path}} marcado como resuelto",
+    "binary": {
+      "title": "Este archivo no se puede editar aquí",
+      "description": "Es un archivo binario. Elige qué versión quieres conservar."
+    },
+    "tooLarge": {
+      "description": "El archivo es demasiado grande para el editor. Elige qué versión quieres conservar."
+    },
+    "useMine": "Usar mi versión",
+    "useTheirs": "Usar la versión entrante",
+    "deletedByUs": {
+      "title": "Tu rama eliminó este archivo",
+      "description": "La versión entrante lo modificó. Decide si lo eliminas o conservas los cambios."
+    },
+    "deletedByThem": {
+      "title": "La versión entrante eliminó este archivo",
+      "description": "Tu rama lo modificó. Decide si lo conservas o lo eliminas."
+    },
+    "bothDeleted": {
+      "title": "Ambas versiones eliminaron este archivo",
+      "description": "Confirma la eliminación para resolver el conflicto."
+    },
+    "deleteFile": "Eliminar el archivo",
+    "keepIncoming": "Conservar la versión entrante",
+    "keepMine": "Conservar mi versión",
+    "confirmDeletion": "Confirmar eliminación"
   }
 }

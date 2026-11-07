@@ -692,5 +692,53 @@
     "menu": {
       "withCurrent": "Compare with current branch"
     }
+  },
+  "conflicts": {
+    "editorLabel": "Conflict editor for {{path}}",
+    "remaining_one": "{{count}} conflict to resolve",
+    "remaining_other": "{{count}} conflicts to resolve",
+    "noneLeft": "No conflicts left",
+    "useAllMine": "Use all mine",
+    "useAllTheirs": "Use all incoming",
+    "reset": "Reset",
+    "markResolved": "Mark as resolved",
+    "unresolvedHint": "Resolve every conflict before marking the file.",
+    "panes": {
+      "ours": "Current",
+      "theirs": "Incoming",
+      "result": "Result"
+    },
+    "region": {
+      "title": "Conflict {{number}}",
+      "ours": "Current",
+      "theirs": "Incoming",
+      "both": "Both"
+    },
+    "resolvedToast": "{{path}} marked as resolved",
+    "binary": {
+      "title": "This file cannot be edited here",
+      "description": "It is a binary file. Choose which version to keep."
+    },
+    "tooLarge": {
+      "description": "The file is too large for the editor. Choose which version to keep."
+    },
+    "useMine": "Use my version",
+    "useTheirs": "Use the incoming version",
+    "deletedByUs": {
+      "title": "Your branch deleted this file",
+      "description": "The incoming version changed it. Decide whether to delete it or keep the changes."
+    },
+    "deletedByThem": {
+      "title": "The incoming version deleted this file",
+      "description": "Your branch changed it. Decide whether to keep it or delete it."
+    },
+    "bothDeleted": {
+      "title": "Both versions deleted this file",
+      "description": "Confirm the deletion to resolve the conflict."
+    },
+    "deleteFile": "Delete the file",
+    "keepIncoming": "Keep the incoming version",
+    "keepMine": "Keep my version",
+    "confirmDeletion": "Confirm deletion"
   }
 }
