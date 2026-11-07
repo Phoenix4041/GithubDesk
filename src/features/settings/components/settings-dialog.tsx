@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGUAGES, changeLanguage, isLanguage } from "@/i18n";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
+import { useCommandUiStore } from "@/features/commands/command-ui-store";
 import { AccountsSection } from "@/features/github/components/accounts-section";
 import { Dialog } from "@/shared/ui/dialog";
 import { useSettingsStore } from "../store";
@@ -66,6 +67,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const language = useSettingsStore((state) => state.language);
   const setTheme = useSettingsStore((state) => state.setTheme);
   const setLanguage = useSettingsStore((state) => state.setLanguage);
+  const setShortcutsOpen = useCommandUiStore((state) => state.setShortcutsOpen);
 
   const themeOptions: SegmentOption<ThemePreference>[] = [
     { value: "system", label: t("settings.theme.system"), icon: <Monitor className="size-3.5" /> },
@@ -100,6 +102,19 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
             }
           }}
         />
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-medium">{t("settings.shortcuts.label")}</span>
+          <p className="text-xs text-muted">{t("settings.shortcuts.description")}</p>
+          <Button
+            className="w-fit"
+            onClick={() => {
+              onClose();
+              setShortcutsOpen(true);
+            }}
+          >
+            {t("settings.shortcuts.open")}
+          </Button>
+        </div>
         <AccountsSection />
       </div>
     </Dialog>

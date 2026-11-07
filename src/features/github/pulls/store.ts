@@ -8,10 +8,12 @@ interface PullState {
   selected: number | null;
   detailTab: PullDetailTab;
   selectedFile: string | null;
+  creating: boolean;
   setFilter: (filter: PullFilter) => void;
   select: (number: number | null) => void;
   setDetailTab: (tab: PullDetailTab) => void;
   selectFile: (path: string | null) => void;
+  setCreating: (creating: boolean) => void;
   reset: () => void;
 }
 
@@ -20,9 +22,11 @@ export const usePullStore = create<PullState>((set) => ({
   selected: null,
   detailTab: "conversation",
   selectedFile: null,
+  creating: false,
   setFilter: (filter) => set({ filter, selected: null, selectedFile: null }),
   select: (selected) => set({ selected, detailTab: "conversation", selectedFile: null }),
   setDetailTab: (detailTab) => set({ detailTab }),
   selectFile: (selectedFile) => set({ selectedFile }),
-  reset: () => set({ filter: "open", selected: null, detailTab: "conversation", selectedFile: null }),
+  setCreating: (creating) => set({ creating }),
+  reset: () => set({ filter: "open", selected: null, detailTab: "conversation", selectedFile: null, creating: false }),
 }));

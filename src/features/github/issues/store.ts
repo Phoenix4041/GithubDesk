@@ -7,10 +7,12 @@ interface IssueState {
   label: string | null;
   search: string;
   selected: number | null;
+  creating: boolean;
   setFilter: (filter: IssueFilter) => void;
   setLabel: (label: string | null) => void;
   setSearch: (search: string) => void;
   select: (number: number | null) => void;
+  setCreating: (creating: boolean) => void;
   reset: () => void;
 }
 
@@ -19,9 +21,11 @@ export const useIssueStore = create<IssueState>((set) => ({
   label: null,
   search: "",
   selected: null,
+  creating: false,
   setFilter: (filter) => set({ filter, selected: null }),
   setLabel: (label) => set({ label, selected: null }),
   setSearch: (search) => set({ search }),
   select: (selected) => set({ selected }),
-  reset: () => set({ filter: "open", label: null, search: "", selected: null }),
+  setCreating: (creating) => set({ creating }),
+  reset: () => set({ filter: "open", label: null, search: "", selected: null, creating: false }),
 }));

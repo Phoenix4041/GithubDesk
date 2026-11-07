@@ -1,5 +1,5 @@
 import { GitPullRequestCreate, RefreshCw } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/shared/lib/cn";
 import { isoToUnixSeconds } from "@/shared/lib/dates";
@@ -34,9 +34,10 @@ export function PullList({ repoPath, target }: PullListProps) {
   const selected = usePullStore((state) => state.selected);
   const setFilter = usePullStore((state) => state.setFilter);
   const select = usePullStore((state) => state.select);
+  const creating = usePullStore((state) => state.creating);
+  const setCreating = usePullStore((state) => state.setCreating);
   const pulls = usePulls(target, filter);
   const showSkeleton = useSkeletonVisible(pulls.isPending);
-  const [creating, setCreating] = useState(false);
 
   const items = useMemo(() => pulls.data?.pages.flatMap((page) => page.items) ?? [], [pulls.data]);
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = pulls;

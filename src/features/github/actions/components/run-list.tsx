@@ -1,5 +1,5 @@
 import { Play, RefreshCw } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
 import { cn } from "@/shared/lib/cn";
@@ -36,10 +36,11 @@ export function RunList({ target }: RunListProps) {
   const setStatus = useRunStore((state) => state.setStatus);
   const setBranch = useRunStore((state) => state.setBranch);
   const select = useRunStore((state) => state.select);
+  const dispatching = useRunStore((state) => state.dispatching);
+  const setDispatching = useRunStore((state) => state.setDispatching);
   const debouncedBranch = useDebouncedValue(branch, 350);
   const runs = useRuns(target, status, debouncedBranch);
   const showSkeleton = useSkeletonVisible(runs.isPending);
-  const [dispatching, setDispatching] = useState(false);
 
   const items = useMemo(() => runs.data?.pages.flatMap((page) => page.items) ?? [], [runs.data]);
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = runs;

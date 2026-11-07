@@ -329,6 +329,11 @@
     "languages": {
       "es": "Español",
       "en": "English"
+    },
+    "shortcuts": {
+      "label": "Atajos de teclado",
+      "description": "Ctrl+K abre la paleta con todas las acciones. Puedes cambiar cada atajo.",
+      "open": "Personalizar atajos"
     }
   },
   "progress": {
@@ -1208,6 +1213,96 @@
         "inputsHint": "Uno por línea, con el formato nombre=valor.",
         "invalidInputs": "Revisa las líneas {{lines}}: falta el nombre o el signo igual.",
         "submit": "Ejecutar workflow"
+      }
+    }
+  },
+  "commands": {
+    "groups": {
+      "general": "General",
+      "repository": "Repositorio",
+      "navigation": "Navegación",
+      "sync": "Sincronización",
+      "branches": "Ramas y stash",
+      "history": "Historial",
+      "github": "GitHub",
+      "tools": "Herramientas"
+    },
+    "palette": {
+      "label": "Paleta de comandos",
+      "placeholder": "Escribe un comando...",
+      "empty": "Ningún comando coincide con tu búsqueda."
+    },
+    "shortcuts": {
+      "title": "Atajos de teclado",
+      "description": "Pulsa un atajo para cambiarlo. Si ya lo usa otra acción, se le quita.",
+      "search": "Buscar acción",
+      "pressKeys": "Pulsa las teclas...",
+      "none": "Sin atajo",
+      "invalid": "Usa Ctrl o Alt junto con otra tecla, o una tecla de función.",
+      "reassigned": "Se quitó ese atajo a: {{names}}",
+      "record": "Cambiar el atajo de {{command}}",
+      "reset": "Restaurar el atajo de {{command}}",
+      "clear": "Quitar el atajo de {{command}}",
+      "restore": "Restaurar",
+      "remove": "Quitar",
+      "resetAll": "Restaurar todos"
+    },
+    "items": {
+      "palette": {
+        "toggle": "Abrir la paleta de comandos"
+      },
+      "app": {
+        "settings": "Abrir ajustes",
+        "shortcuts": "Personalizar atajos de teclado",
+        "theme": {
+          "system": "Tema: seguir al sistema",
+          "light": "Tema: claro",
+          "dark": "Tema: oscuro"
+        },
+        "language": {
+          "es": "Idioma: español",
+          "en": "Idioma: inglés"
+        }
+      },
+      "repo": {
+        "open": "Abrir un repositorio",
+        "clone": "Clonar un repositorio",
+        "create": "Crear un repositorio"
+      },
+      "nav": {
+        "changes": "Ir a Cambios",
+        "history": "Ir a Historial",
+        "pulls": "Ir a Pull requests",
+        "issues": "Ir a Issues",
+        "actions": "Ir a Actions"
+      },
+      "sidebar": {
+        "branches": "Mostrar las ramas",
+        "tags": "Mostrar las etiquetas",
+        "stashes": "Mostrar los stashes"
+      },
+      "sync": {
+        "fetch": "Hacer fetch",
+        "pull": "Hacer pull",
+        "push": "Hacer push"
+      },
+      "branch": {
+        "new": "Crear una rama"
+      },
+      "tag": {
+        "new": "Crear una etiqueta"
+      },
+      "stash": {
+        "save": "Guardar los cambios en un stash"
+      },
+      "history": {
+        "reflog": "Ver el registro de HEAD (reflog)",
+        "undo": "Deshacer la última operación"
+      },
+      "github": {
+        "issueNew": "Crear un issue",
+        "pullNew": "Crear una pull request",
+        "workflowRun": "Ejecutar un workflow"
       }
     }
   }

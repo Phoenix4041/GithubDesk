@@ -329,6 +329,11 @@
     "languages": {
       "es": "Español",
       "en": "English"
+    },
+    "shortcuts": {
+      "label": "Keyboard shortcuts",
+      "description": "Ctrl+K opens the palette with every action. You can change each shortcut.",
+      "open": "Customize shortcuts"
     }
   },
   "progress": {
@@ -1208,6 +1213,96 @@
         "inputsHint": "One per line, as name=value.",
         "invalidInputs": "Check lines {{lines}}: the name or the equals sign is missing.",
         "submit": "Run workflow"
+      }
+    }
+  },
+  "commands": {
+    "groups": {
+      "general": "General",
+      "repository": "Repository",
+      "navigation": "Navigation",
+      "sync": "Sync",
+      "branches": "Branches and stash",
+      "history": "History",
+      "github": "GitHub",
+      "tools": "Tools"
+    },
+    "palette": {
+      "label": "Command palette",
+      "placeholder": "Type a command...",
+      "empty": "No command matches your search."
+    },
+    "shortcuts": {
+      "title": "Keyboard shortcuts",
+      "description": "Click a shortcut to change it. If another action uses it, it is taken away from that action.",
+      "search": "Search action",
+      "pressKeys": "Press the keys...",
+      "none": "No shortcut",
+      "invalid": "Use Ctrl or Alt with another key, or a function key.",
+      "reassigned": "That shortcut was removed from: {{names}}",
+      "record": "Change the shortcut of {{command}}",
+      "reset": "Restore the shortcut of {{command}}",
+      "clear": "Remove the shortcut of {{command}}",
+      "restore": "Restore",
+      "remove": "Remove",
+      "resetAll": "Restore all"
+    },
+    "items": {
+      "palette": {
+        "toggle": "Open the command palette"
+      },
+      "app": {
+        "settings": "Open settings",
+        "shortcuts": "Customize keyboard shortcuts",
+        "theme": {
+          "system": "Theme: follow the system",
+          "light": "Theme: light",
+          "dark": "Theme: dark"
+        },
+        "language": {
+          "es": "Language: Spanish",
+          "en": "Language: English"
+        }
+      },
+      "repo": {
+        "open": "Open a repository",
+        "clone": "Clone a repository",
+        "create": "Create a repository"
+      },
+      "nav": {
+        "changes": "Go to Changes",
+        "history": "Go to History",
+        "pulls": "Go to Pull requests",
+        "issues": "Go to Issues",
+        "actions": "Go to Actions"
+      },
+      "sidebar": {
+        "branches": "Show branches",
+        "tags": "Show tags",
+        "stashes": "Show stashes"
+      },
+      "sync": {
+        "fetch": "Fetch",
+        "pull": "Pull",
+        "push": "Push"
+      },
+      "branch": {
+        "new": "Create a branch"
+      },
+      "tag": {
+        "new": "Create a tag"
+      },
+      "stash": {
+        "save": "Save changes to a stash"
+      },
+      "history": {
+        "reflog": "View the HEAD log (reflog)",
+        "undo": "Undo the last operation"
+      },
+      "github": {
+        "issueNew": "Create an issue",
+        "pullNew": "Create a pull request",
+        "workflowRun": "Run a workflow"
       }
     }
   }

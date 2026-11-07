@@ -1,5 +1,5 @@
 import { Plus, RefreshCw } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useDebouncedValue } from "@/shared/hooks/use-debounced-value";
 import { cn } from "@/shared/lib/cn";
@@ -38,11 +38,12 @@ export function IssueList({ target }: IssueListProps) {
   const setLabel = useIssueStore((state) => state.setLabel);
   const setSearch = useIssueStore((state) => state.setSearch);
   const select = useIssueStore((state) => state.select);
+  const creating = useIssueStore((state) => state.creating);
+  const setCreating = useIssueStore((state) => state.setCreating);
   const debouncedSearch = useDebouncedValue(search, 350);
   const issues = useIssues(target, filter, label, debouncedSearch);
   const labels = useLabels(target);
   const showSkeleton = useSkeletonVisible(issues.isPending);
-  const [creating, setCreating] = useState(false);
 
   const items = useMemo(() => issues.data?.pages.flatMap((page) => page.items) ?? [], [issues.data]);
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = issues;

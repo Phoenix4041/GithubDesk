@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Language } from "@/i18n";
+import type { ShortcutOverrides } from "@/features/commands/shortcut-model";
 
 export type ThemePreference = "system" | "light" | "dark";
 export type DiffMode = "unified" | "split";
@@ -22,6 +23,7 @@ interface SettingsState {
   ignoreWhitespace: boolean;
   githubClientId: string;
   repoAccounts: Record<string, RepoAccountChoice>;
+  shortcuts: ShortcutOverrides;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -30,6 +32,7 @@ interface SettingsState {
   setIgnoreWhitespace: (ignore: boolean) => void;
   setGithubClientId: (clientId: string) => void;
   setRepoAccount: (repoPath: string, choice: RepoAccountChoice | null) => void;
+  setShortcuts: (shortcuts: ShortcutOverrides) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -43,6 +46,7 @@ export const useSettingsStore = create<SettingsState>()(
       ignoreWhitespace: false,
       githubClientId: "",
       repoAccounts: {},
+      shortcuts: {},
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
@@ -60,6 +64,7 @@ export const useSettingsStore = create<SettingsState>()(
           }
           return { repoAccounts: next };
         }),
+      setShortcuts: (shortcuts) => set({ shortcuts }),
     }),
     { name: "githubdesk.settings" },
   ),

@@ -1,6 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { CommandsHost } from "@/features/commands/components/commands-host";
 import { RepositoryDialogs } from "@/features/repositories/components/repository-dialogs";
 import { WelcomeScreen } from "@/features/repositories/components/welcome-screen";
 import { useRepositoriesStore } from "@/features/repositories/store";
@@ -35,6 +36,7 @@ export function App() {
         {activePath ? <Workspace key={activePath} repoPath={activePath} /> : <WelcomeScreen />}
       </ErrorBoundary>
       <RepositoryDialogs />
+      <CommandsHost />
       <ToastRegion />
       <ContextMenuHost />
     </QueryClientProvider>
