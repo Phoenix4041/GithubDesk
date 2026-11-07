@@ -2,6 +2,7 @@ use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
+use crate::commands::rebase::remove_rebase_files;
 use crate::error::{AppError, AppResult, ErrorKind};
 use crate::git::repo_state::{read_operation, OperationKind, RepoOperation};
 use crate::git::runner::git;
@@ -17,9 +18,15 @@ pub enum OperationAction {
 pub async fn current_operation(repo: &Path) -> AppResult<Option<RepoOperation>> {
     let output = git(repo, &["rev-parse", "--absolute-git-dir"]).await?;
     let git_dir = PathBuf::from(output.trimmed());
-    tokio::task::spawn_blocking(move || read_operation(&git_dir))
-        .await
-        .map_err(|error| AppError::new(ErrorKind::Io, error.to_string()))
+    tokio::task::spawn_blocking(move || {
+        let operation = read_operation(&git_dir);
+        if operation.is_none() {
+            remove_rebase_files(&git_dir);
+        }
+        operation
+    })
+    .await
+    .map_err(|error| AppError::new(ErrorKind::Io, error.to_string()))
 }
 
 fn verb_for(kind: OperationKind) -> &'static str {

@@ -502,6 +502,14 @@
     "stashNotFound": {
       "title": "Stash not found",
       "message": "The stash no longer exists. Refresh the list."
+    },
+    "rebaseHasMerges": {
+      "title": "There are merges in the range",
+      "message": "Interactive rebase does not support merge commits yet. Pick a more recent commit."
+    },
+    "nothingToRebase": {
+      "title": "No commits to rearrange",
+      "message": "Pick a commit older than the last one on your branch."
     }
   },
   "operation": {
@@ -588,7 +596,8 @@
       "resetSoft": "Soft reset to this commit",
       "resetMixed": "Mixed reset to this commit",
       "resetHard": "Hard reset to this commit...",
-      "copyHash": "Copy hash"
+      "copyHash": "Copy hash",
+      "rebase": "Interactive rebase from here..."
     },
     "reset": {
       "soft": {
@@ -740,5 +749,34 @@
     "keepIncoming": "Keep the incoming version",
     "keepMine": "Keep my version",
     "confirmDeletion": "Confirm deletion"
+  },
+  "rebase": {
+    "title_one": "Interactive rebase of {{count}} commit",
+    "title_other": "Interactive rebase of {{count}} commits",
+    "description": "From top to bottom, oldest to newest. Change each commit's action or reorder them.",
+    "loadingTitle": "Preparing the rebase",
+    "listLabel": "Rebase commits",
+    "start": "Start rebase",
+    "done": "Rebase finished",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "actionLabel": "Action for {{subject}}",
+    "published": "Published",
+    "actions": {
+      "pick": "Pick",
+      "reword": "Reword",
+      "edit": "Stop to edit",
+      "squash": "Squash into previous",
+      "fixup": "Fixup into previous",
+      "drop": "Drop"
+    },
+    "messageReword": "New message",
+    "messageCombined": "Combined commit message (optional)",
+    "messageCombinedHint": "If left empty, Git joins the messages of the combined commits.",
+    "publishedWarning": "Some commits were already pushed. After the rebase you will need a safe overwrite push and other people may need to redo their copy.",
+    "problems": {
+      "firstSquash": "The first kept commit cannot be combined into a previous one.",
+      "emptyReword": "Write the new message for the commits you are rewording."
+    }
   }
 }

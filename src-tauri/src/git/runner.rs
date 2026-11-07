@@ -109,6 +109,18 @@ pub async fn git(cwd: &Path, args: &[&str]) -> AppResult<GitOutput> {
     ensure_success(git_unchecked(cwd, args).await?)
 }
 
+pub async fn git_with_env(
+    cwd: &Path,
+    args: &[&str],
+    envs: &[(&str, &str)],
+) -> AppResult<GitOutput> {
+    let mut command = base_command(Some(cwd), args);
+    for (key, value) in envs {
+        command.env(key, value);
+    }
+    ensure_success(run_to_completion(command, None).await?)
+}
+
 pub async fn git_with_input(cwd: &Path, args: &[&str], input: Vec<u8>) -> AppResult<GitOutput> {
     ensure_success(run_to_completion(base_command(Some(cwd), args), Some(input)).await?)
 }

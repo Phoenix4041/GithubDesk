@@ -33,6 +33,8 @@ export type ErrorKind =
   | "tagNotFound"
   | "nothingToStash"
   | "stashNotFound"
+  | "rebaseHasMerges"
+  | "nothingToRebase"
   | "noCommits"
   | "cancelled"
   | "invalidInput"
@@ -259,4 +261,25 @@ export interface ConflictFile {
   ours: string | null;
   theirs: string | null;
   working: string | null;
+}
+
+export type RebaseAction = "pick" | "reword" | "edit" | "squash" | "fixup" | "drop";
+
+export interface RebaseCommit {
+  hash: string;
+  shortHash: string;
+  subject: string;
+  authorName: string;
+  pushed: boolean;
+}
+
+export interface RebasePlan {
+  base: string;
+  commits: RebaseCommit[];
+}
+
+export interface RebaseStepPayload {
+  hash: string;
+  action: RebaseAction;
+  message: string | null;
 }

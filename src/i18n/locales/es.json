@@ -502,6 +502,14 @@
     "stashNotFound": {
       "title": "No se encontró el stash",
       "message": "El stash ya no existe. Actualiza la lista."
+    },
+    "rebaseHasMerges": {
+      "title": "Hay merges en el rango",
+      "message": "El rebase interactivo todavía no admite commits de merge. Elige un commit más reciente."
+    },
+    "nothingToRebase": {
+      "title": "No hay commits para reorganizar",
+      "message": "Elige un commit anterior al último de tu rama."
     }
   },
   "operation": {
@@ -588,7 +596,8 @@
       "resetSoft": "Reset suave a este commit",
       "resetMixed": "Reset mixto a este commit",
       "resetHard": "Reset duro a este commit...",
-      "copyHash": "Copiar hash"
+      "copyHash": "Copiar hash",
+      "rebase": "Rebase interactivo desde aquí..."
     },
     "reset": {
       "soft": {
@@ -740,5 +749,34 @@
     "keepIncoming": "Conservar la versión entrante",
     "keepMine": "Conservar mi versión",
     "confirmDeletion": "Confirmar eliminación"
+  },
+  "rebase": {
+    "title_one": "Rebase interactivo de {{count}} commit",
+    "title_other": "Rebase interactivo de {{count}} commits",
+    "description": "De arriba abajo, del más antiguo al más reciente. Cambia la acción de cada commit o reordénalos.",
+    "loadingTitle": "Preparando el rebase",
+    "listLabel": "Commits del rebase",
+    "start": "Iniciar rebase",
+    "done": "Rebase terminado",
+    "moveUp": "Subir",
+    "moveDown": "Bajar",
+    "actionLabel": "Acción para {{subject}}",
+    "published": "Publicado",
+    "actions": {
+      "pick": "Mantener",
+      "reword": "Cambiar mensaje",
+      "edit": "Detener para editar",
+      "squash": "Combinar con el anterior",
+      "fixup": "Combinar sin su mensaje",
+      "drop": "Descartar"
+    },
+    "messageReword": "Nuevo mensaje",
+    "messageCombined": "Mensaje del commit combinado (opcional)",
+    "messageCombinedHint": "Si lo dejas vacío, Git une los mensajes de los commits combinados.",
+    "publishedWarning": "Hay commits que ya subiste al remoto. Después del rebase tendrás que subir con sobrescritura segura y otras personas podrían necesitar rehacer su copia.",
+    "problems": {
+      "firstSquash": "El primer commit que se conserva no puede combinarse con uno anterior.",
+      "emptyReword": "Escribe el nuevo mensaje de los commits que vas a cambiar."
+    }
   }
 }

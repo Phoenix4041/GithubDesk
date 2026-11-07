@@ -14,6 +14,7 @@ import { HistoryView } from "@/features/history/components/history-view";
 import { useHistoryStore } from "@/features/history/store";
 import { useRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/features/settings/store";
+import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
 import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
@@ -99,6 +100,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <BranchDialogs repoPath={repoPath} />
       <TagDialogs repoPath={repoPath} />
       <StashDialogs repoPath={repoPath} />
+      <RebaseDialog repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>

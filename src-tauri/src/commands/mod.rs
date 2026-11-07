@@ -6,6 +6,7 @@ pub mod conflict;
 pub mod history;
 pub mod job;
 pub mod operation;
+pub mod rebase;
 pub mod remote;
 pub mod repo;
 pub mod stash;

@@ -6,11 +6,12 @@ use common::{commit_file, git_as, git_output, git_try, new_repository, write_fil
 use githubdesk_lib::commands::commit_ops::{self, ResetMode};
 use githubdesk_lib::commands::conflict::{self, ConflictKind, ConflictSide, LineEnding};
 use githubdesk_lib::commands::operation::{self, OperationAction};
-use githubdesk_lib::commands::{compare, history, remote, stash, status, tag};
+use githubdesk_lib::commands::{compare, history, rebase, remote, stash, status, tag};
 use githubdesk_lib::error::ErrorKind;
 use githubdesk_lib::git::history_query::{ContentMode, HistoryQuery, HistoryScope};
 use githubdesk_lib::git::parse::diff::LineKind;
 use githubdesk_lib::git::parse::log::CommitSummary;
+use githubdesk_lib::git::parse::rebase_todo::{RebaseAction, RebaseStep};
 use githubdesk_lib::git::parse::status::ChangeKind;
 use githubdesk_lib::git::repo_state::OperationKind;
 use githubdesk_lib::jobs::CancelToken;
@@ -1213,4 +1214,306 @@ async fn reading_a_clean_file_as_a_conflict_is_rejected() {
         .await
         .expect_err("unsafe");
     assert_eq!(unsafe_path.kind, ErrorKind::InvalidInput);
+}
+
+struct Chain {
+    workspace: Workspace,
+    base: String,
+    hashes: Vec<String>,
+}
+
+async fn chain_of_independent_commits(names: &[&str]) -> Chain {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let base = commit_file(repo, "base.txt", "base\n", "base").await;
+    let mut hashes = Vec::new();
+    for name in names {
+        let hash = commit_file(repo, &format!("{name}.txt"), &format!("{name}\n"), name).await;
+        hashes.push(hash);
+    }
+    Chain {
+        workspace,
+        base,
+        hashes,
+    }
+}
+
+fn step(hash: &str, action: RebaseAction, message: Option<&str>) -> RebaseStep {
+    RebaseStep {
+        hash: hash.to_string(),
+        action,
+        message: message.map(str::to_string),
+    }
+}
+
+fn log_subjects(repo: &Path) -> Vec<String> {
+    git_output(repo, &["log", "--format=%s"])
+        .lines()
+        .map(str::to_string)
+        .collect()
+}
+
+fn rebase_files(repo: &Path) -> std::path::PathBuf {
+    repo.join(".git").join("githubdesk-rebase")
+}
+
+#[tokio::test]
+async fn rebase_plan_lists_commits_oldest_first_and_marks_pushed_ones() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+    let remote_dir = tempfile::TempDir::new().expect("remote dir");
+    git_output(remote_dir.path(), &["init", "--bare", "-b", "main"]);
+    let remote_url = remote_dir.path().to_string_lossy().into_owned();
+    git_output(repo, &["remote", "add", "origin", &remote_url]);
+    git_output(repo, &["push", "-u", "origin", "main"]);
+    commit_file(repo, "c.txt", "c\n", "c").await;
+
+    let plan = rebase::plan_rebase(repo, &chain.base).await.expect("plan");
+    let summary: Vec<(&str, bool)> = plan
+        .commits
+        .iter()
+        .map(|commit| (commit.subject.as_str(), commit.pushed))
+        .collect();
+    assert_eq!(summary, vec![("a", true), ("b", true), ("c", false)]);
+}
+
+#[tokio::test]
+async fn rebase_reorders_and_drops_commits() {
+    let chain = chain_of_independent_commits(&["a", "b", "c"]).await;
+    let repo = chain.workspace.path.as_path();
+    let [a, b, c] = [&chain.hashes[0], &chain.hashes[1], &chain.hashes[2]];
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(c, RebaseAction::Pick, None),
+            step(a, RebaseAction::Drop, None),
+            step(b, RebaseAction::Pick, None),
+        ],
+    )
+    .await
+    .expect("rebase");
+
+    assert_eq!(log_subjects(repo), vec!["b", "c", "base"]);
+    assert!(!repo.join("a.txt").exists());
+    assert_eq!(current_kind(repo).await, None);
+    assert!(!rebase_files(repo).exists());
+}
+
+#[tokio::test]
+async fn rebase_squashes_with_a_custom_message_and_fixes_up() {
+    let chain = chain_of_independent_commits(&["a", "b", "c", "d"]).await;
+    let repo = chain.workspace.path.as_path();
+    let hashes = &chain.hashes;
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(&hashes[0], RebaseAction::Pick, Some("Combined a and b")),
+            step(&hashes[1], RebaseAction::Squash, None),
+            step(&hashes[2], RebaseAction::Pick, None),
+            step(&hashes[3], RebaseAction::Fixup, None),
+        ],
+    )
+    .await
+    .expect("rebase");
+
+    assert_eq!(log_subjects(repo), vec!["c", "Combined a and b", "base"]);
+    assert!(repo.join("b.txt").exists());
+    assert!(repo.join("d.txt").exists());
+}
+
+#[tokio::test]
+async fn rebase_squash_without_a_message_combines_the_messages() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(&chain.hashes[0], RebaseAction::Pick, None),
+            step(&chain.hashes[1], RebaseAction::Squash, None),
+        ],
+    )
+    .await
+    .expect("rebase");
+
+    let message = git_output(repo, &["log", "-1", "--format=%B"]);
+    assert!(message.contains('a'));
+    assert!(message.contains('b'));
+    assert_eq!(log_subjects(repo).len(), 2);
+}
+
+#[tokio::test]
+async fn rebase_rewords_a_commit_message() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(
+                &chain.hashes[0],
+                RebaseAction::Reword,
+                Some("Better title\n\nWith a body"),
+            ),
+            step(&chain.hashes[1], RebaseAction::Pick, None),
+        ],
+    )
+    .await
+    .expect("rebase");
+
+    assert_eq!(log_subjects(repo), vec!["b", "Better title", "base"]);
+    let body = git_output(repo, &["log", "-1", "--skip=1", "--format=%b"]);
+    assert_eq!(body.trim(), "With a body");
+}
+
+#[tokio::test]
+async fn rebase_edit_pauses_until_continued() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(&chain.hashes[0], RebaseAction::Edit, None),
+            step(&chain.hashes[1], RebaseAction::Pick, None),
+        ],
+    )
+    .await
+    .expect("rebase stops without failing");
+    assert_eq!(current_kind(repo).await, Some(OperationKind::Rebase));
+
+    write_file(repo, "extra.txt", "added while paused\n");
+    git_output(repo, &["add", "extra.txt"]);
+    git_output(repo, &["commit", "--amend", "--no-edit"]);
+    operation::run_operation_action(repo, OperationAction::Continue)
+        .await
+        .expect("continue");
+
+    assert_eq!(current_kind(repo).await, None);
+    assert!(repo.join("extra.txt").exists());
+    assert_eq!(log_subjects(repo), vec!["b", "a", "base"]);
+    assert!(!rebase_files(repo).exists());
+}
+
+#[tokio::test]
+async fn rebase_conflict_can_be_resolved_or_aborted_and_cleans_its_files() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let base = commit_file(repo, "f.txt", "start\n", "base").await;
+    let first = commit_file(repo, "f.txt", "start\none\n", "add one").await;
+    let second = commit_file(repo, "f.txt", "start\none\ntwo\n", "add two").await;
+    let reordered = [
+        step(&second, RebaseAction::Pick, None),
+        step(&first, RebaseAction::Pick, None),
+    ];
+
+    let error = rebase::start_rebase(repo, &base, &reordered)
+        .await
+        .expect_err("conflict");
+    assert_eq!(error.kind, ErrorKind::MergeConflict);
+    assert_eq!(current_kind(repo).await, Some(OperationKind::Rebase));
+
+    operation::run_operation_action(repo, OperationAction::Abort)
+        .await
+        .expect("abort");
+    assert_eq!(current_kind(repo).await, None);
+    assert_eq!(log_subjects(repo), vec!["add two", "add one", "base"]);
+    assert!(!rebase_files(repo).exists());
+
+    rebase::start_rebase(repo, &base, &reordered)
+        .await
+        .expect_err("conflict again");
+    resolve(repo, "start\ntwo\n").await;
+    let error = operation::run_operation_action(repo, OperationAction::Continue)
+        .await
+        .expect_err("second step conflicts too");
+    assert_eq!(error.kind, ErrorKind::MergeConflict);
+    resolve(repo, "start\none\ntwo\n").await;
+    operation::run_operation_action(repo, OperationAction::Continue)
+        .await
+        .expect("finish");
+    assert_eq!(current_kind(repo).await, None);
+    assert_eq!(log_subjects(repo), vec!["add one", "add two", "base"]);
+    assert!(!rebase_files(repo).exists());
+}
+
+#[tokio::test]
+async fn rebase_keeps_local_changes_with_autostash() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+    write_file(repo, "base.txt", "dirty edit\n");
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(&chain.hashes[1], RebaseAction::Pick, None),
+            step(&chain.hashes[0], RebaseAction::Pick, None),
+        ],
+    )
+    .await
+    .expect("rebase");
+
+    assert_eq!(
+        std::fs::read_to_string(repo.join("base.txt")).expect("read"),
+        "dirty edit\n"
+    );
+    assert_eq!(log_subjects(repo), vec!["a", "b", "base"]);
+}
+
+#[tokio::test]
+async fn rebase_rejects_stale_plans_merges_and_bad_bases() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+
+    let stale = rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[step(&chain.hashes[0], RebaseAction::Pick, None)],
+    )
+    .await
+    .expect_err("missing a commit");
+    assert_eq!(stale.kind, ErrorKind::InvalidInput);
+
+    let squash_first = rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(&chain.hashes[0], RebaseAction::Squash, None),
+            step(&chain.hashes[1], RebaseAction::Pick, None),
+        ],
+    )
+    .await
+    .expect_err("squash first");
+    assert_eq!(squash_first.kind, ErrorKind::InvalidInput);
+
+    let injected = rebase::plan_rebase(repo, "--exec=evil")
+        .await
+        .expect_err("option-like");
+    assert_eq!(injected.kind, ErrorKind::InvalidInput);
+
+    let head = chain.hashes[1].clone();
+    let nothing = rebase::plan_rebase(repo, &head).await.expect_err("empty");
+    assert_eq!(nothing.kind, ErrorKind::NothingToRebase);
+
+    git_output(repo, &["checkout", "-b", "side", &chain.base]);
+    let side = commit_file(repo, "side.txt", "s\n", "side").await;
+    git_output(repo, &["checkout", "main"]);
+    let unrelated = rebase::plan_rebase(repo, &side)
+        .await
+        .expect_err("not an ancestor");
+    assert_eq!(unrelated.kind, ErrorKind::InvalidInput);
+
+    git_output(repo, &["merge", "--no-ff", "-m", "merge side", "side"]);
+    let merges = rebase::plan_rebase(repo, &chain.base)
+        .await
+        .expect_err("merge in range");
+    assert_eq!(merges.kind, ErrorKind::RebaseHasMerges);
 }

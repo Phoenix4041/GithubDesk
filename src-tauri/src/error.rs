@@ -40,6 +40,8 @@ pub enum ErrorKind {
     TagNotFound,
     NothingToStash,
     StashNotFound,
+    RebaseHasMerges,
+    NothingToRebase,
     NoCommits,
     Cancelled,
     InvalidInput,

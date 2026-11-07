@@ -1,6 +1,7 @@
-import { Copy, GitBranchPlus, GitCommitHorizontal, History, RotateCcw, Tag, Undo2 } from "lucide-react";
+import { Copy, GitBranchPlus, GitCommitHorizontal, History, ListOrdered, RotateCcw, Tag, Undo2 } from "lucide-react";
 import { i18next } from "@/i18n";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { useRebaseDialogStore } from "@/features/rebase/store";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
 import type { CommitSummary } from "@/shared/types/git";
 import type { ContextMenuEntry } from "@/shared/ui/context-menu";
@@ -83,6 +84,13 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
       icon: <RotateCcw className="size-4" />,
       destructive: true,
       onSelect: () => useCommitDialogStore.getState().show({ kind: "resetHard", commit }),
+    },
+    { kind: "separator" },
+    {
+      label: t("commitActions.menu.rebase"),
+      icon: <ListOrdered className="size-4" />,
+      disabled: commit.refs.some((ref) => ref.kind === "head"),
+      onSelect: () => useRebaseDialogStore.getState().show({ base: commit.hash, label: commit.shortHash }),
     },
     { kind: "separator" },
     {

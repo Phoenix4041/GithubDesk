@@ -2,6 +2,7 @@ pub mod branch;
 pub mod diff;
 pub mod log;
 pub mod progress;
+pub mod rebase_todo;
 pub mod remote;
 pub mod stash;
 pub mod status;
