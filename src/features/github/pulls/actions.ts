@@ -6,8 +6,18 @@ import type { Progress } from "@/shared/types/git";
 import { showToast } from "@/shared/ui/toast-store";
 import { targetScope } from "../target";
 import type { GithubTarget } from "../target";
-import type { MergeMethod, NewPull, PullRequest } from "../types";
-import { checkoutPull, commentOnPull, createPull, mergePull, reviewPull, setPullState } from "./api";
+import type { MergeMethod, NewPull, NewReviewComment, PullRequest } from "../types";
+import {
+  checkoutPull,
+  commentOnPull,
+  createPull,
+  createReviewComment,
+  mergePull,
+  replyToReviewComment,
+  reviewPull,
+  setPullState,
+} from "./api";
+import { reviewCommentsKey } from "./queries";
 import { usePullStore } from "./store";
 
 async function run<T>(target: GithubTarget, work: () => Promise<T>): Promise<T | null> {
@@ -34,6 +44,33 @@ export async function openNewPull(target: GithubTarget, request: NewPull): Promi
 export async function addPullComment(target: GithubTarget, number: number, body: string): Promise<boolean> {
   const comment = await run(target, () => commentOnPull(target, number, body));
   return comment !== null;
+}
+
+async function refreshReviewComments<T>(target: GithubTarget, number: number, work: () => Promise<T>): Promise<T | null> {
+  try {
+    const result = await work();
+    await queryClient.invalidateQueries({ queryKey: reviewCommentsKey(target, number) });
+    return result;
+  } catch (error) {
+    reportError(error);
+    return null;
+  }
+}
+
+export async function addInlineComment(target: GithubTarget, number: number, request: NewReviewComment): Promise<boolean> {
+  const created = await refreshReviewComments(target, number, () => createReviewComment(target, number, request));
+  if (created) {
+    showToast({ kind: "success", title: i18next.t("github.pulls.inline.sent") });
+  }
+  return created !== null;
+}
+
+export async function replyInThread(target: GithubTarget, number: number, threadId: number, body: string): Promise<boolean> {
+  const reply = await refreshReviewComments(target, number, () => replyToReviewComment(target, number, threadId, body));
+  if (reply) {
+    showToast({ kind: "success", title: i18next.t("github.pulls.inline.replied") });
+  }
+  return reply !== null;
 }
 
 export async function mergeExistingPull(

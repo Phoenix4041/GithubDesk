@@ -1,7 +1,9 @@
-import { useEffect, useMemo } from "react";
+import { MessageSquareWarning } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChangeKindBadge } from "@/features/changes/components/change-badge";
 import { DiffViewer } from "@/features/diff/components/diff-viewer";
+import type { DiffSide, LineCommentControls } from "@/features/diff/line-comments";
 import { cn } from "@/shared/lib/cn";
 import { splitPath } from "@/shared/lib/paths";
 import { describeError } from "@/shared/lib/report-error";
@@ -12,8 +14,11 @@ import { Skeleton } from "@/shared/ui/skeleton";
 import { VirtualList } from "@/shared/ui/virtual-list";
 import { DiffOptions } from "@/features/diff/components/diff-options";
 import type { GithubTarget } from "../../target";
-import { usePullFiles } from "../queries";
+import { addInlineComment, replyInThread } from "../actions";
+import { usePullFiles, usePullReviewComments } from "../queries";
+import { buildThreads, commentCounts, outdatedThreads, threadsAt, threadsForFile } from "../review-model";
 import { usePullStore } from "../store";
+import { ReviewThreadDialog } from "./review-thread-dialog";
 
 const ROW_HEIGHT = 34;
 
@@ -30,20 +35,34 @@ function kindOf(status: string): ChangeKind {
   }
 }
 
+type ThreadView = { kind: "line"; side: DiffSide; line: number } | { kind: "outdated" };
+
 interface PullFilesProps {
   target: GithubTarget;
   number: number;
+  headSha: string;
 }
 
-export function PullFiles({ target, number }: PullFilesProps) {
+export function PullFiles({ target, number, headSha }: PullFilesProps) {
   const { t } = useTranslation();
   const files = usePullFiles(target, number, true);
+  const reviewComments = usePullReviewComments(target, number, true);
+  const [view, setView] = useState<ThreadView | null>(null);
   const selectedPath = usePullStore((state) => state.selectedFile);
   const selectFile = usePullStore((state) => state.selectFile);
 
   const items = useMemo(() => files.data?.pages.flatMap((page) => page.items) ?? [], [files.data]);
   const selected = items.find((file) => file.path === selectedPath) ?? items[0] ?? null;
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = files;
+  const reviewData = reviewComments.data;
+  const threads = useMemo(() => buildThreads(reviewData ?? []), [reviewData]);
+  const fileThreads = useMemo(() => (selected ? threadsForFile(threads, selected.path) : []), [threads, selected]);
+  const outdated = useMemo(() => outdatedThreads(fileThreads), [fileThreads]);
+  const openLine = useCallback((side: DiffSide, line: number) => setView({ kind: "line", side, line }), []);
+  const lineComments = useMemo<LineCommentControls>(
+    () => ({ counts: commentCounts(fileThreads), onOpen: openLine }),
+    [fileThreads, openLine],
+  );
 
   useEffect(() => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -66,6 +85,33 @@ export function PullFiles({ target, number }: PullFilesProps) {
   if (items.length === 0) {
     return <EmptyState icon={null} title={t("github.pulls.files.empty")} />;
   }
+
+  const viewedThreads =
+    view?.kind === "line" ? threadsAt(fileThreads, view.side, view.line) : view?.kind === "outdated" ? outdated : [];
+  const viewedPath = selected?.path ?? "";
+
+  function closeView() {
+    setView(null);
+  }
+
+  function dialogTitle(): string {
+    if (view?.kind === "line") {
+      return t(view.side === "LEFT" ? "github.pulls.inline.lineTitleOld" : "github.pulls.inline.lineTitle", { line: view.line });
+    }
+    return t("github.pulls.inline.outdatedTitle");
+  }
+
+  function dialogDescription(): string {
+    return view?.kind === "outdated"
+      ? t("github.pulls.inline.outdatedDescription", { path: viewedPath })
+      : viewedPath;
+  }
+
+  const creator =
+    view?.kind === "line"
+      ? (body: string) =>
+          addInlineComment(target, number, { body, path: viewedPath, line: view.line, side: view.side, commitId: headSha })
+      : null;
 
   return (
     <div className="flex min-h-0 flex-1">
@@ -111,10 +157,29 @@ export function PullFiles({ target, number }: PullFilesProps) {
               </span>
               <DiffOptions hideWhitespace />
             </div>
-            <DiffViewer key={selected.path} diff={selected.diff} />
+            {outdated.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => setView({ kind: "outdated" })}
+                className="flex cursor-pointer items-center gap-2 border-b border-line bg-subtle px-4 py-1.5 text-left text-xs transition-colors duration-150 hover:bg-accent-soft"
+              >
+                <MessageSquareWarning className="size-3.5 shrink-0 text-muted" />
+                {t("github.pulls.inline.outdatedBanner", { count: outdated.length })}
+              </button>
+            ) : null}
+            <DiffViewer key={selected.path} diff={selected.diff} comments={lineComments} />
           </>
         ) : null}
       </div>
+      <ReviewThreadDialog
+        open={view !== null}
+        title={dialogTitle()}
+        description={dialogDescription()}
+        threads={viewedThreads}
+        onClose={closeView}
+        onReply={(thread, body) => replyInThread(target, number, thread.id, body)}
+        onCreate={creator}
+      />
     </div>
   );
 }

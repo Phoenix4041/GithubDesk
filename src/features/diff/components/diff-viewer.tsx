@@ -11,11 +11,14 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { VirtualList } from "@/shared/ui/virtual-list";
 import { buildDiffRows, changeLineIndices, isChangeLine, lineKey, longestLineLength, selectionsFromKeys } from "../diff-model";
+import { commentKey, lineAnchor } from "../line-comments";
+import type { DiffSide, LineCommentControls } from "../line-comments";
 import { applyWordRanges, computeWordRanges, wordKey } from "../word-diff";
 import type { WordRange } from "../word-diff";
 import type { DiffRow } from "../diff-model";
 import type { StagingControls } from "../staging-controls";
 import { useLanguageSupport } from "../use-language-support";
+import { CommentButton } from "./comment-button";
 import { HunkHeaderRow } from "./hunk-header-row";
 import { SplitDiff } from "./split-diff";
 
@@ -28,6 +31,7 @@ const NO_WORD_RANGES: ReadonlyMap<string, WordRange[]> = new Map();
 interface DiffViewerProps {
   diff: FileDiff;
   staging?: StagingControls;
+  comments?: LineCommentControls;
 }
 
 interface SelectionState {
@@ -44,6 +48,11 @@ interface DiffLineRowProps {
   onToggle: (hunkIndex: number, lineIndex: number) => void;
   selectLabel: string;
   noNewlineLabel: string;
+  commentSide: DiffSide | null;
+  commentLine: number | null;
+  commentCount: number;
+  commentLabel: string;
+  onComment: ((side: DiffSide, line: number) => void) | undefined;
 }
 
 const DiffLineRow = memo(function DiffLineRow({
@@ -55,6 +64,11 @@ const DiffLineRow = memo(function DiffLineRow({
   onToggle,
   selectLabel,
   noNewlineLabel,
+  commentSide,
+  commentLine,
+  commentCount,
+  commentLabel,
+  onComment,
 }: DiffLineRowProps) {
   const { line } = row;
   const text = line.content.replace(/\r$/, "");
@@ -69,7 +83,7 @@ const DiffLineRow = memo(function DiffLineRow({
   return (
     <div
       className={cn(
-        "flex h-5 font-mono text-xs leading-5",
+        "group/line flex h-5 font-mono text-xs leading-5",
         isAdded && "bg-add-bg",
         isRemoved && "bg-del-bg",
         selected && "ring-1 ring-accent/50 ring-inset",
@@ -83,6 +97,8 @@ const DiffLineRow = memo(function DiffLineRow({
             onChange={() => onToggle(row.hunkIndex, row.lineIndex)}
             className="size-3"
           />
+        ) : onComment && commentSide && commentLine !== null ? (
+          <CommentButton count={commentCount} label={commentLabel} onClick={() => onComment(commentSide, commentLine)} />
         ) : null}
       </span>
       <span className={cn("w-11 shrink-0 pr-2 text-right text-muted/80 tabular-nums", isAdded && "bg-add-strong/60", isRemoved && "bg-del-strong/60")}>
@@ -117,7 +133,7 @@ const DiffLineRow = memo(function DiffLineRow({
   );
 });
 
-export function DiffViewer({ diff, staging }: DiffViewerProps) {
+export function DiffViewer({ diff, staging, comments }: DiffViewerProps) {
   const { t } = useTranslation();
   const support = useLanguageSupport(diff.path);
   const [selection, setSelection] = useState<SelectionState>({ owner: diff, keys: EMPTY_KEYS });
@@ -171,7 +187,14 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
   if (diffMode === "split") {
     return (
       <div className="flex min-h-0 flex-1 flex-col">
-        <SplitDiff diff={diff} support={support} staging={staging} selectable={selectable} onApplyHunk={applyHunk} />
+        <SplitDiff
+          diff={diff}
+          support={support}
+          staging={staging}
+          comments={comments}
+          selectable={selectable}
+          onApplyHunk={applyHunk}
+        />
       </div>
     );
   }
@@ -220,6 +243,8 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
               />
             );
           }
+          const anchor = comments ? lineAnchor(row.line) : null;
+          const commentCount = anchor ? (comments?.counts.get(commentKey(anchor.side, anchor.line)) ?? 0) : 0;
           return (
             <DiffLineRow
               row={row}
@@ -230,6 +255,11 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
               onToggle={toggleLine}
               selectLabel={t("diff.selectLine")}
               noNewlineLabel={t("diff.noNewline")}
+              commentSide={anchor?.side ?? null}
+              commentLine={anchor?.line ?? null}
+              commentCount={commentCount}
+              commentLabel={commentCount > 0 ? t("diff.comment.view", { count: commentCount }) : t("diff.comment.add")}
+              onComment={comments?.onOpen}
             />
           );
         }}

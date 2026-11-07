@@ -3,8 +3,11 @@ use serde::{Deserialize, Serialize};
 
 use crate::error::{AppError, AppResult};
 use crate::git::parse::diff::{parse_unified_diff, FileChange, FileDiff};
+use crate::git::validate::ensure_commit_hash;
 use crate::github::client::{GithubClient, Page};
-use crate::github::models::{CheckRun, CheckRunsResponse, Comment, PullRequest, RepoInfo, Review};
+use crate::github::models::{
+    CheckRun, CheckRunsResponse, Comment, PullRequest, RepoInfo, Review, ReviewComment,
+};
 
 pub const PAGE_SIZE: u32 = 30;
 pub const FILES_PAGE_SIZE: u32 = 100;
@@ -238,6 +241,103 @@ pub async fn add_comment(
     let path = format!("{}/issues/{number}/comments", repo_path(owner, repo)?);
     client
         .send_json(Method::POST, &path, &CommentBody { body })
+        .await
+}
+
+const MAX_REVIEW_COMMENT_PAGES: u32 = 5;
+
+pub async fn list_review_comments(
+    client: &GithubClient,
+    owner: &str,
+    repo: &str,
+    number: u64,
+) -> AppResult<Vec<ReviewComment>> {
+    let path = format!("{}/pulls/{number}/comments", repo_path(owner, repo)?);
+    let mut comments = Vec::new();
+    let mut page = 1;
+    loop {
+        let result: Page<ReviewComment> = client.get_page(&path, &[], page, 100).await?;
+        comments.extend(result.items);
+        match result.next_page {
+            Some(next) if page < MAX_REVIEW_COMMENT_PAGES => page = next,
+            _ => break,
+        }
+    }
+    Ok(comments)
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewReviewComment {
+    pub body: String,
+    pub path: String,
+    pub line: u64,
+    pub side: String,
+    pub commit_id: String,
+}
+
+#[derive(Serialize)]
+struct ReviewCommentBody<'a> {
+    body: &'a str,
+    commit_id: &'a str,
+    path: &'a str,
+    line: u64,
+    side: &'a str,
+}
+
+pub async fn create_review_comment(
+    client: &GithubClient,
+    owner: &str,
+    repo: &str,
+    number: u64,
+    request: &NewReviewComment,
+) -> AppResult<ReviewComment> {
+    if request.body.trim().is_empty() {
+        return Err(AppError::invalid_input("the comment is empty"));
+    }
+    if request.path.trim().is_empty() || request.path.contains('\0') {
+        return Err(AppError::invalid_input("invalid file path"));
+    }
+    if request.line == 0 {
+        return Err(AppError::invalid_input("invalid line number"));
+    }
+    if !matches!(request.side.as_str(), "LEFT" | "RIGHT") {
+        return Err(AppError::invalid_input("invalid diff side"));
+    }
+    ensure_commit_hash(&request.commit_id)?;
+    let path = format!("{}/pulls/{number}/comments", repo_path(owner, repo)?);
+    client
+        .send_json(
+            Method::POST,
+            &path,
+            &ReviewCommentBody {
+                body: request.body.trim(),
+                commit_id: &request.commit_id,
+                path: &request.path,
+                line: request.line,
+                side: &request.side,
+            },
+        )
+        .await
+}
+
+pub async fn reply_to_review_comment(
+    client: &GithubClient,
+    owner: &str,
+    repo: &str,
+    number: u64,
+    comment_id: u64,
+    body: &str,
+) -> AppResult<ReviewComment> {
+    if body.trim().is_empty() {
+        return Err(AppError::invalid_input("the reply is empty"));
+    }
+    let path = format!(
+        "{}/pulls/{number}/comments/{comment_id}/replies",
+        repo_path(owner, repo)?
+    );
+    client
+        .send_json(Method::POST, &path, &CommentBody { body: body.trim() })
         .await
 }
 

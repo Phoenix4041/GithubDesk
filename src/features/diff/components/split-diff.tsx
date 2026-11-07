@@ -8,15 +8,19 @@ import type { FileDiff } from "@/shared/types/git";
 import { VirtualList } from "@/shared/ui/virtual-list";
 import { useSettingsStore } from "@/features/settings/store";
 import { buildSplitRows, longestLineLength } from "../diff-model";
+import { commentKey, lineAnchor } from "../line-comments";
+import type { DiffSide, LineCommentControls } from "../line-comments";
 import { applyWordRanges, computeWordRanges, wordKey } from "../word-diff";
 import type { WordRange } from "../word-diff";
 import type { SplitCell, SplitRow } from "../diff-model";
 import type { StagingControls } from "../staging-controls";
+import { CommentButton } from "./comment-button";
 import { HunkHeaderRow } from "./hunk-header-row";
 
 const ROW_HEIGHT = 20;
 const NUMBER_WIDTH = 44;
 const MARKER_WIDTH = 16;
+const COMMENT_WIDTH = 20;
 const CHARACTER_WIDTH = 7.4;
 const NO_WORD_RANGES: ReadonlyMap<string, WordRange[]> = new Map();
 
@@ -26,9 +30,27 @@ interface SplitCellViewProps {
   support: LanguageSupport | null;
   ranges: readonly WordRange[] | undefined;
   noNewlineLabel: string;
+  commentsEnabled: boolean;
+  commentSide: DiffSide | null;
+  commentLine: number | null;
+  commentCount: number;
+  commentLabel: string;
+  onComment: ((side: DiffSide, line: number) => void) | undefined;
 }
 
-const SplitCellView = memo(function SplitCellView({ cell, side, support, ranges, noNewlineLabel }: SplitCellViewProps) {
+const SplitCellView = memo(function SplitCellView({
+  cell,
+  side,
+  support,
+  ranges,
+  noNewlineLabel,
+  commentsEnabled,
+  commentSide,
+  commentLine,
+  commentCount,
+  commentLabel,
+  onComment,
+}: SplitCellViewProps) {
   const text = cell ? cell.line.content.replace(/\r$/, "") : "";
   const segments = useMemo(
     () => applyWordRanges(support ? highlightLine(support, text) : [{ text, className: null }], ranges),
@@ -53,6 +75,13 @@ const SplitCellView = memo(function SplitCellView({ cell, side, support, ranges,
         isRemoved && "bg-del-bg",
       )}
     >
+      {commentsEnabled ? (
+        <span className="grid w-5 shrink-0 place-items-center">
+          {onComment && commentSide && commentLine !== null ? (
+            <CommentButton count={commentCount} label={commentLabel} onClick={() => onComment(commentSide, commentLine)} />
+          ) : null}
+        </span>
+      ) : null}
       <span className={cn("w-11 shrink-0 pr-2 text-right text-muted/80 tabular-nums", strong)}>{number ?? ""}</span>
       <span className={cn("w-4 shrink-0 text-center", isAdded && "text-add", isRemoved && "text-del")}>
         {isAdded ? "+" : isRemoved ? "-" : ""}
@@ -85,6 +114,7 @@ interface SplitDiffProps {
   diff: FileDiff;
   support: LanguageSupport | null;
   staging?: StagingControls;
+  comments?: LineCommentControls;
   selectable: boolean;
   onApplyHunk: (hunkIndex: number) => void;
 }
@@ -93,7 +123,7 @@ function rowKey(row: SplitRow): string {
   return row.kind === "hunk" ? `h${row.hunkIndex}` : `p${row.hunkIndex}:${row.rowIndex}`;
 }
 
-export function SplitDiff({ diff, support, staging, selectable, onApplyHunk }: SplitDiffProps) {
+export function SplitDiff({ diff, support, staging, comments, selectable, onApplyHunk }: SplitDiffProps) {
   const { t } = useTranslation();
   const wordDiffEnabled = useSettingsStore((state) => state.wordDiff);
   const rows = useMemo(() => buildSplitRows(diff), [diff]);
@@ -101,8 +131,21 @@ export function SplitDiff({ diff, support, staging, selectable, onApplyHunk }: S
     () => (wordDiffEnabled ? computeWordRanges(diff) : NO_WORD_RANGES),
     [diff, wordDiffEnabled],
   );
-  const halfWidth = NUMBER_WIDTH + MARKER_WIDTH + longestLineLength(diff) * CHARACTER_WIDTH + 48;
+  const halfWidth = NUMBER_WIDTH + MARKER_WIDTH + (comments ? COMMENT_WIDTH : 0) + longestLineLength(diff) * CHARACTER_WIDTH + 48;
   const noNewlineLabel = t("diff.noNewline");
+
+  function cellComment(cell: SplitCell | null, side: "left" | "right") {
+    const anchor = comments && cell && (side === "right" || cell.line.kind === "removed") ? lineAnchor(cell.line) : null;
+    const count = anchor ? (comments?.counts.get(commentKey(anchor.side, anchor.line)) ?? 0) : 0;
+    return {
+      commentsEnabled: comments !== undefined,
+      commentSide: anchor?.side ?? null,
+      commentLine: anchor?.line ?? null,
+      commentCount: count,
+      commentLabel: count > 0 ? t("diff.comment.view", { count }) : t("diff.comment.add"),
+      onComment: comments?.onOpen,
+    };
+  }
 
   return (
     <VirtualList
@@ -126,13 +169,14 @@ export function SplitDiff({ diff, support, staging, selectable, onApplyHunk }: S
           );
         }
         return (
-          <div className="flex h-5 font-mono text-xs leading-5">
+          <div className="group/line flex h-5 font-mono text-xs leading-5">
             <SplitCellView
               cell={row.left}
               side="left"
               support={support}
               ranges={row.left ? wordRanges.get(wordKey(row.hunkIndex, row.left.lineIndex)) : undefined}
               noNewlineLabel={noNewlineLabel}
+              {...cellComment(row.left, "left")}
             />
             <SplitCellView
               cell={row.right}
@@ -140,6 +184,7 @@ export function SplitDiff({ diff, support, staging, selectable, onApplyHunk }: S
               support={support}
               ranges={row.right ? wordRanges.get(wordKey(row.hunkIndex, row.right.lineIndex)) : undefined}
               noNewlineLabel={noNewlineLabel}
+              {...cellComment(row.right, "right")}
             />
           </div>
         );

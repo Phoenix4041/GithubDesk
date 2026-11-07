@@ -1,6 +1,19 @@
 import { call, callWithProgress } from "@/shared/lib/tauri-client";
 import type { Progress } from "@/shared/types/git";
-import type { Comment, MergeMethod, MergeResult, NewPull, Page, PullBundle, PullFile, PullRequest, RepoInfo, Review } from "../types";
+import type {
+  Comment,
+  MergeMethod,
+  MergeResult,
+  NewPull,
+  NewReviewComment,
+  Page,
+  PullBundle,
+  PullFile,
+  PullRequest,
+  RepoInfo,
+  Review,
+  ReviewComment,
+} from "../types";
 import type { GithubTarget } from "../target";
 
 function base(target: GithubTarget) {
@@ -29,6 +42,27 @@ export function createPull(target: GithubTarget, request: NewPull): Promise<Pull
 
 export function commentOnPull(target: GithubTarget, number: number, body: string): Promise<Comment> {
   return call<Comment>("github_pull_comment", { ...base(target), number, body });
+}
+
+export function listReviewComments(target: GithubTarget, number: number): Promise<ReviewComment[]> {
+  return call<ReviewComment[]>("github_pull_review_comments", { ...base(target), number });
+}
+
+export function createReviewComment(
+  target: GithubTarget,
+  number: number,
+  request: NewReviewComment,
+): Promise<ReviewComment> {
+  return call<ReviewComment>("github_pull_review_comment_create", { ...base(target), number, request });
+}
+
+export function replyToReviewComment(
+  target: GithubTarget,
+  number: number,
+  commentId: number,
+  body: string,
+): Promise<ReviewComment> {
+  return call<ReviewComment>("github_pull_review_comment_reply", { ...base(target), number, commentId, body });
 }
 
 export function mergePull(

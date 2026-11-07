@@ -7,9 +7,12 @@ import { TextAreaField } from "@/shared/ui/text-field";
 interface CommentComposerProps {
   onSubmit: (body: string) => Promise<boolean>;
   extraActions?: ReactNode;
+  label?: string;
+  submitLabel?: string;
+  rows?: number;
 }
 
-export function CommentComposer({ onSubmit, extraActions }: CommentComposerProps) {
+export function CommentComposer({ onSubmit, extraActions, label, submitLabel, rows = 4 }: CommentComposerProps) {
   const { t } = useTranslation();
   const [body, setBody] = useState("");
   const [busy, setBusy] = useState(false);
@@ -30,8 +33,8 @@ export function CommentComposer({ onSubmit, extraActions }: CommentComposerProps
   return (
     <form onSubmit={(event) => void submit(event)} className="flex flex-col gap-2">
       <TextAreaField
-        label={t("github.composer.label")}
-        rows={4}
+        label={label ?? t("github.composer.label")}
+        rows={rows}
         value={body}
         disabled={busy}
         onChange={(event) => setBody(event.target.value)}
@@ -39,7 +42,7 @@ export function CommentComposer({ onSubmit, extraActions }: CommentComposerProps
       <div className="flex flex-wrap items-center justify-end gap-2">
         {extraActions}
         <Button type="submit" variant="primary" size="sm" disabled={body.trim().length === 0} loading={busy}>
-          {t("github.composer.submit")}
+          {submitLabel ?? t("github.composer.submit")}
         </Button>
       </div>
     </form>

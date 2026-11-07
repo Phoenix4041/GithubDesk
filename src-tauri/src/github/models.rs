@@ -105,6 +105,29 @@ pub struct Comment {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+pub struct ReviewComment {
+    pub id: u64,
+    pub user: Option<UserRef>,
+    #[serde(default)]
+    pub body: Option<String>,
+    pub path: String,
+    #[serde(default)]
+    pub line: Option<u64>,
+    #[serde(default)]
+    pub original_line: Option<u64>,
+    #[serde(default)]
+    pub side: Option<String>,
+    #[serde(default)]
+    pub in_reply_to_id: Option<u64>,
+    #[serde(default)]
+    pub commit_id: Option<String>,
+    pub created_at: String,
+    #[serde(default)]
+    pub html_url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct Review {
     pub id: u64,
     pub user: Option<UserRef>,

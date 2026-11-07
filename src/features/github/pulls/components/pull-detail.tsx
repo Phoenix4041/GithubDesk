@@ -245,7 +245,7 @@ export function PullDetail({ repoPath, target }: PullDetailProps) {
       {detailTab === "conversation" ? (
         <Conversation target={target} bundle={bundle.data} />
       ) : (
-        <PullFiles target={target} number={pull.number} />
+        <PullFiles target={target} number={pull.number} headSha={pull.head.sha} />
       )}
       <MergeDialog open={merging} target={target} pull={pull} methods={methods} onClose={() => setMerging(false)} />
     </>

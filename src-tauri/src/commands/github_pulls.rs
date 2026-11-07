@@ -9,7 +9,7 @@ use crate::error::{AppError, AppResult};
 use crate::git::parse::progress::Progress;
 use crate::git::runner::{git, git_streaming};
 use crate::github::client::{GithubClient, Page};
-use crate::github::models::{Comment, PullRequest, RepoInfo, Review};
+use crate::github::models::{Comment, PullRequest, RepoInfo, Review, ReviewComment};
 use crate::github::pulls::{self, MergeResult, NewPull, PullBundle, PullFile};
 use crate::jobs::CancelToken;
 use crate::state::AppState;
@@ -118,6 +118,45 @@ pub async fn github_pull_comment(
 ) -> AppResult<Comment> {
     let client = client_for(&state, &account_id).await?;
     pulls::add_comment(&client, &owner, &repo, number, &body).await
+}
+
+#[tauri::command]
+pub async fn github_pull_review_comments(
+    state: State<'_, AppState>,
+    account_id: String,
+    owner: String,
+    repo: String,
+    number: u64,
+) -> AppResult<Vec<ReviewComment>> {
+    let client = client_for(&state, &account_id).await?;
+    pulls::list_review_comments(&client, &owner, &repo, number).await
+}
+
+#[tauri::command]
+pub async fn github_pull_review_comment_create(
+    state: State<'_, AppState>,
+    account_id: String,
+    owner: String,
+    repo: String,
+    number: u64,
+    request: pulls::NewReviewComment,
+) -> AppResult<ReviewComment> {
+    let client = client_for(&state, &account_id).await?;
+    pulls::create_review_comment(&client, &owner, &repo, number, &request).await
+}
+
+#[tauri::command]
+pub async fn github_pull_review_comment_reply(
+    state: State<'_, AppState>,
+    account_id: String,
+    owner: String,
+    repo: String,
+    number: u64,
+    comment_id: u64,
+    body: String,
+) -> AppResult<ReviewComment> {
+    let client = client_for(&state, &account_id).await?;
+    pulls::reply_to_review_comment(&client, &owner, &repo, number, comment_id, &body).await
 }
 
 #[tauri::command]

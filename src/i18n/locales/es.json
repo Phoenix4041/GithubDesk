@@ -257,7 +257,12 @@
       "split": "Vista dividida"
     },
     "wordDiff": "Palabras",
-    "wordDiffHint": "Resalta las palabras que cambiaron dentro de cada línea."
+    "wordDiffHint": "Resalta las palabras que cambiaron dentro de cada línea.",
+    "comment": {
+      "add": "Comentar esta línea",
+      "view_one": "Ver {{count}} comentario",
+      "view_other": "Ver {{count}} comentarios"
+    }
   },
   "history": {
     "listLabel": "Historial de commits",
@@ -1149,6 +1154,22 @@
         "body": "Descripción",
         "draft": "Crear como borrador",
         "submit": "Crear pull request"
+      },
+      "inline": {
+        "lineTitle": "Línea {{line}}",
+        "lineTitleOld": "Línea {{line}} (versión anterior)",
+        "outdatedTitle": "Comentarios en líneas que cambiaron",
+        "outdatedDescription": "Estos comentarios estaban en líneas de {{path}} que ya no existen en la versión actual.",
+        "outdatedBanner_one": "{{count}} hilo en una línea que ya cambió. Pulsa para verlo.",
+        "outdatedBanner_other": "{{count}} hilos en líneas que ya cambiaron. Pulsa para verlos.",
+        "threadLabel_one": "Hilo de {{count}} comentario",
+        "threadLabel_other": "Hilo de {{count}} comentarios",
+        "replyLabel": "Tu respuesta",
+        "reply": "Responder",
+        "newLabel": "Tu comentario sobre esta línea",
+        "send": "Comentar",
+        "sent": "Comentario enviado",
+        "replied": "Respuesta enviada"
       }
     },
     "issues": {

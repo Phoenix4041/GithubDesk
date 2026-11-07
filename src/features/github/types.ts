@@ -72,6 +72,28 @@ export interface Review {
   htmlUrl: string;
 }
 
+export interface ReviewComment {
+  id: number;
+  user: UserRef | null;
+  body: string | null;
+  path: string;
+  line: number | null;
+  originalLine: number | null;
+  side: string | null;
+  inReplyToId: number | null;
+  commitId: string | null;
+  createdAt: string;
+  htmlUrl: string;
+}
+
+export interface NewReviewComment {
+  body: string;
+  path: string;
+  line: number;
+  side: "LEFT" | "RIGHT";
+  commitId: string;
+}
+
 export interface CheckRun {
   id: number;
   name: string;

@@ -6,8 +6,9 @@ use githubdesk_lib::commands::github_pulls::checkout_pull;
 use githubdesk_lib::error::ErrorKind;
 use githubdesk_lib::github::client::GithubClient;
 use githubdesk_lib::github::pulls::{
-    add_comment, create_pull, get_pull_bundle, get_repo, list_pull_files, list_pulls, merge_pull,
-    set_pull_state, submit_review, NewPull,
+    add_comment, create_pull, create_review_comment, get_pull_bundle, get_repo, list_pull_files,
+    list_pulls, list_review_comments, merge_pull, reply_to_review_comment, set_pull_state,
+    submit_review, NewPull, NewReviewComment,
 };
 use githubdesk_lib::jobs::CancelToken;
 use serde_json::Value;
@@ -62,6 +63,20 @@ fn github_handler(request: &MockRequest) -> MockResponse {
             200,
             r#"[{"filename":"src/a.rs","status":"modified","additions":1,"deletions":1,"changes":2,"patch":"@@ -1,2 +1,2 @@\n keep\n-old\n+new"},
                 {"filename":"data.bin","status":"added","additions":0,"deletions":0,"changes":0}]"#,
+        ),
+        ("GET", "/repos/o/r/pulls/42/comments") => MockResponse::json(
+            200,
+            r#"[{"id":70,"user":{"login":"hubot"},"body":"Why this?","path":"src/a.rs","line":2,"original_line":2,"side":"RIGHT","commit_id":"abc123","created_at":"2026-01-03T10:00:00Z","html_url":"u"},
+                {"id":71,"user":{"login":"me"},"body":"Because","path":"src/a.rs","line":2,"side":"RIGHT","in_reply_to_id":70,"created_at":"2026-01-03T11:00:00Z","html_url":"u"},
+                {"id":72,"user":{"login":"hubot"},"body":"Old line","path":"src/a.rs","line":null,"original_line":1,"side":"LEFT","created_at":"2026-01-03T12:00:00Z","html_url":"u"}]"#,
+        ),
+        ("POST", "/repos/o/r/pulls/42/comments") => MockResponse::json(
+            201,
+            r#"{"id":80,"user":{"login":"me"},"body":"New note","path":"src/a.rs","line":2,"side":"RIGHT","commit_id":"abc123","created_at":"2026-01-06T10:00:00Z","html_url":"u"}"#,
+        ),
+        ("POST", "/repos/o/r/pulls/42/comments/70/replies") => MockResponse::json(
+            201,
+            r#"{"id":81,"user":{"login":"me"},"body":"Reply text","path":"src/a.rs","line":2,"side":"RIGHT","in_reply_to_id":70,"created_at":"2026-01-06T11:00:00Z","html_url":"u"}"#,
         ),
         ("POST", "/repos/o/r/pulls") => MockResponse::json(201, PULL),
         ("POST", "/repos/o/r/issues/42/comments") => MockResponse::json(
@@ -398,4 +413,103 @@ async fn pull_requests_can_be_checked_out_from_the_pull_refs() {
         .await
         .expect_err("missing pull request");
     assert_ne!(missing.kind, ErrorKind::InvalidInput);
+}
+
+#[tokio::test]
+async fn inline_review_comments_keep_their_position_and_threading() {
+    let (_, client) = setup().await;
+    let comments = list_review_comments(&client, "o", "r", 42)
+        .await
+        .expect("comments");
+    assert_eq!(comments.len(), 3);
+    assert_eq!(comments[0].path, "src/a.rs");
+    assert_eq!(comments[0].line, Some(2));
+    assert_eq!(comments[0].side.as_deref(), Some("RIGHT"));
+    assert_eq!(comments[1].in_reply_to_id, Some(70));
+    assert_eq!(comments[2].line, None);
+    assert_eq!(comments[2].original_line, Some(1));
+    assert_eq!(comments[2].side.as_deref(), Some("LEFT"));
+}
+
+#[tokio::test]
+async fn a_review_comment_is_created_on_a_line_of_the_diff() {
+    let (server, client) = setup().await;
+    let request = NewReviewComment {
+        body: "  New note  ".to_string(),
+        path: "src/a.rs".to_string(),
+        line: 2,
+        side: "RIGHT".to_string(),
+        commit_id: "abc123".to_string(),
+    };
+    let created = create_review_comment(&client, "o", "r", 42, &request)
+        .await
+        .expect("created");
+    assert_eq!(created.id, 80);
+
+    let sent = server.requests().pop().expect("request");
+    assert_eq!(sent.method, "POST");
+    let body = body_of(&sent);
+    assert_eq!(body["body"], "New note");
+    assert_eq!(body["path"], "src/a.rs");
+    assert_eq!(body["line"], 2);
+    assert_eq!(body["side"], "RIGHT");
+    assert_eq!(body["commit_id"], "abc123");
+}
+
+#[tokio::test]
+async fn invalid_review_comments_never_reach_github() {
+    let (server, client) = setup().await;
+    let valid = NewReviewComment {
+        body: "text".to_string(),
+        path: "src/a.rs".to_string(),
+        line: 2,
+        side: "RIGHT".to_string(),
+        commit_id: "abc123".to_string(),
+    };
+    let cases = [
+        NewReviewComment {
+            body: "  ".to_string(),
+            ..valid.clone()
+        },
+        NewReviewComment {
+            path: String::new(),
+            ..valid.clone()
+        },
+        NewReviewComment {
+            line: 0,
+            ..valid.clone()
+        },
+        NewReviewComment {
+            side: "MIDDLE".to_string(),
+            ..valid.clone()
+        },
+        NewReviewComment {
+            commit_id: "--oops".to_string(),
+            ..valid.clone()
+        },
+    ];
+    for case in &cases {
+        let error = create_review_comment(&client, "o", "r", 42, case)
+            .await
+            .expect_err("invalid");
+        assert_eq!(error.kind, ErrorKind::InvalidInput);
+    }
+    assert!(server.requests().is_empty());
+}
+
+#[tokio::test]
+async fn replies_go_to_the_thread_of_the_comment() {
+    let (server, client) = setup().await;
+    let reply = reply_to_review_comment(&client, "o", "r", 42, 70, " Reply text ")
+        .await
+        .expect("reply");
+    assert_eq!(reply.in_reply_to_id, Some(70));
+    let sent = server.requests().pop().expect("request");
+    assert_eq!(sent.path(), "/repos/o/r/pulls/42/comments/70/replies");
+    assert_eq!(body_of(&sent)["body"], "Reply text");
+
+    let empty = reply_to_review_comment(&client, "o", "r", 42, 70, "   ")
+        .await
+        .expect_err("empty");
+    assert_eq!(empty.kind, ErrorKind::InvalidInput);
 }

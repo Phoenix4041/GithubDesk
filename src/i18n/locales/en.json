@@ -257,7 +257,12 @@
       "split": "Split view"
     },
     "wordDiff": "Words",
-    "wordDiffHint": "Highlights the words that changed inside each line."
+    "wordDiffHint": "Highlights the words that changed inside each line.",
+    "comment": {
+      "add": "Comment on this line",
+      "view_one": "View {{count}} comment",
+      "view_other": "View {{count}} comments"
+    }
   },
   "history": {
     "listLabel": "Commit history",
@@ -1149,6 +1154,22 @@
         "body": "Description",
         "draft": "Create as draft",
         "submit": "Create pull request"
+      },
+      "inline": {
+        "lineTitle": "Line {{line}}",
+        "lineTitleOld": "Line {{line}} (previous version)",
+        "outdatedTitle": "Comments on changed lines",
+        "outdatedDescription": "These comments were on lines of {{path}} that no longer exist in the current version.",
+        "outdatedBanner_one": "{{count}} thread on a line that has since changed. Click to view it.",
+        "outdatedBanner_other": "{{count}} threads on lines that have since changed. Click to view them.",
+        "threadLabel_one": "Thread of {{count}} comment",
+        "threadLabel_other": "Thread of {{count}} comments",
+        "replyLabel": "Your reply",
+        "reply": "Reply",
+        "newLabel": "Your comment on this line",
+        "send": "Comment",
+        "sent": "Comment sent",
+        "replied": "Reply sent"
       }
     },
     "issues": {

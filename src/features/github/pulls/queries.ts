@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { targetKey } from "../target";
 import type { GithubTarget } from "../target";
-import { getPullBundle, getRepoInfo, listPullFiles, listPulls } from "./api";
+import { getPullBundle, getRepoInfo, listPullFiles, listPulls, listReviewComments } from "./api";
 
 export function useRepoInfo(target: GithubTarget) {
   return useQuery({
@@ -36,5 +36,19 @@ export function usePullFiles(target: GithubTarget, number: number | null, enable
     getNextPageParam: (last) => last.nextPage ?? undefined,
     enabled: enabled && number !== null,
     staleTime: 60_000,
+  });
+}
+
+export function reviewCommentsKey(target: GithubTarget, number: number) {
+  return targetKey(target, "review-comments", number);
+}
+
+export function usePullReviewComments(target: GithubTarget, number: number, enabled: boolean) {
+  return useQuery({
+    queryKey: reviewCommentsKey(target, number),
+    queryFn: () => listReviewComments(target, number),
+    enabled,
+    retry: false,
+    staleTime: 30_000,
   });
 }
