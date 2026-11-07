@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
 import { useCompareStore } from "@/features/compare/store";
+import { useGithubRepo } from "@/features/github/use-github-repo";
 import { useStashStore } from "@/features/stash/store";
 import { cn } from "@/shared/lib/cn";
 import { useUiStore } from "@/shared/lib/ui-store";
@@ -18,6 +19,7 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
   const changeCount = status.data?.entries.length ?? 0;
   const stashSelected = useStashStore((state) => state.selectedHash !== null);
   const compareOpen = useCompareStore((state) => state.base !== null);
+  const onGithub = useGithubRepo(repoPath).context !== null;
 
   const tabs: Array<{ id: WorkspaceTab; label: string; count?: number }> = [
     { id: "changes", label: t("tabs.changes"), count: changeCount },
@@ -28,6 +30,13 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
   }
   if (compareOpen) {
     tabs.push({ id: "compare", label: t("tabs.compare") });
+  }
+  if (onGithub) {
+    tabs.push(
+      { id: "pulls", label: t("tabs.pulls") },
+      { id: "issues", label: t("tabs.issues") },
+      { id: "actions", label: t("tabs.actions") },
+    );
   }
 
   return (

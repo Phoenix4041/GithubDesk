@@ -35,7 +35,10 @@
     "changes": "Cambios",
     "history": "Historial",
     "stash": "Stash",
-    "compare": "Comparar"
+    "compare": "Comparar",
+    "pulls": "Pull requests",
+    "issues": "Issues",
+    "actions": "Actions"
   },
   "welcome": {
     "title": "Bienvenido a GithubDesk",
@@ -957,6 +960,137 @@
       "chipWithAccount": "Cuenta: {{login}}",
       "chipWithoutAccount": "Conecta una cuenta para ver pull requests, issues y Actions",
       "connect": "Conectar"
+    },
+    "refresh": "Actualizar",
+    "details": "Detalles",
+    "ghost": "Usuario eliminado",
+    "noDescription": "Sin descripción.",
+    "openOnGithub": "Abrir en GitHub",
+    "composer": {
+      "label": "Escribe un comentario",
+      "submit": "Comentar"
+    },
+    "gate": {
+      "noRemote": {
+        "title": "Este repositorio no está en GitHub",
+        "description": "Ningún remoto apunta a GitHub. Publica el repositorio o agrega un remoto de GitHub para usar esta sección."
+      },
+      "noAccount": {
+        "title": "Conecta una cuenta de GitHub",
+        "description": "Necesitas una cuenta conectada para ver y gestionar pull requests, issues y Actions de este repositorio."
+      }
+    },
+    "pulls": {
+      "created": "Pull request #{{number}} creada",
+      "merged": "Pull request #{{number}} combinada",
+      "closedToast": "Pull request #{{number}} cerrada",
+      "reopenedToast": "Pull request #{{number}} reabierta",
+      "reviewSent": "Revisión enviada",
+      "checkedOut": "Ahora estás en la rama {{branch}}",
+      "state": {
+        "open": "Abierta",
+        "draft": "Borrador",
+        "merged": "Combinada",
+        "closed": "Cerrada"
+      },
+      "listLabel": "Pull requests",
+      "filterLabel": "Filtrar por estado",
+      "filters": {
+        "open": "Abiertas",
+        "closed": "Cerradas",
+        "all": "Todas"
+      },
+      "new": "Nueva",
+      "empty": {
+        "title": "Sin pull requests",
+        "open": "No hay pull requests abiertas.",
+        "closed": "No hay pull requests cerradas.",
+        "all": "Este repositorio todavía no tiene pull requests."
+      },
+      "nothingSelected": {
+        "title": "Selecciona una pull request",
+        "description": "Elige una de la lista para ver su conversación y sus archivos."
+      },
+      "wantsToMerge": "{{user}} quiere combinar",
+      "into": "en",
+      "checkout": "Traer a mi equipo",
+      "close": "Cerrar",
+      "reopen": "Reabrir",
+      "hasConflicts": "Tiene conflictos con la rama base",
+      "tabs": {
+        "label": "Secciones de la pull request",
+        "conversation_one": "Conversación ({{count}})",
+        "conversation_other": "Conversación ({{count}})",
+        "files_one": "Archivos ({{count}})",
+        "files_other": "Archivos ({{count}})"
+      },
+      "checks": {
+        "title": "Comprobaciones",
+        "success": "Todas las comprobaciones pasaron ({{total}})",
+        "failure": "{{failed}} de {{total}} comprobaciones fallaron",
+        "pending": "Comprobaciones en curso ({{passed}} de {{total}} listas)"
+      },
+      "merge": {
+        "button": "Combinar",
+        "title": "Combinar la pull request #{{number}}",
+        "description": "Se combinará {{head}} en {{base}}.",
+        "confirm": "Combinar",
+        "method": "Forma de combinar",
+        "methods": {
+          "merge": {
+            "label": "Commit de merge",
+            "hint": "Conserva todos los commits y agrega un commit de merge."
+          },
+          "squash": {
+            "label": "Combinar en un solo commit (squash)",
+            "hint": "Junta todos los commits en uno solo."
+          },
+          "rebase": {
+            "label": "Rebase y combinar",
+            "hint": "Reaplica los commits sobre la rama base sin commit de merge."
+          }
+        },
+        "commitTitle": "Título del commit",
+        "commitMessage": "Descripción del commit (opcional)"
+      },
+      "review": {
+        "open": "Revisar",
+        "title": "Enviar una revisión",
+        "description": "Tu revisión quedará registrada en la pull request.",
+        "ownPull": "GitHub no permite aprobar ni pedir cambios en tu propia pull request. Solo puedes comentar.",
+        "decision": "Decisión",
+        "comment": "Comentario",
+        "submit": "Enviar revisión",
+        "events": {
+          "COMMENT": "Solo comentar",
+          "APPROVE": "Aprobar",
+          "REQUEST_CHANGES": "Pedir cambios"
+        },
+        "states": {
+          "APPROVED": "aprobó los cambios",
+          "CHANGES_REQUESTED": "pidió cambios",
+          "COMMENTED": "comentó en la revisión",
+          "DISMISSED": "tuvo su revisión descartada"
+        },
+        "approvedBy": "Aprobada por {{users}}",
+        "changesBy": "Cambios pedidos por {{users}}"
+      },
+      "files": {
+        "empty": "Esta pull request no cambia archivos.",
+        "listLabel": "Archivos de la pull request"
+      },
+      "create": {
+        "title": "Nueva pull request",
+        "description": "Propón tus cambios en {{repo}}.",
+        "head": "Tu rama",
+        "base": "Rama destino",
+        "sameBranch": "Elige ramas distintas.",
+        "notPublished": "La rama {{branch}} todavía no está en GitHub. Publícala antes de crear la pull request.",
+        "titleLabel": "Título",
+        "body": "Descripción",
+        "draft": "Crear como borrador",
+        "submit": "Crear pull request"
+      }
     }
   }
 }

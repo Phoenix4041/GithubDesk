@@ -35,7 +35,10 @@
     "changes": "Changes",
     "history": "History",
     "stash": "Stash",
-    "compare": "Compare"
+    "compare": "Compare",
+    "pulls": "Pull requests",
+    "issues": "Issues",
+    "actions": "Actions"
   },
   "welcome": {
     "title": "Welcome to GithubDesk",
@@ -957,6 +960,137 @@
       "chipWithAccount": "Account: {{login}}",
       "chipWithoutAccount": "Connect an account to see pull requests, issues and Actions",
       "connect": "Connect"
+    },
+    "refresh": "Refresh",
+    "details": "Details",
+    "ghost": "Deleted user",
+    "noDescription": "No description.",
+    "openOnGithub": "Open on GitHub",
+    "composer": {
+      "label": "Write a comment",
+      "submit": "Comment"
+    },
+    "gate": {
+      "noRemote": {
+        "title": "This repository is not on GitHub",
+        "description": "No remote points to GitHub. Publish the repository or add a GitHub remote to use this section."
+      },
+      "noAccount": {
+        "title": "Connect a GitHub account",
+        "description": "You need a connected account to view and manage pull requests, issues and Actions of this repository."
+      }
+    },
+    "pulls": {
+      "created": "Pull request #{{number}} created",
+      "merged": "Pull request #{{number}} merged",
+      "closedToast": "Pull request #{{number}} closed",
+      "reopenedToast": "Pull request #{{number}} reopened",
+      "reviewSent": "Review sent",
+      "checkedOut": "You are now on branch {{branch}}",
+      "state": {
+        "open": "Open",
+        "draft": "Draft",
+        "merged": "Merged",
+        "closed": "Closed"
+      },
+      "listLabel": "Pull requests",
+      "filterLabel": "Filter by state",
+      "filters": {
+        "open": "Open",
+        "closed": "Closed",
+        "all": "All"
+      },
+      "new": "New",
+      "empty": {
+        "title": "No pull requests",
+        "open": "There are no open pull requests.",
+        "closed": "There are no closed pull requests.",
+        "all": "This repository has no pull requests yet."
+      },
+      "nothingSelected": {
+        "title": "Select a pull request",
+        "description": "Pick one from the list to see its conversation and files."
+      },
+      "wantsToMerge": "{{user}} wants to merge",
+      "into": "into",
+      "checkout": "Check out locally",
+      "close": "Close",
+      "reopen": "Reopen",
+      "hasConflicts": "Has conflicts with the base branch",
+      "tabs": {
+        "label": "Pull request sections",
+        "conversation_one": "Conversation ({{count}})",
+        "conversation_other": "Conversation ({{count}})",
+        "files_one": "Files ({{count}})",
+        "files_other": "Files ({{count}})"
+      },
+      "checks": {
+        "title": "Checks",
+        "success": "All checks passed ({{total}})",
+        "failure": "{{failed}} of {{total}} checks failed",
+        "pending": "Checks in progress ({{passed}} of {{total}} done)"
+      },
+      "merge": {
+        "button": "Merge",
+        "title": "Merge pull request #{{number}}",
+        "description": "{{head}} will be merged into {{base}}.",
+        "confirm": "Merge",
+        "method": "Merge method",
+        "methods": {
+          "merge": {
+            "label": "Merge commit",
+            "hint": "Keeps all commits and adds a merge commit."
+          },
+          "squash": {
+            "label": "Squash and merge",
+            "hint": "Combines all commits into one."
+          },
+          "rebase": {
+            "label": "Rebase and merge",
+            "hint": "Replays the commits on the base branch without a merge commit."
+          }
+        },
+        "commitTitle": "Commit title",
+        "commitMessage": "Commit description (optional)"
+      },
+      "review": {
+        "open": "Review",
+        "title": "Submit a review",
+        "description": "Your review will be recorded on the pull request.",
+        "ownPull": "GitHub does not allow approving or requesting changes on your own pull request. You can only comment.",
+        "decision": "Decision",
+        "comment": "Comment",
+        "submit": "Submit review",
+        "events": {
+          "COMMENT": "Comment only",
+          "APPROVE": "Approve",
+          "REQUEST_CHANGES": "Request changes"
+        },
+        "states": {
+          "APPROVED": "approved these changes",
+          "CHANGES_REQUESTED": "requested changes",
+          "COMMENTED": "left a review comment",
+          "DISMISSED": "had their review dismissed"
+        },
+        "approvedBy": "Approved by {{users}}",
+        "changesBy": "Changes requested by {{users}}"
+      },
+      "files": {
+        "empty": "This pull request changes no files.",
+        "listLabel": "Pull request files"
+      },
+      "create": {
+        "title": "New pull request",
+        "description": "Propose your changes in {{repo}}.",
+        "head": "Your branch",
+        "base": "Target branch",
+        "sameBranch": "Choose different branches.",
+        "notPublished": "Branch {{branch}} is not on GitHub yet. Publish it before creating the pull request.",
+        "titleLabel": "Title",
+        "body": "Description",
+        "draft": "Create as draft",
+        "submit": "Create pull request"
+      }
     }
   }
 }

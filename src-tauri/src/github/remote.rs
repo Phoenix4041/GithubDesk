@@ -35,13 +35,20 @@ fn split_owner_and_name(path: &str) -> Option<(String, String)> {
     }
 }
 
-fn normalize_host(host: &str) -> String {
+fn normalize_host(host: &str, keep_web_port: bool) -> String {
     let lowered = host.to_lowercase();
-    let without_port = match lowered.rsplit_once(':') {
-        Some((name, port)) if port.chars().all(|character| character.is_ascii_digit()) => name,
-        _ => lowered.as_str(),
+    let (name, port) = match lowered.rsplit_once(':') {
+        Some((name, port)) if port.chars().all(|character| character.is_ascii_digit()) => {
+            (name, Some(port))
+        }
+        _ => (lowered.as_str(), None),
     };
-    match without_port {
+    if keep_web_port {
+        if let Some(port) = port.filter(|port| *port != "443" && *port != "80") {
+            return format!("{name}:{port}");
+        }
+    }
+    match name {
         "ssh.github.com" | "www.github.com" => "github.com".to_string(),
         other => other.to_string(),
     }
@@ -55,7 +62,8 @@ pub fn parse_remote_url(url: &str) -> Option<(String, String, String)> {
             .rsplit_once('@')
             .map_or(authority, |(_, host)| host);
         let (owner, name) = split_owner_and_name(path)?;
-        return Some((normalize_host(host), owner, name));
+        let web = trimmed.starts_with("http://") || trimmed.starts_with("https://");
+        return Some((normalize_host(host, web), owner, name));
     }
     let (authority, path) = trimmed.split_once(':')?;
     let drive_letter = authority.len() == 1
@@ -69,7 +77,7 @@ pub fn parse_remote_url(url: &str) -> Option<(String, String, String)> {
         .rsplit_once('@')
         .map_or(authority, |(_, host)| host);
     let (owner, name) = split_owner_and_name(path)?;
-    Some((normalize_host(host), owner, name))
+    Some((normalize_host(host, false), owner, name))
 }
 
 pub fn to_remote_repo(remote_name: &str, url: &str) -> Option<RemoteRepo> {
@@ -148,6 +156,26 @@ mod tests {
         assert_eq!(
             parsed("git@git.company.example:team/app.git"),
             triple("git.company.example", "team", "app")
+        );
+    }
+
+    #[test]
+    fn keeps_non_default_web_ports_but_not_ssh_ports() {
+        assert_eq!(
+            parsed("http://127.0.0.1:9000/octo/hello.git"),
+            triple("127.0.0.1:9000", "octo", "hello")
+        );
+        assert_eq!(
+            parsed("https://git.corp.example:8443/team/app.git"),
+            triple("git.corp.example:8443", "team", "app")
+        );
+        assert_eq!(
+            parsed("https://github.com:443/octo/hello.git"),
+            triple("github.com", "octo", "hello")
+        );
+        assert_eq!(
+            parsed("ssh://git@git.corp.example:2222/team/app.git"),
+            triple("git.corp.example", "team", "app")
         );
     }
 
