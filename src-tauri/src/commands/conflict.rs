@@ -268,7 +268,7 @@ mod tests {
 
     #[test]
     fn parses_the_stages_present_in_the_index() {
-        let listing = b"100644 aaa 1\tf.txt\0100644 bbb 2\tf.txt\0100644 ccc 3\tf.txt\0";
+        let listing = b"100644 aaa 1\tf.txt\x00100644 bbb 2\tf.txt\x00100644 ccc 3\tf.txt\x00";
         let stages = parse_stages(listing);
         assert!(stages.base && stages.ours && stages.theirs);
         assert_eq!(classify(stages), ConflictKind::BothModified);
