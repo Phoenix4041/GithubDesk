@@ -35,6 +35,9 @@ pub enum ErrorKind {
     NoOperationInProgress,
     UnstagedChanges,
     CommitBecameEmpty,
+    MergeCommitNeedsParent,
+    TagAlreadyExists,
+    TagNotFound,
     NoCommits,
     Cancelled,
     InvalidInput,
@@ -228,6 +231,15 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     if (has("cannot delete branch") && has("checked out")) || has("cannot delete the branch") {
         return ErrorKind::BranchCheckedOut;
     }
+    if has("is a merge but no -m option was given") {
+        return ErrorKind::MergeCommitNeedsParent;
+    }
+    if has("tag '") && has("already exists") {
+        return ErrorKind::TagAlreadyExists;
+    }
+    if has("tag '") && has("not found") {
+        return ErrorKind::TagNotFound;
+    }
     if has("a branch named") && has("already exists") {
         return ErrorKind::BranchAlreadyExists;
     }
@@ -377,6 +389,22 @@ The previous cherry-pick is now empty, possibly due to conflict resolution.";
 You must edit all merge conflicts and then
 mark them as resolved using git add";
         assert_eq!(classify_failure(output), ErrorKind::UnmergedFiles);
+    }
+
+    #[test]
+    fn detects_tag_and_merge_commit_errors() {
+        assert_eq!(
+            classify_failure("fatal: tag 'v1' already exists"),
+            ErrorKind::TagAlreadyExists
+        );
+        assert_eq!(
+            classify_failure("error: tag 'v9' not found."),
+            ErrorKind::TagNotFound
+        );
+        assert_eq!(
+            classify_failure("error: commit abc123 is a merge but no -m option was given."),
+            ErrorKind::MergeCommitNeedsParent
+        );
     }
 
     #[test]

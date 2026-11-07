@@ -5,7 +5,9 @@ pub mod jobs;
 pub mod state;
 pub mod watcher;
 
-use commands::{branch, commit, history, job, operation, remote, repo, status, watch};
+use commands::{
+    branch, commit, commit_ops, history, job, operation, remote, repo, status, tag, watch,
+};
 use state::AppState;
 
 pub fn run() {
@@ -42,6 +44,15 @@ pub fn run() {
             history::history_detail,
             history::history_files,
             history::history_file_diff,
+            commit_ops::commit_cherry_pick,
+            commit_ops::commit_revert,
+            commit_ops::commit_reset,
+            commit_ops::commit_checkout,
+            tag::tag_list,
+            tag::tag_create,
+            tag::tag_delete,
+            tag::tag_push,
+            tag::tag_delete_remote,
             job::job_cancel,
             watch::watch_start,
             watch::watch_stop,

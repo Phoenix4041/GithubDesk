@@ -1,7 +1,12 @@
 import { create } from "zustand";
 
+export interface BranchStartPoint {
+  hash: string;
+  label: string;
+}
+
 export type BranchDialog =
-  | { kind: "create" }
+  | { kind: "create"; startPoint?: BranchStartPoint }
   | { kind: "rename"; name: string }
   | { kind: "delete"; name: string; force: boolean };
 

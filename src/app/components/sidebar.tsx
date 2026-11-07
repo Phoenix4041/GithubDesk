@@ -1,9 +1,16 @@
-import { GitBranch, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { BranchList } from "@/features/branches/components/branch-list";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { useBranches } from "@/features/branches/queries";
 import { AddRepositoryMenu } from "@/features/repositories/components/add-repository-menu";
 import { RepositoryList } from "@/features/repositories/components/repository-list";
+import { useTagDialogStore } from "@/features/tags/dialog-store";
+import { TagList } from "@/features/tags/components/tag-list";
+import { useTags } from "@/features/tags/queries";
+import { cn } from "@/shared/lib/cn";
+import { useUiStore } from "@/shared/lib/ui-store";
+import type { SidebarTab } from "@/shared/lib/ui-store";
 import { IconButton } from "@/shared/ui/icon-button";
 
 interface SidebarProps {
@@ -13,6 +20,16 @@ interface SidebarProps {
 export function Sidebar({ repoPath }: SidebarProps) {
   const { t } = useTranslation();
   const showBranchDialog = useBranchDialogStore((state) => state.show);
+  const showTagDialog = useTagDialogStore((state) => state.show);
+  const sidebarTab = useUiStore((state) => state.sidebarTab);
+  const setSidebarTab = useUiStore((state) => state.setSidebarTab);
+  const branches = useBranches(repoPath);
+  const tags = useTags(repoPath);
+
+  const tabs: Array<{ id: SidebarTab; label: string; count: number }> = [
+    { id: "branches", label: t("branches.title"), count: branches.data?.filter((branch) => !branch.isRemote).length ?? 0 },
+    { id: "tags", label: t("tags.title"), count: tags.data?.length ?? 0 },
+  ];
 
   return (
     <nav className="flex h-full min-h-0 flex-col bg-canvas" aria-label={t("sidebar.label")}>
@@ -23,17 +40,40 @@ export function Sidebar({ repoPath }: SidebarProps) {
         </div>
         <RepositoryList />
       </section>
-      <section className="flex min-h-0 flex-1 flex-col gap-2 border-t border-line pt-3">
-        <div className="flex items-center justify-between px-4">
-          <h2 className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-muted uppercase">
-            <GitBranch className="size-3" />
-            {t("branches.title")}
-          </h2>
-          <IconButton label={t("branches.new")} onClick={() => showBranchDialog({ kind: "create" })}>
-            <Plus className="size-4" />
-          </IconButton>
+      <section className="flex min-h-0 flex-1 flex-col gap-2 border-t border-line pt-2">
+        <div className="flex items-center justify-between gap-2 px-3">
+          <div role="tablist" aria-label={t("sidebar.sectionsLabel")} className="flex items-center gap-1">
+            {tabs.map((item) => {
+              const selected = item.id === sidebarTab;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => setSidebarTab(item.id)}
+                  className={cn(
+                    "flex h-7 cursor-pointer items-center gap-1.5 rounded-md px-2 text-[11px] font-semibold tracking-wide uppercase transition-colors duration-150",
+                    selected ? "bg-subtle text-fg" : "text-muted hover:text-fg",
+                  )}
+                >
+                  {item.label}
+                  {item.count > 0 ? <span className="rounded-full bg-canvas px-1.5 py-px text-[10px] tabular-nums">{item.count}</span> : null}
+                </button>
+              );
+            })}
+          </div>
+          {sidebarTab === "branches" ? (
+            <IconButton label={t("branches.new")} onClick={() => showBranchDialog({ kind: "create" })}>
+              <Plus className="size-4" />
+            </IconButton>
+          ) : (
+            <IconButton label={t("tags.new")} onClick={() => showTagDialog({ kind: "create", target: null })}>
+              <Plus className="size-4" />
+            </IconButton>
+          )}
         </div>
-        <BranchList repoPath={repoPath} />
+        {sidebarTab === "branches" ? <BranchList repoPath={repoPath} /> : <TagList repoPath={repoPath} />}
       </section>
     </nav>
   );

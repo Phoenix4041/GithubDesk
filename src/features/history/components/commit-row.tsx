@@ -1,25 +1,27 @@
 import { memo } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/shared/lib/cn";
 import { formatRelativeTime } from "@/shared/lib/format";
 import type { CommitSummary } from "@/shared/types/git";
-import { useHistoryStore } from "../store";
 import { RefChips } from "./ref-chips";
 
 interface CommitRowProps {
   commit: CommitSummary;
   selected: boolean;
+  onSelect: (commit: CommitSummary, event: ReactMouseEvent) => void;
+  onContextMenu: (commit: CommitSummary, event: ReactMouseEvent) => void;
 }
 
-export const CommitRow = memo(function CommitRow({ commit, selected }: CommitRowProps) {
+export const CommitRow = memo(function CommitRow({ commit, selected, onSelect, onContextMenu }: CommitRowProps) {
   const { i18n } = useTranslation();
-  const selectCommit = useHistoryStore((state) => state.selectCommit);
 
   return (
     <button
       type="button"
       aria-current={selected ? "true" : undefined}
-      onClick={() => selectCommit(commit.hash)}
+      onClick={(event) => onSelect(commit, event)}
+      onContextMenu={(event) => onContextMenu(commit, event)}
       className={cn(
         "mx-1.5 flex h-[calc(100%-2px)] w-[calc(100%-12px)] cursor-pointer flex-col justify-center gap-0.5 rounded-md px-2.5 text-left transition-colors duration-150",
         selected ? "bg-accent-soft" : "hover:bg-subtle",

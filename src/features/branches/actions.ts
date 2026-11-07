@@ -42,8 +42,13 @@ export function switchToBranch(repoPath: string, branch: Branch, allBranches: re
   return perform(repoPath, () => switchBranch(repoPath, branch.name, true));
 }
 
-export async function createAndSwitchBranch(repoPath: string, name: string, checkout: boolean): Promise<boolean> {
-  const succeeded = await perform(repoPath, () => createBranch(repoPath, name, null, checkout));
+export async function createAndSwitchBranch(
+  repoPath: string,
+  name: string,
+  checkout: boolean,
+  startPoint: string | null,
+): Promise<boolean> {
+  const succeeded = await perform(repoPath, () => createBranch(repoPath, name, startPoint, checkout));
   if (succeeded) {
     showToast({ kind: "success", title: i18next.t("branches.created", { name }) });
   }

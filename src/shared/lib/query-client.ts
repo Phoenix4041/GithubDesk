@@ -20,6 +20,7 @@ export const repoKeys = {
   remotes: (path: string) => ["repo", path, "remotes"] as const,
   headCommit: (path: string) => ["repo", path, "head-commit"] as const,
   operation: (path: string) => ["repo", path, "operation"] as const,
+  tags: (path: string) => ["repo", path, "tags"] as const,
   history: (path: string) => ["repo", path, "history"] as const,
   diff: (path: string, source: string, file: string, ignoreWhitespace: boolean) =>
     ["repo", path, "diff", source, file, ignoreWhitespace] as const,

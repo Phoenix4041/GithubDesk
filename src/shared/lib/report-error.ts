@@ -10,6 +10,7 @@ const MAX_DETAIL_LENGTH = 280;
 export interface ErrorHandlers {
   retry?: () => void;
   pull?: () => void;
+  forcePush?: () => void;
   publish?: () => void;
   forceDelete?: () => void;
 }
@@ -66,6 +67,9 @@ function actionsFor(appError: AppError | null, handlers: ErrorHandlers): ToastAc
       break;
     default:
       break;
+  }
+  if (appError?.kind === "remoteAhead" && handlers.forcePush) {
+    actions.push({ label: i18next.t("errors.actions.forcePush"), run: handlers.forcePush });
   }
   return actions;
 }

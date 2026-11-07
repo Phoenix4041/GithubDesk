@@ -16,6 +16,20 @@ pub async fn ensure_valid_branch_name(repo: &Path, name: &str) -> AppResult<()> 
     }
 }
 
+pub async fn ensure_valid_tag_name(repo: &Path, name: &str) -> AppResult<()> {
+    let candidate = name.trim();
+    if candidate.is_empty() || candidate.starts_with('-') {
+        return Err(AppError::new(ErrorKind::InvalidName, name));
+    }
+    let reference = format!("refs/tags/{candidate}");
+    let output = git_unchecked(repo, &["check-ref-format", &reference]).await?;
+    if output.success() {
+        Ok(())
+    } else {
+        Err(AppError::new(ErrorKind::InvalidName, name))
+    }
+}
+
 pub fn ensure_revision(value: &str) -> AppResult<()> {
     let candidate = value.trim();
     if candidate.is_empty() || candidate.starts_with('-') || candidate.contains('\0') {

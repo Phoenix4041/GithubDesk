@@ -5,6 +5,7 @@ import { cancelJob } from "@/shared/lib/tauri-client";
 import { showToast } from "@/shared/ui/toast-store";
 import type { Progress, StatusSnapshot } from "@/shared/types/git";
 import { fetchRemotes, publishBranch, pullCurrentBranch, pushCurrentBranch } from "./api";
+import { useForcePushStore } from "./force-push-store";
 import { useSyncStore } from "./store";
 import type { SyncKind } from "./store";
 
@@ -32,6 +33,9 @@ export async function runSyncOperation(kind: SyncKind, repoPath: string, branchN
       case "push":
         await pushCurrentBranch(repoPath, jobId, report);
         break;
+      case "forcePush":
+        await pushCurrentBranch(repoPath, jobId, report, true);
+        break;
       case "publish": {
         const target = branchName ?? currentBranchName(repoPath);
         if (!target) {
@@ -49,6 +53,7 @@ export async function runSyncOperation(kind: SyncKind, repoPath: string, branchN
     reportError(error, {
       retry: () => void runSyncOperation(kind, repoPath, branchName),
       pull: () => void runSyncOperation("pull", repoPath),
+      forcePush: kind === "push" ? () => useForcePushStore.getState().show(repoPath) : undefined,
       publish: branch ? () => void runSyncOperation("publish", repoPath, branch) : undefined,
     });
   } finally {

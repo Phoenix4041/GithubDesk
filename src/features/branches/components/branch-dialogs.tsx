@@ -7,6 +7,7 @@ import { Dialog } from "@/shared/ui/dialog";
 import { TextField } from "@/shared/ui/text-field";
 import { createAndSwitchBranch, deleteExistingBranch, renameExistingBranch } from "../actions";
 import { useBranchDialogStore } from "../dialog-store";
+import type { BranchStartPoint } from "../dialog-store";
 
 interface BranchDialogsProps {
   repoPath: string;
@@ -17,7 +18,11 @@ interface NameDialogProps {
   onClose: () => void;
 }
 
-function CreateBranchDialog({ repoPath, onClose }: NameDialogProps) {
+interface CreateBranchDialogProps extends NameDialogProps {
+  startPoint?: BranchStartPoint;
+}
+
+function CreateBranchDialog({ repoPath, startPoint, onClose }: CreateBranchDialogProps) {
   const { t } = useTranslation();
   const [name, setName] = useState("");
   const [checkout, setCheckout] = useState(true);
@@ -30,7 +35,7 @@ function CreateBranchDialog({ repoPath, onClose }: NameDialogProps) {
       return;
     }
     setBusy(true);
-    const succeeded = await createAndSwitchBranch(repoPath, name.trim(), checkout);
+    const succeeded = await createAndSwitchBranch(repoPath, name.trim(), checkout, startPoint?.hash ?? null);
     setBusy(false);
     if (succeeded) {
       onClose();
@@ -41,7 +46,11 @@ function CreateBranchDialog({ repoPath, onClose }: NameDialogProps) {
     <Dialog
       open
       title={t("branches.createDialog.title")}
-      description={t("branches.createDialog.description")}
+      description={
+        startPoint
+          ? t("branches.createDialog.descriptionAt", { target: startPoint.label })
+          : t("branches.createDialog.description")
+      }
       onClose={onClose}
       width="sm"
       dismissible={!busy}
@@ -153,7 +162,7 @@ export function BranchDialogs({ repoPath }: BranchDialogsProps) {
     return null;
   }
   if (dialog.kind === "create") {
-    return <CreateBranchDialog repoPath={repoPath} onClose={hide} />;
+    return <CreateBranchDialog repoPath={repoPath} startPoint={dialog.startPoint} onClose={hide} />;
   }
   if (dialog.kind === "rename") {
     return <RenameBranchDialog key={dialog.name} repoPath={repoPath} currentName={dialog.name} onClose={hide} />;

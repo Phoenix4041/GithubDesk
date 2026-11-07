@@ -22,7 +22,8 @@
     "message": "The app ran into an unexpected problem. You can retry or go back to the start."
   },
   "sidebar": {
-    "label": "Repositories and branches"
+    "label": "Repositories and branches",
+    "sectionsLabel": "Sidebar sections"
   },
   "toolbar": {
     "detached": "Detached HEAD",
@@ -112,7 +113,8 @@
       "description": "Create a branch from where you are now.",
       "name": "Branch name",
       "checkout": "Switch to the new branch",
-      "submit": "Create branch"
+      "submit": "Create branch",
+      "descriptionAt": "The branch will be created from commit {{target}}."
     },
     "renameDialog": {
       "title": "Rename {{name}}",
@@ -266,12 +268,20 @@
       "fetch": "Looking for updates...",
       "pull": "Downloading changes...",
       "push": "Sending commits...",
-      "publish": "Publishing the branch..."
+      "publish": "Publishing the branch...",
+      "forcePush": "Pushing with safe overwrite..."
     },
     "done": {
       "pull": "Pull completed",
       "push": "Push completed",
-      "publish": "Branch published"
+      "publish": "Branch published",
+      "forcePush": "Changes pushed with safe overwrite"
+    },
+    "forcePushDialog": {
+      "title": "Push with safe overwrite",
+      "description": "Your commits will replace the ones on the remote. Git only does it if nobody pushed new changes in the meantime (force-with-lease).",
+      "loss": "Remote commits you do not have locally will be gone from that branch.",
+      "confirm": "Push and replace"
     }
   },
   "settings": {
@@ -304,7 +314,8 @@
       "publishBranch": "Publish branch",
       "retry": "Retry",
       "showChanges": "View changes",
-      "forceDelete": "Force delete"
+      "forceDelete": "Force delete",
+      "forcePush": "Push with overwrite"
     },
     "gitNotFound": {
       "title": "Git is not installed",
@@ -441,6 +452,18 @@
     "commitBecameEmpty": {
       "title": "The step has no changes left",
       "message": "After resolving, this commit changes nothing. You can skip the step."
+    },
+    "mergeCommitNeedsParent": {
+      "title": "Choose a parent",
+      "message": "This commit is a merge. Choose which parent is the mainline."
+    },
+    "tagAlreadyExists": {
+      "title": "The tag already exists",
+      "message": "A tag with that name already exists. Pick another one."
+    },
+    "tagNotFound": {
+      "title": "Tag not found",
+      "message": "The tag no longer exists."
     }
   },
   "operation": {
@@ -469,6 +492,88 @@
       "continued": "The {{name}} continued",
       "skipped": "Step skipped",
       "aborted": "The {{name}} was cancelled"
+    }
+  },
+  "tags": {
+    "title": "Tags",
+    "new": "New tag",
+    "search": "Search tags",
+    "noResults": "No results",
+    "empty": {
+      "title": "No tags",
+      "description": "Create a tag to mark a release, for example v1.0.0."
+    },
+    "listLabel": "Repository tags",
+    "created": "Tag {{name}} created",
+    "deleted": "Tag {{name}} deleted",
+    "pushed": "Tag {{name}} pushed",
+    "deletedRemote": "Tag {{name}} deleted from the remote",
+    "menu": {
+      "push": "Push to remote",
+      "copyName": "Copy name",
+      "delete": "Delete tag",
+      "deleteRemote": "Delete from remote"
+    },
+    "createDialog": {
+      "title": "New tag",
+      "descriptionHead": "It will be created on the current commit.",
+      "descriptionAt": "It will be created on commit {{target}}.",
+      "name": "Name",
+      "message": "Message (optional)",
+      "messageHint": "Writing a message creates an annotated tag.",
+      "submit": "Create tag"
+    },
+    "deleteDialog": {
+      "title": "Delete tag {{name}}",
+      "description": "It is only deleted on your computer. If you already pushed it, it stays on the remote.",
+      "confirm": "Delete"
+    },
+    "deleteRemoteDialog": {
+      "title": "Delete {{name}} from the remote",
+      "description": "The tag will be removed from the remote for everyone.",
+      "loss": "Nobody else will be able to use this tag from the remote.",
+      "confirm": "Delete from remote"
+    }
+  },
+  "commitActions": {
+    "cherryPicked_one": "Cherry-pick applied",
+    "cherryPicked_other": "{{count}} commits applied",
+    "reverted": "Commit reverted",
+    "checkedOut": "You are now on {{hash}} (detached HEAD)",
+    "menu": {
+      "createBranch": "Create branch here...",
+      "createTag": "Create tag here...",
+      "checkout": "Check out {{hash}} (detached HEAD)",
+      "cherryPick_one": "Cherry-pick onto current branch",
+      "cherryPick_other": "Cherry-pick {{count}} commits onto current branch",
+      "revert": "Revert this commit",
+      "resetSoft": "Soft reset to this commit",
+      "resetMixed": "Mixed reset to this commit",
+      "resetHard": "Hard reset to this commit...",
+      "copyHash": "Copy hash"
+    },
+    "reset": {
+      "soft": {
+        "done": "Soft reset done: your changes are staged"
+      },
+      "mixed": {
+        "done": "Mixed reset done: your changes are unstaged"
+      },
+      "hard": {
+        "done": "Hard reset done",
+        "title": "Hard reset to {{hash}}",
+        "description": "The current branch will move to this commit and your working folder will match it.",
+        "lossChanges": "Changes you have not committed will be lost.",
+        "lossCommits": "Later commits will leave the branch. You can recover them from the reflog for a while.",
+        "confirm": "Hard reset"
+      }
+    },
+    "revertMerge": {
+      "title": "Revert merge {{hash}}",
+      "description": "A merge has several parents. Choose which one is the mainline you want to keep.",
+      "parentLabel": "Mainline",
+      "parent": "Parent {{number}}",
+      "submit": "Revert"
     }
   }
 }

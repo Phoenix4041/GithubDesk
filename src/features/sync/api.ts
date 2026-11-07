@@ -13,8 +13,13 @@ export function pullCurrentBranch(path: string, jobId: string, onProgress: (prog
   return callWithProgress<void>("remote_pull", { path, jobId }, onProgress);
 }
 
-export function pushCurrentBranch(path: string, jobId: string, onProgress: (progress: Progress) => void): Promise<void> {
-  return callWithProgress<void>("remote_push", { path, jobId }, onProgress);
+export function pushCurrentBranch(
+  path: string,
+  jobId: string,
+  onProgress: (progress: Progress) => void,
+  forceWithLease = false,
+): Promise<void> {
+  return callWithProgress<void>("remote_push", { path, jobId, forceWithLease }, onProgress);
 }
 
 export function publishBranch(

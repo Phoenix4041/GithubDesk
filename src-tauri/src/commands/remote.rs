@@ -71,8 +71,21 @@ pub async fn push_current(
     cancel: CancelToken,
     on_progress: &(dyn Fn(Progress) + Send + Sync),
 ) -> AppResult<()> {
+    push_with_options(repo, false, cancel, on_progress).await
+}
+
+pub async fn push_with_options(
+    repo: &Path,
+    force_with_lease: bool,
+    cancel: CancelToken,
+    on_progress: &(dyn Fn(Progress) + Send + Sync),
+) -> AppResult<()> {
     require_remote(repo).await?;
-    git_streaming(Some(repo), &["push", "--progress"], cancel, on_progress).await?;
+    let mut args = vec!["push", "--progress"];
+    if force_with_lease {
+        args.push("--force-with-lease");
+    }
+    git_streaming(Some(repo), &args, cancel, on_progress).await?;
     Ok(())
 }
 
@@ -113,12 +126,18 @@ pub async fn remote_pull(
 pub async fn remote_push(
     state: State<'_, AppState>,
     path: String,
+    force_with_lease: bool,
     job_id: String,
     on_progress: Channel<Progress>,
 ) -> AppResult<()> {
     let guard = state.jobs.register(&job_id);
-    push_current(Path::new(&path), guard.token(), &|progress| {
-        let _ = on_progress.send(progress);
-    })
+    push_with_options(
+        Path::new(&path),
+        force_with_lease,
+        guard.token(),
+        &|progress| {
+            let _ = on_progress.send(progress);
+        },
+    )
     .await
 }

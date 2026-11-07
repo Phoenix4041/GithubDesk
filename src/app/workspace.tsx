@@ -5,11 +5,14 @@ import { ChangesDiffPanel } from "@/features/changes/components/changes-diff-pan
 import { ChangesView } from "@/features/changes/components/changes-view";
 import { useStatus } from "@/features/changes/queries";
 import { useChangesStore } from "@/features/changes/store";
+import { CommitDialogs } from "@/features/history/components/commit-dialogs";
 import { HistoryDiffPanel } from "@/features/history/components/history-diff-panel";
 import { HistoryView } from "@/features/history/components/history-view";
 import { useHistoryStore } from "@/features/history/store";
 import { useRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/features/settings/store";
+import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
+import { TagDialogs } from "@/features/tags/components/tag-dialogs";
 import { CommandError } from "@/shared/lib/tauri-client";
 import { useUiStore } from "@/shared/lib/ui-store";
 import { ResizeHandle } from "@/shared/ui/resize-handle";
@@ -79,6 +82,9 @@ export function Workspace({ repoPath }: WorkspaceProps) {
         </main>
       </div>
       <BranchDialogs repoPath={repoPath} />
+      <TagDialogs repoPath={repoPath} />
+      <CommitDialogs repoPath={repoPath} />
+      <ForcePushDialog repoPath={repoPath} />
     </div>
   );
 }

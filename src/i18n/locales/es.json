@@ -22,7 +22,8 @@
     "message": "La aplicación encontró un problema inesperado. Puedes reintentar o volver al inicio."
   },
   "sidebar": {
-    "label": "Repositorios y ramas"
+    "label": "Repositorios y ramas",
+    "sectionsLabel": "Secciones de la barra lateral"
   },
   "toolbar": {
     "detached": "HEAD separado",
@@ -112,7 +113,8 @@
       "description": "Crea una rama a partir de tu posición actual.",
       "name": "Nombre de la rama",
       "checkout": "Cambiar a la nueva rama",
-      "submit": "Crear rama"
+      "submit": "Crear rama",
+      "descriptionAt": "La rama se creará desde el commit {{target}}."
     },
     "renameDialog": {
       "title": "Renombrar {{name}}",
@@ -266,12 +268,20 @@
       "fetch": "Buscando novedades...",
       "pull": "Descargando cambios...",
       "push": "Enviando commits...",
-      "publish": "Publicando la rama..."
+      "publish": "Publicando la rama...",
+      "forcePush": "Subiendo con sobrescritura segura..."
     },
     "done": {
       "pull": "Pull completado",
       "push": "Push completado",
-      "publish": "Rama publicada"
+      "publish": "Rama publicada",
+      "forcePush": "Cambios subidos con sobrescritura segura"
+    },
+    "forcePushDialog": {
+      "title": "Subir con sobrescritura segura",
+      "description": "Tus commits reemplazarán a los del remoto. Git solo lo hará si nadie subió cambios nuevos mientras tanto (force-with-lease).",
+      "loss": "Los commits del remoto que no tengas en tu equipo se perderán de esa rama.",
+      "confirm": "Subir y reemplazar"
     }
   },
   "settings": {
@@ -304,7 +314,8 @@
       "publishBranch": "Publicar rama",
       "retry": "Reintentar",
       "showChanges": "Ver cambios",
-      "forceDelete": "Forzar eliminación"
+      "forceDelete": "Forzar eliminación",
+      "forcePush": "Subir con sobrescritura"
     },
     "gitNotFound": {
       "title": "Git no está instalado",
@@ -441,6 +452,18 @@
     "commitBecameEmpty": {
       "title": "El paso quedó sin cambios",
       "message": "Después de resolver, este commit no cambia nada. Puedes omitir el paso."
+    },
+    "mergeCommitNeedsParent": {
+      "title": "Falta elegir el padre",
+      "message": "Este commit es un merge. Elige qué padre es la línea principal."
+    },
+    "tagAlreadyExists": {
+      "title": "La etiqueta ya existe",
+      "message": "Ya hay una etiqueta con ese nombre. Elige otro."
+    },
+    "tagNotFound": {
+      "title": "No se encontró la etiqueta",
+      "message": "La etiqueta ya no existe."
     }
   },
   "operation": {
@@ -469,6 +492,88 @@
       "continued": "Se continuó el {{name}}",
       "skipped": "Se omitió el paso",
       "aborted": "Se canceló el {{name}}"
+    }
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "new": "Nueva etiqueta",
+    "search": "Buscar etiqueta",
+    "noResults": "Sin resultados",
+    "empty": {
+      "title": "Sin etiquetas",
+      "description": "Crea una etiqueta para marcar una versión, por ejemplo v1.0.0."
+    },
+    "listLabel": "Etiquetas del repositorio",
+    "created": "Etiqueta {{name}} creada",
+    "deleted": "Etiqueta {{name}} eliminada",
+    "pushed": "Etiqueta {{name}} subida",
+    "deletedRemote": "Etiqueta {{name}} eliminada del remoto",
+    "menu": {
+      "push": "Subir al remoto",
+      "copyName": "Copiar nombre",
+      "delete": "Eliminar etiqueta",
+      "deleteRemote": "Eliminar del remoto"
+    },
+    "createDialog": {
+      "title": "Nueva etiqueta",
+      "descriptionHead": "Se creará en el commit actual.",
+      "descriptionAt": "Se creará en el commit {{target}}.",
+      "name": "Nombre",
+      "message": "Mensaje (opcional)",
+      "messageHint": "Si escribes un mensaje se crea una etiqueta anotada.",
+      "submit": "Crear etiqueta"
+    },
+    "deleteDialog": {
+      "title": "Eliminar la etiqueta {{name}}",
+      "description": "Solo se elimina en tu equipo. Si ya la subiste, seguirá en el remoto.",
+      "confirm": "Eliminar"
+    },
+    "deleteRemoteDialog": {
+      "title": "Eliminar {{name}} del remoto",
+      "description": "La etiqueta se borrará del remoto para todas las personas.",
+      "loss": "Nadie más podrá usar esta etiqueta desde el remoto.",
+      "confirm": "Eliminar del remoto"
+    }
+  },
+  "commitActions": {
+    "cherryPicked_one": "Cherry-pick aplicado",
+    "cherryPicked_other": "{{count}} commits aplicados",
+    "reverted": "Commit revertido",
+    "checkedOut": "Ahora estás en {{hash}} (HEAD desacoplado)",
+    "menu": {
+      "createBranch": "Crear rama aquí...",
+      "createTag": "Crear etiqueta aquí...",
+      "checkout": "Ver commit {{hash}} (HEAD desacoplado)",
+      "cherryPick_one": "Cherry-pick a la rama actual",
+      "cherryPick_other": "Cherry-pick de {{count}} commits a la rama actual",
+      "revert": "Revertir este commit",
+      "resetSoft": "Reset suave a este commit",
+      "resetMixed": "Reset mixto a este commit",
+      "resetHard": "Reset duro a este commit...",
+      "copyHash": "Copiar hash"
+    },
+    "reset": {
+      "soft": {
+        "done": "Reset suave hecho: tus cambios quedaron preparados"
+      },
+      "mixed": {
+        "done": "Reset mixto hecho: tus cambios quedaron sin preparar"
+      },
+      "hard": {
+        "done": "Reset duro hecho",
+        "title": "Reset duro a {{hash}}",
+        "description": "La rama actual se moverá a este commit y tu carpeta de trabajo quedará igual que él.",
+        "lossChanges": "Se perderán los cambios que no hayas guardado en un commit.",
+        "lossCommits": "Los commits posteriores dejan de estar en la rama. Puedes recuperarlos desde el reflog durante un tiempo.",
+        "confirm": "Reset duro"
+      }
+    },
+    "revertMerge": {
+      "title": "Revertir el merge {{hash}}",
+      "description": "Un merge tiene varios padres. Elige cuál es la línea principal que quieres conservar.",
+      "parentLabel": "Línea principal",
+      "parent": "Padre {{number}}",
+      "submit": "Revertir"
     }
   }
 }

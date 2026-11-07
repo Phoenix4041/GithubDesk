@@ -28,6 +28,9 @@ export type ErrorKind =
   | "noOperationInProgress"
   | "unstagedChanges"
   | "commitBecameEmpty"
+  | "mergeCommitNeedsParent"
+  | "tagAlreadyExists"
+  | "tagNotFound"
   | "noCommits"
   | "cancelled"
   | "invalidInput"
@@ -194,3 +197,14 @@ export interface RepoOperation {
   total: number | null;
   branch: string | null;
 }
+
+export interface Tag {
+  name: string;
+  targetHash: string;
+  annotated: boolean;
+  message: string | null;
+  tagger: string | null;
+  time: number;
+}
+
+export type ResetMode = "soft" | "mixed" | "hard";

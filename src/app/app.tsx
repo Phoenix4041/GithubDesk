@@ -7,6 +7,7 @@ import { useRepositoriesStore } from "@/features/repositories/store";
 import { stopRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { useTheme } from "@/features/settings/use-theme";
 import { queryClient } from "@/shared/lib/query-client";
+import { ContextMenuHost } from "@/shared/ui/context-menu";
 import { ErrorBoundary } from "@/shared/ui/error-boundary";
 import { ToastRegion } from "@/shared/ui/toast-region";
 import { RenderFailure } from "./components/render-failure";
@@ -35,6 +36,7 @@ export function App() {
       </ErrorBoundary>
       <RepositoryDialogs />
       <ToastRegion />
+      <ContextMenuHost />
     </QueryClientProvider>
   );
 }

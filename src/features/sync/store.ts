@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import type { Progress } from "@/shared/types/git";
 
-export type SyncKind = "fetch" | "pull" | "push" | "publish";
+export type SyncKind = "fetch" | "pull" | "push" | "forcePush" | "publish";
 
 export interface SyncOperation {
   kind: SyncKind;
