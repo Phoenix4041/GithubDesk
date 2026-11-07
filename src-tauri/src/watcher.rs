@@ -11,7 +11,7 @@ use crate::error::{AppError, AppResult, ErrorKind};
 const DEBOUNCE_MILLISECONDS: u64 = 400;
 const CHANGE_EVENT: &str = "repo-changed";
 
-const WATCHED_GIT_ENTRIES: [&str; 10] = [
+const WATCHED_GIT_ENTRIES: [&str; 12] = [
     "HEAD",
     "index",
     "refs",
@@ -19,6 +19,8 @@ const WATCHED_GIT_ENTRIES: [&str; 10] = [
     "MERGE_HEAD",
     "REBASE_HEAD",
     "CHERRY_PICK_HEAD",
+    "REVERT_HEAD",
+    "sequencer",
     "ORIG_HEAD",
     "rebase-merge",
     "rebase-apply",

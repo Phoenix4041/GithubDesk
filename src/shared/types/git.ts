@@ -24,6 +24,10 @@ export type ErrorKind =
   | "repositoryLocked"
   | "unrelatedHistories"
   | "patchRejected"
+  | "operationInProgress"
+  | "noOperationInProgress"
+  | "unstagedChanges"
+  | "commitBecameEmpty"
   | "noCommits"
   | "cancelled"
   | "invalidInput"
@@ -178,4 +182,15 @@ export interface HeadCommit {
   description: string;
   pushed: boolean;
   parentCount: number;
+}
+
+export type OperationKind = "merge" | "cherryPick" | "revert" | "rebase";
+
+export type OperationAction = "continue" | "skip" | "abort";
+
+export interface RepoOperation {
+  kind: OperationKind;
+  step: number | null;
+  total: number | null;
+  branch: string | null;
 }

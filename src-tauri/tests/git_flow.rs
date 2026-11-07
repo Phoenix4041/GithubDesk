@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
+use githubdesk_lib::commands::operation::{self, OperationAction};
 use githubdesk_lib::commands::{branch, commit, history, remote, repo, status};
 use githubdesk_lib::error::{ErrorKind, SuggestedAction};
 use githubdesk_lib::git::parse::diff::{FileDiff, LineKind};
@@ -591,7 +592,9 @@ async fn reports_conflicts_and_aborts_the_merge() {
         .iter()
         .any(|line| line.content.starts_with("<<<<<<<")));
 
-    remote::abort_merge(&first_path).await.expect("abort");
+    operation::run_operation_action(&first_path, OperationAction::Abort)
+        .await
+        .expect("abort");
     let snapshot = status::get_status(&first_path).await.expect("status");
     assert!(snapshot.entries.is_empty());
 }

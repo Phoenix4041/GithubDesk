@@ -31,6 +31,10 @@ pub enum ErrorKind {
     RepositoryLocked,
     UnrelatedHistories,
     PatchRejected,
+    OperationInProgress,
+    NoOperationInProgress,
+    UnstagedChanges,
+    CommitBecameEmpty,
     NoCommits,
     Cancelled,
     InvalidInput,
@@ -111,6 +115,7 @@ pub fn suggested_action_for(kind: ErrorKind) -> Option<SuggestedAction> {
         | ErrorKind::RepositoryLocked => Some(SuggestedAction::Retry),
         ErrorKind::MergeConflict
         | ErrorKind::UnmergedFiles
+        | ErrorKind::UnstagedChanges
         | ErrorKind::LocalChangesWouldBeOverwritten => Some(SuggestedAction::ShowChanges),
         ErrorKind::BranchNotFullyMerged => Some(SuggestedAction::ForceDelete),
         _ => None,
@@ -181,15 +186,35 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     {
         return ErrorKind::RemoteAhead;
     }
-    if has("automatic merge failed") || has("conflict (") || has("merge conflict") {
-        return ErrorKind::MergeConflict;
+    if has("is now empty") || has("did you forget to use 'git add'") {
+        return ErrorKind::CommitBecameEmpty;
+    }
+    if has("you have not concluded your merge")
+        || has("already in progress")
+        || has("already a rebase-merge directory")
+        || has("already a rebase-apply directory")
+    {
+        return ErrorKind::OperationInProgress;
+    }
+    if has("no rebase in progress")
+        || has("no cherry-pick or revert in progress")
+        || has("there is no merge to abort")
+    {
+        return ErrorKind::NoOperationInProgress;
+    }
+    if has("you have unstaged changes") {
+        return ErrorKind::UnstagedChanges;
     }
     if has("you have unmerged paths")
         || has("unmerged files")
         || has("needs merge")
         || has("unresolved conflict")
+        || has("you must edit all merge conflicts")
     {
         return ErrorKind::UnmergedFiles;
+    }
+    if has("automatic merge failed") || has("conflict (") || has("merge conflict") {
+        return ErrorKind::MergeConflict;
     }
     if has("would be overwritten by")
         || has("please commit your changes or stash them")
@@ -312,6 +337,57 @@ mod tests {
         assert_eq!(
             classify_failure("fatal: your current branch 'main' does not have any commits yet"),
             ErrorKind::NoCommits
+        );
+    }
+
+    #[test]
+    fn detects_operation_state_errors() {
+        assert_eq!(
+            classify_failure("fatal: You have not concluded your merge (MERGE_HEAD exists)."),
+            ErrorKind::OperationInProgress
+        );
+        assert_eq!(
+            classify_failure("error: a cherry-pick or revert is already in progress"),
+            ErrorKind::OperationInProgress
+        );
+        assert_eq!(
+            classify_failure("fatal: No rebase in progress?"),
+            ErrorKind::NoOperationInProgress
+        );
+        assert_eq!(
+            classify_failure("fatal: There is no merge to abort (MERGE_HEAD missing)."),
+            ErrorKind::NoOperationInProgress
+        );
+    }
+
+    #[test]
+    fn detects_empty_results_before_nothing_to_commit() {
+        let output = "nothing to commit, working tree clean
+The previous cherry-pick is now empty, possibly due to conflict resolution.";
+        assert_eq!(classify_failure(output), ErrorKind::CommitBecameEmpty);
+        assert_eq!(
+            classify_failure("No changes - did you forget to use 'git add'?"),
+            ErrorKind::CommitBecameEmpty
+        );
+    }
+
+    #[test]
+    fn unresolved_conflicts_on_continue_are_unmerged_files() {
+        let output = "f.txt: needs merge
+You must edit all merge conflicts and then
+mark them as resolved using git add";
+        assert_eq!(classify_failure(output), ErrorKind::UnmergedFiles);
+    }
+
+    #[test]
+    fn detects_unstaged_changes() {
+        assert_eq!(
+            classify_failure("error: cannot rebase: You have unstaged changes."),
+            ErrorKind::UnstagedChanges
+        );
+        assert_eq!(
+            suggested_action_for(ErrorKind::UnstagedChanges),
+            Some(SuggestedAction::ShowChanges)
         );
     }
 

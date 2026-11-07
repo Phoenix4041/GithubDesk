@@ -52,7 +52,3 @@ export function createCommit(path: string, title: string, description: string, a
 export function undoLastCommit(path: string): Promise<HeadCommit> {
   return call<HeadCommit>("commit_undo", { path });
 }
-
-export function abortMerge(path: string): Promise<void> {
-  return call<void>("merge_abort", { path });
-}

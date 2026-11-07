@@ -5,7 +5,7 @@ pub mod jobs;
 pub mod state;
 pub mod watcher;
 
-use commands::{branch, commit, history, job, remote, repo, status, watch};
+use commands::{branch, commit, history, job, operation, remote, repo, status, watch};
 use state::AppState;
 
 pub fn run() {
@@ -36,7 +36,8 @@ pub fn run() {
             remote::remote_fetch,
             remote::remote_pull,
             remote::remote_push,
-            remote::merge_abort,
+            operation::operation_state,
+            operation::operation_run,
             history::history_list,
             history::history_detail,
             history::history_files,

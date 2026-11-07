@@ -42,6 +42,17 @@ pub fn git_output(directory: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&output.stdout).into_owned()
 }
 
+pub fn git_try(directory: &Path, args: &[&str]) -> (bool, String) {
+    let output = Command::new("git")
+        .args(args)
+        .current_dir(directory)
+        .output()
+        .expect("git runs");
+    let mut text = String::from_utf8_lossy(&output.stdout).into_owned();
+    text.push_str(&String::from_utf8_lossy(&output.stderr));
+    (output.status.success(), text)
+}
+
 pub fn write_file(repo: &Path, relative: &str, content: &str) {
     let full_path = repo.join(relative);
     if let Some(parent) = full_path.parent() {

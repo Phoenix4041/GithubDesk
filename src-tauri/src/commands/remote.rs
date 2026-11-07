@@ -6,7 +6,7 @@ use tauri::State;
 use crate::error::{AppError, AppResult, ErrorKind};
 use crate::git::parse::progress::Progress;
 use crate::git::parse::remote::{parse_remotes, Remote};
-use crate::git::runner::{git, git_streaming, git_unchecked};
+use crate::git::runner::{git_streaming, git_unchecked};
 use crate::jobs::CancelToken;
 use crate::state::AppState;
 
@@ -76,11 +76,6 @@ pub async fn push_current(
     Ok(())
 }
 
-pub async fn abort_merge(repo: &Path) -> AppResult<()> {
-    git(repo, &["merge", "--abort"]).await?;
-    Ok(())
-}
-
 #[tauri::command]
 pub async fn remote_list(path: String) -> AppResult<Vec<Remote>> {
     list_remotes(Path::new(&path)).await
@@ -126,9 +121,4 @@ pub async fn remote_push(
         let _ = on_progress.send(progress);
     })
     .await
-}
-
-#[tauri::command]
-pub async fn merge_abort(path: String) -> AppResult<()> {
-    abort_merge(Path::new(&path)).await
 }

@@ -159,7 +159,6 @@
     "stageAll": "Preparar todo",
     "unstageAll": "Quitar todo",
     "discardAll": "Descartar todos los cambios",
-    "mergeAborted": "Merge cancelado",
     "discard": {
       "title_one": "Descartar los cambios de {{count}} archivo",
       "title_other": "Descartar los cambios de {{count}} archivos",
@@ -175,14 +174,8 @@
     "conflictBanner": {
       "title_one": "{{count}} archivo con conflicto",
       "title_other": "{{count}} archivos con conflictos",
-      "description": "Edita los archivos para resolver los conflictos y márcalos como resueltos. También puedes cancelar el merge.",
+      "description": "Edita los archivos para resolver los conflictos y márcalos como resueltos.",
       "abort": "Cancelar merge"
-    },
-    "abortMerge": {
-      "title": "Cancelar el merge",
-      "description": "Volverás al estado que tenías antes de empezar el merge.",
-      "loss": "Se descartará la resolución de conflictos que hayas hecho hasta ahora.",
-      "confirm": "Cancelar merge"
     },
     "empty": {
       "title": "No hay cambios",
@@ -432,6 +425,50 @@
     "unknown": {
       "title": "Algo salió mal",
       "message": "Git devolvió un error inesperado."
+    },
+    "operationInProgress": {
+      "title": "Ya hay una operación en curso",
+      "message": "Termina o cancela el merge, cherry-pick, revert o rebase actual antes de empezar otra operación."
+    },
+    "noOperationInProgress": {
+      "title": "No hay ninguna operación en curso",
+      "message": "La operación ya terminó o se canceló. Actualiza la vista para ver el estado actual."
+    },
+    "unstagedChanges": {
+      "title": "Hay cambios sin preparar",
+      "message": "Prepara los cambios que quieres conservar o descártalos antes de continuar."
+    },
+    "commitBecameEmpty": {
+      "title": "El paso quedó sin cambios",
+      "message": "Después de resolver, este commit no cambia nada. Puedes omitir el paso."
+    }
+  },
+  "operation": {
+    "names": {
+      "merge": "merge",
+      "cherryPick": "cherry-pick",
+      "revert": "revert",
+      "rebase": "rebase"
+    },
+    "title": "{{name}} en curso",
+    "progress": "Paso {{step}} de {{total}}",
+    "onBranch": "en {{branch}}",
+    "resolveConflicts_one": "Resuelve el conflicto de {{count}} archivo y luego continúa.",
+    "resolveConflicts_other": "Resuelve los conflictos de {{count}} archivos y luego continúa.",
+    "paused": "El rebase se detuvo para que edites el commit. Haz tus cambios, prepáralos y continúa.",
+    "ready": "No quedan conflictos. Puedes continuar.",
+    "continue": "Continuar",
+    "skip": "Omitir paso",
+    "abort": "Cancelar {{name}}",
+    "abortDialog": {
+      "title": "Cancelar el {{name}}",
+      "description": "Volverás al estado que tenías antes de empezar el {{name}}.",
+      "loss": "Se descartará lo que hayas resuelto hasta ahora."
+    },
+    "toast": {
+      "continued": "Se continuó el {{name}}",
+      "skipped": "Se omitió el paso",
+      "aborted": "Se canceló el {{name}}"
     }
   }
 }

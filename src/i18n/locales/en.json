@@ -159,7 +159,6 @@
     "stageAll": "Stage all",
     "unstageAll": "Unstage all",
     "discardAll": "Discard all changes",
-    "mergeAborted": "Merge cancelled",
     "discard": {
       "title_one": "Discard changes in {{count}} file",
       "title_other": "Discard changes in {{count}} files",
@@ -175,14 +174,8 @@
     "conflictBanner": {
       "title_one": "{{count}} conflicted file",
       "title_other": "{{count}} conflicted files",
-      "description": "Edit the files to resolve the conflicts and mark them as resolved. You can also cancel the merge.",
+      "description": "Edit the files to resolve the conflicts and mark them as resolved.",
       "abort": "Cancel merge"
-    },
-    "abortMerge": {
-      "title": "Cancel the merge",
-      "description": "You will go back to the state you had before starting the merge.",
-      "loss": "Any conflict resolution you have done so far will be discarded.",
-      "confirm": "Cancel merge"
     },
     "empty": {
       "title": "No changes",
@@ -432,6 +425,50 @@
     "unknown": {
       "title": "Something went wrong",
       "message": "Git returned an unexpected error."
+    },
+    "operationInProgress": {
+      "title": "An operation is already in progress",
+      "message": "Finish or cancel the current merge, cherry-pick, revert or rebase before starting another operation."
+    },
+    "noOperationInProgress": {
+      "title": "No operation in progress",
+      "message": "The operation already finished or was cancelled. Refresh to see the current state."
+    },
+    "unstagedChanges": {
+      "title": "There are unstaged changes",
+      "message": "Stage the changes you want to keep or discard them before continuing."
+    },
+    "commitBecameEmpty": {
+      "title": "The step has no changes left",
+      "message": "After resolving, this commit changes nothing. You can skip the step."
+    }
+  },
+  "operation": {
+    "names": {
+      "merge": "merge",
+      "cherryPick": "cherry-pick",
+      "revert": "revert",
+      "rebase": "rebase"
+    },
+    "title": "{{name}} in progress",
+    "progress": "Step {{step}} of {{total}}",
+    "onBranch": "on {{branch}}",
+    "resolveConflicts_one": "Resolve the conflict in {{count}} file, then continue.",
+    "resolveConflicts_other": "Resolve the conflicts in {{count}} files, then continue.",
+    "paused": "The rebase stopped so you can edit the commit. Make your changes, stage them and continue.",
+    "ready": "No conflicts left. You can continue.",
+    "continue": "Continue",
+    "skip": "Skip step",
+    "abort": "Cancel {{name}}",
+    "abortDialog": {
+      "title": "Cancel the {{name}}",
+      "description": "You will go back to how things were before the {{name}} started.",
+      "loss": "Everything you resolved so far will be discarded."
+    },
+    "toast": {
+      "continued": "The {{name}} continued",
+      "skipped": "Step skipped",
+      "aborted": "The {{name}} was cancelled"
     }
   }
 }

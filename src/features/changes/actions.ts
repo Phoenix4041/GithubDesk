@@ -1,10 +1,10 @@
 import { i18next } from "@/i18n";
 import { refreshRepository } from "@/shared/lib/query-client";
+import { performRepoAction } from "@/shared/lib/repo-action";
 import { reportError } from "@/shared/lib/report-error";
 import { showToast } from "@/shared/ui/toast-store";
 import type { FileDiff, HeadCommit, LineSelection, StatusEntry } from "@/shared/types/git";
 import {
-  abortMerge,
   createCommit,
   discardChanges,
   stagePaths,
@@ -14,17 +14,7 @@ import {
   unstageSelection,
 } from "./api";
 
-async function perform(repoPath: string, operation: () => Promise<unknown>): Promise<boolean> {
-  try {
-    await operation();
-    return true;
-  } catch (error) {
-    reportError(error);
-    return false;
-  } finally {
-    await refreshRepository(repoPath);
-  }
-}
+const perform = performRepoAction;
 
 export function stageFiles(repoPath: string, paths: string[]): Promise<boolean> {
   return perform(repoPath, () => stagePaths(repoPath, paths));
@@ -78,12 +68,4 @@ export async function undoHeadCommit(repoPath: string): Promise<HeadCommit | nul
   } finally {
     await refreshRepository(repoPath);
   }
-}
-
-export async function abortCurrentMerge(repoPath: string): Promise<boolean> {
-  const succeeded = await perform(repoPath, () => abortMerge(repoPath));
-  if (succeeded) {
-    showToast({ kind: "info", title: i18next.t("changes.mergeAborted") });
-  }
-  return succeeded;
 }
