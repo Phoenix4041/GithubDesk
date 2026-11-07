@@ -510,6 +510,10 @@
     "nothingToRebase": {
       "title": "No hay commits para reorganizar",
       "message": "Elige un commit anterior al último de tu rama."
+    },
+    "fileNotInRevision": {
+      "title": "El archivo no está en esa versión",
+      "message": "Git no conoce este archivo todavía. Haz commit para poder ver su historial."
     }
   },
   "operation": {
@@ -777,6 +781,77 @@
     "problems": {
       "firstSquash": "El primer commit que se conserva no puede combinarse con uno anterior.",
       "emptyReword": "Escribe el nuevo mensaje de los commits que vas a cambiar."
+    }
+  },
+  "blame": {
+    "title": "Blame",
+    "atRevision": "Blame en {{hash}}",
+    "close": "Cerrar blame",
+    "listLabel": "Autoría de {{path}}",
+    "uncommitted": "Sin commit todavía",
+    "menu": {
+      "file": "Ver blame del archivo",
+      "atCommit": "Ver blame en este commit"
+    },
+    "binary": {
+      "title": "Archivo binario",
+      "description": "El blame solo funciona con archivos de texto."
+    },
+    "tooLarge": {
+      "title": "Archivo demasiado grande",
+      "description": "El archivo supera el tamaño que se puede analizar sin ralentizar la aplicación."
+    },
+    "empty": {
+      "title": "Archivo vacío",
+      "description": "No hay líneas para atribuir."
+    },
+    "truncated": "Se muestran las primeras 20 000 líneas."
+  },
+  "reflog": {
+    "open": "Registro de HEAD (reflog)",
+    "title": "Registro de HEAD",
+    "description": "Todo lo que cambió la punta de tu rama. Aquí puedes recuperar commits que parecían perdidos.",
+    "listLabel": "Movimientos de HEAD",
+    "restore": "Volver aquí",
+    "createBranch": "Crear rama aquí",
+    "restored": "Tu rama volvió a {{hash}}",
+    "undone": "Operación deshecha",
+    "empty": {
+      "title": "Sin movimientos",
+      "description": "Cuando hagas commits o cambies de rama aparecerán aquí."
+    },
+    "undo": {
+      "tooltip": "Deshacer: {{action}} \"{{message}}\"",
+      "nothing": "No hay nada que deshacer"
+    },
+    "actions": {
+      "commit": "Commit",
+      "commitAmend": "Commit modificado",
+      "checkout": "Cambio de rama",
+      "merge": "Merge",
+      "rebase": "Rebase",
+      "reset": "Reset",
+      "cherryPick": "Cherry-pick",
+      "revert": "Revert",
+      "pull": "Pull",
+      "clone": "Clonado",
+      "branch": "Rama",
+      "other": "Otro"
+    },
+    "restoreDialog": {
+      "title": "Volver a {{hash}}",
+      "description": "Tu rama se moverá al estado \"{{message}}\".",
+      "effect": "Los archivos de tu carpeta volverán a como estaban en ese punto.",
+      "safety": "Si tienes cambios sin guardar que lo impidan, Git cancela la operación sin tocar nada.",
+      "confirm": "Volver aquí"
+    },
+    "undoDialog": {
+      "title": "Deshacer la última operación",
+      "description": "Se deshará: {{action}} \"{{message}}\".",
+      "effectStaged": "Tu rama volverá a {{hash}} y los cambios quedarán preparados para un nuevo commit.",
+      "effectRestore": "Tu rama y tus archivos volverán a como estaban en {{hash}}.",
+      "safety": "Si tienes cambios sin guardar que lo impidan, Git cancela la operación sin tocar nada.",
+      "confirm": "Deshacer"
     }
   }
 }

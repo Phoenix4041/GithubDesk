@@ -35,6 +35,7 @@ export type ErrorKind =
   | "stashNotFound"
   | "rebaseHasMerges"
   | "nothingToRebase"
+  | "fileNotInRevision"
   | "noCommits"
   | "cancelled"
   | "invalidInput"
@@ -282,4 +283,62 @@ export interface RebaseStepPayload {
   hash: string;
   action: RebaseAction;
   message: string | null;
+}
+
+export interface BlameCommit {
+  hash: string;
+  shortHash: string;
+  author: string;
+  authorTime: number;
+  summary: string;
+  uncommitted: boolean;
+}
+
+export interface BlameLine {
+  commitIndex: number;
+  originalLine: number;
+  content: string;
+}
+
+export interface BlameResult {
+  path: string;
+  commits: BlameCommit[];
+  lines: BlameLine[];
+  binary: boolean;
+  tooLarge: boolean;
+  truncated: boolean;
+}
+
+export type ReflogAction =
+  | "commit"
+  | "commitAmend"
+  | "checkout"
+  | "merge"
+  | "rebase"
+  | "reset"
+  | "cherryPick"
+  | "revert"
+  | "pull"
+  | "clone"
+  | "branch"
+  | "other";
+
+export interface ReflogEntry {
+  index: number;
+  hash: string;
+  shortHash: string;
+  time: number;
+  action: ReflogAction;
+  message: string;
+}
+
+export type UndoStrategy = "keepChangesStaged" | "restoreAll";
+
+export interface UndoPlan {
+  action: ReflogAction;
+  strategy: UndoStrategy;
+  message: string;
+  currentHash: string;
+  targetHash: string;
+  targetShortHash: string;
 }

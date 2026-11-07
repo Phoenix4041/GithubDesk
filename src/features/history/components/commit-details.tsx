@@ -1,5 +1,6 @@
-import { History } from "lucide-react";
+import { History, UserRoundSearch } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useBlameStore } from "@/features/blame/store";
 import { formatDateTime } from "@/shared/lib/format";
 import { openContextMenu } from "@/shared/ui/context-menu";
 import { Skeleton } from "@/shared/ui/skeleton";
@@ -67,6 +68,12 @@ export function CommitDetails({ repoPath, hash }: CommitDetailsProps) {
                     label: t("history.fileMenu.history"),
                     icon: <History className="size-4" />,
                     onSelect: () => showFileHistory(chosen.path),
+                  },
+                  {
+                    label: t("blame.menu.atCommit"),
+                    icon: <UserRoundSearch className="size-4" />,
+                    disabled: chosen.status === "deleted",
+                    onSelect: () => useBlameStore.getState().open({ path: chosen.path, revision: hash }),
                   },
                 ])
               }

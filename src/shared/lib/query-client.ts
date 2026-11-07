@@ -22,6 +22,10 @@ export const repoKeys = {
   operation: (path: string) => ["repo", path, "operation"] as const,
   tags: (path: string) => ["repo", path, "tags"] as const,
   compare: (path: string) => ["repo", path, "compare"] as const,
+  reflog: (path: string) => ["repo", path, "reflog"] as const,
+  undoPlan: (path: string) => ["repo", path, "undo-plan"] as const,
+  blame: (path: string, file: string, revision: string | null, ignoreWhitespace: boolean) =>
+    ["repo", path, "blame", file, revision, ignoreWhitespace] as const,
   rebasePlan: (path: string, base: string) => ["repo", path, "rebase-plan", base] as const,
   conflict: (path: string, file: string) => ["repo", path, "conflict", file] as const,
   stashes: (path: string) => ["repo", path, "stashes"] as const,

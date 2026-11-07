@@ -510,6 +510,10 @@
     "nothingToRebase": {
       "title": "No commits to rearrange",
       "message": "Pick a commit older than the last one on your branch."
+    },
+    "fileNotInRevision": {
+      "title": "The file is not in that version",
+      "message": "Git does not know this file yet. Commit it to see its history."
     }
   },
   "operation": {
@@ -777,6 +781,77 @@
     "problems": {
       "firstSquash": "The first kept commit cannot be combined into a previous one.",
       "emptyReword": "Write the new message for the commits you are rewording."
+    }
+  },
+  "blame": {
+    "title": "Blame",
+    "atRevision": "Blame at {{hash}}",
+    "close": "Close blame",
+    "listLabel": "Authorship of {{path}}",
+    "uncommitted": "Not committed yet",
+    "menu": {
+      "file": "Show file blame",
+      "atCommit": "Show blame at this commit"
+    },
+    "binary": {
+      "title": "Binary file",
+      "description": "Blame only works with text files."
+    },
+    "tooLarge": {
+      "title": "File too large",
+      "description": "The file is larger than what can be analyzed without slowing the app down."
+    },
+    "empty": {
+      "title": "Empty file",
+      "description": "There are no lines to attribute."
+    },
+    "truncated": "Showing the first 20,000 lines."
+  },
+  "reflog": {
+    "open": "HEAD log (reflog)",
+    "title": "HEAD log",
+    "description": "Everything that moved the tip of your branch. Here you can recover commits that seemed lost.",
+    "listLabel": "HEAD movements",
+    "restore": "Go back here",
+    "createBranch": "Branch here",
+    "restored": "Your branch went back to {{hash}}",
+    "undone": "Operation undone",
+    "empty": {
+      "title": "No movements",
+      "description": "When you commit or switch branches they will show up here."
+    },
+    "undo": {
+      "tooltip": "Undo: {{action}} \"{{message}}\"",
+      "nothing": "Nothing to undo"
+    },
+    "actions": {
+      "commit": "Commit",
+      "commitAmend": "Amended commit",
+      "checkout": "Checkout",
+      "merge": "Merge",
+      "rebase": "Rebase",
+      "reset": "Reset",
+      "cherryPick": "Cherry-pick",
+      "revert": "Revert",
+      "pull": "Pull",
+      "clone": "Clone",
+      "branch": "Branch",
+      "other": "Other"
+    },
+    "restoreDialog": {
+      "title": "Go back to {{hash}}",
+      "description": "Your branch will move to the state \"{{message}}\".",
+      "effect": "The files in your folder will go back to how they were at that point.",
+      "safety": "If you have unsaved changes in the way, Git cancels the operation without touching anything.",
+      "confirm": "Go back here"
+    },
+    "undoDialog": {
+      "title": "Undo the last operation",
+      "description": "This will undo: {{action}} \"{{message}}\".",
+      "effectStaged": "Your branch goes back to {{hash}} and the changes stay staged for a new commit.",
+      "effectRestore": "Your branch and files go back to how they were at {{hash}}.",
+      "safety": "If you have unsaved changes in the way, Git cancels the operation without touching anything.",
+      "confirm": "Undo"
     }
   }
 }

@@ -6,12 +6,15 @@ use common::{commit_file, git_as, git_output, git_try, new_repository, write_fil
 use githubdesk_lib::commands::commit_ops::{self, ResetMode};
 use githubdesk_lib::commands::conflict::{self, ConflictKind, ConflictSide, LineEnding};
 use githubdesk_lib::commands::operation::{self, OperationAction};
-use githubdesk_lib::commands::{compare, history, rebase, remote, stash, status, tag};
+use githubdesk_lib::commands::{
+    blame, compare, history, rebase, reflog, remote, stash, status, tag,
+};
 use githubdesk_lib::error::ErrorKind;
 use githubdesk_lib::git::history_query::{ContentMode, HistoryQuery, HistoryScope};
 use githubdesk_lib::git::parse::diff::LineKind;
 use githubdesk_lib::git::parse::log::CommitSummary;
 use githubdesk_lib::git::parse::rebase_todo::{RebaseAction, RebaseStep};
+use githubdesk_lib::git::parse::reflog::{ReflogAction, UndoStrategy};
 use githubdesk_lib::git::parse::status::ChangeKind;
 use githubdesk_lib::git::repo_state::OperationKind;
 use githubdesk_lib::jobs::CancelToken;
@@ -1516,4 +1519,343 @@ async fn rebase_rejects_stale_plans_merges_and_bad_bases() {
         .await
         .expect_err("merge in range");
     assert_eq!(merges.kind, ErrorKind::RebaseHasMerges);
+}
+
+async fn blame_repository() -> (Workspace, String, String) {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    write_file(repo, "f.txt", "alpha\nbeta\n");
+    git_output(repo, &["add", "f.txt"]);
+    git_output(repo, &["commit", "-m", "first by Ada"]);
+    let first = git_output(repo, &["rev-parse", "HEAD"]).trim().to_string();
+
+    write_file(repo, "f.txt", "alpha\nbeta changed\ngamma\n");
+    git_output(repo, &["add", "f.txt"]);
+    git_as(
+        repo,
+        "Grace Hopper",
+        "grace@example.com",
+        &["commit", "-m", "second by Grace"],
+    );
+    let second = git_output(repo, &["rev-parse", "HEAD"]).trim().to_string();
+    (workspace, first, second)
+}
+
+#[tokio::test]
+async fn blame_attributes_each_line_to_its_commit() {
+    let (workspace, first, second) = blame_repository().await;
+    let repo = workspace.path.as_path();
+
+    let result = blame::blame_file(repo, "f.txt", None, false)
+        .await
+        .expect("blame");
+    assert_eq!(result.lines.len(), 3);
+    let commit_of = |line: usize| &result.commits[result.lines[line].commit_index as usize];
+    assert_eq!(commit_of(0).hash, first);
+    assert_eq!(commit_of(0).author, "Test User");
+    assert_eq!(commit_of(1).hash, second);
+    assert_eq!(commit_of(1).author, "Grace Hopper");
+    assert_eq!(commit_of(1).summary, "second by Grace");
+    assert_eq!(commit_of(2).hash, second);
+    assert_eq!(result.lines[1].content, "beta changed");
+    assert!(!result.binary && !result.too_large && !result.truncated);
+    assert_eq!(result.commits.len(), 2);
+}
+
+#[tokio::test]
+async fn blame_can_look_at_an_older_revision() {
+    let (workspace, first, _second) = blame_repository().await;
+    let repo = workspace.path.as_path();
+
+    let result = blame::blame_file(repo, "f.txt", Some(&first), false)
+        .await
+        .expect("blame");
+    assert_eq!(result.lines.len(), 2);
+    assert_eq!(result.commits.len(), 1);
+    assert_eq!(result.lines[1].content, "beta");
+}
+
+#[tokio::test]
+async fn blame_marks_uncommitted_lines() {
+    let (workspace, _first, _second) = blame_repository().await;
+    let repo = workspace.path.as_path();
+    write_file(repo, "f.txt", "alpha\nbeta changed\ngamma\ndraft line\n");
+
+    let result = blame::blame_file(repo, "f.txt", None, false)
+        .await
+        .expect("blame");
+    let last = result.lines.last().expect("last line");
+    assert!(result.commits[last.commit_index as usize].uncommitted);
+    assert_eq!(last.content, "draft line");
+}
+
+#[tokio::test]
+async fn blame_can_ignore_whitespace_only_rewrites() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    write_file(repo, "f.txt", "one\ntwo\n");
+    git_output(repo, &["add", "f.txt"]);
+    git_output(repo, &["commit", "-m", "original"]);
+    let original = git_output(repo, &["rev-parse", "HEAD"]).trim().to_string();
+    write_file(repo, "f.txt", "one\n    two\n");
+    git_output(repo, &["add", "f.txt"]);
+    git_as(
+        repo,
+        "Grace Hopper",
+        "grace@example.com",
+        &["commit", "-m", "indent"],
+    );
+
+    let plain = blame::blame_file(repo, "f.txt", None, false)
+        .await
+        .expect("blame");
+    assert_eq!(
+        plain.commits[plain.lines[1].commit_index as usize].author,
+        "Grace Hopper"
+    );
+
+    let ignoring = blame::blame_file(repo, "f.txt", None, true)
+        .await
+        .expect("blame");
+    assert_eq!(
+        ignoring.commits[ignoring.lines[1].commit_index as usize].hash,
+        original
+    );
+}
+
+#[tokio::test]
+async fn blame_reports_binary_and_missing_files() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "keep.txt", "k\n", "keep").await;
+    std::fs::write(repo.join("data.bin"), b"abc\0def").expect("write");
+    git_output(repo, &["add", "data.bin"]);
+    git_output(repo, &["commit", "-m", "binary"]);
+
+    let binary = blame::blame_file(repo, "data.bin", None, false)
+        .await
+        .expect("binary");
+    assert!(binary.binary);
+    assert!(binary.lines.is_empty());
+
+    let missing = blame::blame_file(repo, "nope.txt", None, false)
+        .await
+        .expect_err("missing");
+    assert_eq!(missing.kind, ErrorKind::FileNotInRevision);
+
+    write_file(repo, "untracked.txt", "u\n");
+    let untracked = blame::blame_file(repo, "untracked.txt", None, false)
+        .await
+        .expect_err("untracked");
+    assert_eq!(untracked.kind, ErrorKind::FileNotInRevision);
+
+    let injected = blame::blame_file(repo, "keep.txt", Some("--contents=x"), false)
+        .await
+        .expect_err("option-like");
+    assert_eq!(injected.kind, ErrorKind::InvalidInput);
+    let unsafe_path = blame::blame_file(repo, "../outside", None, false)
+        .await
+        .expect_err("unsafe path");
+    assert_eq!(unsafe_path.kind, ErrorKind::InvalidInput);
+}
+
+#[tokio::test]
+async fn blame_follows_a_whole_file_rename() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let origin = commit_file(repo, "old.txt", "line one\nline two\n", "create").await;
+    git_output(repo, &["mv", "old.txt", "new.txt"]);
+    git_output(repo, &["commit", "-m", "rename"]);
+
+    let result = blame::blame_file(repo, "new.txt", None, false)
+        .await
+        .expect("blame");
+    assert!(result
+        .lines
+        .iter()
+        .all(|line| result.commits[line.commit_index as usize].hash == origin));
+}
+
+#[tokio::test]
+async fn reflog_lists_operations_newest_first() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let first = commit_file(repo, "f.txt", "one\n", "first").await;
+    commit_file(repo, "f.txt", "two\n", "second").await;
+    git_output(repo, &["commit", "--amend", "-m", "second amended"]);
+    git_output(repo, &["reset", "--soft", &first]);
+
+    let entries = reflog::list_reflog(repo, 50).await.expect("reflog");
+    let actions: Vec<ReflogAction> = entries.iter().map(|entry| entry.action).collect();
+    assert_eq!(
+        actions,
+        vec![
+            ReflogAction::Reset,
+            ReflogAction::CommitAmend,
+            ReflogAction::Commit,
+            ReflogAction::Commit,
+        ]
+    );
+    assert_eq!(entries[0].index, 0);
+    assert_eq!(entries[0].hash, first);
+    assert_eq!(entries[1].message, "second amended");
+}
+
+#[tokio::test]
+async fn reflog_of_a_repository_without_commits_is_empty() {
+    let workspace = new_repository().await;
+    let entries = reflog::list_reflog(workspace.path.as_path(), 50)
+        .await
+        .expect("reflog");
+    assert!(entries.is_empty());
+    assert_eq!(
+        reflog::undo_plan(workspace.path.as_path())
+            .await
+            .expect("plan"),
+        None
+    );
+}
+
+#[tokio::test]
+async fn undoing_a_commit_keeps_its_changes_staged() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let first = commit_file(repo, "f.txt", "one\n", "first").await;
+    let second = commit_file(repo, "f.txt", "two\n", "second").await;
+
+    let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
+    assert_eq!(plan.target_hash, first);
+    assert_eq!(plan.current_hash, second);
+    assert_eq!(plan.strategy, UndoStrategy::KeepChangesStaged);
+
+    reflog::undo_last_operation(repo, &second)
+        .await
+        .expect("undo");
+    assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), first);
+    let snapshot = status::get_status(repo).await.expect("status");
+    assert_eq!(snapshot.entries[0].index, ChangeKind::Modified);
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "two\n"
+    );
+}
+
+#[tokio::test]
+async fn undoing_a_hard_reset_brings_the_work_back() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let first = commit_file(repo, "f.txt", "one\n", "first").await;
+    let second = commit_file(repo, "f.txt", "two\n", "second").await;
+    git_output(repo, &["reset", "--hard", &first]);
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "one\n"
+    );
+
+    let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
+    assert_eq!(plan.action, ReflogAction::Reset);
+    assert_eq!(plan.target_hash, second);
+    assert_eq!(plan.strategy, UndoStrategy::RestoreAll);
+
+    reflog::undo_last_operation(repo, &first)
+        .await
+        .expect("undo");
+    assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), second);
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "two\n"
+    );
+}
+
+#[tokio::test]
+async fn undoing_a_merge_restores_the_previous_tip() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "base.txt", "b\n", "base").await;
+    git_output(repo, &["checkout", "-b", "topic"]);
+    commit_file(repo, "topic.txt", "t\n", "topic work").await;
+    git_output(repo, &["checkout", "main"]);
+    let before = commit_file(repo, "main.txt", "m\n", "main work").await;
+    git_output(repo, &["merge", "--no-ff", "-m", "merge topic", "topic"]);
+    let merged = git_output(repo, &["rev-parse", "HEAD"]).trim().to_string();
+
+    let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
+    assert_eq!(plan.action, ReflogAction::Merge);
+    assert_eq!(plan.target_hash, before);
+
+    reflog::undo_last_operation(repo, &merged)
+        .await
+        .expect("undo");
+    assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), before);
+    assert!(!repo.join("topic.txt").exists());
+}
+
+#[tokio::test]
+async fn undoing_a_rebase_goes_back_before_its_first_step() {
+    let chain = chain_of_independent_commits(&["a", "b"]).await;
+    let repo = chain.workspace.path.as_path();
+    let before = git_output(repo, &["rev-parse", "HEAD"]).trim().to_string();
+
+    rebase::start_rebase(
+        repo,
+        &chain.base,
+        &[
+            step(&chain.hashes[1], RebaseAction::Pick, None),
+            step(&chain.hashes[0], RebaseAction::Pick, None),
+        ],
+    )
+    .await
+    .expect("rebase");
+    assert_ne!(git_output(repo, &["rev-parse", "HEAD"]).trim(), before);
+
+    let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
+    assert_eq!(plan.action, ReflogAction::Rebase);
+    assert_eq!(plan.target_hash, before);
+    reflog::undo_last_operation(repo, &plan.current_hash)
+        .await
+        .expect("undo");
+    assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), before);
+    assert_eq!(log_subjects(repo), vec!["b", "a", "base"]);
+}
+
+#[tokio::test]
+async fn undo_is_refused_when_the_history_moved_or_local_work_would_be_lost() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "one\n", "first").await;
+    commit_file(repo, "f.txt", "two\n", "second").await;
+    git_output(repo, &["reset", "--hard", "HEAD~1"]);
+
+    let stale = reflog::undo_last_operation(repo, "0123456789abcdef")
+        .await
+        .expect_err("stale");
+    assert_eq!(stale.kind, ErrorKind::InvalidInput);
+
+    write_file(repo, "f.txt", "local edit\n");
+    let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
+    let refused = reflog::undo_last_operation(repo, &plan.current_hash)
+        .await
+        .expect_err("would overwrite local work");
+    assert_eq!(refused.kind, ErrorKind::LocalChangesWouldBeOverwritten);
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "local edit\n"
+    );
+}
+
+#[tokio::test]
+async fn restoring_an_older_entry_moves_the_branch_there() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    let first = commit_file(repo, "f.txt", "one\n", "first").await;
+    commit_file(repo, "f.txt", "two\n", "second").await;
+
+    reflog::restore_head(repo, &first, UndoStrategy::RestoreAll)
+        .await
+        .expect("restore");
+    assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), first);
+    let invalid = reflog::restore_head(repo, "--hard", UndoStrategy::RestoreAll)
+        .await
+        .expect_err("option-like");
+    assert_eq!(invalid.kind, ErrorKind::InvalidInput);
 }

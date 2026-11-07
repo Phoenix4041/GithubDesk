@@ -6,8 +6,8 @@ pub mod state;
 pub mod watcher;
 
 use commands::{
-    branch, commit, commit_ops, compare, conflict, history, job, operation, rebase, remote, repo,
-    stash, status, tag, watch,
+    blame, branch, commit, commit_ops, compare, conflict, history, job, operation, rebase, reflog,
+    remote, repo, stash, status, tag, watch,
 };
 use state::AppState;
 
@@ -65,6 +65,11 @@ pub fn run() {
             conflict::conflict_choose_side,
             rebase::rebase_plan,
             rebase::rebase_start,
+            blame::blame_get,
+            reflog::reflog_list,
+            reflog::reflog_undo_plan,
+            reflog::reflog_restore,
+            reflog::reflog_undo,
             tag::tag_list,
             tag::tag_create,
             tag::tag_delete,

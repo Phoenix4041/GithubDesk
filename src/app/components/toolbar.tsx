@@ -2,6 +2,7 @@ import { FolderGit2, GitBranch, Settings } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
+import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
 import { useRepositoriesStore } from "@/features/repositories/store";
 import { SettingsDialog } from "@/features/settings/components/settings-dialog";
 import { SyncButton } from "@/features/sync/components/sync-button";
@@ -38,6 +39,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
         </div>
       ) : null}
       <div className="ml-auto flex items-center gap-2">
+        <ReflogButtons repoPath={repoPath} />
         <SyncButton repoPath={repoPath} />
         <IconButton label={t("settings.title")} onClick={() => setSettingsOpen(true)}>
           <Settings className="size-4" />

@@ -1,7 +1,12 @@
-import { Archive, Trash2 } from "lucide-react";
+import { Archive, History, Trash2, UserRoundSearch } from "lucide-react";
 import { memo, useState } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { useBlameStore } from "@/features/blame/store";
+import { useHistoryFilterStore } from "@/features/history/filter-store";
 import { useStashDialogStore } from "@/features/stash/store";
+import { useUiStore } from "@/shared/lib/ui-store";
+import { openContextMenu } from "@/shared/ui/context-menu";
 import { cn } from "@/shared/lib/cn";
 import { splitPath } from "@/shared/lib/paths";
 import type { StatusEntry } from "@/shared/types/git";
@@ -47,8 +52,31 @@ const FileRow = memo(function FileRow({ repoPath, section, entry, selected, onRe
         ? t("changes.markResolved", { path: entry.path })
         : t("changes.stageFile", { path: entry.path });
 
+  function openMenu(event: ReactMouseEvent) {
+    if (entry.untracked || section === "conflicts") {
+      return;
+    }
+    openContextMenu(event, [
+      {
+        label: t("blame.menu.file"),
+        icon: <UserRoundSearch className="size-4" />,
+        disabled: kind === "added",
+        onSelect: () => useBlameStore.getState().open({ path: entry.path, revision: null }),
+      },
+      {
+        label: t("history.fileMenu.history"),
+        icon: <History className="size-4" />,
+        onSelect: () => {
+          useHistoryFilterStore.getState().showFileHistory(entry.path);
+          useUiStore.getState().setTab("history");
+        },
+      },
+    ]);
+  }
+
   return (
     <div
+      onContextMenu={openMenu}
       className={cn(
         "group mx-1.5 flex h-[calc(100%-2px)] items-center gap-2 rounded-md pr-1 pl-2 transition-colors duration-150",
         selected ? "bg-accent-soft" : "hover:bg-subtle",

@@ -42,6 +42,7 @@ pub enum ErrorKind {
     StashNotFound,
     RebaseHasMerges,
     NothingToRebase,
+    FileNotInRevision,
     NoCommits,
     Cancelled,
     InvalidInput,
@@ -224,6 +225,7 @@ pub fn classify_failure(output: &str) -> ErrorKind {
         return ErrorKind::MergeConflict;
     }
     if has("would be overwritten by")
+        || has("not uptodate. cannot merge")
         || has("please commit your changes or stash them")
         || has("local changes to the following files would be overwritten")
     {
@@ -240,6 +242,9 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     }
     if has("no stash entries found") || (has("stash@{") && has("is not a valid reference")) {
         return ErrorKind::StashNotFound;
+    }
+    if has("no such path") && has("in head") || has("exists on disk, but not in") {
+        return ErrorKind::FileNotInRevision;
     }
     if has("is a merge but no -m option was given") {
         return ErrorKind::MergeCommitNeedsParent;

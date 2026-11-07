@@ -6,6 +6,8 @@ import { ChangesView } from "@/features/changes/components/changes-view";
 import { useStatus } from "@/features/changes/queries";
 import { useChangesStore } from "@/features/changes/store";
 import { CommitDialogs } from "@/features/history/components/commit-dialogs";
+import { BlamePanel } from "@/features/blame/components/blame-panel";
+import { useBlameStore } from "@/features/blame/store";
 import { CompareDiffPanel } from "@/features/compare/components/compare-diff-panel";
 import { ComparePanel } from "@/features/compare/components/compare-panel";
 import { useCompareStore } from "@/features/compare/store";
@@ -15,6 +17,7 @@ import { useHistoryStore } from "@/features/history/store";
 import { useRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/features/settings/store";
 import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
+import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
 import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
@@ -37,6 +40,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   const { t } = useTranslation();
   const status = useStatus(repoPath);
   const tab = useUiStore((state) => state.tab);
+  const blameOpen = useBlameStore((state) => state.target !== null);
   const sidebarWidth = useSettingsStore((state) => state.sidebarWidth);
   const changesWidth = useSettingsStore((state) => state.changesWidth);
   const setSidebarWidth = useSettingsStore((state) => state.setSidebarWidth);
@@ -49,6 +53,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
     useHistoryStore.getState().reset();
     useStashStore.getState().select(null);
     useCompareStore.getState().close();
+    useBlameStore.getState().close();
   }, []);
 
   if (status.isError && status.error instanceof CommandError && status.error.appError.kind === "notARepository") {
@@ -91,16 +96,18 @@ export function Workspace({ repoPath }: WorkspaceProps) {
           onChange={setChangesWidth}
         />
         <main className="flex min-w-0 flex-1 flex-col bg-surface">
-          {tab === "changes" ? <ChangesDiffPanel repoPath={repoPath} /> : null}
-          {tab === "history" ? <HistoryDiffPanel repoPath={repoPath} /> : null}
-          {tab === "stash" ? <StashDiffPanel repoPath={repoPath} /> : null}
-          {tab === "compare" ? <CompareDiffPanel repoPath={repoPath} /> : null}
+          {blameOpen ? <BlamePanel repoPath={repoPath} /> : null}
+          {!blameOpen && tab === "changes" ? <ChangesDiffPanel repoPath={repoPath} /> : null}
+          {!blameOpen && tab === "history" ? <HistoryDiffPanel repoPath={repoPath} /> : null}
+          {!blameOpen && tab === "stash" ? <StashDiffPanel repoPath={repoPath} /> : null}
+          {!blameOpen && tab === "compare" ? <CompareDiffPanel repoPath={repoPath} /> : null}
         </main>
       </div>
       <BranchDialogs repoPath={repoPath} />
       <TagDialogs repoPath={repoPath} />
       <StashDialogs repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
+      <ReflogDialogs repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>
