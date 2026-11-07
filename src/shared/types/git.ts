@@ -424,3 +424,60 @@ export interface Submodule {
   state: SubmoduleState;
   describe: string | null;
 }
+
+export type SignatureStatus =
+  | "none"
+  | "good"
+  | "goodUntrusted"
+  | "goodExpired"
+  | "goodExpiredKey"
+  | "goodRevokedKey"
+  | "bad"
+  | "unverifiable";
+
+export interface SignatureInfo {
+  status: SignatureStatus;
+  signer: string | null;
+  key: string | null;
+}
+
+export type SignatureFormat = "openpgp" | "ssh";
+export type SigningScope = "local" | "global";
+
+export interface SigningConfig {
+  enabled: boolean;
+  format: string;
+  key: string | null;
+  allowedSigners: string | null;
+  scope: string | null;
+}
+
+export interface SigningUpdate {
+  scope: SigningScope;
+  enabled: boolean;
+  format: SignatureFormat;
+  key: string | null;
+  allowedSigners: string | null;
+}
+
+export interface GpgKey {
+  keyId: string;
+  fingerprint: string | null;
+  user: string | null;
+  created: number | null;
+  expires: number | null;
+  expired: boolean;
+}
+
+export interface SshKey {
+  path: string;
+  kind: string;
+  comment: string | null;
+  fingerprint: string | null;
+}
+
+export interface SigningKeys {
+  gpgAvailable: boolean;
+  gpg: GpgKey[];
+  ssh: SshKey[];
+}

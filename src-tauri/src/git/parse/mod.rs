@@ -6,6 +6,7 @@ pub mod progress;
 pub mod rebase_todo;
 pub mod reflog;
 pub mod remote;
+pub mod signing;
 pub mod stash;
 pub mod status;
 pub mod submodule;

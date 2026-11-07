@@ -252,6 +252,17 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     {
         return ErrorKind::LocalChangesWouldBeOverwritten;
     }
+    if has("no secret key") || has("secret key not available") || has("couldn't find key in agent")
+    {
+        return ErrorKind::SigningKeyMissing;
+    }
+    if has("gpg failed to sign the data")
+        || has("couldn't load public key")
+        || has("error: load key")
+        || has("could not open a connection to your authentication agent")
+    {
+        return ErrorKind::SigningFailed;
+    }
     if has("is already checked out at") || has("is already used by worktree at") {
         return ErrorKind::BranchInUseByWorktree;
     }

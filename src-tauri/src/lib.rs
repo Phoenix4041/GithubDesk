@@ -10,7 +10,7 @@ pub mod watcher;
 use commands::{
     blame, branch, commit, commit_ops, compare, conflict, github_account, github_actions,
     github_issues, github_pulls, github_repo, history, job, operation, rebase, reflog, remote,
-    repo, stash, status, submodule, tag, terminal, watch, worktree,
+    repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -131,6 +131,11 @@ pub fn run() {
             submodule::submodule_add,
             submodule::submodule_update,
             submodule::submodule_remove,
+            signing::signing_config_get,
+            signing::signing_config_set,
+            signing::signing_keys_list,
+            signing::signing_test,
+            signing::commit_signature_get,
             job::job_cancel,
             watch::watch_start,
             watch::watch_stop,

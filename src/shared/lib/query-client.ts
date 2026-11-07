@@ -32,6 +32,9 @@ export const repoKeys = {
   stashes: (path: string) => ["repo", path, "stashes"] as const,
   worktrees: (path: string) => ["repo", path, "worktrees"] as const,
   submodules: (path: string) => ["repo", path, "submodules"] as const,
+  signingConfig: (path: string) => ["repo", path, "signing-config"] as const,
+  signingKeys: (path: string) => ["repo", path, "signing-keys"] as const,
+  signature: (path: string, hash: string) => ["repo", path, "signature", hash] as const,
   stashFiles: (path: string, hash: string) => ["repo", path, "stash-files", hash] as const,
   stashDiff: (path: string, hash: string, file: string, ignoreWhitespace: boolean) =>
     ["repo", path, "stash-diff", hash, file, ignoreWhitespace] as const,

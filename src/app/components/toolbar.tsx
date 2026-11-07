@@ -1,9 +1,11 @@
-import { FolderGit2, GitBranch, Settings, Terminal } from "lucide-react";
+import { FolderGit2, GitBranch, Settings, ShieldCheck, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
 import { GithubRepoChip } from "@/features/github/components/github-repo-chip";
 import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
 import { useRepositoriesStore } from "@/features/repositories/store";
+import { useSigningConfig } from "@/features/signing/queries";
+import { useSigningDialogStore } from "@/features/signing/store";
 import { SettingsDialog } from "@/features/settings/components/settings-dialog";
 import { SyncButton } from "@/features/sync/components/sync-button";
 import { useTerminalStore } from "@/features/terminal/store";
@@ -18,6 +20,8 @@ export function Toolbar({ repoPath }: ToolbarProps) {
   const { t } = useTranslation();
   const status = useStatus(repoPath);
   const recents = useRepositoriesStore((state) => state.recents);
+  const signing = useSigningConfig(repoPath);
+  const showSigning = useSigningDialogStore((state) => state.show);
   const terminalOpen = useTerminalStore((state) => state.open);
   const toggleTerminal = useTerminalStore((state) => state.toggle);
   const settingsOpen = useUiStore((state) => state.settingsOpen);
@@ -47,6 +51,13 @@ export function Toolbar({ repoPath }: ToolbarProps) {
       <div className="ml-auto flex items-center gap-2">
         <ReflogButtons repoPath={repoPath} />
         <SyncButton repoPath={repoPath} />
+        <IconButton
+          label={signing.data?.enabled ? t("signing.buttonOn") : t("signing.buttonOff")}
+          active={signing.data?.enabled === true}
+          onClick={showSigning}
+        >
+          <ShieldCheck className="size-4" />
+        </IconButton>
         <IconButton label={t("terminal.toggle")} active={terminalOpen} onClick={toggleTerminal}>
           <Terminal className="size-4" />
         </IconButton>

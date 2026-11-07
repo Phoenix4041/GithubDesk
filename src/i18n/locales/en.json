@@ -1348,6 +1348,9 @@
         "add": "Add a submodule",
         "update": "Initialize and update submodules",
         "show": "Show submodules"
+      },
+      "signing": {
+        "configure": "Configure commit signing"
       }
     }
   },
@@ -1479,6 +1482,74 @@
       "loseChanges": "Any uncommitted changes inside it are lost",
       "stagedRemoval": "The removal is staged for your next commit",
       "confirm": "Remove submodule"
+    }
+  },
+  "signing": {
+    "buttonOn": "Commit signing is on",
+    "buttonOff": "Configure commit signing",
+    "title": "Commit signing",
+    "description": "Sign your commits so GitHub shows them as verified.",
+    "enable": "Sign my commits",
+    "formatLabel": "Signature type",
+    "formats": {
+      "openpgp": "GPG",
+      "ssh": "SSH"
+    },
+    "detected": "Keys found on this computer",
+    "chooseKey": "Pick a key",
+    "expired": "expired",
+    "noGpg": "The GPG program was not found. Install it (for example Gpg4win) or use SSH signing.",
+    "noGpgKeys": "GPG has no secret keys yet. Create one with gpg --full-generate-key.",
+    "noSshKeys": "There are no public keys in your .ssh folder. Create one with ssh-keygen -t ed25519.",
+    "key": "Signing key",
+    "keyHintGpg": "The GPG key id.",
+    "keyHintSsh": "The path of your public key, for example the one ending in .pub.",
+    "allowedSigners": "Allowed signers file (optional)",
+    "allowedSignersHint": "It is only used to check SSH signatures in this app. GitHub verifies them on its own.",
+    "scopeLabel": "Where to save this setting",
+    "scopes": {
+      "local": "This repository only",
+      "global": "All my repositories"
+    },
+    "globalNote": "It is written to your global git configuration and affects all your repositories.",
+    "save": "Save",
+    "test": "Test signing",
+    "testHint": "Tests the configuration that is already saved.",
+    "saved": "Signing settings saved",
+    "testPassed": "Signing works",
+    "status": {
+      "none": {
+        "label": "Unsigned",
+        "hint": "This commit is not signed."
+      },
+      "good": {
+        "label": "Valid signature",
+        "hint": "The signature is valid and the key is trusted."
+      },
+      "goodUntrusted": {
+        "label": "Valid, not trusted",
+        "hint": "The signature is valid but the key is not marked as trusted."
+      },
+      "goodExpired": {
+        "label": "Expired signature",
+        "hint": "The signature is valid but it has expired."
+      },
+      "goodExpiredKey": {
+        "label": "Expired key",
+        "hint": "The signature is valid but the key has expired."
+      },
+      "goodRevokedKey": {
+        "label": "Revoked key",
+        "hint": "The signature is valid but the key was revoked."
+      },
+      "bad": {
+        "label": "Invalid signature",
+        "hint": "The signature does not match the commit content."
+      },
+      "unverifiable": {
+        "label": "Cannot verify",
+        "hint": "The commit is signed but the public key or the allowed signers are missing to check it."
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import { History, UserRoundSearch } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useBlameStore } from "@/features/blame/store";
+import { SignatureBadge } from "@/features/signing/components/signature-badge";
 import { formatDateTime } from "@/shared/lib/format";
 import { openContextMenu } from "@/shared/ui/context-menu";
 import { Skeleton } from "@/shared/ui/skeleton";
@@ -40,6 +41,7 @@ export function CommitDetails({ repoPath, hash }: CommitDetailsProps) {
               {commit.summary.authorName} &middot; {formatDateTime(commit.summary.authorTime, i18n.language)} &middot;{" "}
               <span className="selectable font-mono">{commit.summary.shortHash}</span>
             </p>
+            <SignatureBadge repoPath={repoPath} hash={hash} />
           </>
         ) : (
           <>

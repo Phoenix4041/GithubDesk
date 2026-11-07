@@ -1348,6 +1348,9 @@
         "add": "Agregar un submódulo",
         "update": "Inicializar y actualizar submódulos",
         "show": "Mostrar los submódulos"
+      },
+      "signing": {
+        "configure": "Configurar la firma de commits"
       }
     }
   },
@@ -1479,6 +1482,74 @@
       "loseChanges": "Los cambios sin commit que tenga dentro se pierden",
       "stagedRemoval": "La eliminación queda preparada para tu próximo commit",
       "confirm": "Eliminar submódulo"
+    }
+  },
+  "signing": {
+    "buttonOn": "Firma de commits activada",
+    "buttonOff": "Configurar la firma de commits",
+    "title": "Firma de commits",
+    "description": "Firma tus commits para que GitHub los muestre como verificados.",
+    "enable": "Firmar mis commits",
+    "formatLabel": "Tipo de firma",
+    "formats": {
+      "openpgp": "GPG",
+      "ssh": "SSH"
+    },
+    "detected": "Claves encontradas en este equipo",
+    "chooseKey": "Elige una clave",
+    "expired": "vencida",
+    "noGpg": "No se encontró el programa GPG. Instálalo (por ejemplo Gpg4win) o usa firma SSH.",
+    "noGpgKeys": "GPG no tiene claves secretas todavía. Crea una con gpg --full-generate-key.",
+    "noSshKeys": "No hay claves públicas en tu carpeta .ssh. Crea una con ssh-keygen -t ed25519.",
+    "key": "Clave de firma",
+    "keyHintGpg": "El identificador de la clave GPG.",
+    "keyHintSsh": "La ruta de tu clave pública, por ejemplo la que termina en .pub.",
+    "allowedSigners": "Archivo de firmantes permitidos (opcional)",
+    "allowedSignersHint": "Solo sirve para comprobar firmas SSH en esta aplicación. GitHub las verifica por su cuenta.",
+    "scopeLabel": "Dónde guardar esta configuración",
+    "scopes": {
+      "local": "Solo este repositorio",
+      "global": "Todos mis repositorios"
+    },
+    "globalNote": "Se escribe en tu configuración global de git y afecta a todos tus repositorios.",
+    "save": "Guardar",
+    "test": "Probar la firma",
+    "testHint": "Prueba la configuración que ya está guardada.",
+    "saved": "Configuración de firma guardada",
+    "testPassed": "La firma funciona",
+    "status": {
+      "none": {
+        "label": "Sin firma",
+        "hint": "Este commit no está firmado."
+      },
+      "good": {
+        "label": "Firma válida",
+        "hint": "La firma es válida y la clave es de confianza."
+      },
+      "goodUntrusted": {
+        "label": "Firma válida, sin confianza",
+        "hint": "La firma es válida pero la clave no está marcada como de confianza."
+      },
+      "goodExpired": {
+        "label": "Firma vencida",
+        "hint": "La firma es válida pero ya venció."
+      },
+      "goodExpiredKey": {
+        "label": "Clave vencida",
+        "hint": "La firma es válida pero la clave ya venció."
+      },
+      "goodRevokedKey": {
+        "label": "Clave revocada",
+        "hint": "La firma es válida pero la clave fue revocada."
+      },
+      "bad": {
+        "label": "Firma inválida",
+        "hint": "La firma no coincide con el contenido del commit."
+      },
+      "unverifiable": {
+        "label": "No verificable",
+        "hint": "El commit está firmado pero falta la clave pública o los firmantes permitidos para comprobarlo."
+      }
     }
   }
 }

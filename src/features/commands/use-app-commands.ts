@@ -9,6 +9,7 @@ import { useReflogDialogStore } from "@/features/reflog/store";
 import { pickAndOpenRepository } from "@/features/repositories/actions";
 import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
 import { useSettingsStore } from "@/features/settings/store";
+import { useSigningDialogStore } from "@/features/signing/store";
 import { useSubmoduleDialogStore } from "@/features/submodules/dialog-store";
 import { useTerminalStore } from "@/features/terminal/store";
 import { useWorktreeDialogStore } from "@/features/worktrees/dialog-store";
@@ -329,6 +330,14 @@ function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount
       keywords: "submodulos",
       enabled: true,
       run: () => goToSidebar("submodules"),
+    },
+    {
+      id: "signing.configure",
+      titleKey: "commands.items.signing.configure",
+      group: "tools",
+      keywords: "firma firmar commits gpg ssh clave seguridad verificada signing",
+      enabled: true,
+      run: () => useSigningDialogStore.getState().show(),
     },
     {
       id: "terminal.toggle",
