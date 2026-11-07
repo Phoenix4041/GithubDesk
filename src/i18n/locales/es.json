@@ -140,6 +140,11 @@
       "loss": "Los commits que solo existen en esta rama quedarán sin referencia y se perderán.",
       "noUndo": "No podrás recuperarlos desde la aplicación.",
       "confirm": "Eliminar de todos modos"
+    },
+    "chooser": {
+      "label": "Rama",
+      "none": "No hay otras ramas para elegir.",
+      "next": "Continuar"
     }
   },
   "changes": {
@@ -1335,7 +1340,8 @@
       },
       "branch": {
         "new": "Crear una rama",
-        "merge": "Combinar una rama en la actual"
+        "merge": "Combinar una rama en la actual",
+        "rebaseOnto": "Hacer rebase de la rama actual sobre otra"
       },
       "tag": {
         "new": "Crear una etiqueta"
@@ -1683,10 +1689,7 @@
     "conflictMessage": "Resuélvelos en la pestaña Cambios y continúa desde el aviso de arriba.",
     "choose": {
       "title": "Combinar una rama",
-      "description": "Elige qué rama quieres traer a la rama actual.",
-      "label": "Rama a combinar",
-      "next": "Continuar",
-      "none": "No hay otras ramas para combinar."
+      "description": "Elige qué rama quieres traer a la rama actual."
     },
     "commitsCount_one": "{{count}} commit",
     "commitsCount_other": "{{count}} commits",
@@ -1694,5 +1697,27 @@
     "filesCount_other": "{{count}} archivos",
     "conflictsExpected_one": "Se espera un conflicto en {{count}} archivo. Podrás resolverlo después.",
     "conflictsExpected_other": "Se esperan conflictos en {{count}} archivos. Podrás resolverlos después."
+  },
+  "rebaseOnto": {
+    "menu": "Hacer rebase de la rama actual sobre esta",
+    "chooseTitle": "Rebase sobre otra rama",
+    "chooseDescription": "Elige sobre qué rama quieres reaplicar tus commits.",
+    "title": "Rebase de {{current}} sobre {{target}}",
+    "description": "Reaplica tus commits encima de la otra rama para dejar el historial en línea recta.",
+    "commitsToReplay_one": "Se reaplicará {{count}} commit",
+    "commitsToReplay_other": "Se reaplicarán {{count}} commits",
+    "incoming_one": "sobre {{count}} commit nuevo de la otra rama.",
+    "incoming_other": "sobre {{count}} commits nuevos de la otra rama.",
+    "upToDate": "{{target}} ya está incluida en tu rama: no hay nada que mover.",
+    "noConflicts": "No se esperan conflictos.",
+    "conflictsExpected_one": "Se espera un conflicto en {{count}} archivo. Podrás resolverlo durante el rebase.",
+    "conflictsExpected_other": "Se esperan conflictos en {{count}} archivos. Podrás resolverlos durante el rebase.",
+    "keepMerges": "Conservar los commits de merge",
+    "keepMergesHint": "Tu rama tiene merges. Si no lo marcas, se aplanan y quedan como commits normales.",
+    "rewrites": "Esto reescribe tus commits. Si ya los subiste tendrás que enviarlos con force-with-lease.",
+    "submit": "Hacer rebase",
+    "done": "Rebase terminado",
+    "conflictTitle": "Hay conflictos en el rebase",
+    "conflictMessage": "Resuélvelos en la pestaña Cambios y continúa desde el aviso de arriba."
   }
 }

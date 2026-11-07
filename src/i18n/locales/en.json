@@ -140,6 +140,11 @@
       "loss": "Commits that only exist in this branch will lose their reference and be lost.",
       "noUndo": "You will not be able to recover them from the app.",
       "confirm": "Delete anyway"
+    },
+    "chooser": {
+      "label": "Branch",
+      "none": "There are no other branches to pick.",
+      "next": "Continue"
     }
   },
   "changes": {
@@ -1335,7 +1340,8 @@
       },
       "branch": {
         "new": "Create a branch",
-        "merge": "Merge a branch into the current one"
+        "merge": "Merge a branch into the current one",
+        "rebaseOnto": "Rebase the current branch onto another"
       },
       "tag": {
         "new": "Create a tag"
@@ -1683,10 +1689,7 @@
     "conflictMessage": "Resolve them in the Changes tab and continue from the banner above.",
     "choose": {
       "title": "Merge a branch",
-      "description": "Pick which branch you want to bring into the current one.",
-      "label": "Branch to merge",
-      "next": "Continue",
-      "none": "There are no other branches to merge."
+      "description": "Pick which branch you want to bring into the current one."
     },
     "commitsCount_one": "{{count}} commit",
     "commitsCount_other": "{{count}} commits",
@@ -1694,5 +1697,27 @@
     "filesCount_other": "{{count}} files",
     "conflictsExpected_one": "A conflict is expected in {{count}} file. You will be able to resolve it afterwards.",
     "conflictsExpected_other": "Conflicts are expected in {{count}} files. You will be able to resolve them afterwards."
+  },
+  "rebaseOnto": {
+    "menu": "Rebase the current branch onto this one",
+    "chooseTitle": "Rebase onto another branch",
+    "chooseDescription": "Pick the branch on top of which you want to replay your commits.",
+    "title": "Rebase {{current}} onto {{target}}",
+    "description": "Replays your commits on top of the other branch to keep the history in a straight line.",
+    "commitsToReplay_one": "{{count}} commit will be replayed",
+    "commitsToReplay_other": "{{count}} commits will be replayed",
+    "incoming_one": "on top of {{count}} new commit of the other branch.",
+    "incoming_other": "on top of {{count}} new commits of the other branch.",
+    "upToDate": "{{target}} is already included in your branch: there is nothing to move.",
+    "noConflicts": "No conflicts are expected.",
+    "conflictsExpected_one": "A conflict is expected in {{count}} file. You will be able to resolve it during the rebase.",
+    "conflictsExpected_other": "Conflicts are expected in {{count}} files. You will be able to resolve them during the rebase.",
+    "keepMerges": "Keep the merge commits",
+    "keepMergesHint": "Your branch has merges. If you leave it off, they are flattened into normal commits.",
+    "rewrites": "This rewrites your commits. If you already pushed them you will need to send them with force-with-lease.",
+    "submit": "Rebase",
+    "done": "Rebase finished",
+    "conflictTitle": "There are conflicts in the rebase",
+    "conflictMessage": "Resolve them in the Changes tab and continue from the banner above."
   }
 }

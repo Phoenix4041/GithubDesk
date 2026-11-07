@@ -16,3 +16,19 @@ export const useRebaseDialogStore = create<RebaseDialogState>((set) => ({
   show: (target) => set({ target }),
   hide: () => set({ target: null }),
 }));
+
+interface RebaseOntoState {
+  target: string | null;
+  choosing: boolean;
+  show: (target: string) => void;
+  choose: () => void;
+  hide: () => void;
+}
+
+export const useRebaseOntoStore = create<RebaseOntoState>((set) => ({
+  target: null,
+  choosing: false,
+  show: (target) => set({ target, choosing: false }),
+  choose: () => set({ target: null, choosing: true }),
+  hide: () => set({ target: null, choosing: false }),
+}));

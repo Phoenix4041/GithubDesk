@@ -1,8 +1,9 @@
-import { ArrowLeftRight, Check, Cloud, CloudUpload, GitBranch, GitMerge, Pencil, SearchX, Trash2 } from "lucide-react";
+import { ArrowLeftRight, Check, Cloud, CloudUpload, GitBranch, GitMerge, ListEnd, Pencil, SearchX, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { openCompare } from "@/features/compare/actions";
 import { useMergeDialogStore } from "@/features/merge/store";
+import { useRebaseOntoStore } from "@/features/rebase/store";
 import { runSyncOperation } from "@/features/sync/operations";
 import { describeError } from "@/shared/lib/report-error";
 import { cn } from "@/shared/lib/cn";
@@ -51,6 +52,7 @@ export function BranchList({ repoPath }: BranchListProps) {
   const branches = useBranches(repoPath);
   const showDialog = useBranchDialogStore((state) => state.show);
   const showMerge = useMergeDialogStore((state) => state.show);
+  const showRebaseOnto = useRebaseOntoStore((state) => state.show);
   const [query, setQuery] = useState("");
   const showSkeleton = useSkeletonVisible(branches.isPending);
 
@@ -90,6 +92,12 @@ export function BranchList({ repoPath }: BranchListProps) {
               icon: <GitMerge className="size-4" />,
               disabled: !current || branch.isCurrent,
               onSelect: () => showMerge(branch.name),
+            },
+            {
+              label: t("rebaseOnto.menu"),
+              icon: <ListEnd className="size-4" />,
+              disabled: !current || branch.isCurrent,
+              onSelect: () => showRebaseOnto(branch.name),
             },
           ])
         }

@@ -17,6 +17,7 @@ pub mod lfs;
 pub mod merge;
 pub mod operation;
 pub mod rebase;
+pub mod rebase_onto;
 pub mod reflog;
 pub mod remote;
 pub mod repo;

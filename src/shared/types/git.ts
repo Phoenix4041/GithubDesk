@@ -534,3 +534,11 @@ export interface MergePreview {
   unrelated: boolean;
   conflicts: string[];
 }
+
+export interface RebaseOntoPreview {
+  replay: number;
+  incoming: number;
+  hasMerges: boolean;
+  upToDate: boolean;
+  conflicts: string[];
+}

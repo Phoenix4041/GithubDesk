@@ -20,6 +20,7 @@ import { HistoryView } from "@/features/history/components/history-view";
 import { useHistoryStore } from "@/features/history/store";
 import { useRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/features/settings/store";
+import { RebaseOntoDialog } from "@/features/rebase/components/rebase-onto-dialog";
 import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
 import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
@@ -139,6 +140,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <MergeDialog repoPath={repoPath} />
       <GitignoreDialog repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
+      <RebaseOntoDialog repoPath={repoPath} />
       <ReflogDialogs repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />

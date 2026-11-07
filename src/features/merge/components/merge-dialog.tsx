@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { useBranches } from "@/features/branches/queries";
+import { BranchChooser } from "@/features/branches/components/branch-chooser";
 import { useStatus } from "@/features/changes/queries";
 import { cn } from "@/shared/lib/cn";
 import { describeError } from "@/shared/lib/report-error";
@@ -140,51 +140,15 @@ function MergeForm({ repoPath, source, onClose }: FormProps) {
 
 function MergeChooser({ repoPath, onClose }: { repoPath: string; onClose: () => void }) {
   const { t } = useTranslation();
-  const branches = useBranches(repoPath);
   const show = useMergeDialogStore((state) => state.show);
-  const [chosen, setChosen] = useState("");
-  const candidates = (branches.data ?? []).filter((branch) => !branch.isCurrent);
-  const selected = chosen !== "" ? chosen : (candidates[0]?.name ?? "");
-
   return (
-    <Dialog
-      open
+    <BranchChooser
+      repoPath={repoPath}
       title={t("merge.choose.title")}
       description={t("merge.choose.description")}
-      onClose={onClose}
-      width="sm"
-      footer={
-        <>
-          <Button onClick={onClose}>{t("common.cancel")}</Button>
-          <Button variant="primary" disabled={selected === ""} onClick={() => show(selected)}>
-            {t("merge.choose.next")}
-          </Button>
-        </>
-      }
-    >
-      {candidates.length === 0 ? (
-        <p className="text-xs text-muted">{t("merge.choose.none")}</p>
-      ) : (
-        <div className="flex flex-col gap-1.5">
-          <label htmlFor="merge-source" className="text-xs font-medium">
-            {t("merge.choose.label")}
-          </label>
-          <select
-            id="merge-source"
-            data-autofocus
-            value={selected}
-            onChange={(event) => setChosen(event.target.value)}
-            className="h-8 cursor-pointer rounded-md border border-line bg-surface px-2 text-[13px] text-fg focus-visible:border-accent focus-visible:outline-none"
-          >
-            {candidates.map((branch) => (
-              <option key={branch.fullName} value={branch.name}>
-                {branch.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-    </Dialog>
+      onChoose={show}
+      onCancel={onClose}
+    />
   );
 }
 

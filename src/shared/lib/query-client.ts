@@ -27,6 +27,7 @@ export const repoKeys = {
   undoPlan: (path: string) => ["repo", path, "undo-plan"] as const,
   blame: (path: string, file: string, revision: string | null, ignoreWhitespace: boolean) =>
     ["repo", path, "blame", file, revision, ignoreWhitespace] as const,
+  rebaseOntoPreview: (path: string, target: string) => ["repo", path, "rebase-onto-preview", target] as const,
   rebasePlan: (path: string, base: string) => ["repo", path, "rebase-plan", base] as const,
   conflict: (path: string, file: string) => ["repo", path, "conflict", file] as const,
   stashes: (path: string) => ["repo", path, "stashes"] as const,
