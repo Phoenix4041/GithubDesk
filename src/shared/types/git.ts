@@ -35,6 +35,7 @@ export type ErrorKind =
   | "stashNotFound"
   | "rebaseHasMerges"
   | "nothingToRebase"
+  | "nothingToMerge"
   | "fileNotInRevision"
   | "githubUnauthorized"
   | "githubForbidden"
@@ -520,4 +521,16 @@ export interface IgnoreMatch {
 export interface EditorOption {
   id: string;
   label: string;
+}
+
+export type MergeMode = "merge" | "noFastForward" | "squash";
+export type MergeOutcome = "fastForward" | "merged" | "squashed";
+
+export interface MergePreview {
+  commits: number;
+  filesChanged: number;
+  upToDate: boolean;
+  canFastForward: boolean;
+  unrelated: boolean;
+  conflicts: string[];
 }

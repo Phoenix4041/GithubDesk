@@ -616,6 +616,10 @@
     "branchInUseByWorktree": {
       "title": "La rama ya está abierta en otro worktree",
       "message": "Elige otra rama o crea una rama nueva."
+    },
+    "nothingToMerge": {
+      "title": "No hay nada que combinar",
+      "message": "La rama actual ya tiene todos los cambios de la otra."
     }
   },
   "operation": {
@@ -1330,7 +1334,8 @@
         "push": "Hacer push"
       },
       "branch": {
-        "new": "Crear una rama"
+        "new": "Crear una rama",
+        "merge": "Combinar una rama en la actual"
       },
       "tag": {
         "new": "Crear una etiqueta"
@@ -1640,5 +1645,54 @@
       "folder": "Ignorar la carpeta {{folder}}",
       "extension": "Ignorar todos los {{extension}}"
     }
+  },
+  "merge": {
+    "menu": "Combinar en la rama actual",
+    "title": "Combinar {{source}} en {{current}}",
+    "description": "Trae a la rama actual los cambios de la otra rama.",
+    "summary": "Cambios a traer: {{commits}}, {{files}}.",
+    "canFastForward": "La rama actual solo avanza, sin commit de merge.",
+    "noConflicts": "No se esperan conflictos.",
+    "upToDate": "{{source}} ya está incluida en la rama actual.",
+    "unrelated": "Estas ramas no comparten historia, así que git no las combina.",
+    "modeLabel": "Forma de combinar",
+    "modes": {
+      "merge": {
+        "label": "Combinar",
+        "hint": "Avanza si se puede; si no, crea un commit de merge."
+      },
+      "noFastForward": {
+        "label": "Siempre crear un commit de merge",
+        "hint": "Deja marcado en el historial que hubo una combinación."
+      },
+      "squash": {
+        "label": "Juntar en un solo commit (squash)",
+        "hint": "Deja los cambios preparados y el commit lo haces tú."
+      }
+    },
+    "message": "Mensaje del commit de merge (opcional)",
+    "messagePlaceholder": "Merge de {{source}} en {{current}}",
+    "submit": "Combinar",
+    "submitSquash": "Combinar en un commit",
+    "done": {
+      "fastForward": "La rama avanzó hasta {{source}}",
+      "merged": "{{source}} combinada con la rama actual",
+      "squashed": "Cambios de {{source}} preparados. Haz el commit cuando quieras."
+    },
+    "conflictTitle": "Hay conflictos",
+    "conflictMessage": "Resuélvelos en la pestaña Cambios y continúa desde el aviso de arriba.",
+    "choose": {
+      "title": "Combinar una rama",
+      "description": "Elige qué rama quieres traer a la rama actual.",
+      "label": "Rama a combinar",
+      "next": "Continuar",
+      "none": "No hay otras ramas para combinar."
+    },
+    "commitsCount_one": "{{count}} commit",
+    "commitsCount_other": "{{count}} commits",
+    "filesCount_one": "{{count}} archivo",
+    "filesCount_other": "{{count}} archivos",
+    "conflictsExpected_one": "Se espera un conflicto en {{count}} archivo. Podrás resolverlo después.",
+    "conflictsExpected_other": "Se esperan conflictos en {{count}} archivos. Podrás resolverlos después."
   }
 }

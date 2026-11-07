@@ -5,6 +5,7 @@ import { useIssueStore } from "@/features/github/issues/store";
 import { usePullStore } from "@/features/github/pulls/store";
 import { useRunStore } from "@/features/github/actions/store";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { useMergeDialogStore } from "@/features/merge/store";
 import { useReflogDialogStore } from "@/features/reflog/store";
 import { pickAndOpenRepository } from "@/features/repositories/actions";
 import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
@@ -250,6 +251,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       defaultShortcut: "Mod+Shift+N",
       enabled: true,
       run: () => useBranchDialogStore.getState().show({ kind: "create" }),
+    },
+    {
+      id: "branch.merge",
+      titleKey: "commands.items.branch.merge",
+      group: "branches",
+      keywords: "combinar merge unir fusionar rama",
+      enabled: true,
+      run: () => useMergeDialogStore.getState().choose(),
     },
     {
       id: "tag.new",

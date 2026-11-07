@@ -1,7 +1,8 @@
-import { ArrowLeftRight, Check, Cloud, CloudUpload, GitBranch, Pencil, SearchX, Trash2 } from "lucide-react";
+import { ArrowLeftRight, Check, Cloud, CloudUpload, GitBranch, GitMerge, Pencil, SearchX, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { openCompare } from "@/features/compare/actions";
+import { useMergeDialogStore } from "@/features/merge/store";
 import { runSyncOperation } from "@/features/sync/operations";
 import { describeError } from "@/shared/lib/report-error";
 import { cn } from "@/shared/lib/cn";
@@ -49,6 +50,7 @@ export function BranchList({ repoPath }: BranchListProps) {
   const { t } = useTranslation();
   const branches = useBranches(repoPath);
   const showDialog = useBranchDialogStore((state) => state.show);
+  const showMerge = useMergeDialogStore((state) => state.show);
   const [query, setQuery] = useState("");
   const showSkeleton = useSkeletonVisible(branches.isPending);
 
@@ -82,6 +84,12 @@ export function BranchList({ repoPath }: BranchListProps) {
                   openCompare(current.name, branch.name);
                 }
               },
+            },
+            {
+              label: t("merge.menu"),
+              icon: <GitMerge className="size-4" />,
+              disabled: !current || branch.isCurrent,
+              onSelect: () => showMerge(branch.name),
             },
           ])
         }

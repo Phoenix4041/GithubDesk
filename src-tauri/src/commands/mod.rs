@@ -14,6 +14,7 @@ pub mod gitignore;
 pub mod history;
 pub mod job;
 pub mod lfs;
+pub mod merge;
 pub mod operation;
 pub mod rebase;
 pub mod reflog;

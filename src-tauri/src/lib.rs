@@ -9,8 +9,9 @@ pub mod watcher;
 
 use commands::{
     blame, branch, commit, commit_ops, compare, conflict, external, github_account, github_actions,
-    github_issues, github_pulls, github_repo, gitignore, history, job, lfs, operation, rebase,
-    reflog, remote, repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
+    github_issues, github_pulls, github_repo, gitignore, history, job, lfs, merge, operation,
+    rebase, reflog, remote, repo, signing, stash, status, submodule, tag, terminal, watch,
+    worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -140,6 +141,8 @@ pub fn run() {
             external::editors_list,
             external::editor_open,
             external::reveal_in_file_manager,
+            merge::merge_preview_get,
+            merge::merge_branch_into_current,
             lfs::lfs_status_get,
             lfs::lfs_install_local,
             lfs::lfs_track_pattern,

@@ -4,6 +4,7 @@ pub mod diff;
 pub mod ignore;
 pub mod lfs;
 pub mod log;
+pub mod merge;
 pub mod progress;
 pub mod rebase_todo;
 pub mod reflog;

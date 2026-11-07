@@ -616,6 +616,10 @@
     "branchInUseByWorktree": {
       "title": "The branch is already open in another worktree",
       "message": "Pick another branch or create a new one."
+    },
+    "nothingToMerge": {
+      "title": "There is nothing to merge",
+      "message": "The current branch already has every change of the other one."
     }
   },
   "operation": {
@@ -1330,7 +1334,8 @@
         "push": "Push"
       },
       "branch": {
-        "new": "Create a branch"
+        "new": "Create a branch",
+        "merge": "Merge a branch into the current one"
       },
       "tag": {
         "new": "Create a tag"
@@ -1640,5 +1645,54 @@
       "folder": "Ignore the folder {{folder}}",
       "extension": "Ignore every {{extension}}"
     }
+  },
+  "merge": {
+    "menu": "Merge into the current branch",
+    "title": "Merge {{source}} into {{current}}",
+    "description": "Brings the changes of the other branch into the current one.",
+    "summary": "Changes to bring: {{commits}}, {{files}}.",
+    "canFastForward": "The current branch just moves forward, with no merge commit.",
+    "noConflicts": "No conflicts are expected.",
+    "upToDate": "{{source}} is already included in the current branch.",
+    "unrelated": "These branches share no history, so git will not merge them.",
+    "modeLabel": "How to merge",
+    "modes": {
+      "merge": {
+        "label": "Merge",
+        "hint": "Moves forward when possible; otherwise it creates a merge commit."
+      },
+      "noFastForward": {
+        "label": "Always create a merge commit",
+        "hint": "Keeps a mark in the history that a merge happened."
+      },
+      "squash": {
+        "label": "Combine into one commit (squash)",
+        "hint": "Leaves the changes staged and you make the commit."
+      }
+    },
+    "message": "Merge commit message (optional)",
+    "messagePlaceholder": "Merge {{source}} into {{current}}",
+    "submit": "Merge",
+    "submitSquash": "Merge into one commit",
+    "done": {
+      "fastForward": "The branch moved forward to {{source}}",
+      "merged": "{{source}} merged into the current branch",
+      "squashed": "Changes of {{source}} are staged. Commit whenever you want."
+    },
+    "conflictTitle": "There are conflicts",
+    "conflictMessage": "Resolve them in the Changes tab and continue from the banner above.",
+    "choose": {
+      "title": "Merge a branch",
+      "description": "Pick which branch you want to bring into the current one.",
+      "label": "Branch to merge",
+      "next": "Continue",
+      "none": "There are no other branches to merge."
+    },
+    "commitsCount_one": "{{count}} commit",
+    "commitsCount_other": "{{count}} commits",
+    "filesCount_one": "{{count}} file",
+    "filesCount_other": "{{count}} files",
+    "conflictsExpected_one": "A conflict is expected in {{count}} file. You will be able to resolve it afterwards.",
+    "conflictsExpected_other": "Conflicts are expected in {{count}} files. You will be able to resolve them afterwards."
   }
 }

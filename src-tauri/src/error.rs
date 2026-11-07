@@ -42,6 +42,7 @@ pub enum ErrorKind {
     StashNotFound,
     RebaseHasMerges,
     NothingToRebase,
+    NothingToMerge,
     FileNotInRevision,
     GithubUnauthorized,
     GithubForbidden,
