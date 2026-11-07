@@ -42,7 +42,7 @@ function setLanguage(language: "es" | "en"): void {
   void changeLanguage(language);
 }
 
-function buildGlobalCommands(): AppCommand[] {
+export function buildGlobalCommands(): AppCommand[] {
   return [
     {
       id: "palette.toggle",
@@ -140,7 +140,7 @@ function buildGlobalCommands(): AppCommand[] {
   ];
 }
 
-function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount: boolean): AppCommand[] {
+export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount: boolean): AppCommand[] {
   const githubReady = onGithub && hasGithubAccount;
   return [
     {
