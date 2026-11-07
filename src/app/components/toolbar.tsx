@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
 import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
 import { useGitignoreDialogStore } from "@/features/gitignore/store";
+import { BranchChecksButton } from "@/features/github/checks/components/branch-checks-button";
 import { GithubRepoChip } from "@/features/github/components/github-repo-chip";
 import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
 import { useRepositoriesStore } from "@/features/repositories/store";
@@ -74,6 +75,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
         </div>
       ) : null}
       <GithubRepoChip repoPath={repoPath} />
+      <BranchChecksButton repoPath={repoPath} />
       <div className="ml-auto flex items-center gap-2">
         <ReflogButtons repoPath={repoPath} />
         <SyncButton repoPath={repoPath} />

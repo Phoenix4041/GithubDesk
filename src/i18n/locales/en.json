@@ -1268,6 +1268,15 @@
         "invalidInputs": "Check lines {{lines}}: the name or the equals sign is missing.",
         "submit": "Run workflow"
       }
+    },
+    "checks": {
+      "badge": {
+        "success": "{{passed}} of {{total}} checks passed",
+        "failure": "{{failed}} of {{total}} checks failed",
+        "pending": "Checks running"
+      },
+      "toggle": "Show or hide the checks",
+      "branchTooltip": "Checks of the latest commit of {{branch}}. Click to see its runs."
     }
   },
   "commands": {

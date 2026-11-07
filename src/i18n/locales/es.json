@@ -1268,6 +1268,15 @@
         "invalidInputs": "Revisa las líneas {{lines}}: falta el nombre o el signo igual.",
         "submit": "Ejecutar workflow"
       }
+    },
+    "checks": {
+      "badge": {
+        "success": "{{passed}} de {{total}} comprobaciones pasaron",
+        "failure": "{{failed}} de {{total}} comprobaciones fallaron",
+        "pending": "Comprobaciones en curso"
+      },
+      "toggle": "Mostrar u ocultar las comprobaciones",
+      "branchTooltip": "Comprobaciones del último commit de {{branch}}. Pulsa para ver sus ejecuciones."
     }
   },
   "commands": {

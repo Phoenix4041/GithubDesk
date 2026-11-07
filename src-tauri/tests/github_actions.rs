@@ -5,7 +5,8 @@ use std::collections::BTreeMap;
 use common::mock_http::{MockRequest, MockResponse, MockServer};
 use githubdesk_lib::error::ErrorKind;
 use githubdesk_lib::github::actions::{
-    cancel_run, dispatch_workflow, get_job_log, list_jobs, list_runs, list_workflows, rerun,
+    cancel_run, commit_checks, dispatch_workflow, get_job_log, list_jobs, list_runs,
+    list_workflows, rerun,
 };
 use githubdesk_lib::github::client::GithubClient;
 use serde_json::Value;
@@ -38,6 +39,10 @@ fn handler(request: &MockRequest) -> MockResponse {
         ("POST", "/repos/o/r/actions/runs/900/rerun") => MockResponse::text(201, ""),
         ("POST", "/repos/o/r/actions/runs/900/rerun-failed-jobs") => MockResponse::text(201, ""),
         ("POST", "/repos/o/r/actions/runs/900/cancel") => MockResponse::text(202, ""),
+        ("GET", "/repos/o/r/commits/abc1234/check-runs") => MockResponse::json(
+            200,
+            r#"{"total_count":2,"check_runs":[{"id":1,"name":"build","status":"completed","conclusion":"success"},{"id":2,"name":"lint","status":"in_progress"}]}"#,
+        ),
         ("GET", "/repos/o/r/actions/workflows") => MockResponse::json(
             200,
             r#"{"total_count":1,"workflows":[{"id":5,"name":"CI","path":".github/workflows/ci.yml","state":"active"}]}"#,
@@ -175,5 +180,31 @@ async fn workflows_are_listed_and_can_be_dispatched_with_inputs() {
     let invalid = dispatch_workflow(&client, "o", "r", 5, "main", &bad_inputs)
         .await
         .expect_err("input");
+    assert_eq!(invalid.kind, ErrorKind::InvalidInput);
+}
+
+#[tokio::test]
+async fn commit_checks_are_listed_and_unknown_commits_map_to_not_found() {
+    let (server, client) = setup().await;
+    let checks = commit_checks(&client, "o", "r", "abc1234")
+        .await
+        .expect("checks");
+    assert_eq!(checks.len(), 2);
+    assert_eq!(checks[0].conclusion.as_deref(), Some("success"));
+    assert_eq!(checks[1].status, "in_progress");
+    assert_eq!(checks[1].conclusion, None);
+    assert_eq!(
+        server.requests()[0].query("per_page").as_deref(),
+        Some("100")
+    );
+
+    let missing = commit_checks(&client, "o", "r", "deadbeef")
+        .await
+        .expect_err("unknown commit");
+    assert_eq!(missing.kind, ErrorKind::GithubNotFound);
+
+    let invalid = commit_checks(&client, "o", "r", "--oops")
+        .await
+        .expect_err("invalid hash");
     assert_eq!(invalid.kind, ErrorKind::InvalidInput);
 }

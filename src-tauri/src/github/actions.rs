@@ -4,9 +4,11 @@ use reqwest::Method;
 use serde::Serialize;
 
 use crate::error::{AppError, AppResult};
+use crate::git::validate::ensure_commit_hash;
 use crate::github::client::{GithubClient, Page};
 use crate::github::models::{
-    Job, JobsResponse, Workflow, WorkflowRun, WorkflowRunsResponse, WorkflowsResponse,
+    CheckRun, CheckRunsResponse, Job, JobsResponse, Workflow, WorkflowRun, WorkflowRunsResponse,
+    WorkflowsResponse,
 };
 use crate::github::pulls::{repo_path, PAGE_SIZE};
 
@@ -61,6 +63,23 @@ pub fn cap_log(text: String) -> JobLog {
         text: text[start..].to_string(),
         truncated: true,
     }
+}
+
+pub async fn commit_checks(
+    client: &GithubClient,
+    owner: &str,
+    repo: &str,
+    sha: &str,
+) -> AppResult<Vec<CheckRun>> {
+    ensure_commit_hash(sha)?;
+    let base = repo_path(owner, repo)?;
+    let response: CheckRunsResponse = client
+        .get_json(
+            &format!("{base}/commits/{sha}/check-runs"),
+            &[("per_page", "100".to_string())],
+        )
+        .await?;
+    Ok(response.check_runs)
 }
 
 pub async fn list_runs(

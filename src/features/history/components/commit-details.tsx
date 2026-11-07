@@ -1,6 +1,7 @@
 import { History, UserRoundSearch } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useBlameStore } from "@/features/blame/store";
+import { CommitChecks } from "@/features/github/checks/components/commit-checks";
 import { SignatureBadge } from "@/features/signing/components/signature-badge";
 import { formatDateTime } from "@/shared/lib/format";
 import { openContextMenu } from "@/shared/ui/context-menu";
@@ -42,6 +43,7 @@ export function CommitDetails({ repoPath, hash }: CommitDetailsProps) {
               <span className="selectable font-mono">{commit.summary.shortHash}</span>
             </p>
             <SignatureBadge repoPath={repoPath} hash={hash} />
+            <CommitChecks repoPath={repoPath} hash={hash} />
           </>
         ) : (
           <>

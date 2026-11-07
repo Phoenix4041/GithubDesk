@@ -104,6 +104,7 @@ pub fn run() {
             github_issues::github_labels_list,
             github_issues::github_assignees_list,
             github_actions::github_runs_list,
+            github_actions::github_commit_checks,
             github_actions::github_run_get,
             github_actions::github_run_jobs,
             github_actions::github_job_log,

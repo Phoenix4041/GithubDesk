@@ -6,7 +6,7 @@ use crate::commands::github_pulls::client_for;
 use crate::error::AppResult;
 use crate::github::actions::{self, JobLog};
 use crate::github::client::Page;
-use crate::github::models::{Job, Workflow, WorkflowRun};
+use crate::github::models::{CheckRun, Job, Workflow, WorkflowRun};
 use crate::state::AppState;
 
 #[tauri::command]
@@ -30,6 +30,18 @@ pub async fn github_runs_list(
         page,
     )
     .await
+}
+
+#[tauri::command]
+pub async fn github_commit_checks(
+    state: State<'_, AppState>,
+    account_id: String,
+    owner: String,
+    repo: String,
+    sha: String,
+) -> AppResult<Vec<CheckRun>> {
+    let client = client_for(&state, &account_id).await?;
+    actions::commit_checks(&client, &owner, &repo, &sha).await
 }
 
 #[tauri::command]
