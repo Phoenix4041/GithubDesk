@@ -4,7 +4,7 @@ import type { GithubTarget } from "../target";
 import { getJobLog, getRunBundle, listRuns, listWorkflows } from "./api";
 import { isRunFinished } from "./run-model";
 
-const RUN_LIST_POLL_MS = 15_000;
+const RUN_LIST_POLL_MS = 10_000;
 const RUN_DETAIL_POLL_MS = 8_000;
 const JOB_LOG_POLL_MS = 5_000;
 

@@ -40,7 +40,7 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
   }
 
   return (
-    <div role="tablist" aria-label={t("tabs.label")} className="flex h-10 shrink-0 items-end gap-1 border-b border-line px-3">
+    <div role="tablist" aria-label={t("tabs.label")} className="flex h-10 shrink-0 items-end gap-0.5 overflow-x-auto border-b border-line px-2 [scrollbar-width:none]">
       {tabs.map((item) => {
         const selected = item.id === tab;
         return (
@@ -53,7 +53,7 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
             aria-controls={`panel-${item.id}`}
             onClick={() => setTab(item.id)}
             className={cn(
-              "relative flex h-9 cursor-pointer items-center gap-2 px-3 text-[13px] font-medium transition-colors duration-150",
+              "relative flex h-9 shrink-0 cursor-pointer items-center gap-2 px-2.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-150",
               selected ? "text-fg" : "text-muted hover:text-fg",
             )}
           >
