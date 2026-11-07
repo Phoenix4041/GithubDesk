@@ -7,15 +7,21 @@ pub mod state;
 pub mod watcher;
 
 use commands::{
-    blame, branch, commit, commit_ops, compare, conflict, history, job, operation, rebase, reflog,
-    remote, repo, stash, status, tag, watch,
+    blame, branch, commit, commit_ops, compare, conflict, github_account, history, job, operation,
+    rebase, reflog, remote, repo, stash, status, tag, watch,
 };
 use state::AppState;
+use tauri::Manager;
 
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
-        .manage(AppState::default())
+        .plugin(tauri_plugin_opener::init())
+        .setup(|app| {
+            let directory = app.path().app_data_dir()?;
+            app.manage(AppState::new(directory));
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             repo::repo_open,
             repo::repo_init,
@@ -71,6 +77,11 @@ pub fn run() {
             reflog::reflog_undo_plan,
             reflog::reflog_restore,
             reflog::reflog_undo,
+            github_account::github_accounts_list,
+            github_account::github_account_add_token,
+            github_account::github_account_remove,
+            github_account::github_device_start,
+            github_account::github_device_finish,
             tag::tag_list,
             tag::tag_create,
             tag::tag_delete,

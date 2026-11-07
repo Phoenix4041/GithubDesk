@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGUAGES, changeLanguage, isLanguage } from "@/i18n";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
+import { AccountsSection } from "@/features/github/components/accounts-section";
 import { Dialog } from "@/shared/ui/dialog";
 import { useSettingsStore } from "../store";
 import type { ThemePreference } from "../store";
@@ -79,7 +80,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
       open={open}
       title={t("settings.title")}
       onClose={onClose}
-      width="sm"
+      width="md"
       footer={
         <Button variant="primary" onClick={onClose}>
           {t("common.done")}
@@ -99,6 +100,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
             }
           }}
         />
+        <AccountsSection />
       </div>
     </Dialog>
   );

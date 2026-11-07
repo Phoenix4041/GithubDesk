@@ -62,7 +62,7 @@ pub fn is_loopback_host(host: &str) -> bool {
     name == "localhost" || name == "127.0.0.1" || name == "[::1]" || name.ends_with(".localhost")
 }
 
-fn require_secure(base: &str) -> AppResult<()> {
+pub fn require_secure_url(base: &str) -> AppResult<()> {
     let parsed = url::Url::parse(base)
         .map_err(|error| AppError::invalid_input(format!("invalid GitHub address: {error}")))?;
     let host = parsed.host_str().unwrap_or_default();
@@ -85,7 +85,7 @@ pub fn build_http_client() -> AppResult<reqwest::Client> {
 
 impl GithubClient {
     pub fn new(api_base: &str, token: Option<String>) -> AppResult<Self> {
-        require_secure(api_base)?;
+        require_secure_url(api_base)?;
         Ok(Self {
             http: build_http_client()?,
             api_base: api_base.trim_end_matches('/').to_string(),

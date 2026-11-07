@@ -4,6 +4,7 @@ pub mod commit;
 pub mod commit_ops;
 pub mod compare;
 pub mod conflict;
+pub mod github_account;
 pub mod history;
 pub mod job;
 pub mod operation;

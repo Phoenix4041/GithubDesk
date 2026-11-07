@@ -36,6 +36,19 @@ export type ErrorKind =
   | "rebaseHasMerges"
   | "nothingToRebase"
   | "fileNotInRevision"
+  | "githubUnauthorized"
+  | "githubForbidden"
+  | "githubNotFound"
+  | "githubRateLimited"
+  | "githubValidation"
+  | "githubNotMergeable"
+  | "githubServerError"
+  | "githubNoAccount"
+  | "githubNotConfigured"
+  | "githubDeviceDenied"
+  | "githubDeviceExpired"
+  | "githubNotARepository"
+  | "credentialStoreUnavailable"
   | "noCommits"
   | "cancelled"
   | "invalidInput"
@@ -341,4 +354,23 @@ export interface UndoPlan {
   currentHash: string;
   targetHash: string;
   targetShortHash: string;
+}
+
+export type AccountSource = "oauth" | "token";
+
+export interface GithubAccount {
+  id: string;
+  host: string;
+  login: string;
+  name: string | null;
+  avatarUrl: string;
+  source: AccountSource;
+}
+
+export interface DeviceCode {
+  deviceCode: string;
+  userCode: string;
+  verificationUri: string;
+  expiresIn: number;
+  interval: number;
 }

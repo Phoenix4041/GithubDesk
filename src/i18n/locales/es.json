@@ -514,6 +514,59 @@
     "fileNotInRevision": {
       "title": "El archivo no está en esa versión",
       "message": "Git no conoce este archivo todavía. Haz commit para poder ver su historial."
+    },
+    "githubUnauthorized": {
+      "title": "GitHub rechazó tu sesión",
+      "message": "El token no es válido o venció. Vuelve a conectar la cuenta."
+    },
+    "githubForbidden": {
+      "title": "No tienes permiso",
+      "message": "GitHub no permite esta acción con esta cuenta. Revisa los permisos del token o del repositorio."
+    },
+    "githubNotFound": {
+      "title": "No se encontró en GitHub",
+      "message": "El recurso no existe o esta cuenta no puede verlo."
+    },
+    "githubRateLimited": {
+      "title": "Límite de GitHub alcanzado",
+      "message": "Hiciste demasiadas consultas. Espera unos minutos y vuelve a intentar.",
+      "retryAt": "Podrás intentar de nuevo a las {{time}}."
+    },
+    "githubValidation": {
+      "title": "GitHub no aceptó los datos",
+      "message": "Revisa lo que escribiste."
+    },
+    "githubNotMergeable": {
+      "title": "No se puede completar",
+      "message": "GitHub rechazó la operación, por ejemplo por conflictos o reglas de la rama."
+    },
+    "githubServerError": {
+      "title": "Problema en GitHub",
+      "message": "GitHub respondió con un error. Vuelve a intentar en un momento."
+    },
+    "githubNoAccount": {
+      "title": "Falta conectar una cuenta",
+      "message": "Conecta una cuenta de GitHub en Ajustes para usar esta función."
+    },
+    "githubNotConfigured": {
+      "title": "Falta configurar el inicio de sesión",
+      "message": "Revisa el Client ID de tu OAuth App y que tenga activado el flujo de dispositivo."
+    },
+    "githubDeviceDenied": {
+      "title": "Autorización cancelada",
+      "message": "Rechazaste el acceso en GitHub."
+    },
+    "githubDeviceExpired": {
+      "title": "El código venció",
+      "message": "Empieza de nuevo para obtener un código nuevo."
+    },
+    "githubNotARepository": {
+      "title": "Este repositorio no está en GitHub",
+      "message": "Ningún remoto apunta a GitHub."
+    },
+    "credentialStoreUnavailable": {
+      "title": "No se pudo usar el almacén de credenciales",
+      "message": "El sistema no permitió guardar o leer el token."
     }
   },
   "operation": {
@@ -852,6 +905,46 @@
       "effectRestore": "Tu rama y tus archivos volverán a como estaban en {{hash}}.",
       "safety": "Si tienes cambios sin guardar que lo impidan, Git cancela la operación sin tocar nada.",
       "confirm": "Deshacer"
+    }
+  },
+  "github": {
+    "accounts": {
+      "title": "Cuentas de GitHub",
+      "add": "Agregar cuenta",
+      "empty": "Todavía no conectaste ninguna cuenta. Conecta una para ver pull requests, issues y Actions.",
+      "added": "Cuenta {{login}} conectada",
+      "removed": "Cuenta {{login}} desconectada",
+      "remove": "Desconectar la cuenta {{login}}",
+      "source": {
+        "oauth": "Navegador",
+        "token": "Token"
+      },
+      "removeDialog": {
+        "title": "Desconectar {{login}}",
+        "description": "Se borra el token guardado en este equipo. Tu cuenta de GitHub no se modifica.",
+        "confirm": "Desconectar"
+      }
+    },
+    "add": {
+      "title": "Conectar una cuenta de GitHub",
+      "description": "El token se guarda en el almacén de credenciales del sistema, nunca en archivos de la aplicación.",
+      "methodsLabel": "Forma de conectar",
+      "methods": {
+        "browser": "Con el navegador",
+        "token": "Con un token"
+      },
+      "host": "Servidor",
+      "hostHint": "Usa github.com o la dirección de tu GitHub Enterprise.",
+      "clientId": "Client ID de tu OAuth App",
+      "clientIdHint": "Crea una OAuth App en GitHub (Settings, Developer settings) y activa el flujo de dispositivo. Pega aquí su Client ID.",
+      "start": "Continuar en el navegador",
+      "codeInstruction": "Escribe este código en la página de GitHub que se abrió:",
+      "copyCode": "Copiar código",
+      "openGithub": "Abrir GitHub",
+      "waiting": "Esperando tu autorización...",
+      "token": "Token de acceso personal",
+      "tokenHint": "Necesita los permisos repo y workflow. Nadie más ve este valor.",
+      "connect": "Conectar"
     }
   }
 }

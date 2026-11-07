@@ -6,6 +6,15 @@ import { CommandError, isCancelled } from "./tauri-client";
 import { useUiStore } from "./ui-store";
 
 const MAX_DETAIL_LENGTH = 280;
+const DETAILED_KINDS: ReadonlySet<ErrorKind> = new Set<ErrorKind>([
+  "unknown",
+  "io",
+  "hookRejected",
+  "githubValidation",
+  "githubNotMergeable",
+  "githubForbidden",
+  "githubNotConfigured",
+]);
 
 export interface ErrorHandlers {
   retry?: () => void;
@@ -27,10 +36,17 @@ export function describeError(error: unknown): ErrorDescription {
   const kind: ErrorKind = appError?.kind ?? "unknown";
   const title = i18next.t(`errors.${kind}.title`);
   let message = i18next.t(`errors.${kind}.message`);
-  if (kind === "unknown" || kind === "io" || kind === "hookRejected") {
+  if (DETAILED_KINDS.has(kind)) {
     const detail = appError?.detail ?? (error instanceof Error ? error.message : "");
     if (detail) {
       message = `${message} ${detail.slice(0, MAX_DETAIL_LENGTH)}`;
+    }
+  }
+  if (kind === "githubRateLimited") {
+    const resetSeconds = Number(appError?.detail);
+    if (Number.isFinite(resetSeconds) && resetSeconds > 0) {
+      const time = new Date(resetSeconds * 1000).toLocaleTimeString(i18next.language, { hour: "2-digit", minute: "2-digit" });
+      message = `${message} ${i18next.t("errors.githubRateLimited.retryAt", { time })}`;
     }
   }
   return { kind, title, message, appError };

@@ -514,6 +514,59 @@
     "fileNotInRevision": {
       "title": "The file is not in that version",
       "message": "Git does not know this file yet. Commit it to see its history."
+    },
+    "githubUnauthorized": {
+      "title": "GitHub rejected your session",
+      "message": "The token is invalid or expired. Connect the account again."
+    },
+    "githubForbidden": {
+      "title": "You do not have permission",
+      "message": "GitHub does not allow this action with this account. Check the token or repository permissions."
+    },
+    "githubNotFound": {
+      "title": "Not found on GitHub",
+      "message": "The resource does not exist or this account cannot see it."
+    },
+    "githubRateLimited": {
+      "title": "GitHub rate limit reached",
+      "message": "You made too many requests. Wait a few minutes and try again.",
+      "retryAt": "You can try again at {{time}}."
+    },
+    "githubValidation": {
+      "title": "GitHub did not accept the data",
+      "message": "Check what you entered."
+    },
+    "githubNotMergeable": {
+      "title": "Cannot complete",
+      "message": "GitHub refused the operation, for example because of conflicts or branch rules."
+    },
+    "githubServerError": {
+      "title": "GitHub problem",
+      "message": "GitHub answered with an error. Try again in a moment."
+    },
+    "githubNoAccount": {
+      "title": "An account is needed",
+      "message": "Connect a GitHub account in Settings to use this feature."
+    },
+    "githubNotConfigured": {
+      "title": "Sign-in is not configured",
+      "message": "Check your OAuth App Client ID and that device flow is enabled."
+    },
+    "githubDeviceDenied": {
+      "title": "Authorization cancelled",
+      "message": "You declined access on GitHub."
+    },
+    "githubDeviceExpired": {
+      "title": "The code expired",
+      "message": "Start again to get a new code."
+    },
+    "githubNotARepository": {
+      "title": "This repository is not on GitHub",
+      "message": "No remote points to GitHub."
+    },
+    "credentialStoreUnavailable": {
+      "title": "The credential store is unavailable",
+      "message": "The system did not allow saving or reading the token."
     }
   },
   "operation": {
@@ -852,6 +905,46 @@
       "effectRestore": "Your branch and files go back to how they were at {{hash}}.",
       "safety": "If you have unsaved changes in the way, Git cancels the operation without touching anything.",
       "confirm": "Undo"
+    }
+  },
+  "github": {
+    "accounts": {
+      "title": "GitHub accounts",
+      "add": "Add account",
+      "empty": "You have not connected any account yet. Connect one to see pull requests, issues and Actions.",
+      "added": "Account {{login}} connected",
+      "removed": "Account {{login}} disconnected",
+      "remove": "Disconnect account {{login}}",
+      "source": {
+        "oauth": "Browser",
+        "token": "Token"
+      },
+      "removeDialog": {
+        "title": "Disconnect {{login}}",
+        "description": "The token saved on this computer is deleted. Your GitHub account is not changed.",
+        "confirm": "Disconnect"
+      }
+    },
+    "add": {
+      "title": "Connect a GitHub account",
+      "description": "The token is stored in the system credential store, never in application files.",
+      "methodsLabel": "Way to connect",
+      "methods": {
+        "browser": "With the browser",
+        "token": "With a token"
+      },
+      "host": "Server",
+      "hostHint": "Use github.com or the address of your GitHub Enterprise.",
+      "clientId": "Client ID of your OAuth App",
+      "clientIdHint": "Create an OAuth App on GitHub (Settings, Developer settings) and enable device flow. Paste its Client ID here.",
+      "start": "Continue in the browser",
+      "codeInstruction": "Enter this code on the GitHub page that opened:",
+      "copyCode": "Copy code",
+      "openGithub": "Open GitHub",
+      "waiting": "Waiting for your authorization...",
+      "token": "Personal access token",
+      "tokenHint": "It needs the repo and workflow scopes. Nobody else sees this value.",
+      "connect": "Connect"
     }
   }
 }

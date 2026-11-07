@@ -15,12 +15,14 @@ interface SettingsState {
   changesWidth: number;
   diffMode: DiffMode;
   ignoreWhitespace: boolean;
+  githubClientId: string;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
   setChangesWidth: (width: number) => void;
   setDiffMode: (mode: DiffMode) => void;
   setIgnoreWhitespace: (ignore: boolean) => void;
+  setGithubClientId: (clientId: string) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -32,12 +34,14 @@ export const useSettingsStore = create<SettingsState>()(
       changesWidth: CHANGES_WIDTH_RANGE.initial,
       diffMode: "unified",
       ignoreWhitespace: false,
+      githubClientId: "",
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
       setChangesWidth: (changesWidth) => set({ changesWidth }),
       setDiffMode: (diffMode) => set({ diffMode }),
       setIgnoreWhitespace: (ignoreWhitespace) => set({ ignoreWhitespace }),
+      setGithubClientId: (githubClientId) => set({ githubClientId }),
     }),
     { name: "githubdesk.settings" },
   ),
