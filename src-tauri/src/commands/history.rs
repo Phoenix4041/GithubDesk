@@ -60,6 +60,12 @@ pub async fn commit_detail(repo: &Path, hash: &str) -> AppResult<Option<CommitDe
     Ok(parse_commit_detail(&output.text()))
 }
 
+pub async fn empty_tree(repo: &Path) -> AppResult<String> {
+    let empty_tree =
+        git_with_input(repo, &["hash-object", "-t", "tree", "--stdin"], Vec::new()).await?;
+    Ok(empty_tree.trimmed())
+}
+
 async fn diff_base(repo: &Path, hash: &str) -> AppResult<String> {
     let parent_reference = format!("{hash}^1");
     let parent = git_unchecked(repo, &["rev-parse", "--verify", "-q", &parent_reference]).await?;

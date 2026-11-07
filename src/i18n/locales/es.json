@@ -33,7 +33,8 @@
   "tabs": {
     "label": "Vistas del repositorio",
     "changes": "Cambios",
-    "history": "Historial"
+    "history": "Historial",
+    "stash": "Stash"
   },
   "welcome": {
     "title": "Bienvenido a GithubDesk",
@@ -184,7 +185,8 @@
       "description": "Tu carpeta de trabajo coincide con el último commit.",
       "ahead_one": "Tienes {{count}} commit sin publicar. Usa Push para enviarlo.",
       "ahead_other": "Tienes {{count}} commits sin publicar. Usa Push para enviarlos."
-    }
+    },
+    "stashAll": "Guardar cambios en stash"
   },
   "commit": {
     "label": "Crear commit",
@@ -464,6 +466,14 @@
     "tagNotFound": {
       "title": "No se encontró la etiqueta",
       "message": "La etiqueta ya no existe."
+    },
+    "nothingToStash": {
+      "title": "No hay nada que guardar",
+      "message": "No tienes cambios locales para guardar en un stash."
+    },
+    "stashNotFound": {
+      "title": "No se encontró el stash",
+      "message": "El stash ya no existe. Actualiza la lista."
     }
   },
   "operation": {
@@ -574,6 +584,52 @@
       "parentLabel": "Línea principal",
       "parent": "Padre {{number}}",
       "submit": "Revertir"
+    }
+  },
+  "stash": {
+    "title": "Stashes",
+    "new": "Guardar en stash",
+    "listLabel": "Stashes guardados",
+    "onBranch": "en {{branch}}",
+    "empty": {
+      "title": "Sin stashes",
+      "description": "Guarda tus cambios en un stash para apartarlos sin hacer commit."
+    },
+    "saved": "Cambios guardados en el stash",
+    "applied": "Stash aplicado",
+    "popped": "Stash aplicado y eliminado",
+    "dropped": "Stash eliminado",
+    "branchCreated": "Rama {{name}} creada desde el stash",
+    "menu": {
+      "apply": "Aplicar",
+      "pop": "Aplicar y eliminar",
+      "branch": "Crear rama desde el stash...",
+      "drop": "Eliminar stash"
+    },
+    "panel": {
+      "apply": "Aplicar",
+      "pop": "Aplicar y eliminar",
+      "branch": "Crear rama",
+      "drop": "Eliminar"
+    },
+    "saveDialog": {
+      "title": "Guardar en stash",
+      "description": "Aparta tus cambios actuales y deja la carpeta como el último commit.",
+      "message": "Mensaje (opcional)",
+      "placeholder": "Por ejemplo: arreglo a medias",
+      "includeUntracked": "Incluir archivos nuevos que Git aún no sigue",
+      "submit": "Guardar"
+    },
+    "branchDialog": {
+      "title": "Crear rama desde el stash",
+      "description": "Se crea la rama en el commit donde hiciste el stash, se aplican los cambios y el stash se elimina.",
+      "submit": "Crear rama"
+    },
+    "dropDialog": {
+      "title": "Eliminar el stash",
+      "description": "Se eliminará \"{{message}}\".",
+      "loss": "Los cambios guardados en este stash se perderán.",
+      "confirm": "Eliminar"
     }
   }
 }

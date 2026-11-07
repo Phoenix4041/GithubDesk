@@ -33,7 +33,8 @@
   "tabs": {
     "label": "Repository views",
     "changes": "Changes",
-    "history": "History"
+    "history": "History",
+    "stash": "Stash"
   },
   "welcome": {
     "title": "Welcome to GithubDesk",
@@ -184,7 +185,8 @@
       "description": "Your working folder matches the last commit.",
       "ahead_one": "You have {{count}} unpublished commit. Use Push to send it.",
       "ahead_other": "You have {{count}} unpublished commits. Use Push to send them."
-    }
+    },
+    "stashAll": "Stash changes"
   },
   "commit": {
     "label": "Create commit",
@@ -464,6 +466,14 @@
     "tagNotFound": {
       "title": "Tag not found",
       "message": "The tag no longer exists."
+    },
+    "nothingToStash": {
+      "title": "Nothing to stash",
+      "message": "You have no local changes to save to a stash."
+    },
+    "stashNotFound": {
+      "title": "Stash not found",
+      "message": "The stash no longer exists. Refresh the list."
     }
   },
   "operation": {
@@ -574,6 +584,52 @@
       "parentLabel": "Mainline",
       "parent": "Parent {{number}}",
       "submit": "Revert"
+    }
+  },
+  "stash": {
+    "title": "Stashes",
+    "new": "Save to stash",
+    "listLabel": "Saved stashes",
+    "onBranch": "on {{branch}}",
+    "empty": {
+      "title": "No stashes",
+      "description": "Save your changes to a stash to set them aside without committing."
+    },
+    "saved": "Changes saved to the stash",
+    "applied": "Stash applied",
+    "popped": "Stash applied and removed",
+    "dropped": "Stash deleted",
+    "branchCreated": "Branch {{name}} created from the stash",
+    "menu": {
+      "apply": "Apply",
+      "pop": "Apply and remove",
+      "branch": "Create branch from stash...",
+      "drop": "Delete stash"
+    },
+    "panel": {
+      "apply": "Apply",
+      "pop": "Apply and remove",
+      "branch": "Create branch",
+      "drop": "Delete"
+    },
+    "saveDialog": {
+      "title": "Save to stash",
+      "description": "Set your current changes aside and leave the folder like the last commit.",
+      "message": "Message (optional)",
+      "placeholder": "For example: half-done fix",
+      "includeUntracked": "Include new files Git does not track yet",
+      "submit": "Save"
+    },
+    "branchDialog": {
+      "title": "Create branch from stash",
+      "description": "The branch is created at the commit where you stashed, the changes are applied and the stash is removed.",
+      "submit": "Create branch"
+    },
+    "dropDialog": {
+      "title": "Delete the stash",
+      "description": "\"{{message}}\" will be deleted.",
+      "loss": "The changes saved in this stash will be lost.",
+      "confirm": "Delete"
     }
   }
 }

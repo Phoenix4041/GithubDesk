@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
+import { useStashStore } from "@/features/stash/store";
 import { cn } from "@/shared/lib/cn";
 import { useUiStore } from "@/shared/lib/ui-store";
 import type { WorkspaceTab } from "@/shared/lib/ui-store";
@@ -14,11 +15,15 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
   const setTab = useUiStore((state) => state.setTab);
   const status = useStatus(repoPath);
   const changeCount = status.data?.entries.length ?? 0;
+  const stashSelected = useStashStore((state) => state.selectedHash !== null);
 
   const tabs: Array<{ id: WorkspaceTab; label: string; count?: number }> = [
     { id: "changes", label: t("tabs.changes"), count: changeCount },
     { id: "history", label: t("tabs.history") },
   ];
+  if (stashSelected) {
+    tabs.push({ id: "stash", label: t("tabs.stash") });
+  }
 
   return (
     <div role="tablist" aria-label={t("tabs.label")} className="flex h-10 shrink-0 items-end gap-1 border-b border-line px-3">

@@ -6,6 +6,7 @@ pub mod job;
 pub mod operation;
 pub mod remote;
 pub mod repo;
+pub mod stash;
 pub mod status;
 pub mod tag;
 pub mod watch;

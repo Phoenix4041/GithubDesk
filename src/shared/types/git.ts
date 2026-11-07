@@ -31,6 +31,8 @@ export type ErrorKind =
   | "mergeCommitNeedsParent"
   | "tagAlreadyExists"
   | "tagNotFound"
+  | "nothingToStash"
+  | "stashNotFound"
   | "noCommits"
   | "cancelled"
   | "invalidInput"
@@ -208,3 +210,11 @@ export interface Tag {
 }
 
 export type ResetMode = "soft" | "mixed" | "hard";
+
+export interface Stash {
+  index: number;
+  hash: string;
+  branch: string | null;
+  message: string;
+  time: number;
+}

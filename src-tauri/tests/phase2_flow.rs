@@ -5,7 +5,7 @@ use std::path::Path;
 use common::{commit_file, git_output, git_try, new_repository, write_file, Workspace};
 use githubdesk_lib::commands::commit_ops::{self, ResetMode};
 use githubdesk_lib::commands::operation::{self, OperationAction};
-use githubdesk_lib::commands::{history, remote, status, tag};
+use githubdesk_lib::commands::{history, remote, stash, status, tag};
 use githubdesk_lib::error::ErrorKind;
 use githubdesk_lib::git::parse::diff::LineKind;
 use githubdesk_lib::git::parse::status::ChangeKind;
@@ -466,4 +466,172 @@ async fn force_with_lease_replaces_rewritten_history_on_the_remote() {
         .expect("force with lease");
     let remote_subject = git_output(remote_dir.path(), &["log", "-1", "--format=%s", "main"]);
     assert_eq!(remote_subject.trim(), "one rewritten");
+}
+
+#[tokio::test]
+async fn stash_round_trip_with_untracked_files() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "tracked.txt", "one\n", "one").await;
+    write_file(repo, "tracked.txt", "one\ntwo\n");
+    write_file(repo, "fresh.txt", "brand new\n");
+
+    stash::save_stash(repo, Some("before lunch"), true)
+        .await
+        .expect("save");
+    assert!(status::get_status(repo)
+        .await
+        .expect("status")
+        .entries
+        .is_empty());
+    assert!(!repo.join("fresh.txt").exists());
+
+    let stashes = stash::list_stashes(repo).await.expect("list");
+    assert_eq!(stashes.len(), 1);
+    assert_eq!(stashes[0].message, "before lunch");
+    assert_eq!(stashes[0].branch.as_deref(), Some("main"));
+    let hash = stashes[0].hash.clone();
+
+    let files = stash::stash_files(repo, &hash).await.expect("files");
+    let paths: Vec<&str> = files.iter().map(|file| file.path.as_str()).collect();
+    assert!(paths.contains(&"tracked.txt"));
+    assert!(paths.contains(&"fresh.txt"));
+
+    let tracked_diff = stash::stash_file_diff(repo, &hash, "tracked.txt", None, false)
+        .await
+        .expect("tracked diff");
+    assert!(tracked_diff.hunks[0]
+        .lines
+        .iter()
+        .any(|line| line.kind == LineKind::Added && line.content == "two"));
+    let untracked_diff = stash::stash_file_diff(repo, &hash, "fresh.txt", None, false)
+        .await
+        .expect("untracked diff");
+    assert!(untracked_diff.hunks[0]
+        .lines
+        .iter()
+        .any(|line| line.kind == LineKind::Added && line.content == "brand new"));
+
+    stash::apply_stash(repo, &hash, false).await.expect("apply");
+    assert!(repo.join("fresh.txt").exists());
+    assert_eq!(stash::list_stashes(repo).await.expect("list").len(), 1);
+
+    git_output(repo, &["reset", "--hard"]);
+    git_output(repo, &["clean", "-fd"]);
+    stash::apply_stash(repo, &hash, true).await.expect("pop");
+    assert!(stash::list_stashes(repo).await.expect("list").is_empty());
+    assert_eq!(
+        std::fs::read_to_string(repo.join("tracked.txt")).expect("read"),
+        "one\ntwo\n"
+    );
+}
+
+#[tokio::test]
+async fn stashing_without_changes_is_reported() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "one\n", "one").await;
+    let error = stash::save_stash(repo, None, false)
+        .await
+        .expect_err("nothing");
+    assert_eq!(error.kind, ErrorKind::NothingToStash);
+}
+
+#[tokio::test]
+async fn stash_without_a_message_uses_the_wip_label() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "one\n", "first commit").await;
+    write_file(repo, "f.txt", "changed\n");
+    stash::save_stash(repo, None, false).await.expect("save");
+    let stashes = stash::list_stashes(repo).await.expect("list");
+    assert_eq!(stashes[0].message, "WIP: first commit");
+}
+
+#[tokio::test]
+async fn stash_operations_use_the_hash_not_a_stale_index() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "one\n", "one").await;
+    write_file(repo, "f.txt", "a\n");
+    stash::save_stash(repo, Some("first"), false)
+        .await
+        .expect("first");
+    write_file(repo, "f.txt", "b\n");
+    stash::save_stash(repo, Some("second"), false)
+        .await
+        .expect("second");
+
+    let stashes = stash::list_stashes(repo).await.expect("list");
+    let older = stashes
+        .iter()
+        .find(|stash| stash.message == "first")
+        .expect("first stash")
+        .hash
+        .clone();
+    stash::drop_stash(repo, &older).await.expect("drop older");
+
+    let remaining = stash::list_stashes(repo).await.expect("list");
+    assert_eq!(remaining.len(), 1);
+    assert_eq!(remaining[0].message, "second");
+
+    let missing = stash::drop_stash(repo, &older).await.expect_err("gone");
+    assert_eq!(missing.kind, ErrorKind::StashNotFound);
+    let invalid = stash::drop_stash(repo, "--all").await.expect_err("invalid");
+    assert_eq!(invalid.kind, ErrorKind::InvalidInput);
+}
+
+#[tokio::test]
+async fn applying_a_conflicting_stash_keeps_it_and_reports_conflicts() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "base\n", "base").await;
+    write_file(repo, "f.txt", "stashed\n");
+    stash::save_stash(repo, Some("conflicting"), false)
+        .await
+        .expect("save");
+    commit_file(repo, "f.txt", "committed\n", "diverge").await;
+
+    let hash = stash::list_stashes(repo).await.expect("list")[0]
+        .hash
+        .clone();
+    let error = stash::apply_stash(repo, &hash, true)
+        .await
+        .expect_err("conflict");
+    assert_eq!(error.kind, ErrorKind::MergeConflict);
+    assert_eq!(stash::list_stashes(repo).await.expect("list").len(), 1);
+    assert!(status::get_status(repo)
+        .await
+        .expect("status")
+        .entries
+        .iter()
+        .any(|entry| entry.conflicted));
+}
+
+#[tokio::test]
+async fn branch_can_be_created_from_a_stash() {
+    let workspace = new_repository().await;
+    let repo = workspace.path.as_path();
+    commit_file(repo, "f.txt", "base\n", "base").await;
+    write_file(repo, "f.txt", "work in progress\n");
+    stash::save_stash(repo, Some("wip"), false)
+        .await
+        .expect("save");
+    commit_file(repo, "other.txt", "x\n", "move on").await;
+
+    let hash = stash::list_stashes(repo).await.expect("list")[0]
+        .hash
+        .clone();
+    stash::branch_from_stash(repo, &hash, "from-stash")
+        .await
+        .expect("branch");
+    assert_eq!(
+        git_output(repo, &["rev-parse", "--abbrev-ref", "HEAD"]).trim(),
+        "from-stash"
+    );
+    assert_eq!(
+        std::fs::read_to_string(repo.join("f.txt")).expect("read"),
+        "work in progress\n"
+    );
+    assert!(stash::list_stashes(repo).await.expect("list").is_empty());
 }

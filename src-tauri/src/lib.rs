@@ -6,7 +6,7 @@ pub mod state;
 pub mod watcher;
 
 use commands::{
-    branch, commit, commit_ops, history, job, operation, remote, repo, status, tag, watch,
+    branch, commit, commit_ops, history, job, operation, remote, repo, stash, status, tag, watch,
 };
 use state::AppState;
 
@@ -48,6 +48,13 @@ pub fn run() {
             commit_ops::commit_revert,
             commit_ops::commit_reset,
             commit_ops::commit_checkout,
+            stash::stash_list,
+            stash::stash_save,
+            stash::stash_apply,
+            stash::stash_drop,
+            stash::stash_branch,
+            stash::stash_changed_files,
+            stash::stash_diff,
             tag::tag_list,
             tag::tag_create,
             tag::tag_delete,

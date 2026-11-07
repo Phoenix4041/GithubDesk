@@ -11,6 +11,10 @@ import { HistoryView } from "@/features/history/components/history-view";
 import { useHistoryStore } from "@/features/history/store";
 import { useRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/features/settings/store";
+import { StashDialogs } from "@/features/stash/components/stash-dialogs";
+import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
+import { StashPanel } from "@/features/stash/components/stash-panel";
+import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
 import { TagDialogs } from "@/features/tags/components/tag-dialogs";
 import { CommandError } from "@/shared/lib/tauri-client";
@@ -39,6 +43,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   useEffect(() => {
     useChangesStore.getState().reset();
     useHistoryStore.getState().reset();
+    useStashStore.getState().select(null);
   }, []);
 
   if (status.isError && status.error instanceof CommandError && status.error.appError.kind === "notARepository") {
@@ -67,7 +72,9 @@ export function Workspace({ repoPath }: WorkspaceProps) {
             aria-labelledby={`tab-${tab}`}
             className="flex min-h-0 flex-1 flex-col"
           >
-            {tab === "changes" ? <ChangesView repoPath={repoPath} /> : <HistoryView repoPath={repoPath} />}
+            {tab === "changes" ? <ChangesView repoPath={repoPath} /> : null}
+            {tab === "history" ? <HistoryView repoPath={repoPath} /> : null}
+            {tab === "stash" ? <StashPanel repoPath={repoPath} /> : null}
           </div>
         </section>
         <ResizeHandle
@@ -78,11 +85,14 @@ export function Workspace({ repoPath }: WorkspaceProps) {
           onChange={setChangesWidth}
         />
         <main className="flex min-w-0 flex-1 flex-col bg-surface">
-          {tab === "changes" ? <ChangesDiffPanel repoPath={repoPath} /> : <HistoryDiffPanel repoPath={repoPath} />}
+          {tab === "changes" ? <ChangesDiffPanel repoPath={repoPath} /> : null}
+          {tab === "history" ? <HistoryDiffPanel repoPath={repoPath} /> : null}
+          {tab === "stash" ? <StashDiffPanel repoPath={repoPath} /> : null}
         </main>
       </div>
       <BranchDialogs repoPath={repoPath} />
       <TagDialogs repoPath={repoPath} />
+      <StashDialogs repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>

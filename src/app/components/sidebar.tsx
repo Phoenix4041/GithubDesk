@@ -5,6 +5,9 @@ import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBranches } from "@/features/branches/queries";
 import { AddRepositoryMenu } from "@/features/repositories/components/add-repository-menu";
 import { RepositoryList } from "@/features/repositories/components/repository-list";
+import { StashList } from "@/features/stash/components/stash-list";
+import { useStashes } from "@/features/stash/queries";
+import { useStashDialogStore } from "@/features/stash/store";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
 import { TagList } from "@/features/tags/components/tag-list";
 import { useTags } from "@/features/tags/queries";
@@ -21,14 +24,17 @@ export function Sidebar({ repoPath }: SidebarProps) {
   const { t } = useTranslation();
   const showBranchDialog = useBranchDialogStore((state) => state.show);
   const showTagDialog = useTagDialogStore((state) => state.show);
+  const showStashDialog = useStashDialogStore((state) => state.show);
   const sidebarTab = useUiStore((state) => state.sidebarTab);
   const setSidebarTab = useUiStore((state) => state.setSidebarTab);
   const branches = useBranches(repoPath);
   const tags = useTags(repoPath);
+  const stashes = useStashes(repoPath);
 
   const tabs: Array<{ id: SidebarTab; label: string; count: number }> = [
     { id: "branches", label: t("branches.title"), count: branches.data?.filter((branch) => !branch.isRemote).length ?? 0 },
     { id: "tags", label: t("tags.title"), count: tags.data?.length ?? 0 },
+    { id: "stashes", label: t("stash.title"), count: stashes.data?.length ?? 0 },
   ];
 
   return (
@@ -67,13 +73,21 @@ export function Sidebar({ repoPath }: SidebarProps) {
             <IconButton label={t("branches.new")} onClick={() => showBranchDialog({ kind: "create" })}>
               <Plus className="size-4" />
             </IconButton>
-          ) : (
+          ) : null}
+          {sidebarTab === "tags" ? (
             <IconButton label={t("tags.new")} onClick={() => showTagDialog({ kind: "create", target: null })}>
               <Plus className="size-4" />
             </IconButton>
-          )}
+          ) : null}
+          {sidebarTab === "stashes" ? (
+            <IconButton label={t("stash.new")} onClick={() => showStashDialog({ kind: "save" })}>
+              <Plus className="size-4" />
+            </IconButton>
+          ) : null}
         </div>
-        {sidebarTab === "branches" ? <BranchList repoPath={repoPath} /> : <TagList repoPath={repoPath} />}
+        {sidebarTab === "branches" ? <BranchList repoPath={repoPath} /> : null}
+        {sidebarTab === "tags" ? <TagList repoPath={repoPath} /> : null}
+        {sidebarTab === "stashes" ? <StashList repoPath={repoPath} /> : null}
       </section>
     </nav>
   );

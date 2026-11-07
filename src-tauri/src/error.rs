@@ -38,6 +38,8 @@ pub enum ErrorKind {
     MergeCommitNeedsParent,
     TagAlreadyExists,
     TagNotFound,
+    NothingToStash,
+    StashNotFound,
     NoCommits,
     Cancelled,
     InvalidInput,
@@ -231,6 +233,12 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     if (has("cannot delete branch") && has("checked out")) || has("cannot delete the branch") {
         return ErrorKind::BranchCheckedOut;
     }
+    if has("no local changes to save") {
+        return ErrorKind::NothingToStash;
+    }
+    if has("no stash entries found") || (has("stash@{") && has("is not a valid reference")) {
+        return ErrorKind::StashNotFound;
+    }
     if has("is a merge but no -m option was given") {
         return ErrorKind::MergeCommitNeedsParent;
     }
@@ -404,6 +412,18 @@ mark them as resolved using git add";
         assert_eq!(
             classify_failure("error: commit abc123 is a merge but no -m option was given."),
             ErrorKind::MergeCommitNeedsParent
+        );
+    }
+
+    #[test]
+    fn detects_stash_errors() {
+        assert_eq!(
+            classify_failure("No local changes to save"),
+            ErrorKind::NothingToStash
+        );
+        assert_eq!(
+            classify_failure("No stash entries found."),
+            ErrorKind::StashNotFound
         );
     }
 

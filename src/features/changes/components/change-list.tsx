@@ -1,6 +1,7 @@
-import { Trash2 } from "lucide-react";
+import { Archive, Trash2 } from "lucide-react";
 import { memo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useStashDialogStore } from "@/features/stash/store";
 import { cn } from "@/shared/lib/cn";
 import { splitPath } from "@/shared/lib/paths";
 import type { StatusEntry } from "@/shared/types/git";
@@ -90,6 +91,7 @@ interface ChangeListProps {
 export function ChangeList({ repoPath, model }: ChangeListProps) {
   const { t } = useTranslation();
   const selected = useChangesStore((state) => state.selected);
+  const showStashDialog = useStashDialogStore((state) => state.show);
   const [pendingDiscard, setPendingDiscard] = useState<StatusEntry[] | null>(null);
   const [discarding, setDiscarding] = useState(false);
 
@@ -121,6 +123,9 @@ export function ChangeList({ repoPath, model }: ChangeListProps) {
               <Button size="sm" variant="ghost" onClick={() => void stageFiles(repoPath, model.unstaged.map((entry) => entry.path))}>
                 {t("changes.stageAll")}
               </Button>
+              <IconButton label={t("changes.stashAll")} onClick={() => showStashDialog({ kind: "save" })} className="size-6">
+                <Archive className="size-3.5" />
+              </IconButton>
               <IconButton label={t("changes.discardAll")} onClick={() => setPendingDiscard(model.unstaged)} className="size-6">
                 <Trash2 className="size-3.5" />
               </IconButton>
