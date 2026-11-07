@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { splitPath } from "@/shared/lib/paths";
+import { DiffOptions } from "./diff-options";
 
 interface DiffHeaderProps {
   path: string;
@@ -17,6 +18,7 @@ export function DiffHeader({ path, badge }: DiffHeaderProps) {
           {directory}
         </span>
       </h2>
+      <DiffOptions />
     </header>
   );
 }

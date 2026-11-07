@@ -3,7 +3,8 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { DiffHeader } from "@/features/diff/components/diff-header";
 import { DiffViewer } from "@/features/diff/components/diff-viewer";
-import type { StagingControls } from "@/features/diff/components/diff-viewer";
+import type { StagingControls } from "@/features/diff/staging-controls";
+import { useSettingsStore } from "@/features/settings/store";
 import { describeError } from "@/shared/lib/report-error";
 import type { LineSelection } from "@/shared/types/git";
 import { EmptyState } from "@/shared/ui/empty-state";
@@ -23,6 +24,7 @@ export function ChangesDiffPanel({ repoPath }: ChangesDiffPanelProps) {
   const { t } = useTranslation();
   const status = useStatus(repoPath);
   const selected = useChangesStore((state) => state.selected);
+  const ignoreWhitespace = useSettingsStore((state) => state.ignoreWhitespace);
   const [busy, setBusy] = useState(false);
 
   const row = useMemo(() => {
@@ -40,7 +42,7 @@ export function ChangesDiffPanel({ repoPath }: ChangesDiffPanelProps) {
       }
     : null;
 
-  const diffQuery = useFileDiff(repoPath, target);
+  const diffQuery = useFileDiff(repoPath, target, ignoreWhitespace);
   const showSkeleton = useSkeletonVisible(diffQuery.isPending && target !== null);
 
   if (!row || !target) {

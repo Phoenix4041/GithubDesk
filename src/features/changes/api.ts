@@ -16,8 +16,9 @@ export function getFileDiff(
   filePath: string,
   originalPath: string | null,
   source: DiffSource,
+  ignoreWhitespace: boolean,
 ): Promise<FileDiff> {
-  return call<FileDiff>("diff_file", { path, filePath, originalPath, source });
+  return call<FileDiff>("diff_file", { path, filePath, originalPath, source, ignoreWhitespace });
 }
 
 export function stagePaths(path: string, paths: string[]): Promise<void> {

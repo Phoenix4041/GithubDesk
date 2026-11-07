@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { DiffLine, FileDiff } from "@/shared/types/git";
-import { buildDiffRows, changeLineIndices, lineKey, longestLineLength, selectionsFromKeys } from "./diff-model";
+import {
+  buildDiffRows,
+  buildSplitRows,
+  changeLineIndices,
+  lineKey,
+  longestLineLength,
+  selectionsFromKeys,
+} from "./diff-model";
 
 function line(kind: DiffLine["kind"], content: string): DiffLine {
   return { kind, content, oldNumber: null, newNumber: null };
@@ -67,5 +74,66 @@ describe("selectionsFromKeys", () => {
 describe("longestLineLength", () => {
   it("measures the widest line", () => {
     expect(longestLineLength(diff)).toBe("a much longer added line".length);
+  });
+});
+
+function diffOf(lines: DiffLine[]): FileDiff {
+  return {
+    path: "a.txt",
+    oldPath: null,
+    change: "modified",
+    binary: false,
+    tooLarge: false,
+    partialStagingAllowed: true,
+    hunks: [{ header: "@@ -1 +1 @@", oldStart: 1, oldCount: 1, newStart: 1, newCount: 1, lines }],
+  };
+}
+
+describe("buildSplitRows", () => {
+  it("mirrors context lines on both sides", () => {
+    const rows = buildSplitRows(diffOf([line("context", "same")]));
+    expect(rows).toHaveLength(2);
+    expect(rows[1]).toMatchObject({ kind: "pair", left: { line: { content: "same" } }, right: { line: { content: "same" } } });
+  });
+
+  it("pairs removed and added lines side by side", () => {
+    const rows = buildSplitRows(diffOf([line("removed", "old"), line("added", "new")]));
+    expect(rows).toHaveLength(2);
+    expect(rows[1]).toMatchObject({
+      kind: "pair",
+      left: { line: { content: "old" } },
+      right: { line: { content: "new" } },
+    });
+  });
+
+  it("leaves the opposite side empty when counts differ", () => {
+    const rows = buildSplitRows(
+      diffOf([line("removed", "a"), line("removed", "b"), line("added", "x"), line("context", "end")]),
+    );
+    const pairs = rows.filter((row) => row.kind === "pair");
+    expect(pairs).toHaveLength(3);
+    expect(pairs[0]).toMatchObject({ left: { line: { content: "a" } }, right: { line: { content: "x" } } });
+    expect(pairs[1]).toMatchObject({ left: { line: { content: "b" } }, right: null });
+    expect(pairs[2]).toMatchObject({ left: { line: { content: "end" } } });
+  });
+
+  it("shows pure additions only on the right", () => {
+    const rows = buildSplitRows(diffOf([line("added", "fresh")]));
+    expect(rows[1]).toMatchObject({ kind: "pair", left: null, right: { line: { content: "fresh" } } });
+  });
+
+  it("marks the side that lacks a trailing newline", () => {
+    const rows = buildSplitRows(
+      diffOf([line("removed", "old"), line("noNewline", ""), line("added", "new"), line("noNewline", "")]),
+    );
+    const pair = rows[1];
+    expect(pair).toMatchObject({ kind: "pair", left: { missingNewline: true }, right: { missingNewline: true } });
+  });
+
+  it("keeps the hunk index and a running row index", () => {
+    const rows = buildSplitRows(diff);
+    const pairs = rows.filter((row) => row.kind === "pair");
+    expect(rows.filter((row) => row.kind === "hunk")).toHaveLength(2);
+    expect(pairs.map((row) => (row.kind === "pair" ? row.rowIndex : -1))).toEqual([0, 1, 2, 0, 1]);
   });
 });

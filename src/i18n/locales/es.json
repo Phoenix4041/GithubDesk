@@ -241,7 +241,14 @@
     "clearSelection": "Limpiar",
     "selectedLines_one": "{{count}} línea seleccionada",
     "selectedLines_other": "{{count}} líneas seleccionadas",
-    "noNewline": "Sin salto de línea al final del archivo"
+    "noNewline": "Sin salto de línea al final del archivo",
+    "ignoreWhitespace": "Ignorar espacios",
+    "ignoreWhitespaceHint": "Oculta los cambios que solo son espacios. Mientras esté activo no se puede preparar por bloques ni por líneas.",
+    "modeLabel": "Modo de diferencias",
+    "mode": {
+      "unified": "Vista unificada",
+      "split": "Vista dividida"
+    }
   },
   "history": {
     "listLabel": "Historial de commits",

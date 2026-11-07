@@ -95,6 +95,7 @@ pub async fn commit_file_diff(
     hash: &str,
     path: &str,
     old_path: Option<&str>,
+    ignore_whitespace: bool,
 ) -> AppResult<FileDiff> {
     ensure_commit_hash(hash)?;
     ensure_relative_path(path)?;
@@ -107,11 +108,11 @@ pub async fn commit_file_diff(
         "--no-textconv",
         "-U3",
         "-M",
-        &base,
-        hash,
-        "--",
-        path,
     ];
+    if ignore_whitespace {
+        args.push("-w");
+    }
+    args.extend([base.as_str(), hash, "--", path]);
     if let Some(old) = old_path {
         ensure_relative_path(old)?;
         args.push(old);
@@ -146,6 +147,14 @@ pub async fn history_file_diff(
     hash: String,
     file_path: String,
     old_path: Option<String>,
+    ignore_whitespace: bool,
 ) -> AppResult<FileDiff> {
-    commit_file_diff(Path::new(&path), &hash, &file_path, old_path.as_deref()).await
+    commit_file_diff(
+        Path::new(&path),
+        &hash,
+        &file_path,
+        old_path.as_deref(),
+        ignore_whitespace,
+    )
+    .await
 }

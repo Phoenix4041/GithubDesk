@@ -241,7 +241,14 @@
     "clearSelection": "Clear",
     "selectedLines_one": "{{count}} line selected",
     "selectedLines_other": "{{count}} lines selected",
-    "noNewline": "No newline at end of file"
+    "noNewline": "No newline at end of file",
+    "ignoreWhitespace": "Ignore whitespace",
+    "ignoreWhitespaceHint": "Hides changes that are only whitespace. While active, hunks and lines cannot be staged.",
+    "modeLabel": "Diff mode",
+    "mode": {
+      "unified": "Unified view",
+      "split": "Split view"
+    }
   },
   "history": {
     "listLabel": "Commit history",

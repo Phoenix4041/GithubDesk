@@ -23,14 +23,14 @@ interface FileDiffTarget {
   source: DiffSource;
 }
 
-export function useFileDiff(repoPath: string, target: FileDiffTarget | null) {
+export function useFileDiff(repoPath: string, target: FileDiffTarget | null, ignoreWhitespace: boolean) {
   return useQuery({
-    queryKey: repoKeys.diff(repoPath, target?.source ?? "none", target?.path ?? ""),
+    queryKey: repoKeys.diff(repoPath, target?.source ?? "none", target?.path ?? "", ignoreWhitespace),
     queryFn: () => {
       if (!target) {
         throw new Error("No file selected");
       }
-      return getFileDiff(repoPath, target.path, target.originalPath, target.source);
+      return getFileDiff(repoPath, target.path, target.originalPath, target.source, ignoreWhitespace);
     },
     enabled: target !== null,
   });

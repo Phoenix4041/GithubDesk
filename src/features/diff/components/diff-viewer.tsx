@@ -2,27 +2,25 @@ import type { LanguageSupport } from "@codemirror/language";
 import { FileX, FileQuestion, FileDiff as FileDiffIcon } from "lucide-react";
 import { memo, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSettingsStore } from "@/features/settings/store";
 import { cn } from "@/shared/lib/cn";
 import { highlightLine } from "@/shared/lib/syntax";
-import type { FileDiff, LineSelection } from "@/shared/types/git";
+import type { FileDiff } from "@/shared/types/git";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { VirtualList } from "@/shared/ui/virtual-list";
 import { buildDiffRows, changeLineIndices, isChangeLine, lineKey, longestLineLength, selectionsFromKeys } from "../diff-model";
 import type { DiffRow } from "../diff-model";
+import type { StagingControls } from "../staging-controls";
 import { useLanguageSupport } from "../use-language-support";
+import { HunkHeaderRow } from "./hunk-header-row";
+import { SplitDiff } from "./split-diff";
 
 const ROW_HEIGHT = 20;
 const GUTTER_WIDTH = 28 + 44 + 44 + 16;
 const CHARACTER_WIDTH = 7.4;
 const EMPTY_KEYS: ReadonlySet<string> = new Set();
-
-export interface StagingControls {
-  mode: "stage" | "unstage";
-  busy: boolean;
-  onApply: (selections: LineSelection[]) => void;
-}
 
 interface DiffViewerProps {
   diff: FileDiff;
@@ -111,7 +109,8 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
   const support = useLanguageSupport(diff.path);
   const [selection, setSelection] = useState<SelectionState>({ owner: diff, keys: EMPTY_KEYS });
 
-  const rows = useMemo(() => buildDiffRows(diff), [diff]);
+  const diffMode = useSettingsStore((state) => state.diffMode);
+  const rows = useMemo(() => (diffMode === "unified" ? buildDiffRows(diff) : []), [diff, diffMode]);
   const selectable = Boolean(staging) && diff.partialStagingAllowed;
   const activeKeys = selection.owner === diff ? selection.keys : EMPTY_KEYS;
 
@@ -151,6 +150,14 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
     return <EmptyState icon={<FileDiffIcon className="size-5" />} title={t("diff.noContentChanges.title")} description={t("diff.noContentChanges.description")} />;
   }
 
+  if (diffMode === "split") {
+    return (
+      <div className="flex min-h-0 flex-1 flex-col">
+        <SplitDiff diff={diff} support={support} staging={staging} selectable={selectable} onApplyHunk={applyHunk} />
+      </div>
+    );
+  }
+
   const innerMinWidth = GUTTER_WIDTH + longestLineLength(diff) * CHARACTER_WIDTH + 32;
 
   return (
@@ -185,21 +192,14 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
         renderRow={(row) => {
           if (row.kind === "hunk") {
             return (
-              <div className="flex h-5 items-center bg-hunk-bg font-mono text-xs text-muted">
-                <div className="sticky left-0 flex items-center gap-2 pl-2">
-                  {staging && selectable && row.changeCount > 0 ? (
-                    <button
-                      type="button"
-                      disabled={staging.busy}
-                      onClick={() => applyHunk(row.hunkIndex)}
-                      className="cursor-pointer rounded bg-surface px-1.5 text-[11px] font-medium text-accent transition-colors duration-150 hover:bg-accent-soft disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      {staging.mode === "stage" ? t("diff.stageHunk") : t("diff.unstageHunk")}
-                    </button>
-                  ) : null}
-                  <span className="whitespace-pre">{row.header}</span>
-                </div>
-              </div>
+              <HunkHeaderRow
+                header={row.header}
+                hunkIndex={row.hunkIndex}
+                changeCount={row.changeCount}
+                staging={staging}
+                selectable={selectable}
+                onApplyHunk={applyHunk}
+              />
             );
           }
           return (

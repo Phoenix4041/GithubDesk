@@ -49,6 +49,7 @@ pub async fn get_file_diff(
     path: &str,
     original_path: Option<&str>,
     source: DiffSource,
+    ignore_whitespace: bool,
 ) -> AppResult<FileDiff> {
     ensure_relative_path(path)?;
 
@@ -82,6 +83,9 @@ pub async fn get_file_diff(
     if source == DiffSource::Staged {
         args.push("--cached");
     }
+    if ignore_whitespace {
+        args.push("-w");
+    }
     args.push("--");
     args.push(path);
     if let Some(original) = original_path {
@@ -90,7 +94,11 @@ pub async fn get_file_diff(
     }
 
     let output = git(repo, &args).await?;
-    Ok(parse_unified_diff(path, &output.text()))
+    let mut diff = parse_unified_diff(path, &output.text());
+    if ignore_whitespace {
+        diff.partial_staging_allowed = false;
+    }
+    Ok(diff)
 }
 
 pub async fn stage_paths(repo: &Path, paths: &[String]) -> AppResult<()> {
@@ -224,12 +232,14 @@ pub async fn diff_file(
     file_path: String,
     original_path: Option<String>,
     source: DiffSource,
+    ignore_whitespace: bool,
 ) -> AppResult<FileDiff> {
     get_file_diff(
         Path::new(&path),
         &file_path,
         original_path.as_deref(),
         source,
+        ignore_whitespace,
     )
     .await
 }

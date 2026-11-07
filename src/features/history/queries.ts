@@ -38,14 +38,14 @@ interface CommitFileTarget {
   oldPath: string | null;
 }
 
-export function useCommitFileDiff(repoPath: string, target: CommitFileTarget | null) {
+export function useCommitFileDiff(repoPath: string, target: CommitFileTarget | null, ignoreWhitespace: boolean) {
   return useQuery({
-    queryKey: repoKeys.commitDiff(repoPath, target?.hash ?? "", target?.path ?? ""),
+    queryKey: repoKeys.commitDiff(repoPath, target?.hash ?? "", target?.path ?? "", ignoreWhitespace),
     queryFn: () => {
       if (!target) {
         throw new Error("No file selected");
       }
-      return getCommitFileDiff(repoPath, target.hash, target.path, target.oldPath);
+      return getCommitFileDiff(repoPath, target.hash, target.path, target.oldPath, ignoreWhitespace);
     },
     enabled: target !== null,
     staleTime: Infinity,

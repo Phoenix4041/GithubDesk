@@ -2,6 +2,7 @@ import { FileSearch } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { DiffHeader } from "@/features/diff/components/diff-header";
 import { DiffViewer } from "@/features/diff/components/diff-viewer";
+import { useSettingsStore } from "@/features/settings/store";
 import { describeError } from "@/shared/lib/report-error";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { ErrorState } from "@/shared/ui/error-state";
@@ -17,12 +18,13 @@ export function HistoryDiffPanel({ repoPath }: HistoryDiffPanelProps) {
   const { t } = useTranslation();
   const selectedHash = useHistoryStore((state) => state.selectedHash);
   const selectedFile = useHistoryStore((state) => state.selectedFile);
+  const ignoreWhitespace = useSettingsStore((state) => state.ignoreWhitespace);
 
   const target =
     selectedHash && selectedFile
       ? { hash: selectedHash, path: selectedFile.path, oldPath: selectedFile.oldPath }
       : null;
-  const diffQuery = useCommitFileDiff(repoPath, target);
+  const diffQuery = useCommitFileDiff(repoPath, target, ignoreWhitespace);
   const showSkeleton = useSkeletonVisible(diffQuery.isPending && target !== null);
 
   if (!target) {

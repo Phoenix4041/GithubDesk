@@ -63,3 +63,66 @@ export function longestLineLength(diff: FileDiff): number {
   }
   return longest;
 }
+
+export interface SplitCell {
+  lineIndex: number;
+  line: DiffLine;
+  missingNewline: boolean;
+}
+
+export type SplitRow =
+  | { kind: "hunk"; hunkIndex: number; header: string; changeCount: number }
+  | { kind: "pair"; hunkIndex: number; rowIndex: number; left: SplitCell | null; right: SplitCell | null };
+
+export function buildSplitRows(diff: FileDiff): SplitRow[] {
+  const rows: SplitRow[] = [];
+  diff.hunks.forEach((hunk, hunkIndex) => {
+    rows.push({ kind: "hunk", hunkIndex, header: hunk.header, changeCount: changeLineIndices(hunk).length });
+    let removed: SplitCell[] = [];
+    let added: SplitCell[] = [];
+    let lastCells: SplitCell[] = [];
+    let rowIndex = 0;
+
+    const pushPair = (left: SplitCell | null, right: SplitCell | null) => {
+      rows.push({ kind: "pair", hunkIndex, rowIndex, left, right });
+      rowIndex += 1;
+    };
+
+    const flushChanges = () => {
+      const count = Math.max(removed.length, added.length);
+      for (let index = 0; index < count; index += 1) {
+        pushPair(removed[index] ?? null, added[index] ?? null);
+      }
+      removed = [];
+      added = [];
+    };
+
+    hunk.lines.forEach((line, lineIndex) => {
+      if (line.kind === "noNewline") {
+        for (const cell of lastCells) {
+          cell.missingNewline = true;
+        }
+        return;
+      }
+      if (line.kind === "removed") {
+        const cell: SplitCell = { lineIndex, line, missingNewline: false };
+        removed.push(cell);
+        lastCells = [cell];
+        return;
+      }
+      if (line.kind === "added") {
+        const cell: SplitCell = { lineIndex, line, missingNewline: false };
+        added.push(cell);
+        lastCells = [cell];
+        return;
+      }
+      flushChanges();
+      const left: SplitCell = { lineIndex, line, missingNewline: false };
+      const right: SplitCell = { lineIndex, line, missingNewline: false };
+      pushPair(left, right);
+      lastCells = [left, right];
+    });
+    flushChanges();
+  });
+  return rows;
+}

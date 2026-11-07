@@ -23,6 +23,7 @@ export function getCommitFileDiff(
   hash: string,
   filePath: string,
   oldPath: string | null,
+  ignoreWhitespace: boolean,
 ): Promise<FileDiff> {
-  return call<FileDiff>("history_file_diff", { path, hash, filePath, oldPath });
+  return call<FileDiff>("history_file_diff", { path, hash, filePath, oldPath, ignoreWhitespace });
 }

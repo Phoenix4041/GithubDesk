@@ -1,6 +1,5 @@
 use std::path::{Path, PathBuf};
-use std::process::Command;
-use std::sync::{Arc, Mutex, Once};
+use std::sync::{Arc, Mutex};
 
 use githubdesk_lib::commands::{branch, commit, history, remote, repo, status};
 use githubdesk_lib::error::{ErrorKind, SuggestedAction};
@@ -12,75 +11,9 @@ use githubdesk_lib::jobs::{CancelToken, JobRegistry};
 use status::DiffSource;
 use tempfile::TempDir;
 
-fn configure_environment() {
-    static ONCE: Once = Once::new();
-    ONCE.call_once(|| {
-        let config_directory = std::env::temp_dir().join("githubdesk-test-config");
-        std::fs::create_dir_all(&config_directory).expect("config directory");
-        let global_config = config_directory.join("gitconfig");
-        std::fs::write(
-            &global_config,
-            "[init]\n\tdefaultBranch = main\n[core]\n\tautocrlf = false\n[protocol \"file\"]\n\tallow = always\n",
-        )
-        .expect("global config");
-        std::env::set_var("GIT_CONFIG_GLOBAL", &global_config);
-        std::env::set_var("GIT_CONFIG_NOSYSTEM", "1");
-        std::env::set_var("GIT_AUTHOR_NAME", "Test User");
-        std::env::set_var("GIT_AUTHOR_EMAIL", "test@example.com");
-        std::env::set_var("GIT_COMMITTER_NAME", "Test User");
-        std::env::set_var("GIT_COMMITTER_EMAIL", "test@example.com");
-    });
-}
+mod common;
 
-fn git_output(directory: &Path, args: &[&str]) -> String {
-    let output = Command::new("git")
-        .args(args)
-        .current_dir(directory)
-        .output()
-        .expect("git runs");
-    assert!(
-        output.status.success(),
-        "git {:?} failed: {}",
-        args,
-        String::from_utf8_lossy(&output.stderr)
-    );
-    String::from_utf8_lossy(&output.stdout).into_owned()
-}
-
-fn write_file(repo: &Path, relative: &str, content: &str) {
-    let full_path = repo.join(relative);
-    if let Some(parent) = full_path.parent() {
-        std::fs::create_dir_all(parent).expect("parent directory");
-    }
-    std::fs::write(full_path, content).expect("write file");
-}
-
-struct Workspace {
-    _root: TempDir,
-    path: PathBuf,
-}
-
-async fn new_repository() -> Workspace {
-    configure_environment();
-    let root = TempDir::new().expect("temp dir");
-    let info = repo::init_repository(root.path(), "work", "main")
-        .await
-        .expect("init repository");
-    Workspace {
-        path: PathBuf::from(info.path),
-        _root: root,
-    }
-}
-
-async fn commit_file(repo: &Path, relative: &str, content: &str, title: &str) -> String {
-    write_file(repo, relative, content);
-    status::stage_paths(repo, &[relative.to_string()])
-        .await
-        .expect("stage");
-    commit::create_commit(repo, title, "", false)
-        .await
-        .expect("commit")
-}
+use common::{commit_file, configure_environment, git_output, new_repository, write_file};
 
 fn change_indices(diff: &FileDiff, hunk_index: usize) -> Vec<usize> {
     diff.hunks[hunk_index]
@@ -181,7 +114,7 @@ async fn stages_and_unstages_whole_hunks() {
         .replace("line 28\n", "line twenty-eight\n");
     write_file(repo, "f.txt", &modified);
 
-    let diff = status::get_file_diff(repo, "f.txt", None, DiffSource::Unstaged)
+    let diff = status::get_file_diff(repo, "f.txt", None, DiffSource::Unstaged, false)
         .await
         .expect("diff");
     assert_eq!(diff.hunks.len(), 2);
@@ -195,7 +128,7 @@ async fn stages_and_unstages_whole_hunks() {
         .await
         .expect("stage hunk");
 
-    let staged = status::get_file_diff(repo, "f.txt", None, DiffSource::Staged)
+    let staged = status::get_file_diff(repo, "f.txt", None, DiffSource::Staged, false)
         .await
         .expect("staged diff");
     assert_eq!(staged.hunks.len(), 1);
@@ -204,7 +137,7 @@ async fn stages_and_unstages_whole_hunks() {
         .iter()
         .any(|line| line.kind == LineKind::Added && line.content == "line two"));
 
-    let unstaged = status::get_file_diff(repo, "f.txt", None, DiffSource::Unstaged)
+    let unstaged = status::get_file_diff(repo, "f.txt", None, DiffSource::Unstaged, false)
         .await
         .expect("unstaged diff");
     assert_eq!(unstaged.hunks.len(), 1);
@@ -220,7 +153,7 @@ async fn stages_and_unstages_whole_hunks() {
     status::apply_selection(repo, &staged, &unstage_selection, PatchDirection::Unstage)
         .await
         .expect("unstage hunk");
-    let staged_after = status::get_file_diff(repo, "f.txt", None, DiffSource::Staged)
+    let staged_after = status::get_file_diff(repo, "f.txt", None, DiffSource::Staged, false)
         .await
         .expect("staged diff");
     assert!(staged_after.hunks.is_empty());
@@ -233,7 +166,7 @@ async fn stages_a_single_added_line() {
     commit_file(repo, "g.txt", "a\nb\nc\nd\ne\n", "init").await;
     write_file(repo, "g.txt", "a\nB\nc\nd\ne\nf\n");
 
-    let diff = status::get_file_diff(repo, "g.txt", None, DiffSource::Unstaged)
+    let diff = status::get_file_diff(repo, "g.txt", None, DiffSource::Unstaged, false)
         .await
         .expect("diff");
     let added_index = diff.hunks[0]
@@ -256,7 +189,7 @@ async fn stages_a_single_added_line() {
         "a\nB\nc\nd\ne\nf\n"
     );
 
-    let staged = status::get_file_diff(repo, "g.txt", None, DiffSource::Staged)
+    let staged = status::get_file_diff(repo, "g.txt", None, DiffSource::Staged, false)
         .await
         .expect("staged diff");
     let unstage_selection = vec![LineSelection {
@@ -276,7 +209,7 @@ async fn stale_selection_is_rejected_without_touching_the_index() {
     commit_file(repo, "s.txt", "one\ntwo\nthree\n", "init").await;
     write_file(repo, "s.txt", "one\nTWO\nthree\n");
 
-    let diff = status::get_file_diff(repo, "s.txt", None, DiffSource::Unstaged)
+    let diff = status::get_file_diff(repo, "s.txt", None, DiffSource::Unstaged, false)
         .await
         .expect("diff");
     write_file(repo, "s.txt", "uno\ndos\ntres\n");
@@ -301,7 +234,7 @@ async fn diffs_untracked_files_from_disk() {
     let repo = workspace.path.as_path();
     write_file(repo, "new.txt", "x\ny\n");
 
-    let diff = status::get_file_diff(repo, "new.txt", None, DiffSource::Raw)
+    let diff = status::get_file_diff(repo, "new.txt", None, DiffSource::Raw, false)
         .await
         .expect("diff");
     assert_eq!(diff.hunks.len(), 1);
@@ -491,7 +424,7 @@ async fn reads_paginated_history_and_commit_files() {
         .expect("files");
     assert_eq!(root_files[0].path, "file-1.txt");
 
-    let diff = history::commit_file_diff(repo, &first_page[0].hash, "file-5.txt", None)
+    let diff = history::commit_file_diff(repo, &first_page[0].hash, "file-5.txt", None, false)
         .await
         .expect("diff");
     assert_eq!(diff.hunks[0].lines[0].content, "5");
@@ -650,7 +583,7 @@ async fn reports_conflicts_and_aborts_the_merge() {
     let snapshot = status::get_status(&first_path).await.expect("status");
     assert!(snapshot.entries.iter().any(|entry| entry.conflicted));
 
-    let raw = status::get_file_diff(&first_path, "shared.txt", None, DiffSource::Raw)
+    let raw = status::get_file_diff(&first_path, "shared.txt", None, DiffSource::Raw, false)
         .await
         .expect("raw diff");
     assert!(raw.hunks[0]
