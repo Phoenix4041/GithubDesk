@@ -11,6 +11,7 @@ pub mod github_pulls;
 pub mod github_repo;
 pub mod history;
 pub mod job;
+pub mod lfs;
 pub mod operation;
 pub mod rebase;
 pub mod reflog;

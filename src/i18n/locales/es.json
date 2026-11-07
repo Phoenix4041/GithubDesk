@@ -1351,6 +1351,9 @@
       },
       "signing": {
         "configure": "Configurar la firma de commits"
+      },
+      "lfs": {
+        "show": "Mostrar Git LFS"
       }
     }
   },
@@ -1551,5 +1554,31 @@
         "hint": "El commit está firmado pero falta la clave pública o los firmantes permitidos para comprobarlo."
       }
     }
+  },
+  "lfs": {
+    "title": "Git LFS",
+    "missing": {
+      "title": "Git LFS no está instalado",
+      "description": "Instala Git LFS para guardar archivos grandes (imágenes, videos, modelos) sin hacer pesado el repositorio."
+    },
+    "notReady": "Git LFS todavía no está activado en este repositorio.",
+    "enable": "Activar Git LFS aquí",
+    "enabled": "Git LFS activado en este repositorio",
+    "patterns": "Tipos de archivo con LFS",
+    "newPattern": "Seguir con LFS",
+    "track": "Seguir",
+    "untrack": "Dejar de seguir {{pattern}}",
+    "noPatterns": "Todavía no sigues ningún patrón. Prueba con *.psd o assets/**.",
+    "tracked": "Ahora {{pattern}} se guarda con LFS",
+    "untracked": "{{pattern}} ya no se guarda con LFS",
+    "commitReminder": "Haz commit de .gitattributes para guardar el cambio.",
+    "files": "Archivos en LFS ({{count}})",
+    "noFiles": "Ningún archivo del repositorio usa LFS todavía.",
+    "pointerOnly": "Sin descargar",
+    "pull": "Descargar",
+    "pullMissing": "Descargar ({{count}})",
+    "pulling": "Descargando archivos de LFS",
+    "pulled": "Archivos de LFS descargados",
+    "truncated": "Se muestran solo los primeros archivos."
   }
 }

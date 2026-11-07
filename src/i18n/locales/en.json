@@ -1351,6 +1351,9 @@
       },
       "signing": {
         "configure": "Configure commit signing"
+      },
+      "lfs": {
+        "show": "Show Git LFS"
       }
     }
   },
@@ -1551,5 +1554,31 @@
         "hint": "The commit is signed but the public key or the allowed signers are missing to check it."
       }
     }
+  },
+  "lfs": {
+    "title": "Git LFS",
+    "missing": {
+      "title": "Git LFS is not installed",
+      "description": "Install Git LFS to store large files (images, videos, models) without making the repository heavy."
+    },
+    "notReady": "Git LFS is not enabled in this repository yet.",
+    "enable": "Enable Git LFS here",
+    "enabled": "Git LFS enabled in this repository",
+    "patterns": "File types using LFS",
+    "newPattern": "Track with LFS",
+    "track": "Track",
+    "untrack": "Stop tracking {{pattern}}",
+    "noPatterns": "You are not tracking any pattern yet. Try *.psd or assets/**.",
+    "tracked": "{{pattern}} is now stored with LFS",
+    "untracked": "{{pattern}} is no longer stored with LFS",
+    "commitReminder": "Commit .gitattributes to save the change.",
+    "files": "Files in LFS ({{count}})",
+    "noFiles": "No file in the repository uses LFS yet.",
+    "pointerOnly": "Not downloaded",
+    "pull": "Download",
+    "pullMissing": "Download ({{count}})",
+    "pulling": "Downloading LFS files",
+    "pulled": "LFS files downloaded",
+    "truncated": "Only the first files are shown."
   }
 }

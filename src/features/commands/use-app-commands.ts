@@ -332,6 +332,14 @@ function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount
       run: () => goToSidebar("submodules"),
     },
     {
+      id: "lfs.show",
+      titleKey: "commands.items.lfs.show",
+      group: "tools",
+      keywords: "git lfs archivos grandes large file storage",
+      enabled: true,
+      run: () => goToSidebar("lfs"),
+    },
+    {
       id: "signing.configure",
       titleKey: "commands.items.signing.configure",
       group: "tools",

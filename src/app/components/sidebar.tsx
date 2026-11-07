@@ -1,9 +1,11 @@
-import { Boxes, GitBranch, MoreHorizontal, Plus } from "lucide-react";
+import { Boxes, GitBranch, HardDrive, MoreHorizontal, Plus } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { BranchList } from "@/features/branches/components/branch-list";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBranches } from "@/features/branches/queries";
+import { LfsPanel } from "@/features/lfs/components/lfs-panel";
+import { useLfsStatus } from "@/features/lfs/queries";
 import { AddRepositoryMenu } from "@/features/repositories/components/add-repository-menu";
 import { RepositoryList } from "@/features/repositories/components/repository-list";
 import { StashList } from "@/features/stash/components/stash-list";
@@ -38,8 +40,9 @@ export function Sidebar({ repoPath }: SidebarProps) {
   const branches = useBranches(repoPath);
   const tags = useTags(repoPath);
   const stashes = useStashes(repoPath);
-  const worktrees = useWorktrees(repoPath);
-  const submodules = useSubmodules(repoPath);
+  const worktrees = useWorktrees(repoPath, sidebarTab === "worktrees");
+  const submodules = useSubmodules(repoPath, sidebarTab === "submodules");
+  const lfs = useLfsStatus(repoPath, sidebarTab === "lfs");
   const showWorktreeDialog = useWorktreeDialogStore((state) => state.show);
   const showSubmoduleDialog = useSubmoduleDialogStore((state) => state.show);
   const strip = useRef<HTMLDivElement>(null);
@@ -56,6 +59,7 @@ export function Sidebar({ repoPath }: SidebarProps) {
   const extraTabs: Array<{ id: SidebarTab; label: string; count: number }> = [
     { id: "worktrees", label: t("worktrees.title"), count: Math.max((worktrees.data?.length ?? 1) - 1, 0) },
     { id: "submodules", label: t("submodules.title"), count: submodules.data?.length ?? 0 },
+    { id: "lfs", label: t("lfs.title"), count: lfs.data?.files.length ?? 0 },
   ];
   const activeExtra = extraTabs.find((item) => item.id === sidebarTab);
   if (activeExtra) {
@@ -106,6 +110,7 @@ export function Sidebar({ repoPath }: SidebarProps) {
               items={[
                 { label: t("worktrees.title"), icon: <GitBranch className="size-4" />, onSelect: () => setSidebarTab("worktrees") },
                 { label: t("submodules.title"), icon: <Boxes className="size-4" />, onSelect: () => setSidebarTab("submodules") },
+              { label: t("lfs.title"), icon: <HardDrive className="size-4" />, onSelect: () => setSidebarTab("lfs") },
               ]}
             />
             {sidebarTab === "branches" ? (
@@ -140,6 +145,7 @@ export function Sidebar({ repoPath }: SidebarProps) {
         {sidebarTab === "stashes" ? <StashList repoPath={repoPath} /> : null}
         {sidebarTab === "worktrees" ? <WorktreeList repoPath={repoPath} /> : null}
         {sidebarTab === "submodules" ? <SubmoduleList repoPath={repoPath} /> : null}
+        {sidebarTab === "lfs" ? <LfsPanel repoPath={repoPath} /> : null}
       </section>
     </nav>
   );

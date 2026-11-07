@@ -9,7 +9,7 @@ pub mod watcher;
 
 use commands::{
     blame, branch, commit, commit_ops, compare, conflict, github_account, github_actions,
-    github_issues, github_pulls, github_repo, history, job, operation, rebase, reflog, remote,
+    github_issues, github_pulls, github_repo, history, job, lfs, operation, rebase, reflog, remote,
     repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
@@ -131,6 +131,11 @@ pub fn run() {
             submodule::submodule_add,
             submodule::submodule_update,
             submodule::submodule_remove,
+            lfs::lfs_status_get,
+            lfs::lfs_install_local,
+            lfs::lfs_track_pattern,
+            lfs::lfs_untrack_pattern,
+            lfs::lfs_pull_files,
             signing::signing_config_get,
             signing::signing_config_set,
             signing::signing_keys_list,

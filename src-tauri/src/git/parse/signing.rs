@@ -175,6 +175,35 @@ pub fn parse_ssh_fingerprint(text: &str) -> Option<String> {
         .map(str::to_string)
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ScopedSetting {
+    pub scope: String,
+    pub key: String,
+    pub value: String,
+}
+
+pub fn parse_scoped_settings(text: &str) -> Vec<ScopedSetting> {
+    text.lines()
+        .filter_map(|line| {
+            let (scope, rest) = line.split_once('\t')?;
+            let (key, value) = rest.split_once(' ').unwrap_or((rest, ""));
+            if key.is_empty() {
+                return None;
+            }
+            Some(ScopedSetting {
+                scope: scope.trim().to_string(),
+                key: key.trim().to_lowercase(),
+                value: value.trim().to_string(),
+            })
+        })
+        .collect()
+}
+
+pub fn last_setting<'a>(settings: &'a [ScopedSetting], key: &str) -> Option<&'a ScopedSetting> {
+    let wanted = key.to_lowercase();
+    settings.iter().rev().find(|setting| setting.key == wanted)
+}
+
 pub fn parse_scoped_value(text: &str) -> Option<(String, String)> {
     let line = text.lines().next()?;
     let (scope, value) = line.split_once('\t')?;
@@ -290,6 +319,29 @@ uid:r::::1400000000::HASH4::Revoked <rev@example.com>::::::::::0:\n";
             Some("SHA256:abcDEF123")
         );
         assert_eq!(parse_ssh_fingerprint("garbage"), None);
+    }
+
+    #[test]
+    fn parses_scoped_regexp_output_and_keeps_the_last_value() {
+        let text = "global	commit.gpgsign false
+local	commit.gpgsign true
+local	user.signingkey ABC 123
+global	gpg.ssh.allowedsignersfile
+";
+        let settings = parse_scoped_settings(text);
+        assert_eq!(settings.len(), 4);
+        let enabled = last_setting(&settings, "commit.gpgSign").expect("setting");
+        assert_eq!(enabled.value, "true");
+        assert_eq!(enabled.scope, "local");
+        assert_eq!(
+            last_setting(&settings, "user.signingkey").map(|item| item.value.as_str()),
+            Some("ABC 123")
+        );
+        assert_eq!(
+            last_setting(&settings, "gpg.ssh.allowedSignersFile").map(|item| item.value.as_str()),
+            Some("")
+        );
+        assert!(last_setting(&settings, "gpg.format").is_none());
     }
 
     #[test]

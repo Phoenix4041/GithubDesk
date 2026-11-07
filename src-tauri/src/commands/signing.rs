@@ -6,8 +6,9 @@ use tokio::process::Command;
 
 use crate::error::{AppError, AppResult};
 use crate::git::parse::signing::{
-    parse_gpg_secret_keys, parse_scoped_value, parse_signature, parse_ssh_fingerprint,
-    parse_ssh_public_key, GpgKey, SignatureInfo, SshKey, SIGNATURE_FORMAT,
+    last_setting, parse_gpg_secret_keys, parse_scoped_settings, parse_scoped_value,
+    parse_signature, parse_ssh_fingerprint, parse_ssh_public_key, GpgKey, SignatureInfo, SshKey,
+    SIGNATURE_FORMAT,
 };
 use crate::git::runner::{git, git_unchecked, git_with_input};
 use crate::git::validate::ensure_commit_hash;
@@ -56,26 +57,33 @@ fn is_true(value: &str) -> bool {
 }
 
 pub async fn read_signing_config(repo: &Path) -> AppResult<SigningConfig> {
-    let enabled = config_value(repo, "commit.gpgsign").await?;
-    let format = config_value(repo, "gpg.format").await?;
-    let key = config_value(repo, "user.signingkey").await?;
-    let allowed = config_value(repo, "gpg.ssh.allowedSignersFile").await?;
-    Ok(SigningConfig {
-        enabled: enabled
-            .as_ref()
-            .map(|(_, value)| is_true(value))
-            .unwrap_or(false),
-        format: format
-            .map(|(_, value)| value)
+    let output = git_unchecked(
+        repo,
+        &[
+            "config",
+            "--show-scope",
+            "--get-regexp",
+            r"^(commit\.gpgsign|gpg\.format|user\.signingkey|gpg\.ssh\.allowedsignersfile)$",
+        ],
+    )
+    .await?;
+    let settings = if output.success() {
+        parse_scoped_settings(&output.text())
+    } else {
+        Vec::new()
+    };
+    let value_of = |key: &str| {
+        last_setting(&settings, key)
+            .map(|setting| setting.value.clone())
             .filter(|value| !value.is_empty())
-            .unwrap_or_else(|| "openpgp".to_string()),
-        key: key
-            .map(|(_, value)| value)
-            .filter(|value| !value.is_empty()),
-        allowed_signers: allowed
-            .map(|(_, value)| value)
-            .filter(|value| !value.is_empty()),
-        scope: enabled.map(|(scope, _)| scope),
+    };
+    let enabled = last_setting(&settings, "commit.gpgsign");
+    Ok(SigningConfig {
+        enabled: enabled.is_some_and(|setting| is_true(&setting.value)),
+        format: value_of("gpg.format").unwrap_or_else(|| "openpgp".to_string()),
+        key: value_of("user.signingkey"),
+        allowed_signers: value_of("gpg.ssh.allowedSignersFile"),
+        scope: enabled.map(|setting| setting.scope.clone()),
     })
 }
 

@@ -481,3 +481,25 @@ export interface SigningKeys {
   gpg: GpgKey[];
   ssh: SshKey[];
 }
+
+export interface LfsPattern {
+  pattern: string;
+  source: string;
+}
+
+export interface LfsFile {
+  oid: string;
+  present: boolean;
+  path: string;
+  size: string | null;
+}
+
+export interface LfsStatus {
+  installed: boolean;
+  version: string | null;
+  filtersConfigured: boolean;
+  hooksInstalled: boolean;
+  patterns: LfsPattern[];
+  files: LfsFile[];
+  filesTruncated: boolean;
+}

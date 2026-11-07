@@ -263,6 +263,9 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     {
         return ErrorKind::SigningFailed;
     }
+    if has("is not a git command") && has("lfs") {
+        return ErrorKind::LfsNotInstalled;
+    }
     if has("is already checked out at") || has("is already used by worktree at") {
         return ErrorKind::BranchInUseByWorktree;
     }

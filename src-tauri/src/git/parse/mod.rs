@@ -1,6 +1,7 @@
 pub mod blame;
 pub mod branch;
 pub mod diff;
+pub mod lfs;
 pub mod log;
 pub mod progress;
 pub mod rebase_todo;
