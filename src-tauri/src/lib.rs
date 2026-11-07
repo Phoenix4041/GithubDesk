@@ -1,13 +1,16 @@
 pub mod commands;
+pub mod diagnostics;
 pub mod error;
 pub mod git;
 pub mod github;
 pub mod jobs;
 pub mod platform;
 pub mod pty;
+pub mod redact;
 pub mod state;
 pub mod watcher;
 
+use commands::diagnostics as diagnostics_commands;
 use commands::{
     blame, branch, commit, commit_ops, compare, conflict, external, github_account, github_actions,
     github_issues, github_pulls, github_repo, gitignore, history, job, lfs, merge, operation,
@@ -24,6 +27,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .setup(|app| {
             let directory = app.path().app_data_dir()?;
+            diagnostics::init(directory.join("logs"));
             app.manage(AppState::new(directory));
             Ok(())
         })
@@ -128,6 +132,8 @@ pub fn run() {
             terminal::terminal_write,
             terminal::terminal_resize,
             terminal::terminal_close,
+            diagnostics_commands::diagnostics_log,
+            diagnostics_commands::diagnostics_open_folder,
             worktree::worktree_list,
             worktree::worktree_add,
             worktree::worktree_remove,

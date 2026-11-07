@@ -1,5 +1,6 @@
 import { Component } from "react";
 import type { ReactNode } from "react";
+import { describeUnknown, logClientError } from "@/shared/lib/diagnostics";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -15,6 +16,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { error };
+  }
+
+  override componentDidCatch(error: Error): void {
+    logClientError("render", error.name, describeUnknown(error));
   }
 
   private readonly reset = () => {

@@ -5,10 +5,20 @@ use std::sync::{LazyLock, RwLock};
 use base64::engine::general_purpose::STANDARD;
 use base64::Engine;
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub struct GitAuth {
     pub web_base: String,
     pub token: String,
+}
+
+impl std::fmt::Debug for GitAuth {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("GitAuth")
+            .field("web_base", &self.web_base)
+            .field("token", &"[redacted]")
+            .finish()
+    }
 }
 
 static REPO_AUTH: LazyLock<RwLock<HashMap<String, GitAuth>>> =
@@ -75,6 +85,13 @@ mod tests {
             web_base: "https://github.com".to_string(),
             token: token.to_string(),
         }
+    }
+
+    #[test]
+    fn the_token_never_appears_when_the_value_is_printed_for_debugging() {
+        let printed = format!("{:?}", auth("tok123-secret"));
+        assert!(!printed.contains("tok123"));
+        assert!(printed.contains("https://github.com"));
     }
 
     #[test]

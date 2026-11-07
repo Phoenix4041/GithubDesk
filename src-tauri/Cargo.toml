@@ -3,7 +3,7 @@ name = "githubdesk"
 version = "0.1.0"
 description = "Cliente de Git y GitHub de escritorio"
 edition = "2021"
-rust-version = "1.80"
+rust-version = "1.81"
 
 [lib]
 name = "githubdesk_lib"

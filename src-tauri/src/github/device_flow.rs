@@ -33,7 +33,7 @@ struct RawDeviceCode {
     error_description: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 struct RawToken {
     access_token: Option<String>,
     error: Option<String>,
@@ -41,11 +41,21 @@ struct RawToken {
     interval: Option<u64>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone, PartialEq, Eq)]
 pub enum PollOutcome {
     Token(String),
     Pending,
     SlowDown(Option<u64>),
+}
+
+impl std::fmt::Debug for PollOutcome {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Token(_) => formatter.write_str("Token([redacted])"),
+            Self::Pending => formatter.write_str("Pending"),
+            Self::SlowDown(seconds) => formatter.debug_tuple("SlowDown").field(seconds).finish(),
+        }
+    }
 }
 
 fn configuration_error(error: &str, description: Option<String>) -> AppError {
@@ -207,5 +217,23 @@ pub async fn wait_for_token(
                 "the code expired",
             ));
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn an_obtained_token_is_hidden_when_the_outcome_is_printed() {
+        let printed = format!(
+            "{:?}",
+            PollOutcome::Token("gho_supersecretvalue".to_string())
+        );
+        assert!(!printed.contains("supersecret"));
+        assert_eq!(
+            format!("{:?}", PollOutcome::SlowDown(Some(10))),
+            "SlowDown(Some(10))"
+        );
     }
 }

@@ -2,6 +2,7 @@ import { i18next } from "@/i18n";
 import { showToast } from "@/shared/ui/toast-store";
 import type { ToastAction } from "@/shared/ui/toast-store";
 import type { AppError, ErrorKind } from "@/shared/types/git";
+import { logClientError } from "./diagnostics";
 import { CommandError, isCancelled } from "./tauri-client";
 import { useUiStore } from "./ui-store";
 
@@ -93,11 +94,16 @@ function actionsFor(appError: AppError | null, handlers: ErrorHandlers): ToastAc
   return actions;
 }
 
+function describeUnknownDetail(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export function reportError(error: unknown, handlers: ErrorHandlers = {}): void {
   if (isCancelled(error)) {
     return;
   }
   const description = describeError(error);
+  logClientError("command", description.kind, description.appError?.detail ?? describeUnknownDetail(error));
   showToast({
     kind: "error",
     title: description.title,

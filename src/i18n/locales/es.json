@@ -1346,7 +1346,8 @@
         "language": {
           "es": "Idioma: español",
           "en": "Idioma: inglés"
-        }
+        },
+        "logs": "Abrir la carpeta de registros de errores"
       },
       "repo": {
         "open": "Abrir un repositorio",

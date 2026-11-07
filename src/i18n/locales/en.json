@@ -1346,7 +1346,8 @@
         "language": {
           "es": "Language: Spanish",
           "en": "Language: English"
-        }
+        },
+        "logs": "Open the error log folder"
       },
       "repo": {
         "open": "Open a repository",

@@ -21,6 +21,8 @@ import type { ThemePreference } from "@/features/settings/store";
 import { useStashDialogStore } from "@/features/stash/store";
 import { runSyncOperation } from "@/features/sync/operations";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
+import { openLogFolder } from "@/shared/lib/diagnostics";
+import { reportError } from "@/shared/lib/report-error";
 import { useUiStore } from "@/shared/lib/ui-store";
 import type { SidebarTab, WorkspaceTab } from "@/shared/lib/ui-store";
 import { useCommandRegistry } from "./command-registry";
@@ -71,6 +73,14 @@ export function buildGlobalCommands(): AppCommand[] {
       keywords: "teclado atajos keyboard shortcuts",
       enabled: true,
       run: () => useCommandUiStore.getState().setShortcutsOpen(true),
+    },
+    {
+      id: "app.logs",
+      titleKey: "commands.items.app.logs",
+      group: "tools",
+      keywords: "registro errores log diagnostico carpeta logs",
+      enabled: true,
+      run: () => openLogFolder().catch(reportError),
     },
     {
       id: "app.theme.system",
