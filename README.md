@@ -30,6 +30,13 @@ Cliente de Git y GitHub de escritorio hecho con Tauri 2, React y TypeScript.
 - Git LFS: activar en el repositorio, elegir qué tipos de archivo van a LFS, ver los archivos y descargarlos.
 - Editor de .gitignore con plantillas, comprobación de rutas y opción de dejar de seguir archivos que ya se ignoran.
 - Abrir el repositorio o un archivo en el editor externo (VS Code, Cursor, Sublime, Zed, Notepad++ u otro) y mostrarlo en el explorador de archivos.
+- Combinar una rama en la actual, con vista previa y tres modos (normal, sin avance rápido y squash); los conflictos pasan al editor de tres paneles.
+- Rebase sobre otra rama, con la opción de conservar los merges, y reordenar los commits del rebase interactivo arrastrándolos.
+- Resaltado de las palabras que cambiaron dentro de cada línea modificada.
+- Estado de las comprobaciones de GitHub en cada commit y en la rama actual, junto al nombre del repositorio.
+- Comentarios en línea en las pull requests: ver los hilos de cada línea del diff, responderlos y empezar uno nuevo, en vista unificada y dividida.
+- Aviso de versión nueva, apagado hasta que se indica de qué repositorio de GitHub salen las versiones.
+- Registro local de errores con los secretos ya quitados, y un comando en la paleta para abrir su carpeta.
 
 ## Conectar GitHub
 
@@ -58,11 +65,36 @@ Todos se pueden cambiar en Ajustes, Personalizar atajos, o desde la paleta de co
 | Ctrl+Shift+X | Mostrar el repositorio en el explorador |
 | Ctrl+, | Ajustes |
 
+## Instalar
+
+El instalador de Windows (`GithubDesk_0.5.0_x64-setup.exe`) instala solo para tu usuario, sin permisos de administrador, y se ofrece en español e inglés. Para generarlo:
+
+```bash
+pnpm tauri build --bundles nsis
+```
+
+El instalador queda en `src-tauri/target/release/bundle/nsis/`. Si el equipo no tiene WebView2, el instalador lo descarga. Para instalar y desinstalar sin ventanas: `GithubDesk_0.5.0_x64-setup.exe /S` y `uninstall.exe /S` dentro de la carpeta de instalación.
+
+Los instaladores no están firmados con un certificado de firma de código. Windows (SmartScreen) y macOS (Gatekeeper) van a mostrar un aviso la primera vez; en Windows se pulsa Más información y Ejecutar de todas formas, y en macOS se abre con clic derecho y Abrir.
+
+## Plataformas
+
+| Sistema | Estado | Motor web mínimo |
+| --- | --- | --- |
+| Windows 10 y 11 | Probado a mano en cada fase | WebView2 111 o superior (se actualiza solo) |
+| Linux | Compila, pasa todas las pruebas y arranca en Ubuntu 26.04 (WSL2) | WebKitGTK 2.40 o superior |
+| macOS | Preparado, sin probar en un equipo real | macOS 13.3 o superior (Safari 16.4) |
+
+- El almacén de credenciales es el de cada sistema: Administrador de credenciales en Windows, Llavero en macOS y el servicio de secretos (GNOME Keyring o KWallet) en Linux. Sin servicio de secretos en Linux, el token solo dura la sesión.
+- En Linux hacen falta estos paquetes para compilar: `libwebkit2gtk-4.1-dev`, `libgtk-3-dev`, `libayatana-appindicator3-dev`, `librsvg2-dev`, `libsoup-3.0-dev`, `libdbus-1-dev` y `libssl-dev`.
+- Los atajos usan Cmd en macOS y Ctrl en el resto. Las rutas de los editores externos se buscan en el PATH y en las carpetas habituales de cada sistema.
+- Las aplicaciones abiertas desde el Finder o el menú de Linux reciben un PATH corto; la aplicación agrega `/opt/homebrew/bin` y `/usr/local/bin` para encontrar `git`.
+
 ## Requisitos
 
 - Git instalado y disponible en el PATH
 - Node.js 24 o superior y pnpm
-- Rust estable (toolchain MSVC en Windows)
+- Rust estable 1.81 o superior (toolchain MSVC en Windows)
 - Windows: Visual Studio Build Tools con la carga de trabajo de C++ y WebView2
 
 ## Comandos
@@ -76,6 +108,17 @@ pnpm tauri dev
 pnpm typecheck
 pnpm lint
 pnpm test
+```
+
+Hay un recorrido de humo para Windows que abre un repositorio en la aplicación en marcha, pasa por las pestañas, abre y cierra la paleta y revisa que no haya errores de script. La aplicación debe arrancar con la depuración remota de WebView2:
+
+```powershell
+$env:WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS = "--remote-debugging-port=9222"
+.\src-tauri\target\release\githubdesk.exe
+```
+
+```bash
+pnpm smoke C:/ruta/al/repositorio
 ```
 
 ```bash
@@ -119,3 +162,13 @@ pnpm tauri build
 
 - Las listas largas (historial, cambios, ramas, líneas de diff y de blame) están virtualizadas.
 - El grafo usa el orden topológico de git. Al activarlo por primera vez en un repositorio, la aplicación genera el archivo `commit-graph` de git si no existe, lo que acelera la consulta en repositorios grandes.
+
+## Notas de la Fase 5
+
+- Calidad: hay pruebas de componentes (diálogos, menús, paleta, avisos, campos, worktrees, hilos de comentarios) con Testing Library y los comandos de Tauri simulados, y una prueba que calcula el contraste de todos los pares de colores del tema claro y oscuro contra WCAG AA (4,5 a 1). Los diálogos atrapan el foco, se cierran con Escape y devuelven el foco a quien los abrió.
+- Seguridad: la ventana solo puede abrir enlaces `https://` y los de `localhost`, elegir carpetas y escuchar eventos. Los tokens no aparecen en los mensajes de depuración. `cargo audit` no encuentra vulnerabilidades (solo avisos de paquetes sin mantenimiento que trae Tauri en Linux) y `pnpm audit --prod` no encuentra nada; la única alerta de `pnpm audit` es de `minimatch` dentro de eslint, una herramienta de desarrollo que no viaja en la aplicación.
+- Registro de errores: `errors.log` en la carpeta `logs` del directorio de datos de la aplicación, con una línea por error (hora UTC, origen, tipo y detalle). Se quitan tokens de GitHub, credenciales dentro de direcciones, cabeceras de autorización y parámetros secretos. Rota a `errors.1.log` al llegar a 1 MB. También guarda los pánicos del backend y los errores de pantalla. Nada sale del equipo.
+- Rendimiento medido con la versión release: unos 111 MB en la pantalla de bienvenida, unos 144 MB con un repositorio abierto, unos 158 MB con el historial de un repositorio de 100000 commits recorrido por 25 páginas y unos 158 a 162 MB con las pestañas de pull requests y Actions abiertas. Abrir el repositorio de 100000 commits y dibujar la interfaz tarda unos 1,3 s, contando la recarga completa de la ventana de la prueba, y al pasar a Historial las primeras filas aparecen en menos de 40 ms. De esa memoria, el montón de JavaScript de la aplicación son unos 8 MB y el proceso de Rust unos 5 MB; el resto es el motor web del sistema.
+- Aviso de versión nueva: está apagado. Para activarlo, escribe `Some("dueno/repositorio")` en `UPDATE_REPOSITORY` de `src-tauri/src/update_check.rs`. Consulta la última versión publicada una vez al día y también con el comando Buscar versiones nuevas de la paleta. La actualización automática dentro de la aplicación necesita una clave de firma (`pnpm tauri signer generate`) y un repositorio de versiones, y no está incluida.
+- Integración continua: `.github/workflows/ci.yml` prueba en Windows, macOS y Linux, y `.github/workflows/release.yml` genera los instaladores al subir una etiqueta `v*` y los deja en un borrador de release. Ninguno de los dos se pudo ejecutar fuera de GitHub; la sintaxis está validada y los mismos comandos se ejecutaron en Windows y en Linux.
+- `CHANGELOG.md` se genera con `node scripts/changelog.mjs <versión> [desde-etiqueta]` a partir de los commits convencionales.
