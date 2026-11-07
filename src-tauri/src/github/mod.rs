@@ -1,4 +1,5 @@
 pub mod accounts;
+pub mod actions;
 pub mod client;
 pub mod device_flow;
 pub mod host;

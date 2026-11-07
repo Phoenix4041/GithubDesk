@@ -7,9 +7,9 @@ pub mod state;
 pub mod watcher;
 
 use commands::{
-    blame, branch, commit, commit_ops, compare, conflict, github_account, github_issues,
-    github_pulls, github_repo, history, job, operation, rebase, reflog, remote, repo, stash,
-    status, tag, watch,
+    blame, branch, commit, commit_ops, compare, conflict, github_account, github_actions,
+    github_issues, github_pulls, github_repo, history, job, operation, rebase, reflog, remote,
+    repo, stash, status, tag, watch,
 };
 use state::AppState;
 use tauri::Manager;
@@ -101,6 +101,14 @@ pub fn run() {
             github_issues::github_issue_set_state,
             github_issues::github_labels_list,
             github_issues::github_assignees_list,
+            github_actions::github_runs_list,
+            github_actions::github_run_get,
+            github_actions::github_run_jobs,
+            github_actions::github_job_log,
+            github_actions::github_run_rerun,
+            github_actions::github_run_cancel,
+            github_actions::github_workflows_list,
+            github_actions::github_workflow_dispatch,
             github_repo::github_set_git_account,
             tag::tag_list,
             tag::tag_create,

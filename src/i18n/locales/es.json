@@ -1142,6 +1142,73 @@
         "assignees": "Asignar a",
         "submit": "Crear issue"
       }
+    },
+    "actions": {
+      "rerunToast": "Se volvió a ejecutar el workflow",
+      "rerunFailedToast": "Se volvieron a ejecutar los jobs que fallaron",
+      "cancelToast": "Se pidió cancelar la ejecución",
+      "dispatchToast": "Workflow enviado a GitHub",
+      "listLabel": "Ejecuciones de workflows",
+      "statusFilter": "Filtrar por estado",
+      "statuses": {
+        "all": "Todas las ejecuciones",
+        "in_progress": "En curso",
+        "queued": "En cola",
+        "success": "Exitosas",
+        "failure": "Fallidas",
+        "cancelled": "Canceladas"
+      },
+      "run": "Ejecutar",
+      "branchFilter": "Filtrar por rama",
+      "empty": {
+        "title": "Sin ejecuciones",
+        "all": "Este repositorio todavía no ejecutó ningún workflow.",
+        "filtered": "Ninguna ejecución coincide con el filtro."
+      },
+      "nothingSelected": {
+        "title": "Selecciona una ejecución",
+        "description": "Elige una de la lista para ver sus jobs y su registro."
+      },
+      "outcomes": {
+        "success": "Exitosa",
+        "failure": "Fallida",
+        "cancelled": "Cancelada",
+        "running": "En curso",
+        "queued": "En cola",
+        "skipped": "Omitida"
+      },
+      "event": "evento {{event}}",
+      "attempt": "Intento {{number}}",
+      "rerun": "Volver a ejecutar todo",
+      "rerunFailed": "Volver a ejecutar los que fallaron",
+      "cancel": "Cancelar ejecución",
+      "cancelDialog": {
+        "title": "Cancelar la ejecución",
+        "description": "Se pedirá a GitHub que detenga \"{{title}}\". Lo que ya se ejecutó no se deshace.",
+        "confirm": "Cancelar ejecución"
+      },
+      "jobs": "Jobs",
+      "noJobs": "Todavía no hay jobs para esta ejecución.",
+      "expandSteps": "Mostrar los pasos de {{job}}",
+      "collapseSteps": "Ocultar los pasos de {{job}}",
+      "log": {
+        "pick": "Elige un job para ver su registro.",
+        "empty": "Este job todavía no tiene registro.",
+        "truncated": "El registro es muy largo: se muestra solo el final.",
+        "label": "Registro de {{job}}"
+      },
+      "dispatch": {
+        "title": "Ejecutar un workflow",
+        "description": "Lanza un workflow de {{repo}} a mano. Solo funciona si tiene el disparador workflow_dispatch.",
+        "loading": "Buscando workflows...",
+        "none": "Este repositorio no tiene workflows activos.",
+        "workflow": "Workflow",
+        "reference": "Rama o etiqueta",
+        "inputs": "Parámetros (opcional)",
+        "inputsHint": "Uno por línea, con el formato nombre=valor.",
+        "invalidInputs": "Revisa las líneas {{lines}}: falta el nombre o el signo igual.",
+        "submit": "Ejecutar workflow"
+      }
     }
   }
 }

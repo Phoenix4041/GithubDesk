@@ -1142,6 +1142,73 @@
         "assignees": "Assignees",
         "submit": "Create issue"
       }
+    },
+    "actions": {
+      "rerunToast": "The workflow run was started again",
+      "rerunFailedToast": "The failed jobs were started again",
+      "cancelToast": "Cancellation was requested",
+      "dispatchToast": "Workflow sent to GitHub",
+      "listLabel": "Workflow runs",
+      "statusFilter": "Filter by status",
+      "statuses": {
+        "all": "All runs",
+        "in_progress": "In progress",
+        "queued": "Queued",
+        "success": "Successful",
+        "failure": "Failed",
+        "cancelled": "Cancelled"
+      },
+      "run": "Run",
+      "branchFilter": "Filter by branch",
+      "empty": {
+        "title": "No runs",
+        "all": "This repository has not run any workflow yet.",
+        "filtered": "No run matches the filter."
+      },
+      "nothingSelected": {
+        "title": "Select a run",
+        "description": "Pick one from the list to see its jobs and log."
+      },
+      "outcomes": {
+        "success": "Success",
+        "failure": "Failed",
+        "cancelled": "Cancelled",
+        "running": "Running",
+        "queued": "Queued",
+        "skipped": "Skipped"
+      },
+      "event": "{{event}} event",
+      "attempt": "Attempt {{number}}",
+      "rerun": "Re-run all jobs",
+      "rerunFailed": "Re-run failed jobs",
+      "cancel": "Cancel run",
+      "cancelDialog": {
+        "title": "Cancel the run",
+        "description": "GitHub will be asked to stop \"{{title}}\". Anything that already ran is not undone.",
+        "confirm": "Cancel run"
+      },
+      "jobs": "Jobs",
+      "noJobs": "There are no jobs for this run yet.",
+      "expandSteps": "Show the steps of {{job}}",
+      "collapseSteps": "Hide the steps of {{job}}",
+      "log": {
+        "pick": "Pick a job to see its log.",
+        "empty": "This job has no log yet.",
+        "truncated": "The log is very long: only the end is shown.",
+        "label": "Log of {{job}}"
+      },
+      "dispatch": {
+        "title": "Run a workflow",
+        "description": "Start a workflow of {{repo}} by hand. It only works if it has the workflow_dispatch trigger.",
+        "loading": "Looking for workflows...",
+        "none": "This repository has no active workflows.",
+        "workflow": "Workflow",
+        "reference": "Branch or tag",
+        "inputs": "Inputs (optional)",
+        "inputsHint": "One per line, as name=value.",
+        "invalidInputs": "Check lines {{lines}}: the name or the equals sign is missing.",
+        "submit": "Run workflow"
+      }
     }
   }
 }
