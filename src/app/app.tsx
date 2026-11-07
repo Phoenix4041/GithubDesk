@@ -7,7 +7,9 @@ import { useRepositoriesStore } from "@/features/repositories/store";
 import { stopRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { useTheme } from "@/features/settings/use-theme";
 import { queryClient } from "@/shared/lib/query-client";
+import { ErrorBoundary } from "@/shared/ui/error-boundary";
 import { ToastRegion } from "@/shared/ui/toast-region";
+import { RenderFailure } from "./components/render-failure";
 import { Workspace } from "./workspace";
 
 export function App() {
@@ -28,7 +30,9 @@ export function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {activePath ? <Workspace key={activePath} repoPath={activePath} /> : <WelcomeScreen />}
+      <ErrorBoundary fallback={(error, reset) => <RenderFailure error={error} onReset={reset} />}>
+        {activePath ? <Workspace key={activePath} repoPath={activePath} /> : <WelcomeScreen />}
+      </ErrorBoundary>
       <RepositoryDialogs />
       <ToastRegion />
     </QueryClientProvider>

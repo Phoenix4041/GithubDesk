@@ -17,6 +17,10 @@
     "backToStart": "Volver al inicio",
     "forget": "Quitar de recientes"
   },
+  "crash": {
+    "title": "Algo falló al mostrar la pantalla",
+    "message": "La aplicación encontró un problema inesperado. Puedes reintentar o volver al inicio."
+  },
   "sidebar": {
     "label": "Repositorios y ramas"
   },

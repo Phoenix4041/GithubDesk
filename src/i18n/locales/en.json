@@ -17,6 +17,10 @@
     "backToStart": "Back to start",
     "forget": "Remove from recents"
   },
+  "crash": {
+    "title": "Something failed while showing the screen",
+    "message": "The app ran into an unexpected problem. You can retry or go back to the start."
+  },
   "sidebar": {
     "label": "Repositories and branches"
   },
