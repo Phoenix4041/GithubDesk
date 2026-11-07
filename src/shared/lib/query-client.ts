@@ -22,6 +22,7 @@ export const repoKeys = {
   operation: (path: string) => ["repo", path, "operation"] as const,
   tags: (path: string) => ["repo", path, "tags"] as const,
   compare: (path: string) => ["repo", path, "compare"] as const,
+  githubRemotes: (path: string) => ["repo", path, "github-remotes"] as const,
   reflog: (path: string) => ["repo", path, "reflog"] as const,
   undoPlan: (path: string) => ["repo", path, "undo-plan"] as const,
   blame: (path: string, file: string, revision: string | null, ignoreWhitespace: boolean) =>

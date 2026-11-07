@@ -945,6 +945,18 @@
       "token": "Personal access token",
       "tokenHint": "It needs the repo and workflow scopes. Nobody else sees this value.",
       "connect": "Connect"
+    },
+    "repo": {
+      "title": "{{name}} on GitHub",
+      "description": "Choose which {{host}} account this repository uses.",
+      "accountLabel": "Account",
+      "noAccounts": "There are no connected accounts for {{host}}.",
+      "useForGit": "Also use for fetch, pull and push",
+      "useForGitHint": "Git will use this account's token in this repository instead of the credentials saved by the system.",
+      "openOnGithub": "Open on GitHub",
+      "chipWithAccount": "Account: {{login}}",
+      "chipWithoutAccount": "Connect an account to see pull requests, issues and Actions",
+      "connect": "Connect"
     }
   }
 }

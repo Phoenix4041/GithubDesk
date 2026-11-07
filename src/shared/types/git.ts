@@ -374,3 +374,11 @@ export interface DeviceCode {
   expiresIn: number;
   interval: number;
 }
+
+export interface RemoteRepo {
+  remoteName: string;
+  url: string;
+  host: string;
+  owner: string;
+  name: string;
+}

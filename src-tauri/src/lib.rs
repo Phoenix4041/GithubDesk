@@ -7,8 +7,8 @@ pub mod state;
 pub mod watcher;
 
 use commands::{
-    blame, branch, commit, commit_ops, compare, conflict, github_account, history, job, operation,
-    rebase, reflog, remote, repo, stash, status, tag, watch,
+    blame, branch, commit, commit_ops, compare, conflict, github_account, github_repo, history,
+    job, operation, rebase, reflog, remote, repo, stash, status, tag, watch,
 };
 use state::AppState;
 use tauri::Manager;
@@ -82,6 +82,8 @@ pub fn run() {
             github_account::github_account_remove,
             github_account::github_device_start,
             github_account::github_device_finish,
+            github_repo::github_repo_remotes,
+            github_repo::github_set_git_account,
             tag::tag_list,
             tag::tag_create,
             tag::tag_delete,

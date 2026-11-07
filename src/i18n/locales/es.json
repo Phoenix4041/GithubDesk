@@ -945,6 +945,18 @@
       "token": "Token de acceso personal",
       "tokenHint": "Necesita los permisos repo y workflow. Nadie más ve este valor.",
       "connect": "Conectar"
+    },
+    "repo": {
+      "title": "{{name}} en GitHub",
+      "description": "Elige qué cuenta de {{host}} usa este repositorio.",
+      "accountLabel": "Cuenta",
+      "noAccounts": "No hay cuentas conectadas para {{host}}.",
+      "useForGit": "Usar también para fetch, pull y push",
+      "useForGitHint": "Git usará el token de esta cuenta en este repositorio en lugar de las credenciales guardadas del sistema.",
+      "openOnGithub": "Abrir en GitHub",
+      "chipWithAccount": "Cuenta: {{login}}",
+      "chipWithoutAccount": "Conecta una cuenta para ver pull requests, issues y Actions",
+      "connect": "Conectar"
     }
   }
 }

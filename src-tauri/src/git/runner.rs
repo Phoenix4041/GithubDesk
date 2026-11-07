@@ -5,6 +5,7 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::process::{Child, Command};
 
 use crate::error::{AppError, AppResult, ErrorKind};
+use crate::git::auth::auth_environment;
 use crate::git::parse::progress::{parse_progress_line, Progress};
 use crate::jobs::CancelToken;
 
@@ -46,6 +47,9 @@ fn base_command(cwd: Option<&Path>, args: &[&str]) -> Command {
         .env("LANG", "C");
     if let Some(directory) = cwd {
         command.current_dir(directory);
+        for (name, value) in auth_environment(directory) {
+            command.env(name, value);
+        }
     }
     #[cfg(windows)]
     command.creation_flags(CREATE_NO_WINDOW);

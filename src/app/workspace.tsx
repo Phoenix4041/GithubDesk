@@ -7,6 +7,7 @@ import { useStatus } from "@/features/changes/queries";
 import { useChangesStore } from "@/features/changes/store";
 import { CommitDialogs } from "@/features/history/components/commit-dialogs";
 import { BlamePanel } from "@/features/blame/components/blame-panel";
+import { useGithubGitAuth } from "@/features/github/use-github-repo";
 import { useBlameStore } from "@/features/blame/store";
 import { CompareDiffPanel } from "@/features/compare/components/compare-diff-panel";
 import { ComparePanel } from "@/features/compare/components/compare-panel";
@@ -47,6 +48,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   const setChangesWidth = useSettingsStore((state) => state.setChangesWidth);
 
   useRepoWatcher(repoPath);
+  useGithubGitAuth(repoPath);
 
   useEffect(() => {
     useChangesStore.getState().reset();

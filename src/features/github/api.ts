@@ -1,5 +1,5 @@
 import { call } from "@/shared/lib/tauri-client";
-import type { DeviceCode, GithubAccount } from "@/shared/types/git";
+import type { DeviceCode, GithubAccount, RemoteRepo } from "@/shared/types/git";
 
 export function listAccounts(): Promise<GithubAccount[]> {
   return call<GithubAccount[]>("github_accounts_list");
@@ -19,4 +19,12 @@ export function startDeviceFlow(host: string, clientId: string): Promise<DeviceC
 
 export function finishDeviceFlow(host: string, clientId: string, code: DeviceCode, jobId: string): Promise<GithubAccount> {
   return call<GithubAccount>("github_device_finish", { host, clientId, code, jobId });
+}
+
+export function listGithubRemotes(path: string): Promise<RemoteRepo[]> {
+  return call<RemoteRepo[]>("github_repo_remotes", { path });
+}
+
+export function setGitAccount(path: string, accountId: string | null): Promise<void> {
+  return call<void>("github_set_git_account", { path, accountId });
 }

@@ -1,3 +1,4 @@
+pub mod auth;
 pub mod history_query;
 pub mod parse;
 pub mod patch;
