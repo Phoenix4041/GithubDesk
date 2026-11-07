@@ -255,7 +255,9 @@
     "mode": {
       "unified": "Vista unificada",
       "split": "Vista dividida"
-    }
+    },
+    "wordDiff": "Palabras",
+    "wordDiffHint": "Resalta las palabras que cambiaron dentro de cada línea."
   },
   "history": {
     "listLabel": "Historial de commits",

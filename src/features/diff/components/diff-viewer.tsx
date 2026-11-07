@@ -11,6 +11,8 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { VirtualList } from "@/shared/ui/virtual-list";
 import { buildDiffRows, changeLineIndices, isChangeLine, lineKey, longestLineLength, selectionsFromKeys } from "../diff-model";
+import { applyWordRanges, computeWordRanges, wordKey } from "../word-diff";
+import type { WordRange } from "../word-diff";
 import type { DiffRow } from "../diff-model";
 import type { StagingControls } from "../staging-controls";
 import { useLanguageSupport } from "../use-language-support";
@@ -21,6 +23,7 @@ const ROW_HEIGHT = 20;
 const GUTTER_WIDTH = 28 + 44 + 44 + 16;
 const CHARACTER_WIDTH = 7.4;
 const EMPTY_KEYS: ReadonlySet<string> = new Set();
+const NO_WORD_RANGES: ReadonlyMap<string, WordRange[]> = new Map();
 
 interface DiffViewerProps {
   diff: FileDiff;
@@ -35,6 +38,7 @@ interface SelectionState {
 interface DiffLineRowProps {
   row: Extract<DiffRow, { kind: "line" }>;
   support: LanguageSupport | null;
+  ranges: readonly WordRange[] | undefined;
   selectable: boolean;
   selected: boolean;
   onToggle: (hunkIndex: number, lineIndex: number) => void;
@@ -45,6 +49,7 @@ interface DiffLineRowProps {
 const DiffLineRow = memo(function DiffLineRow({
   row,
   support,
+  ranges,
   selectable,
   selected,
   onToggle,
@@ -53,10 +58,10 @@ const DiffLineRow = memo(function DiffLineRow({
 }: DiffLineRowProps) {
   const { line } = row;
   const text = line.content.replace(/\r$/, "");
-  const segments = useMemo(
-    () => (support && line.kind !== "noNewline" ? highlightLine(support, text) : [{ text, className: null }]),
-    [support, text, line.kind],
-  );
+  const segments = useMemo(() => {
+    const base = support && line.kind !== "noNewline" ? highlightLine(support, text) : [{ text, className: null }];
+    return applyWordRanges(base, ranges);
+  }, [support, text, line.kind, ranges]);
 
   const isAdded = line.kind === "added";
   const isRemoved = line.kind === "removed";
@@ -94,7 +99,15 @@ const DiffLineRow = memo(function DiffLineRow({
       ) : (
         <span className="selectable pr-4 whitespace-pre">
           {segments.map((segment, index) => (
-            <span key={index} className={segment.className ?? undefined}>
+            <span
+              key={index}
+              className={cn(
+                segment.className,
+                segment.changed && "rounded-[2px]",
+                segment.changed && isAdded && "bg-add-strong",
+                segment.changed && isRemoved && "bg-del-strong",
+              )}
+            >
               {segment.text}
             </span>
           ))}
@@ -110,7 +123,12 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
   const [selection, setSelection] = useState<SelectionState>({ owner: diff, keys: EMPTY_KEYS });
 
   const diffMode = useSettingsStore((state) => state.diffMode);
+  const wordDiffEnabled = useSettingsStore((state) => state.wordDiff);
   const rows = useMemo(() => (diffMode === "unified" ? buildDiffRows(diff) : []), [diff, diffMode]);
+  const wordRanges = useMemo(
+    () => (wordDiffEnabled && diffMode === "unified" ? computeWordRanges(diff) : NO_WORD_RANGES),
+    [diff, diffMode, wordDiffEnabled],
+  );
   const selectable = Boolean(staging) && diff.partialStagingAllowed;
   const activeKeys = selection.owner === diff ? selection.keys : EMPTY_KEYS;
 
@@ -206,6 +224,7 @@ export function DiffViewer({ diff, staging }: DiffViewerProps) {
             <DiffLineRow
               row={row}
               support={support}
+              ranges={wordRanges.get(wordKey(row.hunkIndex, row.lineIndex))}
               selectable={selectable}
               selected={activeKeys.has(lineKey(row.hunkIndex, row.lineIndex))}
               onToggle={toggleLine}

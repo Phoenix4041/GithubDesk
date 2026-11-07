@@ -21,6 +21,7 @@ interface SettingsState {
   changesWidth: number;
   diffMode: DiffMode;
   ignoreWhitespace: boolean;
+  wordDiff: boolean;
   githubClientId: string;
   repoAccounts: Record<string, RepoAccountChoice>;
   shortcuts: ShortcutOverrides;
@@ -33,6 +34,7 @@ interface SettingsState {
   setChangesWidth: (width: number) => void;
   setDiffMode: (mode: DiffMode) => void;
   setIgnoreWhitespace: (ignore: boolean) => void;
+  setWordDiff: (enabled: boolean) => void;
   setGithubClientId: (clientId: string) => void;
   setRepoAccount: (repoPath: string, choice: RepoAccountChoice | null) => void;
   setShortcuts: (shortcuts: ShortcutOverrides) => void;
@@ -50,6 +52,7 @@ export const useSettingsStore = create<SettingsState>()(
       changesWidth: CHANGES_WIDTH_RANGE.initial,
       diffMode: "unified",
       ignoreWhitespace: false,
+      wordDiff: true,
       githubClientId: "",
       repoAccounts: {},
       shortcuts: {},
@@ -62,6 +65,7 @@ export const useSettingsStore = create<SettingsState>()(
       setChangesWidth: (changesWidth) => set({ changesWidth }),
       setDiffMode: (diffMode) => set({ diffMode }),
       setIgnoreWhitespace: (ignoreWhitespace) => set({ ignoreWhitespace }),
+      setWordDiff: (wordDiff) => set({ wordDiff }),
       setGithubClientId: (githubClientId) => set({ githubClientId }),
       setRepoAccount: (repoPath, choice) =>
         set((state) => {

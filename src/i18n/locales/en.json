@@ -255,7 +255,9 @@
     "mode": {
       "unified": "Unified view",
       "split": "Split view"
-    }
+    },
+    "wordDiff": "Words",
+    "wordDiffHint": "Highlights the words that changed inside each line."
   },
   "history": {
     "listLabel": "Commit history",

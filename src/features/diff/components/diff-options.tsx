@@ -14,9 +14,23 @@ export function DiffOptions({ hideWhitespace = false }: DiffOptionsProps) {
   const ignoreWhitespace = useSettingsStore((state) => state.ignoreWhitespace);
   const setDiffMode = useSettingsStore((state) => state.setDiffMode);
   const setIgnoreWhitespace = useSettingsStore((state) => state.setIgnoreWhitespace);
+  const wordDiff = useSettingsStore((state) => state.wordDiff);
+  const setWordDiff = useSettingsStore((state) => state.setWordDiff);
 
   return (
     <div className="ml-auto flex shrink-0 items-center gap-1">
+      <button
+        type="button"
+        aria-pressed={wordDiff}
+        title={t("diff.wordDiffHint")}
+        onClick={() => setWordDiff(!wordDiff)}
+        className={cn(
+          "h-7 cursor-pointer rounded-md px-2 text-xs font-medium transition-colors duration-150",
+          wordDiff ? "bg-accent-soft text-accent" : "text-muted hover:bg-subtle hover:text-fg",
+        )}
+      >
+        {t("diff.wordDiff")}
+      </button>
       {hideWhitespace ? null : (
         <button
           type="button"
