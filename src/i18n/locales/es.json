@@ -1091,6 +1091,57 @@
         "draft": "Crear como borrador",
         "submit": "Crear pull request"
       }
+    },
+    "issues": {
+      "created": "Issue #{{number}} creado",
+      "closedToast": "Issue #{{number}} cerrado",
+      "reopenedToast": "Issue #{{number}} reabierto",
+      "state": {
+        "open": "Abierto",
+        "closed": "Cerrado",
+        "notPlanned": "Descartado"
+      },
+      "listLabel": "Issues",
+      "filterLabel": "Filtrar por estado",
+      "filters": {
+        "open": "Abiertos",
+        "closed": "Cerrados",
+        "all": "Todos"
+      },
+      "new": "Nuevo",
+      "search": "Buscar issues",
+      "labelFilter": "Filtrar por etiqueta",
+      "allLabels": "Todas las etiquetas",
+      "commentsCount_one": "{{count}} comentario",
+      "commentsCount_other": "{{count}} comentarios",
+      "empty": {
+        "title": "Sin issues",
+        "open": "No hay issues abiertos.",
+        "closed": "No hay issues cerrados.",
+        "all": "Este repositorio todavía no tiene issues.",
+        "filtered": "Ningún issue coincide con la búsqueda o la etiqueta."
+      },
+      "nothingSelected": {
+        "title": "Selecciona un issue",
+        "description": "Elige uno de la lista para ver su conversación."
+      },
+      "openedBy": "Abierto por {{user}}",
+      "close": "Cerrar",
+      "reopen": "Reabrir",
+      "closeReason": "Motivo del cierre",
+      "reasons": {
+        "completed": "Resuelto",
+        "notPlanned": "No se hará"
+      },
+      "create": {
+        "title": "Nuevo issue",
+        "description": "Reporta algo en {{repo}}.",
+        "titleLabel": "Título",
+        "body": "Descripción",
+        "labels": "Etiquetas",
+        "assignees": "Asignar a",
+        "submit": "Crear issue"
+      }
     }
   }
 }

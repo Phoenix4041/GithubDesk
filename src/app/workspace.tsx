@@ -7,6 +7,7 @@ import { useStatus } from "@/features/changes/queries";
 import { useChangesStore } from "@/features/changes/store";
 import { CommitDialogs } from "@/features/history/components/commit-dialogs";
 import { BlamePanel } from "@/features/blame/components/blame-panel";
+import { IssueDetailPanel, IssuesPanel } from "@/features/github/issues/components/issues-panels";
 import { PullDetailPanel, PullsPanel } from "@/features/github/pulls/components/pulls-panels";
 import { useGithubGitAuth } from "@/features/github/use-github-repo";
 import { useBlameStore } from "@/features/blame/store";
@@ -90,6 +91,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
             {tab === "stash" ? <StashPanel repoPath={repoPath} /> : null}
             {tab === "compare" ? <ComparePanel repoPath={repoPath} /> : null}
             {tab === "pulls" ? <PullsPanel repoPath={repoPath} /> : null}
+            {tab === "issues" ? <IssuesPanel repoPath={repoPath} /> : null}
           </div>
         </section>
         <ResizeHandle
@@ -106,6 +108,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
           {!blameOpen && tab === "stash" ? <StashDiffPanel repoPath={repoPath} /> : null}
           {!blameOpen && tab === "compare" ? <CompareDiffPanel repoPath={repoPath} /> : null}
           {!blameOpen && tab === "pulls" ? <PullDetailPanel repoPath={repoPath} /> : null}
+          {!blameOpen && tab === "issues" ? <IssueDetailPanel repoPath={repoPath} /> : null}
         </main>
       </div>
       <BranchDialogs repoPath={repoPath} />

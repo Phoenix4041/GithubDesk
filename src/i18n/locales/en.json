@@ -1091,6 +1091,57 @@
         "draft": "Create as draft",
         "submit": "Create pull request"
       }
+    },
+    "issues": {
+      "created": "Issue #{{number}} created",
+      "closedToast": "Issue #{{number}} closed",
+      "reopenedToast": "Issue #{{number}} reopened",
+      "state": {
+        "open": "Open",
+        "closed": "Closed",
+        "notPlanned": "Not planned"
+      },
+      "listLabel": "Issues",
+      "filterLabel": "Filter by state",
+      "filters": {
+        "open": "Open",
+        "closed": "Closed",
+        "all": "All"
+      },
+      "new": "New",
+      "search": "Search issues",
+      "labelFilter": "Filter by label",
+      "allLabels": "All labels",
+      "commentsCount_one": "{{count}} comment",
+      "commentsCount_other": "{{count}} comments",
+      "empty": {
+        "title": "No issues",
+        "open": "There are no open issues.",
+        "closed": "There are no closed issues.",
+        "all": "This repository has no issues yet.",
+        "filtered": "No issue matches the search or the label."
+      },
+      "nothingSelected": {
+        "title": "Select an issue",
+        "description": "Pick one from the list to see its conversation."
+      },
+      "openedBy": "Opened by {{user}}",
+      "close": "Close",
+      "reopen": "Reopen",
+      "closeReason": "Close reason",
+      "reasons": {
+        "completed": "Completed",
+        "notPlanned": "Not planned"
+      },
+      "create": {
+        "title": "New issue",
+        "description": "Report something in {{repo}}.",
+        "titleLabel": "Title",
+        "body": "Description",
+        "labels": "Labels",
+        "assignees": "Assignees",
+        "submit": "Create issue"
+      }
     }
   }
 }
