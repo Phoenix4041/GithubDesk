@@ -25,6 +25,8 @@ interface SettingsState {
   repoAccounts: Record<string, RepoAccountChoice>;
   shortcuts: ShortcutOverrides;
   terminalShell: string | null;
+  externalEditor: string | null;
+  externalEditorCommand: string;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -35,6 +37,8 @@ interface SettingsState {
   setRepoAccount: (repoPath: string, choice: RepoAccountChoice | null) => void;
   setShortcuts: (shortcuts: ShortcutOverrides) => void;
   setTerminalShell: (shell: string | null) => void;
+  setExternalEditor: (editor: string | null) => void;
+  setExternalEditorCommand: (command: string) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -50,6 +54,8 @@ export const useSettingsStore = create<SettingsState>()(
       repoAccounts: {},
       shortcuts: {},
       terminalShell: null,
+      externalEditor: null,
+      externalEditorCommand: "",
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
@@ -69,6 +75,8 @@ export const useSettingsStore = create<SettingsState>()(
         }),
       setShortcuts: (shortcuts) => set({ shortcuts }),
       setTerminalShell: (terminalShell) => set({ terminalShell }),
+      setExternalEditor: (externalEditor) => set({ externalEditor }),
+      setExternalEditorCommand: (externalEditorCommand) => set({ externalEditorCommand }),
     }),
     { name: "githubdesk.settings" },
   ),

@@ -1,12 +1,16 @@
-import { Archive, History, Trash2, UserRoundSearch } from "lucide-react";
+import { Archive, EyeOff, FolderSearch, History, SquarePen, Trash2, UserRoundSearch } from "lucide-react";
 import { memo, useState } from "react";
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useBlameStore } from "@/features/blame/store";
+import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
+import { ignorePatterns } from "@/features/gitignore/actions";
+import { ignorePatternForExtension, ignorePatternForFolder, ignorePatternForPath } from "@/features/gitignore/gitignore-model";
 import { useHistoryFilterStore } from "@/features/history/filter-store";
 import { useStashDialogStore } from "@/features/stash/store";
 import { useUiStore } from "@/shared/lib/ui-store";
 import { openContextMenu } from "@/shared/ui/context-menu";
+import type { ContextMenuEntry } from "@/shared/ui/context-menu";
 import { cn } from "@/shared/lib/cn";
 import { splitPath } from "@/shared/lib/paths";
 import type { StatusEntry } from "@/shared/types/git";
@@ -53,25 +57,69 @@ const FileRow = memo(function FileRow({ repoPath, section, entry, selected, onRe
         : t("changes.stageFile", { path: entry.path });
 
   function openMenu(event: ReactMouseEvent) {
-    if (entry.untracked || section === "conflicts") {
+    if (section === "conflicts") {
       return;
     }
-    openContextMenu(event, [
-      {
-        label: t("blame.menu.file"),
-        icon: <UserRoundSearch className="size-4" />,
-        disabled: kind === "added",
-        onSelect: () => useBlameStore.getState().open({ path: entry.path, revision: null }),
-      },
-      {
-        label: t("history.fileMenu.history"),
-        icon: <History className="size-4" />,
-        onSelect: () => {
-          useHistoryFilterStore.getState().showFileHistory(entry.path);
-          useUiStore.getState().setTab("history");
+    const entries: ContextMenuEntry[] = [];
+    if (!entry.untracked) {
+      entries.push(
+        {
+          label: t("blame.menu.file"),
+          icon: <UserRoundSearch className="size-4" />,
+          disabled: kind === "added",
+          onSelect: () => useBlameStore.getState().open({ path: entry.path, revision: null }),
         },
+        {
+          label: t("history.fileMenu.history"),
+          icon: <History className="size-4" />,
+          onSelect: () => {
+            useHistoryFilterStore.getState().showFileHistory(entry.path);
+            useUiStore.getState().setTab("history");
+          },
+        },
+        { kind: "separator" },
+      );
+    }
+    const exists = kind !== "deleted";
+    entries.push(
+      {
+        label: t("external.openFile"),
+        icon: <SquarePen className="size-4" />,
+        disabled: !exists,
+        onSelect: () => void openRepositoryInEditor(repoPath, entry.path),
       },
-    ]);
+      {
+        label: t("external.revealFile"),
+        icon: <FolderSearch className="size-4" />,
+        disabled: !exists,
+        onSelect: () => void revealRepositoryPath(repoPath, entry.path),
+      },
+    );
+    if (entry.untracked) {
+      const extension = ignorePatternForExtension(entry.path);
+      const folder = ignorePatternForFolder(entry.path);
+      entries.push({ kind: "separator" });
+      entries.push({
+        label: t("gitignore.menu.file"),
+        icon: <EyeOff className="size-4" />,
+        onSelect: () => void ignorePatterns(repoPath, [ignorePatternForPath(entry.path)]),
+      });
+      if (folder) {
+        entries.push({
+          label: t("gitignore.menu.folder", { folder }),
+          icon: <EyeOff className="size-4" />,
+          onSelect: () => void ignorePatterns(repoPath, [folder]),
+        });
+      }
+      if (extension) {
+        entries.push({
+          label: t("gitignore.menu.extension", { extension }),
+          icon: <EyeOff className="size-4" />,
+          onSelect: () => void ignorePatterns(repoPath, [extension]),
+        });
+      }
+    }
+    openContextMenu(event, entries);
   }
 
   return (

@@ -125,6 +125,14 @@ pub async fn git_with_env(
     ensure_success(run_to_completion(command, None).await?)
 }
 
+pub async fn git_with_input_unchecked(
+    cwd: &Path,
+    args: &[&str],
+    input: Vec<u8>,
+) -> AppResult<GitOutput> {
+    run_to_completion(base_command(Some(cwd), args), Some(input)).await
+}
+
 pub async fn git_with_input(cwd: &Path, args: &[&str], input: Vec<u8>) -> AppResult<GitOutput> {
     ensure_success(run_to_completion(base_command(Some(cwd), args), Some(input)).await?)
 }

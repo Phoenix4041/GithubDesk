@@ -8,9 +8,9 @@ pub mod state;
 pub mod watcher;
 
 use commands::{
-    blame, branch, commit, commit_ops, compare, conflict, github_account, github_actions,
-    github_issues, github_pulls, github_repo, history, job, lfs, operation, rebase, reflog, remote,
-    repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
+    blame, branch, commit, commit_ops, compare, conflict, external, github_account, github_actions,
+    github_issues, github_pulls, github_repo, gitignore, history, job, lfs, operation, rebase,
+    reflog, remote, repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -131,6 +131,15 @@ pub fn run() {
             submodule::submodule_add,
             submodule::submodule_update,
             submodule::submodule_remove,
+            gitignore::gitignore_read,
+            gitignore::gitignore_write,
+            gitignore::gitignore_append,
+            gitignore::gitignore_check,
+            gitignore::gitignore_tracked,
+            gitignore::gitignore_untrack,
+            external::editors_list,
+            external::editor_open,
+            external::reveal_in_file_manager,
             lfs::lfs_status_get,
             lfs::lfs_install_local,
             lfs::lfs_track_pattern,

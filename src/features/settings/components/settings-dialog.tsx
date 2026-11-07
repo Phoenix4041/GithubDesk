@@ -6,8 +6,10 @@ import { SUPPORTED_LANGUAGES, changeLanguage, isLanguage } from "@/i18n";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { useCommandUiStore } from "@/features/commands/command-ui-store";
+import { useEditors } from "@/features/external/queries";
 import { AccountsSection } from "@/features/github/components/accounts-section";
 import { Dialog } from "@/shared/ui/dialog";
+import { TextField } from "@/shared/ui/text-field";
 import { useSettingsStore } from "../store";
 import type { ThemePreference } from "../store";
 
@@ -68,6 +70,11 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const setTheme = useSettingsStore((state) => state.setTheme);
   const setLanguage = useSettingsStore((state) => state.setLanguage);
   const setShortcutsOpen = useCommandUiStore((state) => state.setShortcutsOpen);
+  const externalEditor = useSettingsStore((state) => state.externalEditor);
+  const externalEditorCommand = useSettingsStore((state) => state.externalEditorCommand);
+  const setExternalEditor = useSettingsStore((state) => state.setExternalEditor);
+  const setExternalEditorCommand = useSettingsStore((state) => state.setExternalEditorCommand);
+  const editors = useEditors();
 
   const themeOptions: SegmentOption<ThemePreference>[] = [
     { value: "system", label: t("settings.theme.system"), icon: <Monitor className="size-3.5" /> },
@@ -114,6 +121,36 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           >
             {t("settings.shortcuts.open")}
           </Button>
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="external-editor" className="text-xs font-medium">
+            {t("settings.editor.label")}
+          </label>
+          <select
+            id="external-editor"
+            value={externalEditor ?? ""}
+            onChange={(event) => setExternalEditor(event.target.value === "" ? null : event.target.value)}
+            className="h-8 w-fit min-w-56 cursor-pointer rounded-md border border-line bg-surface px-2 text-[13px] text-fg focus-visible:border-accent focus-visible:outline-none"
+          >
+            <option value="">{t("settings.editor.auto")}</option>
+            {(editors.data ?? []).map((editor) => (
+              <option key={editor.id} value={editor.id}>
+                {editor.label}
+              </option>
+            ))}
+            <option value="custom">{t("settings.editor.custom")}</option>
+          </select>
+          {externalEditor === "custom" ? (
+            <TextField
+              label={t("settings.editor.command")}
+              value={externalEditorCommand}
+              onChange={(event) => setExternalEditorCommand(event.target.value)}
+              hint={t("settings.editor.commandHint")}
+              spellCheck={false}
+            />
+          ) : editors.data && editors.data.length === 0 ? (
+            <p className="text-xs text-muted">{t("settings.editor.none")}</p>
+          ) : null}
         </div>
         <AccountsSection />
       </div>

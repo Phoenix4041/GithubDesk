@@ -1,6 +1,8 @@
-import { FolderGit2, GitBranch, Settings, ShieldCheck, Terminal } from "lucide-react";
+import { EyeOff, FolderGit2, FolderSearch, GitBranch, Settings, ShieldCheck, SquarePen, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
+import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
+import { useGitignoreDialogStore } from "@/features/gitignore/store";
 import { GithubRepoChip } from "@/features/github/components/github-repo-chip";
 import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
 import { useRepositoriesStore } from "@/features/repositories/store";
@@ -11,6 +13,7 @@ import { SyncButton } from "@/features/sync/components/sync-button";
 import { useTerminalStore } from "@/features/terminal/store";
 import { useUiStore } from "@/shared/lib/ui-store";
 import { IconButton } from "@/shared/ui/icon-button";
+import { Menu } from "@/shared/ui/menu";
 
 interface ToolbarProps {
   repoPath: string;
@@ -21,6 +24,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
   const status = useStatus(repoPath);
   const recents = useRepositoriesStore((state) => state.recents);
   const signing = useSigningConfig(repoPath);
+  const showGitignore = useGitignoreDialogStore((state) => state.show);
   const showSigning = useSigningDialogStore((state) => state.show);
   const terminalOpen = useTerminalStore((state) => state.open);
   const toggleTerminal = useTerminalStore((state) => state.toggle);
@@ -37,9 +41,31 @@ export function Toolbar({ repoPath }: ToolbarProps) {
 
   return (
     <header className="flex h-12 shrink-0 items-center gap-3 border-b border-line bg-surface px-3">
-      <div className="flex min-w-0 items-center gap-2" title={repoPath}>
+      <div className="flex min-w-0 items-center gap-1" title={repoPath}>
         <FolderGit2 className="size-4 shrink-0 text-muted" />
         <span className="truncate text-[13px] font-semibold">{repositoryName}</span>
+        <Menu
+          label={t("external.menu")}
+          align="left"
+          trigger={<SquarePen className="size-3.5" />}
+          items={[
+            {
+              label: t("external.openRepository"),
+              icon: <SquarePen className="size-4" />,
+              onSelect: () => void openRepositoryInEditor(repoPath),
+            },
+            {
+              label: t("external.revealRepository"),
+              icon: <FolderSearch className="size-4" />,
+              onSelect: () => void revealRepositoryPath(repoPath),
+            },
+            {
+              label: t("gitignore.open"),
+              icon: <EyeOff className="size-4" />,
+              onSelect: showGitignore,
+            },
+          ]}
+        />
       </div>
       {branch ? (
         <div className="flex min-w-0 items-center gap-1.5 rounded-md bg-subtle px-2 py-1 text-xs" aria-label={t("toolbar.currentBranch")}>

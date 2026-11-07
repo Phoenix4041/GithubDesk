@@ -27,6 +27,7 @@ import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
 import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
+import { GitignoreDialog } from "@/features/gitignore/components/gitignore-dialog";
 import { SigningDialog } from "@/features/signing/components/signing-dialog";
 import { SubmoduleDialogs } from "@/features/submodules/components/submodule-dialogs";
 import { TagDialogs } from "@/features/tags/components/tag-dialogs";
@@ -134,6 +135,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <WorktreeDialogs repoPath={repoPath} />
       <SubmoduleDialogs repoPath={repoPath} />
       <SigningDialog repoPath={repoPath} />
+      <GitignoreDialog repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
       <ReflogDialogs repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />

@@ -335,6 +335,14 @@
       "label": "Keyboard shortcuts",
       "description": "Ctrl+K opens the palette with every action. You can change each shortcut.",
       "open": "Customize shortcuts"
+    },
+    "editor": {
+      "label": "External editor",
+      "auto": "Automatic (the first one found)",
+      "custom": "Other program...",
+      "command": "Editor program",
+      "commandHint": "The executable path, or its name if it is on the PATH. It receives the folder or the file.",
+      "none": "No known editor was detected. You can pick another program."
     }
   },
   "progress": {
@@ -1300,7 +1308,9 @@
       "repo": {
         "open": "Open a repository",
         "clone": "Clone a repository",
-        "create": "Create a repository"
+        "create": "Create a repository",
+        "openInEditor": "Open the repository in the external editor",
+        "reveal": "Show the repository in the file manager"
       },
       "nav": {
         "changes": "Go to Changes",
@@ -1354,6 +1364,9 @@
       },
       "lfs": {
         "show": "Show Git LFS"
+      },
+      "gitignore": {
+        "edit": "Edit the .gitignore"
       }
     }
   },
@@ -1580,5 +1593,52 @@
     "pulling": "Downloading LFS files",
     "pulled": "LFS files downloaded",
     "truncated": "Only the first files are shown."
+  },
+  "external": {
+    "menu": "Open the repository in...",
+    "openRepository": "Open in the external editor",
+    "revealRepository": "Show in the file manager",
+    "openFile": "Open in the external editor",
+    "revealFile": "Show in the file manager",
+    "noEditor": "No editor was found",
+    "noEditorHint": "Pick one in Settings or type the path of your program."
+  },
+  "gitignore": {
+    "open": "Edit the .gitignore",
+    "title": "Ignored files",
+    "description": "Edit the repository .gitignore, add templates and check what is ignored.",
+    "sectionsLabel": ".gitignore sections",
+    "sections": {
+      "editor": "Editor",
+      "templates": "Templates",
+      "check": "Check"
+    },
+    "editorLabel": ".gitignore content",
+    "save": "Save",
+    "saved": ".gitignore saved",
+    "searchTemplates": "Search templates",
+    "templateLines": "{{count}} rules",
+    "addTemplate": "Add the {{name}} template",
+    "add": "Add",
+    "applied": "Added",
+    "templateAdded": "{{name}}: {{count}} new rules were added. Save to apply them.",
+    "nothingNew": "{{name}}: all its rules were already there.",
+    "saveFirst": "Save the changes to check paths against the new rules.",
+    "checkLabel": "Is this path ignored?",
+    "check": "Check",
+    "resultIgnored": "It is ignored by the rule {{pattern}} ({{source}}, line {{line}}).",
+    "resultNotIgnored": "This path is not ignored.",
+    "trackedTitle": "Files already tracked",
+    "trackedNone": "No tracked file matches the rules.",
+    "trackedHint": "These files match a rule but git already tracks them, so they keep showing up. You can stop tracking them without deleting them from disk.",
+    "untrackAll": "Stop tracking the {{count}} files",
+    "untracked": "{{count}} files are no longer tracked. Commit to save it.",
+    "ignored": "{{pattern}} is now ignored",
+    "alreadyIgnored": "That rule was already in the .gitignore",
+    "menu": {
+      "file": "Ignore this file",
+      "folder": "Ignore the folder {{folder}}",
+      "extension": "Ignore every {{extension}}"
+    }
   }
 }

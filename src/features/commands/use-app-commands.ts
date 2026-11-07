@@ -9,6 +9,8 @@ import { useReflogDialogStore } from "@/features/reflog/store";
 import { pickAndOpenRepository } from "@/features/repositories/actions";
 import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
 import { useSettingsStore } from "@/features/settings/store";
+import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
+import { useGitignoreDialogStore } from "@/features/gitignore/store";
 import { useSigningDialogStore } from "@/features/signing/store";
 import { useSubmoduleDialogStore } from "@/features/submodules/dialog-store";
 import { useTerminalStore } from "@/features/terminal/store";
@@ -330,6 +332,32 @@ function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount
       keywords: "submodulos",
       enabled: true,
       run: () => goToSidebar("submodules"),
+    },
+    {
+      id: "repo.openInEditor",
+      titleKey: "commands.items.repo.openInEditor",
+      group: "tools",
+      keywords: "editor externo vscode visual studio code abrir carpeta",
+      defaultShortcut: "Mod+Shift+E",
+      enabled: true,
+      run: () => openRepositoryInEditor(repoPath).then(() => undefined),
+    },
+    {
+      id: "repo.reveal",
+      titleKey: "commands.items.repo.reveal",
+      group: "tools",
+      keywords: "explorador carpeta archivos finder mostrar abrir",
+      defaultShortcut: "Mod+Shift+X",
+      enabled: true,
+      run: () => revealRepositoryPath(repoPath).then(() => undefined),
+    },
+    {
+      id: "gitignore.edit",
+      titleKey: "commands.items.gitignore.edit",
+      group: "tools",
+      keywords: "gitignore ignorar archivos plantillas ignore",
+      enabled: true,
+      run: () => useGitignoreDialogStore.getState().show(),
     },
     {
       id: "lfs.show",

@@ -335,6 +335,14 @@
       "label": "Atajos de teclado",
       "description": "Ctrl+K abre la paleta con todas las acciones. Puedes cambiar cada atajo.",
       "open": "Personalizar atajos"
+    },
+    "editor": {
+      "label": "Editor externo",
+      "auto": "Automático (el primero que se encuentre)",
+      "custom": "Otro programa...",
+      "command": "Programa del editor",
+      "commandHint": "La ruta del ejecutable o su nombre si está en el PATH. Se le pasa la carpeta o el archivo.",
+      "none": "No se detectó ningún editor conocido. Puedes elegir otro programa."
     }
   },
   "progress": {
@@ -1300,7 +1308,9 @@
       "repo": {
         "open": "Abrir un repositorio",
         "clone": "Clonar un repositorio",
-        "create": "Crear un repositorio"
+        "create": "Crear un repositorio",
+        "openInEditor": "Abrir el repositorio en el editor externo",
+        "reveal": "Mostrar el repositorio en el explorador"
       },
       "nav": {
         "changes": "Ir a Cambios",
@@ -1354,6 +1364,9 @@
       },
       "lfs": {
         "show": "Mostrar Git LFS"
+      },
+      "gitignore": {
+        "edit": "Editar el .gitignore"
       }
     }
   },
@@ -1580,5 +1593,52 @@
     "pulling": "Descargando archivos de LFS",
     "pulled": "Archivos de LFS descargados",
     "truncated": "Se muestran solo los primeros archivos."
+  },
+  "external": {
+    "menu": "Abrir el repositorio en...",
+    "openRepository": "Abrir en el editor externo",
+    "revealRepository": "Mostrar en el explorador de archivos",
+    "openFile": "Abrir en el editor externo",
+    "revealFile": "Mostrar en el explorador de archivos",
+    "noEditor": "No se encontró ningún editor",
+    "noEditorHint": "Elige uno en Ajustes o escribe la ruta de tu programa."
+  },
+  "gitignore": {
+    "open": "Editar el .gitignore",
+    "title": "Archivos ignorados",
+    "description": "Edita el .gitignore del repositorio, agrega plantillas y comprueba qué se ignora.",
+    "sectionsLabel": "Secciones del .gitignore",
+    "sections": {
+      "editor": "Editor",
+      "templates": "Plantillas",
+      "check": "Comprobar"
+    },
+    "editorLabel": "Contenido del .gitignore",
+    "save": "Guardar",
+    "saved": ".gitignore guardado",
+    "searchTemplates": "Buscar plantilla",
+    "templateLines": "{{count}} reglas",
+    "addTemplate": "Agregar la plantilla {{name}}",
+    "add": "Agregar",
+    "applied": "Agregada",
+    "templateAdded": "{{name}}: se agregaron {{count}} reglas nuevas. Guarda para aplicarlas.",
+    "nothingNew": "{{name}}: todas sus reglas ya estaban.",
+    "saveFirst": "Guarda los cambios para poder comprobar rutas con las reglas nuevas.",
+    "checkLabel": "¿Se ignora esta ruta?",
+    "check": "Comprobar",
+    "resultIgnored": "Se ignora por la regla {{pattern}} ({{source}}, línea {{line}}).",
+    "resultNotIgnored": "Esta ruta no se ignora.",
+    "trackedTitle": "Archivos que ya se siguen",
+    "trackedNone": "Ningún archivo seguido coincide con las reglas.",
+    "trackedHint": "Estos archivos coinciden con una regla pero git ya los sigue, por eso siguen apareciendo. Puedes dejar de seguirlos sin borrarlos del disco.",
+    "untrackAll": "Dejar de seguir los {{count}} archivos",
+    "untracked": "Se dejaron de seguir {{count}} archivos. Haz commit para guardarlo.",
+    "ignored": "Ahora se ignora {{pattern}}",
+    "alreadyIgnored": "Esa regla ya estaba en el .gitignore",
+    "menu": {
+      "file": "Ignorar este archivo",
+      "folder": "Ignorar la carpeta {{folder}}",
+      "extension": "Ignorar todos los {{extension}}"
+    }
   }
 }

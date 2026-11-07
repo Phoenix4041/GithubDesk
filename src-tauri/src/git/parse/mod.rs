@@ -1,6 +1,7 @@
 pub mod blame;
 pub mod branch;
 pub mod diff;
+pub mod ignore;
 pub mod lfs;
 pub mod log;
 pub mod progress;

@@ -503,3 +503,21 @@ export interface LfsStatus {
   files: LfsFile[];
   filesTruncated: boolean;
 }
+
+export interface IgnoreFile {
+  content: string;
+  exists: boolean;
+}
+
+export interface IgnoreMatch {
+  path: string;
+  ignored: boolean;
+  source: string | null;
+  line: number | null;
+  pattern: string | null;
+}
+
+export interface EditorOption {
+  id: string;
+  label: string;
+}
