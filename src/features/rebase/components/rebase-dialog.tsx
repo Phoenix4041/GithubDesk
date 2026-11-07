@@ -1,8 +1,10 @@
 import type { ParseKeys } from "i18next";
-import { ArrowDown, ArrowUp, TriangleAlert } from "lucide-react";
+import { ArrowDown, ArrowUp, GripVertical, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getCommitDetail } from "@/features/history/api";
+import { usePointerReorder } from "@/shared/hooks/use-pointer-reorder";
+import { cn } from "@/shared/lib/cn";
 import { describeError } from "@/shared/lib/report-error";
 import type { RebaseAction, RebasePlan } from "@/shared/types/git";
 import { Button } from "@/shared/ui/button";
@@ -56,6 +58,11 @@ function DraftEditor({ repoPath, plan, onClose }: DraftEditorProps) {
   const problem = validateDraft(steps);
   const unchanged = isUnchanged(steps, plan);
   const warnPublished = rewritesPublishedCommits(steps, plan);
+  const { listRef, dragging, gripProps } = usePointerReorder({
+    count: steps.length,
+    disabled: busy,
+    onMove: (from, to) => setSteps((current) => moveStep(current, from, to)),
+  });
 
   function update(index: number, patch: Partial<DraftStep>) {
     setSteps((current) => current.map((step, position) => (position === index ? { ...step, ...patch } : step)));
@@ -119,10 +126,29 @@ function DraftEditor({ repoPath, plan, onClose }: DraftEditorProps) {
             {t(problem === "firstSquash" ? "rebase.problems.firstSquash" : "rebase.problems.emptyReword")}
           </p>
         ) : null}
-        <ol className="flex flex-col gap-1.5" aria-label={t("rebase.listLabel")}>
+        <ol ref={listRef} className="flex flex-col gap-1.5" aria-label={t("rebase.listLabel")}>
           {steps.map((step, index) => (
-            <li key={step.hash} className="flex flex-col gap-1.5 rounded-lg border border-line p-2">
+            <li
+              key={step.hash}
+              className={cn(
+                "flex flex-col gap-1.5 rounded-lg border border-line p-2 transition-colors duration-150",
+                dragging === index && "border-accent bg-accent-soft/50",
+              )}
+            >
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  aria-label={t("rebase.drag", { subject: step.subject })}
+                  title={t("rebase.dragHint")}
+                  disabled={busy}
+                  className={cn(
+                    "grid size-6 shrink-0 touch-none place-items-center rounded-md text-muted transition-colors duration-150 hover:bg-subtle hover:text-fg disabled:cursor-not-allowed disabled:opacity-40",
+                    dragging === index ? "cursor-grabbing" : "cursor-grab",
+                  )}
+                  {...gripProps(index)}
+                >
+                  <GripVertical className="size-3.5" />
+                </button>
                 <div className="flex shrink-0 items-center">
                   <IconButton
                     label={t("rebase.moveUp")}

@@ -894,7 +894,9 @@
     "problems": {
       "firstSquash": "The first kept commit cannot be combined into a previous one.",
       "emptyReword": "Write the new message for the commits you are rewording."
-    }
+    },
+    "drag": "Drag the commit {{subject}} to reorder it",
+    "dragHint": "Drag to reorder, or use the keyboard arrows"
   },
   "blame": {
     "title": "Blame",

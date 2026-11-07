@@ -894,7 +894,9 @@
     "problems": {
       "firstSquash": "El primer commit que se conserva no puede combinarse con uno anterior.",
       "emptyReword": "Escribe el nuevo mensaje de los commits que vas a cambiar."
-    }
+    },
+    "drag": "Arrastrar el commit {{subject}} para reordenarlo",
+    "dragHint": "Arrastra para reordenar, o usa las flechas del teclado"
   },
   "blame": {
     "title": "Blame",
