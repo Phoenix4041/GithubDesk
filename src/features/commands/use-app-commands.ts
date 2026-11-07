@@ -21,6 +21,7 @@ import type { ThemePreference } from "@/features/settings/store";
 import { useStashDialogStore } from "@/features/stash/store";
 import { runSyncOperation } from "@/features/sync/operations";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
+import { checkForUpdates } from "@/features/updates/actions";
 import { openLogFolder } from "@/shared/lib/diagnostics";
 import { reportError } from "@/shared/lib/report-error";
 import { useUiStore } from "@/shared/lib/ui-store";
@@ -73,6 +74,14 @@ export function buildGlobalCommands(): AppCommand[] {
       keywords: "teclado atajos keyboard shortcuts",
       enabled: true,
       run: () => useCommandUiStore.getState().setShortcutsOpen(true),
+    },
+    {
+      id: "app.updates",
+      titleKey: "commands.items.app.updates",
+      group: "tools",
+      keywords: "actualizar actualizaciones version nueva update upgrade release",
+      enabled: true,
+      run: () => checkForUpdates(true),
     },
     {
       id: "app.logs",

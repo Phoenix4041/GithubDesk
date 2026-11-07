@@ -7,12 +7,15 @@ import { WelcomeScreen } from "@/features/repositories/components/welcome-screen
 import { useRepositoriesStore } from "@/features/repositories/store";
 import { stopRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { useTheme } from "@/features/settings/use-theme";
+import { checkForUpdates } from "@/features/updates/actions";
 import { queryClient } from "@/shared/lib/query-client";
 import { ContextMenuHost } from "@/shared/ui/context-menu";
 import { ErrorBoundary } from "@/shared/ui/error-boundary";
 import { ToastRegion } from "@/shared/ui/toast-region";
 import { RenderFailure } from "./components/render-failure";
 import { Workspace } from "./workspace";
+
+const UPDATE_CHECK_DELAY_MS = 8000;
 
 export function App() {
   const { i18n } = useTranslation();
@@ -23,6 +26,11 @@ export function App() {
   useEffect(() => {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void checkForUpdates(false), UPDATE_CHECK_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     if (!activePath) {

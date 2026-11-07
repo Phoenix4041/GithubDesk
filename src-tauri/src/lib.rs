@@ -8,14 +8,15 @@ pub mod platform;
 pub mod pty;
 pub mod redact;
 pub mod state;
+pub mod update_check;
 pub mod watcher;
 
 use commands::diagnostics as diagnostics_commands;
 use commands::{
-    blame, branch, commit, commit_ops, compare, conflict, external, github_account, github_actions,
-    github_issues, github_pulls, github_repo, gitignore, history, job, lfs, merge, operation,
-    rebase, rebase_onto, reflog, remote, repo, signing, stash, status, submodule, tag, terminal,
-    watch, worktree,
+    app_update, blame, branch, commit, commit_ops, compare, conflict, external, github_account,
+    github_actions, github_issues, github_pulls, github_repo, gitignore, history, job, lfs, merge,
+    operation, rebase, rebase_onto, reflog, remote, repo, signing, stash, status, submodule, tag,
+    terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -134,6 +135,7 @@ pub fn run() {
             terminal::terminal_close,
             diagnostics_commands::diagnostics_log,
             diagnostics_commands::diagnostics_open_folder,
+            app_update::app_update_check,
             worktree::worktree_list,
             worktree::worktree_add,
             worktree::worktree_remove,

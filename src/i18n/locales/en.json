@@ -1347,7 +1347,8 @@
           "es": "Language: Spanish",
           "en": "Language: English"
         },
-        "logs": "Open the error log folder"
+        "logs": "Open the error log folder",
+        "updates": "Check for new versions"
       },
       "repo": {
         "open": "Open a repository",
@@ -1754,5 +1755,12 @@
     "done": "Rebase finished",
     "conflictTitle": "There are conflicts in the rebase",
     "conflictMessage": "Resolve them in the Changes tab and continue from the banner above."
+  },
+  "updates": {
+    "available": "A new version is available: {{version}}",
+    "current": "You have {{version}}.",
+    "view": "See what is new",
+    "upToDate": "You already have the latest version ({{version}})",
+    "notConfigured": "Checking for new versions is not turned on in this build yet."
   }
 }

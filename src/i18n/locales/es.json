@@ -1347,7 +1347,8 @@
           "es": "Idioma: español",
           "en": "Idioma: inglés"
         },
-        "logs": "Abrir la carpeta de registros de errores"
+        "logs": "Abrir la carpeta de registros de errores",
+        "updates": "Buscar versiones nuevas"
       },
       "repo": {
         "open": "Abrir un repositorio",
@@ -1754,5 +1755,12 @@
     "done": "Rebase terminado",
     "conflictTitle": "Hay conflictos en el rebase",
     "conflictMessage": "Resuélvelos en la pestaña Cambios y continúa desde el aviso de arriba."
+  },
+  "updates": {
+    "available": "Hay una versión nueva: {{version}}",
+    "current": "Tienes la {{version}}.",
+    "view": "Ver novedades",
+    "upToDate": "Ya tienes la última versión ({{version}})",
+    "notConfigured": "La búsqueda de versiones nuevas todavía no está activada en esta compilación."
   }
 }
