@@ -27,8 +27,10 @@ import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
 import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
+import { SubmoduleDialogs } from "@/features/submodules/components/submodule-dialogs";
 import { TagDialogs } from "@/features/tags/components/tag-dialogs";
 import { useTerminalStore } from "@/features/terminal/store";
+import { WorktreeDialogs } from "@/features/worktrees/components/worktree-dialogs";
 import { CommandError } from "@/shared/lib/tauri-client";
 import { useUiStore } from "@/shared/lib/ui-store";
 import { ResizeHandle } from "@/shared/ui/resize-handle";
@@ -128,6 +130,8 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <BranchDialogs repoPath={repoPath} />
       <TagDialogs repoPath={repoPath} />
       <StashDialogs repoPath={repoPath} />
+      <WorktreeDialogs repoPath={repoPath} />
+      <SubmoduleDialogs repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
       <ReflogDialogs repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />

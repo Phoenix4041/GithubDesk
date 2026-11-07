@@ -23,7 +23,8 @@
   },
   "sidebar": {
     "label": "Repositories and branches",
-    "sectionsLabel": "Sidebar sections"
+    "sectionsLabel": "Sidebar sections",
+    "moreSections": "More sections"
   },
   "toolbar": {
     "detached": "Detached HEAD",
@@ -603,6 +604,10 @@
     "editorNotFound": {
       "title": "The editor was not found",
       "message": "Check the external editor in Settings."
+    },
+    "branchInUseByWorktree": {
+      "title": "The branch is already open in another worktree",
+      "message": "Pick another branch or create a new one."
     }
   },
   "operation": {
@@ -1334,6 +1339,15 @@
       },
       "terminal": {
         "toggle": "Show or hide the terminal"
+      },
+      "worktree": {
+        "new": "Create a worktree",
+        "show": "Show worktrees"
+      },
+      "submodule": {
+        "add": "Add a submodule",
+        "update": "Initialize and update submodules",
+        "show": "Show submodules"
       }
     }
   },
@@ -1351,6 +1365,120 @@
       "running": "Running",
       "exited": "Ended",
       "error": "Could not open"
+    }
+  },
+  "worktrees": {
+    "title": "Worktrees",
+    "new": "New worktree",
+    "listLabel": "Worktree list",
+    "main": "Main",
+    "current": "Open",
+    "lockedBadge": "Locked",
+    "missing": "Missing",
+    "detached": "Detached HEAD {{head}}",
+    "prune": "Clean up missing ones",
+    "created": "Worktree created",
+    "removed": "Worktree removed",
+    "locked": "Worktree locked",
+    "unlocked": "Worktree unlocked",
+    "pruned": "Missing worktrees were cleaned up",
+    "empty": {
+      "title": "A single worktree",
+      "description": "A worktree lets you work on another branch in a separate folder without changing the one you have open."
+    },
+    "menu": {
+      "open": "Open this worktree",
+      "lock": "Lock",
+      "unlock": "Unlock",
+      "remove": "Remove"
+    },
+    "createDialog": {
+      "title": "New worktree",
+      "description": "Create a new folder with another branch of the same repository.",
+      "modeLabel": "What to open in the worktree",
+      "modes": {
+        "existing": "Existing branch",
+        "new": "New branch",
+        "detached": "Detached commit"
+      },
+      "branch": "Branch",
+      "noBranches": "Every local branch is already open in a worktree. Create a new branch.",
+      "newBranch": "New branch name",
+      "startPoint": "Start from (optional)",
+      "revision": "Commit, branch or tag",
+      "revisionHint": "It will have no branch, pointing at that spot.",
+      "location": "Folder where it will be created",
+      "chooseFolder": "Choose folder",
+      "folderName": "Folder name",
+      "destination": "It will be created at {{path}}",
+      "submit": "Create worktree"
+    },
+    "removeDialog": {
+      "title": "Remove the worktree",
+      "description": "The folder {{path}} is deleted.",
+      "branchKept": "The branch still exists: only the folder goes away.",
+      "force": "Remove even if it has unsaved changes (they are lost)",
+      "confirm": "Remove worktree"
+    },
+    "lockDialog": {
+      "title": "Lock the worktree",
+      "description": "A locked worktree is not cleaned up or removed by accident.",
+      "reason": "Reason (optional)",
+      "submit": "Lock"
+    }
+  },
+  "submodules": {
+    "title": "Submodules",
+    "add": "Add submodule",
+    "listLabel": "Submodule list",
+    "updateAll": "Initialize and update all",
+    "working": "Working...",
+    "added": "Submodule added",
+    "updated": "Submodules updated",
+    "removed": "Submodule removed",
+    "states": {
+      "uninitialized": "Not initialized",
+      "upToDate": "Up to date",
+      "modified": "Different version",
+      "conflict": "Conflict"
+    },
+    "empty": {
+      "title": "No submodules",
+      "description": "A submodule includes another repository inside this one, pinned to a specific version."
+    },
+    "menu": {
+      "open": "Open as repository",
+      "update": "Update",
+      "remove": "Remove"
+    },
+    "addDialog": {
+      "title": "Add a submodule",
+      "description": "Download another repository into a folder of this one.",
+      "url": "Repository address",
+      "path": "Folder inside the repository",
+      "pathHint": "Relative path, for example libs/library.",
+      "branch": "Branch to follow (optional)",
+      "branchPlaceholder": "The repository default",
+      "progress": "Downloading the submodule",
+      "submit": "Add submodule"
+    },
+    "updateDialog": {
+      "title": "Update submodules",
+      "single": "{{path}} will be updated.",
+      "all": "All submodules will be updated.",
+      "init": "Initialize the missing ones",
+      "recursive": "Include nested submodules",
+      "remote": "Fetch the latest of the remote branch (instead of the pinned version)",
+      "progress": "Updating submodules",
+      "submit": "Update"
+    },
+    "removeDialog": {
+      "title": "Remove the submodule {{path}}",
+      "description": "The submodule stops being part of this repository.",
+      "loseFolder": "The folder {{path}} is deleted",
+      "loseChanges": "Any uncommitted changes inside it are lost",
+      "stagedRemoval": "The removal is staged for your next commit",
+      "confirm": "Remove submodule"
     }
   }
 }

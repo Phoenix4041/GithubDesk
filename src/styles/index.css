@@ -152,6 +152,10 @@ button {
   scrollbar-color: var(--line) transparent;
 }
 
+.scrollbar-hidden {
+  scrollbar-width: none;
+}
+
 .selectable {
   user-select: text;
 }

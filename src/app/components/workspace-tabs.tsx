@@ -40,7 +40,7 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
   }
 
   return (
-    <div role="tablist" aria-label={t("tabs.label")} className="flex h-10 shrink-0 items-end gap-0.5 overflow-x-auto border-b border-line px-2 [scrollbar-width:none]">
+    <div role="tablist" aria-label={t("tabs.label")} className="flex h-10 shrink-0 items-end gap-0.5 overflow-x-auto border-b border-line px-2 scrollbar-hidden">
       {tabs.map((item) => {
         const selected = item.id === tab;
         return (

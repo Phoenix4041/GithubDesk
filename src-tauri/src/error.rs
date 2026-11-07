@@ -59,6 +59,7 @@ pub enum ErrorKind {
     TerminalUnavailable,
     TerminalNotFound,
     WorktreeHasChanges,
+    BranchInUseByWorktree,
     SigningFailed,
     SigningKeyMissing,
     LfsNotInstalled,
@@ -250,6 +251,12 @@ pub fn classify_failure(output: &str) -> ErrorKind {
         || has("local changes to the following files would be overwritten")
     {
         return ErrorKind::LocalChangesWouldBeOverwritten;
+    }
+    if has("is already checked out at") || has("is already used by worktree at") {
+        return ErrorKind::BranchInUseByWorktree;
+    }
+    if has("use --force to delete it") || has("contains modified or untracked files") {
+        return ErrorKind::WorktreeHasChanges;
     }
     if has("not fully merged") {
         return ErrorKind::BranchNotFullyMerged;

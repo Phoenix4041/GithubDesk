@@ -52,6 +52,7 @@ export type ErrorKind =
   | "terminalUnavailable"
   | "terminalNotFound"
   | "worktreeHasChanges"
+  | "branchInUseByWorktree"
   | "signingFailed"
   | "signingKeyMissing"
   | "lfsNotInstalled"
@@ -388,4 +389,38 @@ export interface RemoteRepo {
   host: string;
   owner: string;
   name: string;
+}
+
+export interface Worktree {
+  path: string;
+  head: string | null;
+  branch: string | null;
+  detached: boolean;
+  bare: boolean;
+  locked: boolean;
+  lockReason: string | null;
+  prunable: boolean;
+  prunableReason: string | null;
+  isMain: boolean;
+  isCurrent: boolean;
+}
+
+export interface NewWorktree {
+  path: string;
+  branch: string | null;
+  newBranch: string | null;
+  startPoint: string | null;
+  detach: boolean;
+}
+
+export type SubmoduleState = "uninitialized" | "upToDate" | "modified" | "conflict";
+
+export interface Submodule {
+  name: string;
+  path: string;
+  url: string | null;
+  branch: string | null;
+  commit: string;
+  state: SubmoduleState;
+  describe: string | null;
 }

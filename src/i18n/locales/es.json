@@ -23,7 +23,8 @@
   },
   "sidebar": {
     "label": "Repositorios y ramas",
-    "sectionsLabel": "Secciones de la barra lateral"
+    "sectionsLabel": "Secciones de la barra lateral",
+    "moreSections": "Más secciones"
   },
   "toolbar": {
     "detached": "HEAD separado",
@@ -603,6 +604,10 @@
     "editorNotFound": {
       "title": "No se encontró el editor",
       "message": "Revisa el editor externo en Ajustes."
+    },
+    "branchInUseByWorktree": {
+      "title": "La rama ya está abierta en otro worktree",
+      "message": "Elige otra rama o crea una rama nueva."
     }
   },
   "operation": {
@@ -1334,6 +1339,15 @@
       },
       "terminal": {
         "toggle": "Mostrar u ocultar la terminal"
+      },
+      "worktree": {
+        "new": "Crear un worktree",
+        "show": "Mostrar los worktrees"
+      },
+      "submodule": {
+        "add": "Agregar un submódulo",
+        "update": "Inicializar y actualizar submódulos",
+        "show": "Mostrar los submódulos"
       }
     }
   },
@@ -1351,6 +1365,120 @@
       "running": "En ejecución",
       "exited": "Terminó",
       "error": "No se pudo abrir"
+    }
+  },
+  "worktrees": {
+    "title": "Worktrees",
+    "new": "Nuevo worktree",
+    "listLabel": "Lista de worktrees",
+    "main": "Principal",
+    "current": "Abierto",
+    "lockedBadge": "Bloqueado",
+    "missing": "No encontrado",
+    "detached": "HEAD suelto {{head}}",
+    "prune": "Limpiar los que ya no existen",
+    "created": "Worktree creado",
+    "removed": "Worktree eliminado",
+    "locked": "Worktree bloqueado",
+    "unlocked": "Worktree desbloqueado",
+    "pruned": "Se limpiaron los worktrees que ya no existían",
+    "empty": {
+      "title": "Un solo worktree",
+      "description": "Un worktree te deja trabajar en otra rama en una carpeta aparte, sin cambiar la que tienes abierta."
+    },
+    "menu": {
+      "open": "Abrir este worktree",
+      "lock": "Bloquear",
+      "unlock": "Desbloquear",
+      "remove": "Eliminar"
+    },
+    "createDialog": {
+      "title": "Nuevo worktree",
+      "description": "Crea una carpeta nueva con otra rama del mismo repositorio.",
+      "modeLabel": "Qué abrir en el worktree",
+      "modes": {
+        "existing": "Rama existente",
+        "new": "Rama nueva",
+        "detached": "Commit suelto"
+      },
+      "branch": "Rama",
+      "noBranches": "Todas las ramas locales ya están abiertas en un worktree. Crea una rama nueva.",
+      "newBranch": "Nombre de la rama nueva",
+      "startPoint": "Partir de (opcional)",
+      "revision": "Commit, rama o etiqueta",
+      "revisionHint": "Quedará sin rama, apuntando a ese punto.",
+      "location": "Carpeta donde se creará",
+      "chooseFolder": "Elegir carpeta",
+      "folderName": "Nombre de la carpeta",
+      "destination": "Se creará en {{path}}",
+      "submit": "Crear worktree"
+    },
+    "removeDialog": {
+      "title": "Eliminar el worktree",
+      "description": "Se borra la carpeta {{path}}.",
+      "branchKept": "La rama sigue existiendo: solo desaparece la carpeta.",
+      "force": "Eliminar aunque tenga cambios sin guardar (se pierden)",
+      "confirm": "Eliminar worktree"
+    },
+    "lockDialog": {
+      "title": "Bloquear el worktree",
+      "description": "Un worktree bloqueado no se limpia ni se elimina por accidente.",
+      "reason": "Motivo (opcional)",
+      "submit": "Bloquear"
+    }
+  },
+  "submodules": {
+    "title": "Submódulos",
+    "add": "Agregar submódulo",
+    "listLabel": "Lista de submódulos",
+    "updateAll": "Inicializar y actualizar todos",
+    "working": "Trabajando...",
+    "added": "Submódulo agregado",
+    "updated": "Submódulos actualizados",
+    "removed": "Submódulo eliminado",
+    "states": {
+      "uninitialized": "Sin inicializar",
+      "upToDate": "Al día",
+      "modified": "Otra versión",
+      "conflict": "Conflicto"
+    },
+    "empty": {
+      "title": "Sin submódulos",
+      "description": "Un submódulo incluye otro repositorio dentro de este, fijado en una versión concreta."
+    },
+    "menu": {
+      "open": "Abrir como repositorio",
+      "update": "Actualizar",
+      "remove": "Eliminar"
+    },
+    "addDialog": {
+      "title": "Agregar un submódulo",
+      "description": "Descarga otro repositorio dentro de una carpeta de este.",
+      "url": "Dirección del repositorio",
+      "path": "Carpeta dentro del repositorio",
+      "pathHint": "Ruta relativa, por ejemplo libs/libreria.",
+      "branch": "Rama a seguir (opcional)",
+      "branchPlaceholder": "La predeterminada del repositorio",
+      "progress": "Descargando el submódulo",
+      "submit": "Agregar submódulo"
+    },
+    "updateDialog": {
+      "title": "Actualizar submódulos",
+      "single": "Se actualizará {{path}}.",
+      "all": "Se actualizarán todos los submódulos.",
+      "init": "Inicializar los que falten",
+      "recursive": "Incluir los submódulos anidados",
+      "remote": "Traer lo último de la rama remota (en vez de la versión fijada)",
+      "progress": "Actualizando submódulos",
+      "submit": "Actualizar"
+    },
+    "removeDialog": {
+      "title": "Eliminar el submódulo {{path}}",
+      "description": "El submódulo deja de formar parte de este repositorio.",
+      "loseFolder": "Se borra la carpeta {{path}}",
+      "loseChanges": "Los cambios sin commit que tenga dentro se pierden",
+      "stagedRemoval": "La eliminación queda preparada para tu próximo commit",
+      "confirm": "Eliminar submódulo"
     }
   }
 }

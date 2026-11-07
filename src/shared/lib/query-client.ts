@@ -30,6 +30,8 @@ export const repoKeys = {
   rebasePlan: (path: string, base: string) => ["repo", path, "rebase-plan", base] as const,
   conflict: (path: string, file: string) => ["repo", path, "conflict", file] as const,
   stashes: (path: string) => ["repo", path, "stashes"] as const,
+  worktrees: (path: string) => ["repo", path, "worktrees"] as const,
+  submodules: (path: string) => ["repo", path, "submodules"] as const,
   stashFiles: (path: string, hash: string) => ["repo", path, "stash-files", hash] as const,
   stashDiff: (path: string, hash: string, file: string, ignoreWhitespace: boolean) =>
     ["repo", path, "stash-diff", hash, file, ignoreWhitespace] as const,

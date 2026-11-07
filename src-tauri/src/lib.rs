@@ -10,7 +10,7 @@ pub mod watcher;
 use commands::{
     blame, branch, commit, commit_ops, compare, conflict, github_account, github_actions,
     github_issues, github_pulls, github_repo, history, job, operation, rebase, reflog, remote,
-    repo, stash, status, tag, terminal, watch,
+    repo, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -121,6 +121,16 @@ pub fn run() {
             terminal::terminal_write,
             terminal::terminal_resize,
             terminal::terminal_close,
+            worktree::worktree_list,
+            worktree::worktree_add,
+            worktree::worktree_remove,
+            worktree::worktree_lock,
+            worktree::worktree_unlock,
+            worktree::worktree_prune,
+            submodule::submodule_list,
+            submodule::submodule_add,
+            submodule::submodule_update,
+            submodule::submodule_remove,
             job::job_cancel,
             watch::watch_start,
             watch::watch_stop,

@@ -9,7 +9,9 @@ import { useReflogDialogStore } from "@/features/reflog/store";
 import { pickAndOpenRepository } from "@/features/repositories/actions";
 import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
 import { useSettingsStore } from "@/features/settings/store";
+import { useSubmoduleDialogStore } from "@/features/submodules/dialog-store";
 import { useTerminalStore } from "@/features/terminal/store";
+import { useWorktreeDialogStore } from "@/features/worktrees/dialog-store";
 import type { ThemePreference } from "@/features/settings/store";
 import { useStashDialogStore } from "@/features/stash/store";
 import { runSyncOperation } from "@/features/sync/operations";
@@ -278,6 +280,55 @@ function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithubAccount
       keywords: "deshacer ultima operacion undo",
       enabled: true,
       run: () => useReflogDialogStore.getState().show({ kind: "undo" }),
+    },
+    {
+      id: "worktree.new",
+      titleKey: "commands.items.worktree.new",
+      group: "branches",
+      keywords: "crear worktree arbol de trabajo carpeta adicional",
+      enabled: true,
+      run: () => {
+        goToSidebar("worktrees");
+        useWorktreeDialogStore.getState().show({ kind: "create" });
+      },
+    },
+    {
+      id: "worktree.show",
+      titleKey: "commands.items.worktree.show",
+      group: "navigation",
+      keywords: "worktrees arboles de trabajo",
+      enabled: true,
+      run: () => goToSidebar("worktrees"),
+    },
+    {
+      id: "submodule.add",
+      titleKey: "commands.items.submodule.add",
+      group: "branches",
+      keywords: "agregar submodulo dependencia repositorio anidado",
+      enabled: true,
+      run: () => {
+        goToSidebar("submodules");
+        useSubmoduleDialogStore.getState().show({ kind: "add" });
+      },
+    },
+    {
+      id: "submodule.update",
+      titleKey: "commands.items.submodule.update",
+      group: "branches",
+      keywords: "actualizar inicializar submodulos",
+      enabled: true,
+      run: () => {
+        goToSidebar("submodules");
+        useSubmoduleDialogStore.getState().show({ kind: "update", submodule: null });
+      },
+    },
+    {
+      id: "submodule.show",
+      titleKey: "commands.items.submodule.show",
+      group: "navigation",
+      keywords: "submodulos",
+      enabled: true,
+      run: () => goToSidebar("submodules"),
     },
     {
       id: "terminal.toggle",

@@ -8,4 +8,6 @@ pub mod reflog;
 pub mod remote;
 pub mod stash;
 pub mod status;
+pub mod submodule;
 pub mod tag;
+pub mod worktree;
