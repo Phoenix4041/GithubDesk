@@ -1486,7 +1486,8 @@
         "protection": "Protected branches",
         "hooks": "Webhooks",
         "keys": "Deploy keys",
-        "danger": "Danger zone"
+        "danger": "Danger zone",
+        "actions": "Secrets and variables"
       },
       "roles": {
         "pull": "Read",
@@ -1654,6 +1655,51 @@
         "deleteConfirmDescription": "This action cannot be undone.",
         "deleteConsequence": "The issues, pull requests and wikis of the repository on GitHub are lost for good.",
         "deleted": "Repository {{name}} deleted on GitHub"
+      },
+      "secrets": {
+        "intro": "Data your Actions workflows use. Secrets are encrypted here before they are sent and GitHub never shows them.",
+        "secrets": "Secrets",
+        "variables": "Variables",
+        "neverShown": "The value of a secret cannot be seen afterwards; it can only be replaced.",
+        "noSecrets": "There are no secrets yet.",
+        "noVariables": "There are no variables yet.",
+        "newSecret": "New secret",
+        "newVariable": "New variable",
+        "newSecretTitle": "Create a secret",
+        "newVariableTitle": "Create a variable",
+        "updateSecretTitle": "Replace the value of {{name}}",
+        "updateVariableTitle": "Change the variable {{name}}",
+        "secretDescription": "The value is encrypted on your computer with the repository public key.",
+        "name": "Name",
+        "value": "Value",
+        "valueHint": "It can span several lines, for example a certificate. It is hidden while you type.",
+        "visibility": "Who can use it",
+        "visibilityPrivate": "Private repositories",
+        "visibilityAll": "All repositories in the organization",
+        "nameProblems": {
+          "empty": "Enter a name.",
+          "start": "It must start with a letter or an underscore.",
+          "characters": "Only letters, numbers and underscores.",
+          "reserved": "Names starting with GITHUB_ are reserved.",
+          "long": "At most 100 characters."
+        },
+        "valueProblems": {
+          "empty": "Enter a value.",
+          "large": "The value is larger than 48 KB."
+        },
+        "replaceSecret": "Replace the secret {{name}}",
+        "deleteSecret": "Delete the secret {{name}}",
+        "deleteSecretTitle": "Delete the secret {{name}}?",
+        "deleteSecretDescription": "Workflows that use it will fail until you create it again.",
+        "editVariable": "Change the variable {{name}}",
+        "deleteVariable": "Delete the variable {{name}}",
+        "deleteVariableTitle": "Delete the variable {{name}}?",
+        "deleteVariableDescription": "Workflows that use it will get an empty value.",
+        "deleteConfirm": "Delete",
+        "secretSaved": "Secret {{name}} saved",
+        "secretDeleted": "Secret {{name}} deleted",
+        "variableSaved": "Variable {{name}} saved",
+        "variableDeleted": "Variable {{name}} deleted"
       }
     }
   },

@@ -1,4 +1,4 @@
-export type SettingsSection = "general" | "collaborators" | "protection" | "hooks" | "keys" | "danger";
+export type SettingsSection = "general" | "collaborators" | "protection" | "hooks" | "keys" | "actions" | "danger";
 
 export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
   "general",
@@ -6,6 +6,7 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
   "protection",
   "hooks",
   "keys",
+  "actions",
   "danger",
 ];
 

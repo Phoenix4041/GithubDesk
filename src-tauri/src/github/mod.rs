@@ -1,5 +1,6 @@
 pub mod accounts;
 pub mod actions;
+pub mod actions_secrets;
 pub mod client;
 pub mod collab;
 pub mod device_flow;

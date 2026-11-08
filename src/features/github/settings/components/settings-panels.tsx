@@ -1,4 +1,4 @@
-import { KeyRound, ShieldCheck, SlidersHorizontal, TriangleAlert, Users, Webhook } from "lucide-react";
+import { KeyRound, Lock, ShieldCheck, SlidersHorizontal, TriangleAlert, Users, Webhook } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/shared/lib/cn";
@@ -14,6 +14,7 @@ import { GeneralSection } from "./general-section";
 import { HooksSection } from "./hooks-section";
 import { KeysSection } from "./keys-section";
 import { ProtectionSection } from "./protection-section";
+import { SecretsSection } from "./secrets-section";
 
 const ICONS: Record<SettingsSection, ReactNode> = {
   general: <SlidersHorizontal className="size-4" />,
@@ -21,6 +22,7 @@ const ICONS: Record<SettingsSection, ReactNode> = {
   protection: <ShieldCheck className="size-4" />,
   hooks: <Webhook className="size-4" />,
   keys: <KeyRound className="size-4" />,
+  actions: <Lock className="size-4" />,
   danger: <TriangleAlert className="size-4" />,
 };
 
@@ -55,6 +57,7 @@ export function SettingsSectionsPanel({ repoPath }: { repoPath: string }) {
 }
 
 function Content({ target, section, canAdmin }: { target: GithubTarget; section: SettingsSection; canAdmin: boolean }) {
+  const { t } = useTranslation();
   switch (section) {
     case "general":
       return <GeneralSection target={target} canAdmin={canAdmin} />;
@@ -66,6 +69,14 @@ function Content({ target, section, canAdmin }: { target: GithubTarget; section:
       return <HooksSection target={target} canAdmin={canAdmin} />;
     case "keys":
       return <KeysSection target={target} canAdmin={canAdmin} />;
+    case "actions":
+      return (
+        <SecretsSection
+          scope={{ accountId: target.accountId, owner: target.owner, repo: target.repo, org: null }}
+          canAdmin={canAdmin}
+          title={t("github.settings.sections.actions")}
+        />
+      );
     case "danger":
       return <DangerSection target={target} canAdmin={canAdmin} />;
   }

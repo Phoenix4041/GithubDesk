@@ -1486,7 +1486,8 @@
         "protection": "Ramas protegidas",
         "hooks": "Webhooks",
         "keys": "Llaves de despliegue",
-        "danger": "Zona de peligro"
+        "danger": "Zona de peligro",
+        "actions": "Secretos y variables"
       },
       "roles": {
         "pull": "Lectura",
@@ -1654,6 +1655,51 @@
         "deleteConfirmDescription": "Esta acción no se puede deshacer.",
         "deleteConsequence": "Se pierden para siempre los issues, las pull requests y las wikis del repositorio en GitHub.",
         "deleted": "Repositorio {{name}} borrado en GitHub"
+      },
+      "secrets": {
+        "intro": "Datos que usan tus workflows de Actions. Los secretos se cifran aquí antes de enviarse y GitHub nunca los muestra.",
+        "secrets": "Secretos",
+        "variables": "Variables",
+        "neverShown": "El valor de un secreto no se puede ver después; solo se puede reemplazar.",
+        "noSecrets": "No hay secretos todavía.",
+        "noVariables": "No hay variables todavía.",
+        "newSecret": "Nuevo secreto",
+        "newVariable": "Nueva variable",
+        "newSecretTitle": "Crear un secreto",
+        "newVariableTitle": "Crear una variable",
+        "updateSecretTitle": "Reemplazar el valor de {{name}}",
+        "updateVariableTitle": "Cambiar la variable {{name}}",
+        "secretDescription": "El valor se cifra en tu equipo con la clave pública del repositorio.",
+        "name": "Nombre",
+        "value": "Valor",
+        "valueHint": "Puede tener varias líneas, por ejemplo un certificado. Se oculta mientras escribes.",
+        "visibility": "Quién puede usarlo",
+        "visibilityPrivate": "Los repositorios privados",
+        "visibilityAll": "Todos los repositorios de la organización",
+        "nameProblems": {
+          "empty": "Escribe un nombre.",
+          "start": "Debe empezar con una letra o un guion bajo.",
+          "characters": "Solo letras, números y guiones bajos.",
+          "reserved": "Los nombres que empiezan con GITHUB_ están reservados.",
+          "long": "Máximo 100 caracteres."
+        },
+        "valueProblems": {
+          "empty": "Escribe un valor.",
+          "large": "El valor pasa de 48 KB."
+        },
+        "replaceSecret": "Reemplazar el secreto {{name}}",
+        "deleteSecret": "Borrar el secreto {{name}}",
+        "deleteSecretTitle": "¿Borrar el secreto {{name}}?",
+        "deleteSecretDescription": "Los workflows que lo usen fallarán hasta que lo vuelvas a crear.",
+        "editVariable": "Cambiar la variable {{name}}",
+        "deleteVariable": "Borrar la variable {{name}}",
+        "deleteVariableTitle": "¿Borrar la variable {{name}}?",
+        "deleteVariableDescription": "Los workflows que la usen recibirán un valor vacío.",
+        "deleteConfirm": "Borrar",
+        "secretSaved": "Secreto {{name}} guardado",
+        "secretDeleted": "Secreto {{name}} borrado",
+        "variableSaved": "Variable {{name}} guardada",
+        "variableDeleted": "Variable {{name}} borrada"
       }
     }
   },

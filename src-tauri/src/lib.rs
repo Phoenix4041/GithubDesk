@@ -15,8 +15,8 @@ use commands::diagnostics as diagnostics_commands;
 use commands::{
     app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
     github_account, github_actions, github_admin, github_collab, github_home, github_issues,
-    github_orgs, github_pulls, github_repo, gitignore, history, identity, job, lfs, merge,
-    operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash, status,
+    github_orgs, github_pulls, github_repo, github_secrets, gitignore, history, identity, job, lfs,
+    merge, operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash, status,
     submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
@@ -130,6 +130,13 @@ pub fn run() {
             github_admin::github_deploy_keys_list,
             github_admin::github_deploy_key_add,
             github_admin::github_deploy_key_delete,
+            github_secrets::github_actions_secrets_list,
+            github_secrets::github_actions_variables_list,
+            github_secrets::github_actions_secret_put,
+            github_secrets::github_actions_secret_delete,
+            github_secrets::github_actions_variable_create,
+            github_secrets::github_actions_variable_update,
+            github_secrets::github_actions_variable_delete,
             github_home::github_publish_repository,
             identity::identity_get,
             identity::identity_apply,
