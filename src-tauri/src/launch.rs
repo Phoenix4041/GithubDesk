@@ -1,11 +1,17 @@
 use std::path::Path;
+use std::sync::Mutex;
 
 use serde::Serialize;
+use tauri::{AppHandle, Emitter, Manager, Runtime};
 use url::Url;
+
+use crate::state::AppState;
 
 const MAX_URL_LENGTH: usize = 2000;
 const CUSTOM_SCHEME: &str = "githubdesk";
 const DESKTOP_SCHEME: &str = "x-github-client";
+pub const LAUNCH_EVENT: &str = "launch-request";
+pub const MAIN_WINDOW: &str = "main";
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
@@ -15,7 +21,11 @@ pub enum LaunchRequest {
 }
 
 fn safe_clone_url(candidate: &str) -> Option<String> {
-    if candidate.len() > MAX_URL_LENGTH || candidate.chars().any(|character| character.is_control() || character.is_whitespace()) {
+    if candidate.len() > MAX_URL_LENGTH
+        || candidate
+            .chars()
+            .any(|character| character.is_control() || character.is_whitespace())
+    {
         return None;
     }
     let parsed = Url::parse(candidate).ok()?;
@@ -33,7 +43,9 @@ fn safe_branch(candidate: Option<String>) -> Option<String> {
         !name.is_empty()
             && name.len() <= 200
             && !name.starts_with('-')
-            && !name.chars().any(|character| character.is_control() || character.is_whitespace())
+            && !name
+                .chars()
+                .any(|character| character.is_control() || character.is_whitespace())
     })
 }
 
@@ -55,7 +67,11 @@ fn parse_link(text: &str) -> Option<LaunchRequest> {
                 branch: safe_branch(branch),
             })
         }
-        DESKTOP_SCHEME if link.host_str() == Some("openrepo") => {
+        DESKTOP_SCHEME
+            if link
+                .host_str()
+                .is_some_and(|host| host.eq_ignore_ascii_case("openrepo")) =>
+        {
             let rest = link.path().trim_start_matches('/');
             let target = if rest.starts_with("https:/") && !rest.starts_with("https://") {
                 rest.replacen("https:/", "https://", 1)
@@ -91,9 +107,72 @@ pub fn parse_arguments(arguments: &[String]) -> Option<LaunchRequest> {
     })
 }
 
+pub fn remember(slot: &Mutex<Option<LaunchRequest>>, request: LaunchRequest) {
+    let mut guard = slot.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
+    *guard = Some(request);
+}
+
+pub fn take(slot: &Mutex<Option<LaunchRequest>>) -> Option<LaunchRequest> {
+    let mut guard = slot.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
+    guard.take()
+}
+
+pub fn show_main_window<R: Runtime>(app: &AppHandle<R>) {
+    if let Some(window) = app.get_webview_window(MAIN_WINDOW) {
+        let _ = window.unminimize();
+        let _ = window.show();
+        let _ = window.set_focus();
+    }
+}
+
+pub fn deliver<R: Runtime>(app: &AppHandle<R>, request: LaunchRequest) {
+    if let Some(state) = app.try_state::<AppState>() {
+        remember(&state.launch, request.clone());
+    }
+    let _ = app.emit_to(MAIN_WINDOW, LAUNCH_EVENT, request);
+}
+
+pub fn handle_arguments<R: Runtime>(app: &AppHandle<R>, arguments: &[String]) {
+    if let Some(request) = parse_arguments(arguments) {
+        deliver(app, request);
+    }
+    show_main_window(app);
+}
+
+pub fn handle_links<R: Runtime>(app: &AppHandle<R>, links: &[String]) {
+    let mut arguments = vec![String::new()];
+    arguments.extend(links.iter().cloned());
+    handle_arguments(app, &arguments);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_remembered_request_is_taken_only_once() {
+        let slot = Mutex::new(None);
+        assert_eq!(take(&slot), None);
+        remember(
+            &slot,
+            LaunchRequest::Open {
+                path: "a".to_string(),
+            },
+        );
+        remember(
+            &slot,
+            LaunchRequest::Open {
+                path: "b".to_string(),
+            },
+        );
+        assert_eq!(
+            take(&slot),
+            Some(LaunchRequest::Open {
+                path: "b".to_string()
+            })
+        );
+        assert_eq!(take(&slot), None);
+    }
 
     fn args(items: &[&str]) -> Vec<String> {
         items.iter().map(|item| (*item).to_string()).collect()
@@ -117,7 +196,10 @@ mod tests {
     fn missing_folders_flags_and_empty_arguments_are_ignored() {
         assert_eq!(parse_arguments(&args(&["githubdesk"])), None);
         assert_eq!(parse_arguments(&args(&["githubdesk", "--flag", ""])), None);
-        assert_eq!(parse_arguments(&args(&["githubdesk", "/no/such/folder/anywhere"])), None);
+        assert_eq!(
+            parse_arguments(&args(&["githubdesk", "/no/such/folder/anywhere"])),
+            None
+        );
     }
 
     #[test]
@@ -155,7 +237,11 @@ mod tests {
             "githubdesk://other?url=https%3A%2F%2Fgithub.com%2Fa%2Fb",
             "x-github-client://openRepo/--upload-pack=x",
         ] {
-            assert_eq!(parse_arguments(&args(&["githubdesk", link])), None, "{link}");
+            assert_eq!(
+                parse_arguments(&args(&["githubdesk", link])),
+                None,
+                "{link}"
+            );
         }
     }
 

@@ -4,6 +4,7 @@ pub mod error;
 pub mod git;
 pub mod github;
 pub mod jobs;
+pub mod launch;
 pub mod platform;
 pub mod pty;
 pub mod redact;
@@ -13,6 +14,7 @@ pub mod update_check;
 pub mod watcher;
 
 use commands::diagnostics as diagnostics_commands;
+use commands::launch as launch_commands;
 use commands::{
     absorb, app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict,
     external, github_account, github_actions, github_admin, github_collab, github_extras,
@@ -27,6 +29,10 @@ use tauri::Manager;
 pub fn run() {
     platform::extend_search_path();
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, arguments, _| {
+            launch::handle_arguments(app, &arguments);
+        }))
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
@@ -35,6 +41,25 @@ pub fn run() {
             diagnostics::init(directory.join("logs"));
             app.manage(AppState::new(directory));
             self_update::register(app.handle())?;
+            let arguments: Vec<String> = std::env::args().collect();
+            if let Some(request) = launch::parse_arguments(&arguments) {
+                launch::remember(&app.state::<AppState>().launch, request);
+            }
+            #[cfg(target_os = "macos")]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                let handle = app.handle().clone();
+                app.deep_link().on_open_url(move |event| {
+                    let links: Vec<String> =
+                        event.urls().iter().map(|link| link.to_string()).collect();
+                    launch::handle_links(&handle, &links);
+                });
+            }
+            #[cfg(target_os = "linux")]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                let _ = app.deep_link().register_all();
+            }
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -299,6 +324,7 @@ pub fn run() {
             signing::signing_test,
             signing::commit_signature_get,
             job::job_cancel,
+            launch_commands::launch_take_pending,
             watch::watch_start,
             watch::watch_stop,
         ])

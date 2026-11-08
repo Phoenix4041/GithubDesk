@@ -2792,5 +2792,9 @@
       "failed": "falló"
     },
     "hint": "El pull seguro solo avanza ramas que no tienen commits propios; las que divergen o no tienen remoto se omiten con el motivo. Se revisan tres repositorios a la vez."
+  },
+  "launch": {
+    "cloneTitle": "Enlace para clonar",
+    "cloneBranch": "El enlace pide la rama {{branch}}. Cámbiate a ella cuando termine de clonar."
   }
 }

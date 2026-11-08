@@ -2792,5 +2792,9 @@
       "failed": "failed"
     },
     "hint": "Safe pull only fast-forwards branches with no commits of their own; diverged ones or ones without a remote are skipped with the reason. Three repositories are processed at a time."
+  },
+  "launch": {
+    "cloneTitle": "Link to clone",
+    "cloneBranch": "The link asks for the {{branch}} branch. Switch to it once the clone finishes."
   }
 }

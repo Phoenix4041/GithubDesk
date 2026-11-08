@@ -27,6 +27,7 @@ pub mod guard;
 pub mod history;
 pub mod identity;
 pub mod job;
+pub mod launch;
 pub mod lfs;
 pub mod merge;
 pub mod multi;

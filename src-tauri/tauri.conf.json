@@ -27,6 +27,11 @@
     }
   },
   "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["githubdesk", "x-github-client"]
+      }
+    },
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhGQTNBRjkzMzA3NUMwRTAKUldUZ3dIVXdrNitqajJidVJaaWUyZmc0NGVPeXU3SVEzUlR5dElEV09tSGxvU3RwaWhBTm01bkQK",
       "endpoints": [

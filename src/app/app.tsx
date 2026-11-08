@@ -6,6 +6,7 @@ import { CreateGithubRepoDialog } from "@/features/github/home/components/create
 import { NotificationsDialog } from "@/features/github/notifications/components/notifications-dialog";
 import { OverviewDialog } from "@/features/overview/components/overview-dialog";
 import { useNotificationAlerts } from "@/features/github/notifications/use-notification-alerts";
+import { useLaunchRequests } from "@/features/launch/use-launch-requests";
 import { OrgDialog } from "@/features/github/org-admin/components/org-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
@@ -35,6 +36,7 @@ export function App() {
   const activePath = useRepositoriesStore((state) => state.activePath);
 
   useTheme();
+  useLaunchRequests();
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
