@@ -36,6 +36,8 @@ pub struct Notification {
     pub repository: NotificationRepo,
     #[serde(default)]
     pub updated_at: String,
+    #[serde(skip_deserializing, default)]
+    pub web_url: Option<String>,
 }
 
 pub fn ensure_thread_id(id: &str) -> AppResult<()> {
@@ -72,7 +74,7 @@ pub fn web_url(api_url: Option<&str>, repository: &str, kind: &str) -> Option<St
 }
 
 pub async fn list_notifications(client: &GithubClient, all: bool) -> AppResult<Vec<Notification>> {
-    client
+    let mut items: Vec<Notification> = client
         .get_json(
             "/notifications",
             &[
@@ -80,7 +82,15 @@ pub async fn list_notifications(client: &GithubClient, all: bool) -> AppResult<V
                 ("per_page", NOTIFICATIONS_PAGE_SIZE.to_string()),
             ],
         )
-        .await
+        .await?;
+    for item in &mut items {
+        item.web_url = web_url(
+            item.subject.url.as_deref(),
+            &item.repository.full_name,
+            &item.subject.kind,
+        );
+    }
+    Ok(items)
 }
 
 pub async fn mark_read(client: &GithubClient, id: &str) -> AppResult<()> {

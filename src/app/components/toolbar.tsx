@@ -7,6 +7,7 @@ import { useGitignoreDialogStore } from "@/features/gitignore/store";
 import { BranchChecksButton } from "@/features/github/checks/components/branch-checks-button";
 import { GithubRepoChip } from "@/features/github/components/github-repo-chip";
 import { PublishButton } from "@/features/github/home/components/publish-button";
+import { NotificationsButton } from "@/features/github/notifications/components/notifications-button";
 import { ProfileSwitcher } from "@/features/profiles/components/profile-switcher";
 import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
 import { useRepositoriesStore } from "@/features/repositories/store";
@@ -89,6 +90,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
       <div className="ml-auto flex items-center gap-2">
         <ReflogButtons repoPath={repoPath} />
         <SyncButton repoPath={repoPath} />
+        <NotificationsButton />
         <ProfileSwitcher repoPath={repoPath} />
         <IconButton
           label={signing.data?.enabled ? t("signing.buttonOn") : t("signing.buttonOff")}

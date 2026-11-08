@@ -1490,7 +1490,8 @@
         "danger": "Zona de peligro",
         "actions": "Secretos y variables",
         "labels": "Etiquetas",
-        "milestones": "Hitos"
+        "milestones": "Hitos",
+        "security": "Seguridad"
       },
       "roles": {
         "pull": "Lectura",
@@ -1745,6 +1746,17 @@
         "created": "Hito {{title}} creado",
         "updated": "Hito actualizado",
         "deleted": "Hito borrado"
+      },
+      "security": {
+        "intro": "Alertas abiertas de Dependabot: dependencias con fallos de seguridad conocidos. Solo lectura; se resuelven en GitHub.",
+        "none": "No hay alertas abiertas.",
+        "open": "Abrir",
+        "severity": {
+          "critical": "crítica",
+          "high": "alta",
+          "medium": "media",
+          "low": "baja"
+        }
       }
     },
     "releases": {
@@ -1893,6 +1905,32 @@
       "noOutside": "No hay colaboradores externos.",
       "removeOutside": "Quitar a {{login}} de todos los repositorios",
       "outsideRemoved": "{{login}} ya no colabora desde fuera"
+    },
+    "notifications": {
+      "title": "Notificaciones de GitHub",
+      "description": "Lo que GitHub te avisa: menciones, revisiones pedidas, asignaciones y más.",
+      "button": "Notificaciones de GitHub",
+      "buttonUnread_one": "Notificaciones de GitHub, {{count}} sin leer",
+      "buttonUnread_other": "Notificaciones de GitHub, {{count}} sin leer",
+      "empty": "No tienes notificaciones.",
+      "readAll": "Marcar todo como leído",
+      "desktopTitle_one": "GitHub: {{count}} notificación nueva",
+      "desktopTitle_other": "GitHub: {{count}} notificaciones nuevas",
+      "settingTitle": "Avisos de escritorio",
+      "settingLabel": "Avisarme de las notificaciones nuevas de GitHub",
+      "settingHint": "Consulta GitHub cada pocos minutos mientras la aplicación está abierta y muestra un aviso del sistema. Necesita el permiso de notificaciones de tu cuenta.",
+      "reasons": {
+        "assign": "te asignaron",
+        "author": "eres el autor",
+        "comment": "comentaron",
+        "mention": "te mencionaron",
+        "review_requested": "te piden revisar",
+        "subscribed": "estás suscrito",
+        "team_mention": "mencionaron a tu equipo",
+        "state_change": "cambió de estado",
+        "ci_activity": "actividad de CI",
+        "other": "novedad"
+      }
     }
   },
   "commands": {
@@ -1991,7 +2029,8 @@
         "createRepo": "Crear un repositorio en GitHub",
         "repoSettings": "Abrir los ajustes del repositorio en GitHub",
         "releases": "Abrir las releases de GitHub",
-        "manageOrg": "Administrar la organización del perfil activo"
+        "manageOrg": "Administrar la organización del perfil activo",
+        "notifications": "Abrir las notificaciones de GitHub"
       },
       "terminal": {
         "toggle": "Mostrar u ocultar la terminal"

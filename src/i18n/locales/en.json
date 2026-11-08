@@ -1490,7 +1490,8 @@
         "danger": "Danger zone",
         "actions": "Secrets and variables",
         "labels": "Labels",
-        "milestones": "Milestones"
+        "milestones": "Milestones",
+        "security": "Security"
       },
       "roles": {
         "pull": "Read",
@@ -1745,6 +1746,17 @@
         "created": "Milestone {{title}} created",
         "updated": "Milestone updated",
         "deleted": "Milestone deleted"
+      },
+      "security": {
+        "intro": "Open Dependabot alerts: dependencies with known security flaws. Read only; they are resolved on GitHub.",
+        "none": "There are no open alerts.",
+        "open": "Open",
+        "severity": {
+          "critical": "critical",
+          "high": "high",
+          "medium": "medium",
+          "low": "low"
+        }
       }
     },
     "releases": {
@@ -1893,6 +1905,32 @@
       "noOutside": "There are no outside collaborators.",
       "removeOutside": "Remove {{login}} from all repositories",
       "outsideRemoved": "{{login}} no longer collaborates from outside"
+    },
+    "notifications": {
+      "title": "GitHub notifications",
+      "description": "What GitHub tells you about: mentions, requested reviews, assignments and more.",
+      "button": "GitHub notifications",
+      "buttonUnread_one": "GitHub notifications, {{count}} unread",
+      "buttonUnread_other": "GitHub notifications, {{count}} unread",
+      "empty": "You have no notifications.",
+      "readAll": "Mark all as read",
+      "desktopTitle_one": "GitHub: {{count}} new notification",
+      "desktopTitle_other": "GitHub: {{count}} new notifications",
+      "settingTitle": "Desktop alerts",
+      "settingLabel": "Alert me about new GitHub notifications",
+      "settingHint": "Checks GitHub every few minutes while the app is open and shows a system alert. It needs the notifications permission of your account.",
+      "reasons": {
+        "assign": "assigned to you",
+        "author": "you are the author",
+        "comment": "commented",
+        "mention": "mentioned you",
+        "review_requested": "review requested",
+        "subscribed": "subscribed",
+        "team_mention": "your team was mentioned",
+        "state_change": "state changed",
+        "ci_activity": "CI activity",
+        "other": "update"
+      }
     }
   },
   "commands": {
@@ -1991,7 +2029,8 @@
         "createRepo": "Create a repository on GitHub",
         "repoSettings": "Open the repository settings on GitHub",
         "releases": "Open the GitHub releases",
-        "manageOrg": "Manage the organization of the active profile"
+        "manageOrg": "Manage the organization of the active profile",
+        "notifications": "Open the GitHub notifications"
       },
       "terminal": {
         "toggle": "Show or hide the terminal"

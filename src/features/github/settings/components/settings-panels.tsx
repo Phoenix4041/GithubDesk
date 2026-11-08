@@ -1,4 +1,4 @@
-import { Flag, KeyRound, Lock, ShieldCheck, SlidersHorizontal, Tag, TriangleAlert, Users, Webhook } from "lucide-react";
+import { Flag, KeyRound, Lock, ShieldAlert, ShieldCheck, SlidersHorizontal, Tag, TriangleAlert, Users, Webhook } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/shared/lib/cn";
@@ -15,6 +15,7 @@ import { HooksSection } from "./hooks-section";
 import { KeysSection } from "./keys-section";
 import { ProtectionSection } from "./protection-section";
 import { SecretsSection } from "./secrets-section";
+import { SecuritySection } from "./security-section";
 import { LabelsSection, MilestonesSection } from "./tagging-sections";
 
 const ICONS: Record<SettingsSection, ReactNode> = {
@@ -26,6 +27,7 @@ const ICONS: Record<SettingsSection, ReactNode> = {
   actions: <Lock className="size-4" />,
   labels: <Tag className="size-4" />,
   milestones: <Flag className="size-4" />,
+  security: <ShieldAlert className="size-4" />,
   danger: <TriangleAlert className="size-4" />,
 };
 
@@ -84,6 +86,8 @@ function Content({ target, section, canAdmin }: { target: GithubTarget; section:
       return <LabelsSection target={target} canAdmin={canAdmin} />;
     case "milestones":
       return <MilestonesSection target={target} canAdmin={canAdmin} />;
+    case "security":
+      return <SecuritySection target={target} />;
     case "danger":
       return <DangerSection target={target} canAdmin={canAdmin} />;
   }

@@ -25,6 +25,7 @@ interface SettingsState {
   ignoreWhitespace: boolean;
   wordDiff: boolean;
   githubClientId: string;
+  notificationsEnabled: boolean;
   repoAccounts: Record<string, RepoAccountChoice>;
   profiles: Profile[];
   activeProfileId: string | null;
@@ -42,6 +43,7 @@ interface SettingsState {
   setIgnoreWhitespace: (ignore: boolean) => void;
   setWordDiff: (enabled: boolean) => void;
   setGithubClientId: (clientId: string) => void;
+  setNotificationsEnabled: (enabled: boolean) => void;
   setRepoAccount: (repoPath: string, choice: RepoAccountChoice | null) => void;
   addProfile: (profile: Profile) => void;
   updateProfile: (profile: Profile) => void;
@@ -66,6 +68,7 @@ export const useSettingsStore = create<SettingsState>()(
       ignoreWhitespace: false,
       wordDiff: true,
       githubClientId: "",
+      notificationsEnabled: false,
       repoAccounts: {},
       profiles: [],
       activeProfileId: null,
@@ -83,6 +86,7 @@ export const useSettingsStore = create<SettingsState>()(
       setIgnoreWhitespace: (ignoreWhitespace) => set({ ignoreWhitespace }),
       setWordDiff: (wordDiff) => set({ wordDiff }),
       setGithubClientId: (githubClientId) => set({ githubClientId }),
+      setNotificationsEnabled: (notificationsEnabled) => set({ notificationsEnabled }),
       setRepoAccount: (repoPath, choice) =>
         set((state) => {
           const next = { ...state.repoAccounts };

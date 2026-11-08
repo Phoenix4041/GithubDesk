@@ -9,6 +9,7 @@ import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
+import { useNotificationDialogStore } from "@/features/github/notifications/store";
 import { useOrgDialogStore } from "@/features/github/org-admin/store";
 import { useProfileDialogStore } from "@/features/profiles/dialog-store";
 import { choosePatchesToApply } from "@/features/patches/actions";
@@ -162,6 +163,14 @@ export function buildGlobalCommands(): AppCommand[] {
       keywords: "crear repositorio github nuevo remoto create repository",
       enabled: true,
       run: () => useGithubHomeDialogStore.getState().showCreate(),
+    },
+    {
+      id: "github.notifications",
+      titleKey: "commands.items.github.notifications",
+      group: "github",
+      keywords: "notificaciones avisos bandeja campana notifications inbox",
+      enabled: true,
+      run: () => useNotificationDialogStore.getState().show(),
     },
     {
       id: "github.manageOrg",

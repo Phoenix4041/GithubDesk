@@ -10,6 +10,7 @@ import { useCommandUiStore } from "@/features/commands/command-ui-store";
 import { formatCombo } from "@/features/commands/shortcut-model";
 import { useEditors } from "@/features/external/queries";
 import { AccountsSection } from "@/features/github/components/accounts-section";
+import { NotificationSetting } from "@/features/github/notifications/components/notification-setting";
 import { Dialog } from "@/shared/ui/dialog";
 import { TextField } from "@/shared/ui/text-field";
 import { useSettingsStore } from "../store";
@@ -157,6 +158,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
           ) : null}
         </div>
         <AccountsSection />
+        <NotificationSetting />
       </div>
     </Dialog>
   );

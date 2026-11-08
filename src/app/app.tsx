@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CommandsHost } from "@/features/commands/components/commands-host";
 import { CreateGithubRepoDialog } from "@/features/github/home/components/create-github-repo-dialog";
+import { NotificationsDialog } from "@/features/github/notifications/components/notifications-dialog";
+import { useNotificationAlerts } from "@/features/github/notifications/use-notification-alerts";
 import { OrgDialog } from "@/features/github/org-admin/components/org-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
@@ -21,6 +23,11 @@ import { RenderFailure } from "./components/render-failure";
 import { Workspace } from "./workspace";
 
 const UPDATE_CHECK_DELAY_MS = 8000;
+
+function NotificationWatcher() {
+  useNotificationAlerts();
+  return null;
+}
 
 export function App() {
   const { i18n } = useTranslation();
@@ -50,8 +57,10 @@ export function App() {
       </ErrorBoundary>
       <RepositoryDialogs />
       <GrantScopesDialog />
+      <NotificationWatcher />
       <CreateGithubRepoDialog />
       <OrgDialog />
+      <NotificationsDialog />
       <ProfilesDialog />
       <ProfilePickerDialog />
       <CommandsHost />

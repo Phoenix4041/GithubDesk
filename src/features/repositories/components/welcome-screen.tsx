@@ -2,6 +2,7 @@ import { Download, FolderOpen, FolderPlus, GitBranch } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { GithubHome } from "@/features/github/home/components/github-home";
+import { NotificationsButton } from "@/features/github/notifications/components/notifications-button";
 import { ProfileChips } from "@/features/profiles/components/profile-chips";
 import { pickAndOpenRepository } from "../actions";
 import { useRepositoryDialogStore } from "../dialog-store";
@@ -47,7 +48,10 @@ export function WelcomeScreen() {
           </div>
         </header>
 
-        <ProfileChips />
+        <div className="flex items-center justify-between gap-3">
+          <ProfileChips />
+          <NotificationsButton />
+        </div>
 
         <section className="grid grid-cols-3 gap-3" aria-label={t("welcome.actions")}>
           <ActionCard

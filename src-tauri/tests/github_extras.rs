@@ -7,9 +7,7 @@ use githubdesk_lib::github::account_keys::{
     list_gpg_keys, list_ssh_keys, update_profile, ProfileUpdate,
 };
 use githubdesk_lib::github::client::GithubClient;
-use githubdesk_lib::github::notifications::{
-    list_notifications, mark_all_read, mark_read, web_url,
-};
+use githubdesk_lib::github::notifications::{list_notifications, mark_all_read, mark_read};
 use githubdesk_lib::github::org_admin::{
     add_team_member, cancel_invitation, create_team, delete_team, invite, list_invitations,
     list_members, list_outside_collaborators, list_team_members, list_teams, my_membership,
@@ -342,12 +340,7 @@ async fn notifications_are_listed_and_marked_as_read() {
     assert_eq!(list[0].repository.full_name, "acme/app");
     assert_eq!(server.requests()[0].query("all").as_deref(), Some("false"));
     assert_eq!(
-        web_url(
-            list[0].subject.url.as_deref(),
-            &list[0].repository.full_name,
-            &list[0].subject.kind
-        )
-        .as_deref(),
+        list[0].web_url.as_deref(),
         Some("https://github.com/acme/app/pull/7")
     );
 

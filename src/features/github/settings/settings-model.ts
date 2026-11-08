@@ -7,6 +7,7 @@ export type SettingsSection =
   | "actions"
   | "labels"
   | "milestones"
+  | "security"
   | "danger";
 
 export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
@@ -18,6 +19,7 @@ export const SETTINGS_SECTIONS: readonly SettingsSection[] = [
   "actions",
   "labels",
   "milestones",
+  "security",
   "danger",
 ];
 
