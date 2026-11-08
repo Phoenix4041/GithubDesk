@@ -4,7 +4,7 @@ use std::process::Stdio;
 use serde::{Deserialize, Serialize};
 use tokio::process::Command;
 
-use crate::error::{AppError, AppResult};
+use crate::error::{AppError, AppResult, ErrorKind};
 use crate::git::parse::signing::{
     last_setting, parse_gpg_secret_keys, parse_scoped_settings, parse_scoped_value,
     parse_signature, parse_ssh_fingerprint, parse_ssh_public_key, GpgKey, SignatureInfo, SshKey,
@@ -292,6 +292,20 @@ pub async fn list_signing_keys(repo: &Path) -> AppResult<SigningKeys> {
     })
 }
 
+pub async fn export_gpg_public_key(repo: &Path, key_id: &str) -> AppResult<String> {
+    let id = key_id.trim().trim_start_matches("0x");
+    let valid =
+        (8..=64).contains(&id.len()) && id.chars().all(|character| character.is_ascii_hexdigit());
+    if !valid {
+        return Err(AppError::invalid_input("invalid key id"));
+    }
+    let program = locate_gpg(repo).await?;
+    run_tool(&program, &["--armor", "--export", id])
+        .await
+        .filter(|text| !text.trim().is_empty())
+        .ok_or_else(|| AppError::new(ErrorKind::SigningKeyMissing, id))
+}
+
 pub async fn test_signing(repo: &Path) -> AppResult<()> {
     let tree = git_with_input(repo, &["hash-object", "-t", "tree", "--stdin"], Vec::new()).await?;
     let tree_id = tree.trimmed();
@@ -334,6 +348,11 @@ pub async fn signing_config_set(path: String, update: SigningUpdate) -> AppResul
 #[tauri::command]
 pub async fn signing_keys_list(path: String) -> AppResult<SigningKeys> {
     list_signing_keys(Path::new(&path)).await
+}
+
+#[tauri::command]
+pub async fn signing_export_public_key(key_id: String) -> AppResult<String> {
+    export_gpg_public_key(Path::new("."), &key_id).await
 }
 
 #[tauri::command]

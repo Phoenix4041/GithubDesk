@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CommandsHost } from "@/features/commands/components/commands-host";
 import { CreateGithubRepoDialog } from "@/features/github/home/components/create-github-repo-dialog";
+import { OrgDialog } from "@/features/github/org-admin/components/org-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
 import { ProfilesDialog } from "@/features/profiles/components/profiles-dialog";
@@ -50,6 +51,7 @@ export function App() {
       <RepositoryDialogs />
       <GrantScopesDialog />
       <CreateGithubRepoDialog />
+      <OrgDialog />
       <ProfilesDialog />
       <ProfilePickerDialog />
       <CommandsHost />

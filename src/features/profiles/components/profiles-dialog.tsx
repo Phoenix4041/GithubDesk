@@ -1,6 +1,7 @@
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Building2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useOrgDialogStore } from "@/features/github/org-admin/store";
 import { useAccounts } from "@/features/github/queries";
 import { useSettingsStore } from "@/features/settings/store";
 import { Avatar } from "@/shared/ui/avatar";
@@ -21,6 +22,7 @@ function ProfilesForm({ onClose }: { onClose: () => void }) {
   const addProfile = useSettingsStore((state) => state.addProfile);
   const updateProfile = useSettingsStore((state) => state.updateProfile);
   const deleteProfile = useSettingsStore((state) => state.deleteProfile);
+  const showOrg = useOrgDialogStore((state) => state.show);
   const accounts = useAccounts();
   const [editing, setEditing] = useState<Editing>(null);
   const [removing, setRemoving] = useState<Profile | null>(null);
@@ -78,6 +80,14 @@ function ProfilesForm({ onClose }: { onClose: () => void }) {
                     {account ? ` · @${account.login}` : ""}
                   </span>
                 </div>
+                {profile.org ? (
+                  <IconButton
+                    label={t("profiles.dialog.manageOrg", { org: profile.org })}
+                    onClick={() => showOrg({ accountId: profile.accountId, org: profile.org ?? "" })}
+                  >
+                    <Building2 className="size-4" />
+                  </IconButton>
+                ) : null}
                 <IconButton label={t("profiles.dialog.edit", { label: profile.label })} onClick={() => setEditing({ kind: "edit", profile })}>
                   <Pencil className="size-4" />
                 </IconButton>

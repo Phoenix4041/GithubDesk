@@ -1,3 +1,4 @@
+pub mod account_keys;
 pub mod accounts;
 pub mod actions;
 pub mod actions_secrets;
@@ -9,6 +10,8 @@ pub mod host;
 pub mod inbox;
 pub mod issues;
 pub mod models;
+pub mod notifications;
+pub mod org_admin;
 pub mod orgs;
 pub mod path;
 pub mod protection;
@@ -18,3 +21,4 @@ pub mod remote;
 pub mod repo_admin;
 pub mod scopes;
 pub mod secrets;
+pub mod security;

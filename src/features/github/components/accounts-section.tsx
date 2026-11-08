@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Plus, Trash2, UserCog } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Avatar } from "@/shared/ui/avatar";
@@ -7,6 +7,7 @@ import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { IconButton } from "@/shared/ui/icon-button";
 import type { GithubAccount } from "@/shared/types/git";
 import { disconnectAccount } from "../actions";
+import { AccountDialog } from "../account/components/account-dialog";
 import { TokenDetails } from "../scopes/components/token-details";
 import { useAccounts } from "../queries";
 import { AddAccountDialog } from "./add-account-dialog";
@@ -17,6 +18,7 @@ export function AccountsSection() {
   const [adding, setAdding] = useState(false);
   const [removing, setRemoving] = useState<GithubAccount | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [managing, setManaging] = useState<GithubAccount | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function confirmRemoval() {
@@ -56,6 +58,9 @@ export function AccountsSection() {
                 >
                   {expandedId === account.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                 </IconButton>
+                <IconButton label={t("github.account.manage", { login: account.login })} onClick={() => setManaging(account)}>
+                  <UserCog className="size-4" />
+                </IconButton>
                 <IconButton label={t("github.accounts.remove", { login: account.login })} onClick={() => setRemoving(account)}>
                   <Trash2 className="size-4" />
                 </IconButton>
@@ -68,6 +73,7 @@ export function AccountsSection() {
         <p className="text-xs text-muted">{t("github.accounts.empty")}</p>
       )}
       <AddAccountDialog open={adding} onClose={() => setAdding(false)} />
+      {managing ? <AccountDialog account={managing} onClose={() => setManaging(null)} /> : null}
       <ConfirmDialog
         open={removing !== null}
         title={t("github.accounts.removeDialog.title", { login: removing?.login ?? "" })}

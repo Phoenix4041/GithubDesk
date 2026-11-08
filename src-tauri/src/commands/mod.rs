@@ -13,6 +13,7 @@ pub mod github_account;
 pub mod github_actions;
 pub mod github_admin;
 pub mod github_collab;
+pub mod github_extras;
 pub mod github_home;
 pub mod github_issues;
 pub mod github_orgs;

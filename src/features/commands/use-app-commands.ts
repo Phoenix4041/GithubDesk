@@ -9,6 +9,7 @@ import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
+import { useOrgDialogStore } from "@/features/github/org-admin/store";
 import { useProfileDialogStore } from "@/features/profiles/dialog-store";
 import { choosePatchesToApply } from "@/features/patches/actions";
 import { useRebaseOntoStore } from "@/features/rebase/store";
@@ -161,6 +162,22 @@ export function buildGlobalCommands(): AppCommand[] {
       keywords: "crear repositorio github nuevo remoto create repository",
       enabled: true,
       run: () => useGithubHomeDialogStore.getState().showCreate(),
+    },
+    {
+      id: "github.manageOrg",
+      titleKey: "commands.items.github.manageOrg",
+      group: "github",
+      keywords: "organizacion miembros equipos invitaciones administrar org members teams",
+      enabled: true,
+      run: () => {
+        const { profiles, activeProfileId } = useSettingsStore.getState();
+        const active = profiles.find((profile) => profile.id === activeProfileId);
+        if (active?.org) {
+          useOrgDialogStore.getState().show({ accountId: active.accountId, org: active.org });
+        } else {
+          useProfileDialogStore.getState().showPicker();
+        }
+      },
     },
     {
       id: "profile.switch",
