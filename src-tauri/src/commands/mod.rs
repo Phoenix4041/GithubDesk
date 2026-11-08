@@ -11,6 +11,7 @@ pub mod diagnostics;
 pub mod external;
 pub mod github_account;
 pub mod github_actions;
+pub mod github_admin;
 pub mod github_collab;
 pub mod github_home;
 pub mod github_issues;

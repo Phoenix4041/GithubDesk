@@ -327,6 +327,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       run: () => useCleanupDialogStore.getState().show(),
     },
     {
+      id: "github.repoSettings",
+      titleKey: "commands.items.github.repoSettings",
+      group: "github",
+      keywords: "ajustes repositorio colaboradores webhooks ramas protegidas llaves settings",
+      enabled: githubReady,
+      run: () => goToTab("repoSettings"),
+    },
+    {
       id: "bisect.start",
       titleKey: "commands.items.bisect.start",
       group: "history",

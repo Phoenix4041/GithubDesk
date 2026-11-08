@@ -1,6 +1,14 @@
 import { create } from "zustand";
 
-export type WorkspaceTab = "changes" | "history" | "stash" | "compare" | "pulls" | "issues" | "actions";
+export type WorkspaceTab =
+  | "changes"
+  | "history"
+  | "stash"
+  | "compare"
+  | "pulls"
+  | "issues"
+  | "actions"
+  | "repoSettings";
 export type SidebarTab = "branches" | "tags" | "stashes" | "worktrees" | "submodules" | "lfs";
 
 interface UiState {
