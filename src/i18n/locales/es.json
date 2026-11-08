@@ -2668,5 +2668,29 @@
       "other": "Copia de seguridad"
     },
     "deleteShort": "Eliminar"
+  },
+  "guard": {
+    "title": "Revisa antes de guardar el commit",
+    "description": "Lo que preparaste tiene cosas que suelen ser un error. Nada se ha guardado todavía.",
+    "listLabel": "Hallazgos",
+    "kinds": {
+      "secret": "Parece una clave o un secreto",
+      "largeFile": "Archivo muy grande",
+      "conflictMarker": "Marcador de conflicto sin resolver",
+      "riskyFile": "Archivo que normalmente no se sube"
+    },
+    "cancel": "Cancelar",
+    "unstage": "Quitar de lo preparado",
+    "commitAnyway": "Guardar el commit de todos modos",
+    "silence": "No avisar",
+    "silenceLabel": "No volver a avisar de {{path}}",
+    "largeHint": "GitHub rechaza archivos de más de 100 MB. Para archivos grandes conviene Git LFS.",
+    "limits": "Esta revisión busca patrones conocidos; no detecta todos los secretos y puede equivocarse. Un secreto que ya se subió hay que cambiarlo aunque se borre del historial.",
+    "unstaged_one": "Se quitó {{count}} archivo de lo preparado",
+    "unstaged_other": "Se quitaron {{count}} archivos de lo preparado"
+  },
+  "predict": {
+    "badge_one": "Combinarla con la rama actual daría conflicto en {{count}} archivo",
+    "badge_other": "Combinarla con la rama actual daría conflictos en {{count}} archivos"
   }
 }

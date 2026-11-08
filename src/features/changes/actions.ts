@@ -1,4 +1,5 @@
 import { i18next } from "@/i18n";
+import { reviewStagedChanges } from "@/features/guard/review";
 import { refreshRepository } from "@/shared/lib/query-client";
 import { performRepoAction } from "@/shared/lib/repo-action";
 import { reportError } from "@/shared/lib/report-error";
@@ -44,6 +45,9 @@ export async function commitStagedChanges(
   description: string,
   amend: boolean,
 ): Promise<boolean> {
+  if (!(await reviewStagedChanges(repoPath))) {
+    return false;
+  }
   const succeeded = await perform(repoPath, async () => {
     await createCommit(repoPath, title, description, amend);
   });

@@ -1,8 +1,9 @@
-import { ArrowLeftRight, Check, Cloud, CloudUpload, GitBranch, GitMerge, ListEnd, Pencil, SearchX, Trash2 } from "lucide-react";
+import { ArrowLeftRight, Check, TriangleAlert, Cloud, CloudUpload, GitBranch, GitMerge, ListEnd, Pencil, SearchX, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { openCompare } from "@/features/compare/actions";
 import { useMergeDialogStore } from "@/features/merge/store";
+import { usePredictions } from "@/features/predict/queries";
 import { useRebaseOntoStore } from "@/features/rebase/store";
 import { runSyncOperation } from "@/features/sync/operations";
 import { describeError } from "@/shared/lib/report-error";
@@ -61,6 +62,13 @@ export function BranchList({ repoPath }: BranchListProps) {
     () => buildRows(allBranches, query, t("branches.local"), t("branches.remote")),
     [allBranches, query, t],
   );
+
+  const currentBranch = allBranches.find((candidate) => candidate.isCurrent);
+  const candidates = useMemo(
+    () => allBranches.filter((candidate) => !candidate.isRemote && !candidate.isCurrent).map((candidate) => candidate.name),
+    [allBranches],
+  );
+  const predictions = usePredictions(repoPath, candidates, currentBranch !== undefined);
 
   function renderRow(row: BranchListRow) {
     if (row.kind === "header") {
@@ -123,6 +131,12 @@ export function BranchList({ repoPath }: BranchListProps) {
             <span className="ml-auto shrink-0 text-[11px] text-muted tabular-nums">
               {branch.ahead > 0 ? `↑${branch.ahead}` : ""} {branch.behind > 0 ? `↓${branch.behind}` : ""}
             </span>
+          ) : null}
+          {predictions.get(branch.name)?.conflicts ? (
+            <TriangleAlert
+              className="ml-auto size-3.5 shrink-0 text-warning"
+              aria-label={t("predict.badge", { count: predictions.get(branch.name)?.files.length ?? 0 })}
+            />
           ) : null}
           {branch.upstreamGone ? (
             <span className="ml-auto shrink-0 text-[10px] text-warning">{t("branches.upstreamGone")}</span>

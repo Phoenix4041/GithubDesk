@@ -2668,5 +2668,29 @@
       "other": "Safety copy"
     },
     "deleteShort": "Delete"
+  },
+  "guard": {
+    "title": "Check before committing",
+    "description": "What you staged has things that are usually a mistake. Nothing has been committed yet.",
+    "listLabel": "Findings",
+    "kinds": {
+      "secret": "Looks like a key or a secret",
+      "largeFile": "Very large file",
+      "conflictMarker": "Unresolved conflict marker",
+      "riskyFile": "File that is usually not committed"
+    },
+    "cancel": "Cancel",
+    "unstage": "Remove from staged",
+    "commitAnyway": "Commit anyway",
+    "silence": "Stop warning",
+    "silenceLabel": "Stop warning about {{path}}",
+    "largeHint": "GitHub rejects files over 100 MB. Git LFS is the usual answer for large files.",
+    "limits": "This check looks for known patterns; it does not catch every secret and can be wrong. A secret that was already pushed must be rotated even if it is removed from history.",
+    "unstaged_one": "{{count}} file was removed from staged",
+    "unstaged_other": "{{count}} files were removed from staged"
+  },
+  "predict": {
+    "badge_one": "Merging it into the current branch would conflict in {{count}} file",
+    "badge_other": "Merging it into the current branch would conflict in {{count}} files"
   }
 }

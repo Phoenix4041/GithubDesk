@@ -17,8 +17,9 @@ use commands::{
     app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
     github_account, github_actions, github_admin, github_collab, github_extras, github_home,
     github_issues, github_orgs, github_pulls, github_releases, github_repo, github_secrets,
-    gitignore, history, identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog,
-    remote, repo, rescue, signing, stash, status, submodule, tag, terminal, watch, worktree,
+    gitignore, guard, history, identity, job, lfs, merge, operation, patches, predict, rebase,
+    rebase_onto, reflog, remote, repo, rescue, signing, stash, status, submodule, tag, terminal,
+    watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -231,6 +232,11 @@ pub fn run() {
             terminal::terminal_close,
             diagnostics_commands::diagnostics_log,
             diagnostics_commands::diagnostics_open_folder,
+            guard::guard_scan,
+            guard::guard_silence,
+            predict::predict_merge_conflicts,
+            predict::predict_cherry_pick_conflicts,
+            predict::predict_branches_conflicts,
             rescue::rescue_list,
             rescue::rescue_preview,
             rescue::rescue_restore,
