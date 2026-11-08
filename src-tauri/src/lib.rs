@@ -18,8 +18,8 @@ use commands::background as background_commands;
 use commands::diagnostics as diagnostics_commands;
 use commands::launch as launch_commands;
 use commands::{
-    absorb, app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict,
-    external, github_account, github_actions, github_admin, github_collab, github_extras,
+    absorb, app_update, bisect, blame, branch, browse, cleanup, commit, commit_ops, compare,
+    conflict, external, github_account, github_actions, github_admin, github_collab, github_extras,
     github_home, github_issues, github_orgs, github_pulls, github_releases, github_repo,
     github_secrets, gitignore, guard, history, identity, job, lfs, merge, multi, operation,
     patches, predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split, stack,
@@ -123,6 +123,11 @@ pub fn run() {
             compare::compare_get_summary,
             compare::compare_changed_files,
             compare::compare_diff,
+            browse::browse_tree,
+            browse::browse_read_file,
+            browse::browse_restore_file,
+            browse::browse_diff_files,
+            browse::browse_diff_file,
             conflict::conflict_get,
             conflict::conflict_resolve,
             conflict::conflict_choose_side,

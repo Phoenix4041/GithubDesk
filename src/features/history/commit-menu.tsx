@@ -1,8 +1,10 @@
 import {
+  ArrowLeftRight,
   Bug,
   CircleCheck,
   Copy,
   FileDown,
+  FolderTree,
   GitBranchPlus,
   GitCommitHorizontal,
   History,
@@ -15,6 +17,8 @@ import {
 import { i18next } from "@/i18n";
 import { markFromHistory } from "@/features/bisect/actions";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { useBrowseDialogStore } from "@/features/browse/store";
+import { openCompare } from "@/features/compare/actions";
 import { exportCommitsAsPatches } from "@/features/patches/actions";
 import { useRebaseDialogStore } from "@/features/rebase/store";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
@@ -33,6 +37,11 @@ interface CommitMenuInput {
   repoPath: string;
   commit: CommitSummary;
   selectedNewestFirst: readonly CommitSummary[];
+}
+
+function comparePair(selectedNewestFirst: readonly CommitSummary[]): Array<[CommitSummary, CommitSummary]> {
+  const [newer, older] = selectedNewestFirst;
+  return selectedNewestFirst.length === 2 && newer && older ? [[older, newer]] : [];
 }
 
 export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: CommitMenuInput): ContextMenuEntry[] {
@@ -62,6 +71,19 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
       icon: <History className="size-4" />,
       onSelect: () => void checkoutCommitDetached(repoPath, commit.hash),
     },
+    { kind: "separator" },
+    {
+      label: t("browse.menu.explore"),
+      icon: <FolderTree className="size-4" />,
+      onSelect: () => useBrowseDialogStore.getState().show({ revision: commit.hash, label: commit.shortHash }),
+    },
+    ...comparePair(selectedNewestFirst).map(
+      ([older, newer]): ContextMenuEntry => ({
+        label: t("browse.menu.compareTwo"),
+        icon: <ArrowLeftRight className="size-4" />,
+        onSelect: () => openCompare(older.hash, newer.hash, true),
+      }),
+    ),
     { kind: "separator" },
     {
       label: t("commitActions.menu.cherryPick", { count: picks.length }),

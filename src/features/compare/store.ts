@@ -10,9 +10,10 @@ export interface SelectedCompareFile {
 interface CompareState {
   base: string | null;
   head: string | null;
+  exact: boolean;
   view: CompareView;
   selectedFile: SelectedCompareFile | null;
-  open: (base: string, head: string) => void;
+  open: (base: string, head: string, exact?: boolean) => void;
   setBase: (base: string) => void;
   setHead: (head: string) => void;
   swap: () => void;
@@ -24,13 +25,14 @@ interface CompareState {
 export const useCompareStore = create<CompareState>((set) => ({
   base: null,
   head: null,
+  exact: false,
   view: "files",
   selectedFile: null,
-  open: (base, head) => set({ base, head, view: "files", selectedFile: null }),
+  open: (base, head, exact = false) => set({ base, head, exact, view: "files", selectedFile: null }),
   setBase: (base) => set({ base, selectedFile: null }),
   setHead: (head) => set({ head, selectedFile: null }),
   swap: () => set((state) => ({ base: state.head, head: state.base, selectedFile: null })),
   setView: (view) => set({ view }),
   selectFile: (selectedFile) => set({ selectedFile }),
-  close: () => set({ base: null, head: null, view: "files", selectedFile: null }),
+  close: () => set({ base: null, head: null, exact: false, view: "files", selectedFile: null }),
 }));

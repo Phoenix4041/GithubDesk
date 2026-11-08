@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BranchDialogs } from "@/features/branches/components/branch-dialogs";
+import { BrowseDialog } from "@/features/browse/components/browse-dialog";
 import { ChangesDiffPanel } from "@/features/changes/components/changes-diff-panel";
 import { ChangesView } from "@/features/changes/components/changes-view";
 import { useStatus } from "@/features/changes/queries";
@@ -172,6 +173,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <RebaseOntoDialog repoPath={repoPath} />
       <ReflogDialogs repoPath={repoPath} />
       <RescueDialog repoPath={repoPath} />
+      <BrowseDialog repoPath={repoPath} />
       <GuardDialog />
       <AbsorbDialog repoPath={repoPath} />
       <StackDialog repoPath={repoPath} />
