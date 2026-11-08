@@ -23,6 +23,7 @@ import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/fe
 import { RebaseOntoDialog } from "@/features/rebase/components/rebase-onto-dialog";
 import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
 import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
+import { AbsorbDialog } from "@/features/absorb/components/absorb-dialog";
 import { GuardDialog } from "@/features/guard/components/guard-dialog";
 import { RescueDialog } from "@/features/rescue/components/rescue-dialog";
 import { useRescueNotice } from "@/features/rescue/use-rescue-notice";
@@ -168,6 +169,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <ReflogDialogs repoPath={repoPath} />
       <RescueDialog repoPath={repoPath} />
       <GuardDialog />
+      <AbsorbDialog repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>

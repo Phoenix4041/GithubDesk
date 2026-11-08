@@ -26,6 +26,7 @@ export const repoKeys = {
   reflog: (path: string) => ["repo", path, "reflog"] as const,
   undoPlan: (path: string) => ["repo", path, "undo-plan"] as const,
   rescue: (path: string) => ["repo", path, "rescue"] as const,
+  absorb: (path: string) => ["repo", path, "absorb"] as const,
   predictions: (path: string, sources: readonly string[]) => ["repo", path, "predictions", ...sources] as const,
   rescueDetail: (path: string, id: string) => ["repo", path, "rescue-detail", id] as const,
   blame: (path: string, file: string, revision: string | null, ignoreWhitespace: boolean) =>

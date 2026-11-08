@@ -2085,6 +2085,9 @@
       },
       "rescue": {
         "open": "Open Rescue (automatic safety copies)"
+      },
+      "absorb": {
+        "open": "Absorb staged changes into earlier commits"
       }
     }
   },
@@ -2692,5 +2695,32 @@
   "predict": {
     "badge_one": "Merging it into the current branch would conflict in {{count}} file",
     "badge_other": "Merging it into the current branch would conflict in {{count}} files"
+  },
+  "absorb": {
+    "title": "Absorb changes",
+    "description": "Each staged block goes to the unpushed commit that wrote those lines, as a fixup. They can then be folded into that commit.",
+    "listLabel": "Blocks to absorb",
+    "goesTo": "goes to {{hash}} {{title}}",
+    "nothingToAbsorb": "None of the staged blocks can be sent to an earlier commit.",
+    "skippedTitle_one": "{{count}} block stays as it is",
+    "skippedTitle_other": "{{count}} blocks stay as they are",
+    "hint": "Only commits that are on no remote are touched. A copy is saved in Rescue first. If folding hits conflicts, the operation banner appears.",
+    "applyAndSquash": "Create fixups and fold them",
+    "onlyFixups": "Only create the fixups",
+    "created_one": "{{count}} fixup was created",
+    "created_other": "{{count}} fixups were created",
+    "squashed_one": "Absorbed into {{count}} commit",
+    "squashed_other": "Absorbed into {{count}} commits",
+    "empty": {
+      "title": "Nothing is staged",
+      "description": "Stage changes to lines that already existed and open this again."
+    },
+    "reasons": {
+      "onlyAdditions": "only adds new lines",
+      "manyCommits": "the lines come from several commits",
+      "published": "the commit is already published",
+      "unsupported": "new, deleted, renamed or binary file",
+      "notFound": "could not find who wrote those lines"
+    }
   }
 }

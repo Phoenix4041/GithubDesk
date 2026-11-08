@@ -7,6 +7,7 @@ import { useRunStore } from "@/features/github/actions/store";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
+import { useAbsorbDialogStore } from "@/features/absorb/store";
 import { useRescueDialogStore } from "@/features/rescue/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
@@ -344,6 +345,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "rebase reaplicar linea recta historial rama",
       enabled: true,
       run: () => useRebaseOntoStore.getState().choose(),
+    },
+    {
+      id: "absorb.open",
+      titleKey: "commands.items.absorb.open",
+      group: "repository",
+      keywords: "absorber fixup autosquash corregir commit anterior absorb amend older",
+      enabled: true,
+      run: () => useAbsorbDialogStore.getState().show(),
     },
     {
       id: "rescue.open",

@@ -2085,6 +2085,9 @@
       },
       "rescue": {
         "open": "Abrir el Rescate (copias de seguridad automáticas)"
+      },
+      "absorb": {
+        "open": "Absorber lo preparado en commits anteriores"
       }
     }
   },
@@ -2692,5 +2695,32 @@
   "predict": {
     "badge_one": "Combinarla con la rama actual daría conflicto en {{count}} archivo",
     "badge_other": "Combinarla con la rama actual daría conflictos en {{count}} archivos"
+  },
+  "absorb": {
+    "title": "Absorber cambios",
+    "description": "Cada bloque preparado se manda al commit sin publicar que escribió esas líneas, como un fixup. Después se pueden fundir con su commit.",
+    "listLabel": "Bloques que se absorben",
+    "goesTo": "va a {{hash}} {{title}}",
+    "nothingToAbsorb": "Ninguno de los bloques preparados se puede mandar a un commit anterior.",
+    "skippedTitle_one": "{{count}} bloque se queda como está",
+    "skippedTitle_other": "{{count}} bloques se quedan como están",
+    "hint": "Solo se tocan commits que no están en ningún remoto. Antes de empezar se guarda una copia en Rescate. Si al fundir hay conflictos, aparece el aviso de operación en curso.",
+    "applyAndSquash": "Crear fixups y fundirlos",
+    "onlyFixups": "Solo crear los fixups",
+    "created_one": "Se creó {{count}} fixup",
+    "created_other": "Se crearon {{count}} fixups",
+    "squashed_one": "Se absorbió en {{count}} commit",
+    "squashed_other": "Se absorbió en {{count}} commits",
+    "empty": {
+      "title": "No hay nada preparado",
+      "description": "Prepara cambios sobre líneas que ya existían y vuelve a abrir esto."
+    },
+    "reasons": {
+      "onlyAdditions": "solo agrega líneas nuevas",
+      "manyCommits": "las líneas son de varios commits",
+      "published": "el commit ya está publicado",
+      "unsupported": "archivo nuevo, borrado, renombrado o binario",
+      "notFound": "no se encontró quién escribió esas líneas"
+    }
   }
 }
