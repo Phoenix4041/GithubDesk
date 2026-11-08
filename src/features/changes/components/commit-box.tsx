@@ -3,6 +3,9 @@ import { useState } from "react";
 import type { KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { IdentityLine } from "@/features/profiles/components/identity-line";
+import { SecretScanDialog } from "@/features/secret-scan/components/secret-scan-dialog";
+import { findStagedSecrets, ignoreFlaggedFiles, unstageFlaggedFiles } from "@/features/secret-scan/queries";
+import type { SecretFinding } from "@/features/secret-scan/api";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
@@ -37,6 +40,8 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
   const [committing, setCommitting] = useState(false);
   const [confirmingUndo, setConfirmingUndo] = useState(false);
   const [undoing, setUndoing] = useState(false);
+  const [findings, setFindings] = useState<SecretFinding[]>([]);
+  const [resolving, setResolving] = useState(false);
 
   const titleLength = draft.title.trim().length;
   const hasConflicts = conflictCount > 0;
@@ -47,6 +52,29 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
       return;
     }
     setCommitting(true);
+    const found = stagedCount > 0 ? await findStagedSecrets(repoPath) : [];
+    if (found.length > 0) {
+      setCommitting(false);
+      setFindings(found);
+      return;
+    }
+    await performCommit();
+  }
+
+  async function resolveFindings(resolve: () => Promise<boolean>) {
+    setResolving(true);
+    await resolve();
+    setResolving(false);
+    setFindings([]);
+  }
+
+  async function commitDespiteFindings() {
+    setFindings([]);
+    setCommitting(true);
+    await performCommit();
+  }
+
+  async function performCommit() {
     const succeeded = await commitStagedChanges(repoPath, draft.title, draft.description, amend);
     setCommitting(false);
     if (succeeded) {
@@ -133,6 +161,15 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
           </Button>
         </div>
       ) : null}
+      <SecretScanDialog
+        open={findings.length > 0}
+        findings={findings}
+        busy={resolving}
+        onUnstage={() => void resolveFindings(() => unstageFlaggedFiles(repoPath, findings))}
+        onIgnore={() => void resolveFindings(() => ignoreFlaggedFiles(repoPath, findings))}
+        onCommitAnyway={() => void commitDespiteFindings()}
+        onCancel={() => setFindings([])}
+      />
       <ConfirmDialog
         open={confirmingUndo}
         title={t("commit.undo.title")}
