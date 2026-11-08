@@ -357,7 +357,7 @@ export interface ReflogEntry {
   message: string;
 }
 
-export type UndoStrategy = "keepChangesStaged" | "restoreAll";
+export type UndoStrategy = "keepChangesStaged" | "restoreAll" | "switchBack";
 
 export interface UndoPlan {
   action: ReflogAction;
@@ -366,6 +366,27 @@ export interface UndoPlan {
   currentHash: string;
   targetHash: string;
   targetShortHash: string;
+  switchTo: string | null;
+}
+
+export interface UndoPreviewCommit {
+  hash: string;
+  shortHash: string;
+  subject: string;
+}
+
+export interface UndoPreviewFile {
+  path: string;
+  additions: number;
+  deletions: number;
+}
+
+export interface UndoPreview {
+  plan: UndoPlan;
+  hasUncommittedChanges: boolean;
+  removedCommits: UndoPreviewCommit[];
+  restoredCommits: UndoPreviewCommit[];
+  files: UndoPreviewFile[];
 }
 
 export type AccountSource = "oauth" | "token";

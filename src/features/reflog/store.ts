@@ -1,7 +1,11 @@
 import { create } from "zustand";
 import type { ReflogEntry } from "@/shared/types/git";
 
-export type ReflogDialog = { kind: "list" } | { kind: "undo" } | { kind: "restore"; entry: ReflogEntry };
+export type ReflogDialog =
+  | { kind: "list" }
+  | { kind: "undo" }
+  | { kind: "restore"; entry: ReflogEntry }
+  | { kind: "recover"; entry: ReflogEntry };
 
 interface ReflogDialogState {
   dialog: ReflogDialog | null;

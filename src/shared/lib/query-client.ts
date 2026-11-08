@@ -25,6 +25,9 @@ export const repoKeys = {
   githubRemotes: (path: string) => ["repo", path, "github-remotes"] as const,
   reflog: (path: string) => ["repo", path, "reflog"] as const,
   undoPlan: (path: string) => ["repo", path, "undo-plan"] as const,
+  undoPreview: (path: string) => ["repo", path, "undo-preview"] as const,
+  reflogRef: (path: string, reference: string) => ["repo", path, "reflog-ref", reference] as const,
+  reflogRefs: (path: string) => ["repo", path, "reflog-refs"] as const,
   blame: (path: string, file: string, revision: string | null, ignoreWhitespace: boolean) =>
     ["repo", path, "blame", file, revision, ignoreWhitespace] as const,
   rebaseOntoPreview: (path: string, target: string) => ["repo", path, "rebase-onto-preview", target] as const,

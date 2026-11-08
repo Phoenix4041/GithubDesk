@@ -1,7 +1,7 @@
 import { i18next } from "@/i18n";
 import { performRepoAction } from "@/shared/lib/repo-action";
 import { showToast } from "@/shared/ui/toast-store";
-import { restoreHead, undoLastOperation } from "./api";
+import { recoverCommit, restoreHead, undoLastOperation } from "./api";
 
 export async function restoreToReflogEntry(repoPath: string, hash: string): Promise<boolean> {
   const succeeded = await performRepoAction(repoPath, () => restoreHead(repoPath, hash));
@@ -11,10 +11,23 @@ export async function restoreToReflogEntry(repoPath: string, hash: string): Prom
   return succeeded;
 }
 
-export async function undoLatestOperation(repoPath: string, expectedCurrent: string): Promise<boolean> {
-  const succeeded = await performRepoAction(repoPath, () => undoLastOperation(repoPath, expectedCurrent));
+export async function undoLatestOperation(
+  repoPath: string,
+  expectedCurrent: string,
+  stashFirst: boolean,
+): Promise<boolean> {
+  const succeeded = await performRepoAction(repoPath, () => undoLastOperation(repoPath, expectedCurrent, stashFirst));
   if (succeeded) {
     showToast({ kind: "success", title: i18next.t("reflog.undone") });
+  }
+  return succeeded;
+}
+
+export async function recoverToBranch(repoPath: string, name: string, hash: string): Promise<boolean> {
+  const branchName = name.trim();
+  const succeeded = await performRepoAction(repoPath, () => recoverCommit(repoPath, branchName, hash));
+  if (succeeded) {
+    showToast({ kind: "success", title: i18next.t("reflog.recovered", { name: branchName }) });
   }
   return succeeded;
 }
