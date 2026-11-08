@@ -59,6 +59,13 @@ pub struct GithubClient {
     cache: Option<(Arc<EtagCache>, String)>,
 }
 
+pub fn graphql_endpoint(api_base: &str) -> String {
+    match api_base.strip_suffix("/api/v3") {
+        Some(root) => format!("{root}/api/graphql"),
+        None => format!("{api_base}/graphql"),
+    }
+}
+
 pub fn is_loopback_host(host: &str) -> bool {
     let name = host.split(':').next().unwrap_or(host);
     name == "localhost" || name == "127.0.0.1" || name == "[::1]" || name.ends_with(".localhost")
@@ -249,6 +256,44 @@ impl GithubClient {
             items: unwrap(wrapper),
             next_page: next,
         })
+    }
+
+    pub async fn graphql<T: DeserializeOwned>(
+        &self,
+        query: &str,
+        variables: serde_json::Value,
+    ) -> AppResult<T> {
+        #[derive(serde::Deserialize)]
+        struct Failure {
+            message: String,
+        }
+        #[derive(serde::Deserialize)]
+        struct Envelope<D> {
+            data: Option<D>,
+            #[serde(default)]
+            errors: Vec<Failure>,
+        }
+        let url = graphql_endpoint(&self.api_base);
+        let body = serde_json::json!({ "query": query, "variables": variables });
+        let response = self
+            .dispatch(self.request(Method::POST, &url).json(&body))
+            .await?;
+        let text = response.text().await.map_err(map_transport_error)?;
+        let envelope: Envelope<T> = parse_json(&text)?;
+        if !envelope.errors.is_empty() {
+            let messages: Vec<String> = envelope
+                .errors
+                .into_iter()
+                .map(|failure| failure.message)
+                .collect();
+            return Err(AppError::new(
+                ErrorKind::GithubValidation,
+                messages.join(" | "),
+            ));
+        }
+        envelope
+            .data
+            .ok_or_else(|| AppError::new(ErrorKind::GithubServerError, "empty GraphQL response"))
     }
 
     pub async fn get_text(&self, path: &str) -> AppResult<String> {
@@ -495,6 +540,22 @@ mod tests {
         assert!(GithubClient::new("http://localhost:3000", None).is_ok());
         assert!(GithubClient::new("http://api.github.com", None).is_err());
         assert!(GithubClient::new("not a url", None).is_err());
+    }
+
+    #[test]
+    fn the_graphql_endpoint_follows_the_api_address() {
+        assert_eq!(
+            graphql_endpoint("https://api.github.com"),
+            "https://api.github.com/graphql"
+        );
+        assert_eq!(
+            graphql_endpoint("https://git.corp.example/api/v3"),
+            "https://git.corp.example/api/graphql"
+        );
+        assert_eq!(
+            graphql_endpoint("http://127.0.0.1:8080"),
+            "http://127.0.0.1:8080/graphql"
+        );
     }
 
     #[test]

@@ -1,4 +1,4 @@
-import { ExternalLink, GitBranch, GitMerge, MessageSquareText, RefreshCw } from "lucide-react";
+import { ExternalLink, GitBranch, GitMerge, MessageSquareText, RefreshCw, SquarePen } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/shared/lib/cn";
@@ -11,6 +11,8 @@ import { EmptyState } from "@/shared/ui/empty-state";
 import { ErrorState } from "@/shared/ui/error-state";
 import { Skeleton } from "@/shared/ui/skeleton";
 import type { Progress } from "@/shared/types/git";
+import { changeDraft, refreshPullBranch } from "../../collab/actions";
+import { MetaBar } from "../../collab/components/meta-bar";
 import { CommentComposer } from "../../components/comment-composer";
 import { StateBadge, pullIcon, pullTone } from "../../components/state-badge";
 import { LabelChips, TimelineEntry } from "../../components/timeline";
@@ -122,7 +124,7 @@ export function PullDetail({ repoPath, target }: PullDetailProps) {
   const bundle = usePullBundle(target, selected);
   const info = useRepoInfo(target);
   const [merging, setMerging] = useState(false);
-  const [busy, setBusy] = useState<"checkout" | "state" | null>(null);
+  const [busy, setBusy] = useState<"checkout" | "state" | "draft" | "branch" | null>(null);
   const [progress, setProgress] = useState<Progress | null>(null);
 
   if (selected === null) {
@@ -166,6 +168,18 @@ export function PullDetail({ repoPath, target }: PullDetailProps) {
     setBusy(null);
   }
 
+  async function toggleDraft() {
+    setBusy("draft");
+    await changeDraft(target, pull.number, !pull.draft);
+    setBusy(null);
+  }
+
+  async function updateBranch() {
+    setBusy("branch");
+    await refreshPullBranch(target, pull.number);
+    setBusy(null);
+  }
+
   const tabs: Array<{ id: PullDetailTab; label: string }> = [
     { id: "conversation", label: t("github.pulls.tabs.conversation", { count: pull.comments ?? 0 }) },
     { id: "files", label: t("github.pulls.tabs.files", { count: pull.changedFiles ?? 0 }) },
@@ -205,6 +219,16 @@ export function PullDetail({ repoPath, target }: PullDetailProps) {
               {t("github.pulls.merge.button")}
             </Button>
           ) : null}
+          {state === "open" || state === "draft" ? (
+            <Button size="sm" icon={<SquarePen className="size-3.5" />} loading={busy === "draft"} onClick={() => void toggleDraft()}>
+              {pull.draft ? t("github.collab.markReady") : t("github.collab.convertToDraft")}
+            </Button>
+          ) : null}
+          {pull.mergeableState === "behind" && pull.state === "open" ? (
+            <Button size="sm" icon={<RefreshCw className="size-3.5" />} loading={busy === "branch"} onClick={() => void updateBranch()}>
+              {t("github.collab.updateBranch")}
+            </Button>
+          ) : null}
           {state !== "merged" ? (
             <Button size="sm" loading={busy === "state"} onClick={() => void toggleState()}>
               {pull.state === "open" ? t("github.pulls.close") : t("github.pulls.reopen")}
@@ -216,6 +240,9 @@ export function PullDetail({ repoPath, target }: PullDetailProps) {
           {pull.mergeable === false && state === "open" ? (
             <span className="text-xs text-danger">{t("github.pulls.hasConflicts")}</span>
           ) : null}
+        </div>
+        <div className="pb-2">
+          <MetaBar target={target} number={pull.number} subject={pull} pull />
         </div>
         <div role="tablist" aria-label={t("github.pulls.tabs.label")} className="flex gap-1">
           {tabs.map((tab) => (

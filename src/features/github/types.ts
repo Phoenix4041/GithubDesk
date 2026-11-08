@@ -24,8 +24,25 @@ export interface BranchRef {
   repo: { fullName: string } | null;
 }
 
+export interface Milestone {
+  number: number;
+  title: string;
+  description: string | null;
+  state: string;
+  openIssues: number;
+  closedIssues: number;
+  dueOn: string | null;
+  htmlUrl: string;
+}
+
+export interface TeamRef {
+  slug: string;
+  name: string;
+}
+
 export interface PullRequest {
   number: number;
+  nodeId: string;
   title: string;
   state: string;
   draft: boolean;
@@ -34,6 +51,8 @@ export interface PullRequest {
   labels: Label[];
   assignees: UserRef[];
   requestedReviewers: UserRef[];
+  requestedTeams: TeamRef[];
+  milestone: Milestone | null;
   createdAt: string;
   updatedAt: string;
   closedAt: string | null;
@@ -157,6 +176,7 @@ export interface Issue {
   labels: Label[];
   assignees: UserRef[];
   comments: number;
+  milestone: Milestone | null;
   createdAt: string;
   updatedAt: string;
   closedAt: string | null;

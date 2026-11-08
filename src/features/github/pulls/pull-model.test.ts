@@ -39,6 +39,7 @@ const baseInfo: RepoInfo = {
 function pull(overrides: Partial<PullRequest>): PullRequest {
   return {
     number: 1,
+    nodeId: "PR_1",
     title: "t",
     state: "open",
     draft: false,
@@ -47,6 +48,8 @@ function pull(overrides: Partial<PullRequest>): PullRequest {
     labels: [],
     assignees: [],
     requestedReviewers: [],
+    requestedTeams: [],
+    milestone: null,
     createdAt: "",
     updatedAt: "",
     closedAt: null,

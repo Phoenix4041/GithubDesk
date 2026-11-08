@@ -10,6 +10,7 @@ import { Button } from "@/shared/ui/button";
 import { EmptyState } from "@/shared/ui/empty-state";
 import { ErrorState } from "@/shared/ui/error-state";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { MetaBar } from "../../collab/components/meta-bar";
 import { CommentComposer } from "../../components/comment-composer";
 import { StateBadge, issueIcon, issueTone } from "../../components/state-badge";
 import { LabelChips, TimelineEntry } from "../../components/timeline";
@@ -117,6 +118,7 @@ export function IssueDetail({ target }: IssueDetailProps) {
             {t("github.openOnGithub")}
           </Button>
         </div>
+        <MetaBar target={target} number={issue.number} subject={issue} pull={false} />
       </header>
       <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4">
         <TimelineEntry user={issue.user} createdAt={issue.createdAt} body={issue.body} />

@@ -22,6 +22,33 @@ pub struct Label {
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+pub struct Milestone {
+    pub number: u64,
+    pub title: String,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub state: String,
+    #[serde(default)]
+    pub open_issues: u64,
+    #[serde(default)]
+    pub closed_issues: u64,
+    #[serde(default)]
+    pub due_on: Option<String>,
+    #[serde(default)]
+    pub html_url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
+pub struct TeamRef {
+    pub slug: String,
+    #[serde(default)]
+    pub name: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct RepoRef {
     #[serde(default)]
     pub full_name: String,
@@ -43,6 +70,8 @@ pub struct BranchRef {
 #[serde(rename_all(serialize = "camelCase", deserialize = "snake_case"))]
 pub struct PullRequest {
     pub number: u64,
+    #[serde(default)]
+    pub node_id: String,
     pub title: String,
     pub state: String,
     #[serde(default)]
@@ -56,6 +85,10 @@ pub struct PullRequest {
     pub assignees: Vec<UserRef>,
     #[serde(default)]
     pub requested_reviewers: Vec<UserRef>,
+    #[serde(default)]
+    pub requested_teams: Vec<TeamRef>,
+    #[serde(default)]
+    pub milestone: Option<Milestone>,
     pub created_at: String,
     pub updated_at: String,
     #[serde(default)]
@@ -212,6 +245,8 @@ pub struct Issue {
     pub assignees: Vec<UserRef>,
     #[serde(default)]
     pub comments: u64,
+    #[serde(default)]
+    pub milestone: Option<Milestone>,
     pub created_at: String,
     pub updated_at: String,
     #[serde(default)]
