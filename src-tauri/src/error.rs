@@ -58,6 +58,7 @@ pub enum ErrorKind {
     GithubDeviceExpired,
     GithubMissingScope,
     GithubAccountMismatch,
+    SystemLoginUnavailable,
     GithubNotARepository,
     CredentialStoreUnavailable,
     TerminalUnavailable,

@@ -51,6 +51,7 @@ export type ErrorKind =
   | "githubDeviceExpired"
   | "githubMissingScope"
   | "githubAccountMismatch"
+  | "systemLoginUnavailable"
   | "githubNotARepository"
   | "credentialStoreUnavailable"
   | "terminalUnavailable"
@@ -389,7 +390,7 @@ export interface UndoPreview {
   files: UndoPreviewFile[];
 }
 
-export type AccountSource = "oauth" | "token";
+export type AccountSource = "oauth" | "token" | "system" | "cli";
 
 export interface GithubAccount {
   id: string;

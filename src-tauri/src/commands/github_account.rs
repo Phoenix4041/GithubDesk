@@ -8,6 +8,7 @@ use crate::github::device_flow::{
 };
 use crate::github::host::Endpoints;
 use crate::github::scopes::{token_info, union_scopes, TokenInfo};
+use crate::github::system_login::{login_options, LoginMethod, LoginOptions, Tool};
 use crate::state::AppState;
 
 #[tauri::command]
@@ -78,6 +79,32 @@ pub async fn github_device_finish(
             &token,
             AccountSource::Oauth,
             expected_login.as_deref(),
+        )
+        .await
+}
+
+#[tauri::command]
+pub async fn github_login_options() -> AppResult<LoginOptions> {
+    Ok(login_options(&Tool::git(), &Tool::github_cli()).await)
+}
+
+#[tauri::command]
+pub async fn github_login_system(
+    state: State<'_, AppState>,
+    host: String,
+    method: LoginMethod,
+    job_id: String,
+) -> AppResult<Account> {
+    let guard = state.jobs.register(&job_id);
+    let mut cancel = guard.token();
+    state
+        .accounts
+        .login_with_system(
+            &host,
+            method,
+            &Tool::git(),
+            &Tool::github_cli(),
+            &mut cancel,
         )
         .await
 }
