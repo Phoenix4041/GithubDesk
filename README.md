@@ -84,6 +84,8 @@ El instalador de Windows (`GithubDesk_0.6.0_x64-setup.exe`) instala solo para tu
 pnpm tauri build --bundles nsis
 ```
 
+Como las actualizaciones están activas, la construcción necesita la clave de firma en el entorno: `TAURI_SIGNING_PRIVATE_KEY` con la ruta de `~/.tauri/githubdesk.key` y `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` vacía. Sin la clave, el comando falla al firmar.
+
 El instalador queda en `src-tauri/target/release/bundle/nsis/`. Si el equipo no tiene WebView2, el instalador lo descarga. Para instalar y desinstalar sin ventanas: `GithubDesk_0.6.0_x64-setup.exe /S` y `uninstall.exe /S` dentro de la carpeta de instalación.
 
 Los instaladores no están firmados con un certificado de firma de código. Windows (SmartScreen) y macOS (Gatekeeper) van a mostrar un aviso la primera vez; en Windows se pulsa Más información y Ejecutar de todas formas, y en macOS se abre con clic derecho y Abrir.
@@ -196,7 +198,7 @@ pnpm tauri build
 - Fuera de alcance: Discussions, Projects v2, facturación, SAML y SSO, rulesets, Pages, entornos de despliegue, Codespaces, Packages, Gists y escaneo de código.
 - Actualización dentro de la aplicación: está configurada para `Phoenix4041/GithubDesk`, que debe ser público para que la aplicación pueda leer los releases. La clave pública está en `src-tauri/tauri.conf.json`. Para publicar una versión:
   1. Guarda el contenido de `~/.tauri/githubdesk.key` como secreto del repositorio con el nombre `TAURI_SIGNING_PRIVATE_KEY`. La clave no tiene contraseña, así que `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` puede quedar vacío.
-  2. Sube la versión en `tauri.conf.json`, `Cargo.toml` y `package.json`, y sube una etiqueta `v*`.
+  2. Sube la versión con `pnpm bump 0.6.1` (cambia `package.json`, `tauri.conf.json` y `Cargo.toml`), ejecuta `cargo check` dentro de `src-tauri` para refrescar `Cargo.lock`, haz el commit y sube una etiqueta `v0.6.1`.
   3. `release.yml` firma los instaladores y publica `latest.json` en un borrador. Publica el borrador: mientras sea borrador, las aplicaciones instaladas no lo ven.
   La aplicación comprueba a los 8 segundos de abrir, como mucho una vez al día, y también con el comando Buscar versiones nuevas de la paleta. Ofrece Instalar y reiniciar. La firma se comprueba con una clave de usar y tirar en las pruebas de integración (`src-tauri/tests/self_update.rs`); no se probó una actualización completa contra un repositorio real de GitHub.
 - Firma de los instaladores: Windows necesita un certificado de firma de código (por ejemplo de Azure Trusted Signing o de una autoridad como DigiCert) y se configura en `bundle.windows` con `certificateThumbprint` o `signCommand`; macOS necesita una cuenta de Apple Developer y los secretos `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD` y `APPLE_TEAM_ID`, que `tauri-action` lee del entorno. Sin ellos los instaladores siguen sin firmar.
