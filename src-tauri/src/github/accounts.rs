@@ -8,6 +8,10 @@ use crate::error::{AppError, AppResult, ErrorKind};
 use crate::github::client::GithubClient;
 use crate::github::host::Endpoints;
 use crate::github::secrets::SecretStore;
+use crate::github::system_login::{
+    cli_token, credential_fill, credential_reject, LoginMethod, Tool,
+};
+use crate::jobs::CancelToken;
 
 const ACCOUNTS_FILE: &str = "accounts.json";
 
@@ -16,6 +20,8 @@ const ACCOUNTS_FILE: &str = "accounts.json";
 pub enum AccountSource {
     Oauth,
     Token,
+    System,
+    Cli,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -144,6 +150,39 @@ impl AccountStore {
             client = client.with_cache(cache, account.id.clone());
         }
         Ok((account, client))
+    }
+
+    pub async fn login_with_system(
+        &self,
+        host: &str,
+        method: LoginMethod,
+        git: &Tool,
+        cli: &Tool,
+        cancel: &mut CancelToken,
+    ) -> AppResult<Account> {
+        let endpoints = Endpoints::for_host(host)?;
+        match method {
+            LoginMethod::Cli => {
+                let credential = cli_token(cli, &endpoints.host, cancel).await?;
+                self.add_with_token(host, &credential.token, AccountSource::Cli)
+                    .await
+            }
+            LoginMethod::System => {
+                let credential = credential_fill(git, &endpoints.host, cancel).await?;
+                match self
+                    .add_with_token(host, &credential.token, AccountSource::System)
+                    .await
+                {
+                    Err(error) if error.kind == ErrorKind::GithubUnauthorized => {
+                        credential_reject(git, &endpoints.host, &credential, cancel).await;
+                        let fresh = credential_fill(git, &endpoints.host, cancel).await?;
+                        self.add_with_token(host, &fresh.token, AccountSource::System)
+                            .await
+                    }
+                    other => other,
+                }
+            }
+        }
     }
 
     pub async fn add_with_token(

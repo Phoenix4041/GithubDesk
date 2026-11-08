@@ -649,6 +649,10 @@
     "githubAccountMismatch": {
       "title": "You authorized a different account",
       "message": "On GitHub you were signed in as {{login}}, but the already connected account was needed. Switch account on GitHub and try again."
+    },
+    "systemLoginUnavailable": {
+      "title": "The system sign-in could not be used",
+      "message": "No credential manager or GitHub CLI session that provides a token was found. Try the device code or a personal token."
     }
   },
   "operation": {
@@ -1004,7 +1008,9 @@
       "remove": "Disconnect account {{login}}",
       "source": {
         "oauth": "Browser",
-        "token": "Token"
+        "token": "Token",
+        "system": "System sign-in",
+        "cli": "GitHub CLI"
       },
       "removeDialog": {
         "title": "Disconnect {{login}}",
@@ -1017,8 +1023,9 @@
       "description": "The token is stored in the system credential store, never in application files.",
       "methodsLabel": "Way to connect",
       "methods": {
-        "browser": "With the browser",
-        "token": "With a token"
+        "browser": "Device code",
+        "token": "With a token",
+        "easy": "Sign in"
       },
       "host": "Server",
       "hostHint": "Use github.com or the address of your GitHub Enterprise.",
@@ -1031,7 +1038,17 @@
       "waiting": "Waiting for your authorization...",
       "token": "Personal access token",
       "tokenHint": "It needs the repo and workflow scopes. Nobody else sees this value.",
-      "connect": "Connect"
+      "connect": "Connect",
+      "easyIntro": "Sign in with the account you already use on this computer: the browser opens, you sign in to GitHub and you are done. There is nothing to create.",
+      "signIn": "Sign in with GitHub",
+      "useCli": "Use GitHub CLI",
+      "waitingSystem": "Waiting for you to finish signing in in the browser...",
+      "waitingCli": "Reading the GitHub CLI session...",
+      "noHelper": "Git has no credential manager configured. Install Git for Windows with Git Credential Manager, or use one of the other tabs.",
+      "noCli": "GitHub CLI is not installed or is not in the PATH.",
+      "nothingAvailable": "Neither way is available on this computer. Try the device code or a token.",
+      "limits": "This way brings the permissions your credential manager grants (repositories, workflows). To manage organizations or keys use the device code or a token with more permissions.",
+      "clientIdEmbedded": "This version of the app already ships a Client ID. Leave it empty to use it."
     },
     "repo": {
       "title": "{{name}} on GitHub",

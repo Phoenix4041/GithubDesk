@@ -649,6 +649,10 @@
     "githubAccountMismatch": {
       "title": "Autorizaste otra cuenta",
       "message": "En GitHub iniciaste sesión como {{login}}, pero hacía falta la cuenta que ya estaba conectada. Cambia de cuenta en GitHub y repite."
+    },
+    "systemLoginUnavailable": {
+      "title": "No se pudo usar el inicio de sesión del sistema",
+      "message": "No se encontró un administrador de credenciales o una sesión de GitHub CLI que entregue un token. Prueba con el código de dispositivo o con un token personal."
     }
   },
   "operation": {
@@ -1004,7 +1008,9 @@
       "remove": "Desconectar la cuenta {{login}}",
       "source": {
         "oauth": "Navegador",
-        "token": "Token"
+        "token": "Token",
+        "system": "Inicio de sesión del sistema",
+        "cli": "GitHub CLI"
       },
       "removeDialog": {
         "title": "Desconectar {{login}}",
@@ -1017,8 +1023,9 @@
       "description": "El token se guarda en el almacén de credenciales del sistema, nunca en archivos de la aplicación.",
       "methodsLabel": "Forma de conectar",
       "methods": {
-        "browser": "Con el navegador",
-        "token": "Con un token"
+        "browser": "Código de dispositivo",
+        "token": "Con un token",
+        "easy": "Iniciar sesión"
       },
       "host": "Servidor",
       "hostHint": "Usa github.com o la dirección de tu GitHub Enterprise.",
@@ -1031,7 +1038,17 @@
       "waiting": "Esperando tu autorización...",
       "token": "Token de acceso personal",
       "tokenHint": "Necesita los permisos repo y workflow. Nadie más ve este valor.",
-      "connect": "Conectar"
+      "connect": "Conectar",
+      "easyIntro": "Entra con la cuenta que ya usas en tu equipo: se abre el navegador, inicias sesión en GitHub y listo. No hace falta crear nada.",
+      "signIn": "Iniciar sesión con GitHub",
+      "useCli": "Usar GitHub CLI",
+      "waitingSystem": "Esperando que termines el inicio de sesión en el navegador...",
+      "waitingCli": "Leyendo la sesión de GitHub CLI...",
+      "noHelper": "Git no tiene un administrador de credenciales configurado. Instala Git for Windows con Git Credential Manager, o usa otra de las pestañas.",
+      "noCli": "GitHub CLI no está instalado o no está en el PATH.",
+      "nothingAvailable": "Ninguna de las dos formas está disponible en este equipo. Prueba con el código de dispositivo o con un token.",
+      "limits": "Esta forma trae los permisos que da tu administrador de credenciales (repositorios, flujos de trabajo). Para administrar organizaciones o llaves usa el código de dispositivo o un token con más permisos.",
+      "clientIdEmbedded": "Esta versión de la aplicación ya trae un Client ID. Déjalo vacío para usarlo."
     },
     "repo": {
       "title": "{{name}} en GitHub",

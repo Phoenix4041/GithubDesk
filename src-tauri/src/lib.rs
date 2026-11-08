@@ -96,6 +96,8 @@ pub fn run() {
             github_account::github_account_remove,
             github_account::github_device_start,
             github_account::github_device_finish,
+            github_account::github_login_options,
+            github_account::github_login_system,
             github_account::github_token_info,
             github_orgs::github_orgs_list,
             github_orgs::github_context_repos,
