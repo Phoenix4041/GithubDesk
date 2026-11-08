@@ -536,6 +536,49 @@ export interface MergePreview {
   conflicts: string[];
 }
 
+export interface CleanupFile {
+  path: string;
+  directory: boolean;
+}
+
+export interface CleanupBranch {
+  name: string;
+  hash: string;
+  uniqueCommits: number;
+}
+
+export interface CleanupPreview {
+  untracked: CleanupFile[];
+  ignored: CleanupFile[];
+  mergedBranches: CleanupBranch[];
+  goneBranches: CleanupBranch[];
+}
+
+export interface StaleRemoteBranch {
+  remote: string;
+  name: string;
+}
+
+export interface CleanupRequest {
+  untracked: string[];
+  ignored: string[];
+  mergedBranches: string[];
+  goneBranches: string[];
+  pruneRemotes: string[];
+}
+
+export interface CleanupFailure {
+  item: string;
+  detail: string;
+}
+
+export interface CleanupReport {
+  removedFiles: number;
+  deletedBranches: Array<{ name: string; hash: string }>;
+  prunedBranches: number;
+  failures: CleanupFailure[];
+}
+
 export type BisectVerdict = "good" | "bad" | "skip";
 
 export interface BisectStep {

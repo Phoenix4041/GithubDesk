@@ -6,6 +6,7 @@ import { usePullStore } from "@/features/github/pulls/store";
 import { useRunStore } from "@/features/github/actions/store";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBisectDialogStore } from "@/features/bisect/store";
+import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { choosePatchesToApply } from "@/features/patches/actions";
 import { useRebaseOntoStore } from "@/features/rebase/store";
@@ -289,6 +290,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "rebase reaplicar linea recta historial rama",
       enabled: true,
       run: () => useRebaseOntoStore.getState().choose(),
+    },
+    {
+      id: "cleanup.open",
+      titleKey: "commands.items.cleanup.open",
+      group: "repository",
+      keywords: "limpiar borrar archivos sin seguimiento ramas combinadas remotas obsoletas clean prune",
+      enabled: true,
+      run: () => useCleanupDialogStore.getState().show(),
     },
     {
       id: "bisect.start",

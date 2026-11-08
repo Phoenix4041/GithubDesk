@@ -13,7 +13,7 @@ pub mod watcher;
 
 use commands::diagnostics as diagnostics_commands;
 use commands::{
-    app_update, bisect, blame, branch, commit, commit_ops, compare, conflict, external,
+    app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
     github_account, github_actions, github_issues, github_pulls, github_repo, gitignore, history,
     job, lfs, merge, operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash,
     status, submodule, tag, terminal, watch, worktree,
@@ -166,6 +166,9 @@ pub fn run() {
             bisect::bisect_start,
             bisect::bisect_mark,
             bisect::bisect_finish,
+            cleanup::cleanup_preview_get,
+            cleanup::cleanup_stale_remote_get,
+            cleanup::cleanup_run,
             lfs::lfs_status_get,
             lfs::lfs_install_local,
             lfs::lfs_track_pattern,

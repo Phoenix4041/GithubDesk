@@ -2,6 +2,7 @@ pub mod app_update;
 pub mod bisect;
 pub mod blame;
 pub mod branch;
+pub mod cleanup;
 pub mod commit;
 pub mod commit_ops;
 pub mod compare;

@@ -1,6 +1,7 @@
-import { EyeOff, FolderGit2, FolderSearch, GitBranch, Settings, ShieldCheck, SquarePen, Terminal } from "lucide-react";
+import { Brush, EyeOff, FolderGit2, FolderSearch, GitBranch, Settings, ShieldCheck, SquarePen, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
+import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
 import { useGitignoreDialogStore } from "@/features/gitignore/store";
 import { BranchChecksButton } from "@/features/github/checks/components/branch-checks-button";
@@ -26,6 +27,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
   const recents = useRepositoriesStore((state) => state.recents);
   const signing = useSigningConfig(repoPath);
   const showGitignore = useGitignoreDialogStore((state) => state.show);
+  const showCleanup = useCleanupDialogStore((state) => state.show);
   const showSigning = useSigningDialogStore((state) => state.show);
   const terminalOpen = useTerminalStore((state) => state.open);
   const toggleTerminal = useTerminalStore((state) => state.toggle);
@@ -64,6 +66,11 @@ export function Toolbar({ repoPath }: ToolbarProps) {
               label: t("gitignore.open"),
               icon: <EyeOff className="size-4" />,
               onSelect: showGitignore,
+            },
+            {
+              label: t("cleanup.open"),
+              icon: <Brush className="size-4" />,
+              onSelect: showCleanup,
             },
           ]}
         />

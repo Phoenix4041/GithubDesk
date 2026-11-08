@@ -1427,6 +1427,9 @@
       },
       "bisect": {
         "start": "Find with bisect the commit that broke something"
+      },
+      "cleanup": {
+        "open": "Clean up files and branches that are no longer needed"
       }
     }
   },
@@ -1845,5 +1848,56 @@
       "foundTitle": "This is the first commit with the problem",
       "showInHistory": "Show in history"
     }
+  },
+  "cleanup": {
+    "open": "Clean up the repository",
+    "title": "Clean up the repository",
+    "description": "Tick what you want to remove. Nothing is deleted until you press Clean up and confirm.",
+    "selectAll": "Select all",
+    "selectNone": "Select none",
+    "nothingHere": "Nothing to clean here.",
+    "directory": "folder",
+    "ownCommits_one": "{{count}} commit of its own",
+    "ownCommits_other": "{{count}} commits of its own",
+    "staleCount_one": "{{count}} branch",
+    "staleCount_other": "{{count}} branches",
+    "files": {
+      "title": "Files not in Git",
+      "description": "New files you never saved in a commit. Once deleted they cannot be recovered."
+    },
+    "ignored": {
+      "title": "Ignored files",
+      "description": "The ones your .gitignore leaves out, such as build folders. They can usually be generated again."
+    },
+    "merged": {
+      "title": "Merged branches",
+      "description": "All their work is already in your current branch. The current branch, the main ones and those open in another worktree are not offered."
+    },
+    "gone": {
+      "title": "Branches whose remote is gone",
+      "description": "Their branch on the server was deleted. If it was squash-merged, their commits are still separate here and would be lost."
+    },
+    "stale": {
+      "title": "Stale remote branches",
+      "description": "Local copies of branches that no longer exist on the server. The server has to be asked to know.",
+      "search": "Search on the server",
+      "searching": "Asking the server...",
+      "none": "There are no stale remote branches."
+    },
+    "submit_zero": "Clean up",
+    "submit_one": "Clean up 1 item",
+    "submit_other": "Clean up {{count}} items",
+    "confirm": {
+      "title": "Clean up the selection?",
+      "description_one": "{{count}} item will be cleaned up.",
+      "description_other": "{{count}} items will be cleaned up.",
+      "filesLoss_one": "{{count}} file or folder will be deleted from disk; it does not go to the recycle bin.",
+      "filesLoss_other": "{{count}} files or folders will be deleted from disk; they do not go to the recycle bin.",
+      "commitsLoss_one": "{{count}} branch has commits that are in no other branch.",
+      "commitsLoss_other": "{{count}} branches have commits that are in no other branch.",
+      "confirm": "Clean up"
+    },
+    "done": "Done: {{files}} files, {{branches}} local branches and {{pruned}} remote branches cleaned up.",
+    "partial": "Something could not be cleaned up"
   }
 }

@@ -1427,6 +1427,9 @@
       },
       "bisect": {
         "start": "Buscar con bisect el commit que rompió algo"
+      },
+      "cleanup": {
+        "open": "Limpiar archivos y ramas que ya no sirven"
       }
     }
   },
@@ -1845,5 +1848,56 @@
       "foundTitle": "Este es el primer commit con el problema",
       "showInHistory": "Verlo en el historial"
     }
+  },
+  "cleanup": {
+    "open": "Limpiar el repositorio",
+    "title": "Limpiar el repositorio",
+    "description": "Marca lo que quieres quitar. No se borra nada hasta que pulses Limpiar y confirmes.",
+    "selectAll": "Marcar todo",
+    "selectNone": "Desmarcar todo",
+    "nothingHere": "No hay nada que limpiar aquí.",
+    "directory": "carpeta",
+    "ownCommits_one": "{{count}} commit propio",
+    "ownCommits_other": "{{count}} commits propios",
+    "staleCount_one": "{{count}} rama",
+    "staleCount_other": "{{count}} ramas",
+    "files": {
+      "title": "Archivos que no están en Git",
+      "description": "Archivos nuevos que nunca guardaste en un commit. Al borrarlos no se pueden recuperar."
+    },
+    "ignored": {
+      "title": "Archivos ignorados",
+      "description": "Los que tu .gitignore deja fuera, como carpetas de compilación. Normalmente se pueden volver a generar."
+    },
+    "merged": {
+      "title": "Ramas ya combinadas",
+      "description": "Todo su trabajo ya está en tu rama actual. No se ofrecen la rama actual, las principales ni las abiertas en otro worktree."
+    },
+    "gone": {
+      "title": "Ramas cuyo remoto desapareció",
+      "description": "Su rama en el servidor se borró. Si la combinaron con squash, sus commits siguen aparte aquí y se perderían."
+    },
+    "stale": {
+      "title": "Ramas remotas obsoletas",
+      "description": "Copias locales de ramas que ya no existen en el servidor. Hay que consultar al servidor para saberlo.",
+      "search": "Buscar en el servidor",
+      "searching": "Consultando al servidor...",
+      "none": "No hay ramas remotas obsoletas."
+    },
+    "submit_zero": "Limpiar",
+    "submit_one": "Limpiar 1 elemento",
+    "submit_other": "Limpiar {{count}} elementos",
+    "confirm": {
+      "title": "¿Limpiar lo seleccionado?",
+      "description_one": "Se limpiará {{count}} elemento.",
+      "description_other": "Se limpiarán {{count}} elementos.",
+      "filesLoss_one": "Se borrará {{count}} archivo o carpeta del disco; no va a la papelera.",
+      "filesLoss_other": "Se borrarán {{count}} archivos o carpetas del disco; no van a la papelera.",
+      "commitsLoss_one": "{{count}} rama tiene commits que no están en ninguna otra rama.",
+      "commitsLoss_other": "{{count}} ramas tienen commits que no están en ninguna otra rama.",
+      "confirm": "Limpiar"
+    },
+    "done": "Listo: {{files}} archivos, {{branches}} ramas locales y {{pruned}} ramas remotas limpiadas.",
+    "partial": "Algo no se pudo limpiar"
   }
 }
