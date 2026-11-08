@@ -2,6 +2,38 @@
 
 Todos los cambios importantes de GithubDesk. Este archivo se genera a partir de los commits con `node scripts/changelog.mjs <version> [desde-etiqueta]`.
 
+## 0.7.0 - 2026-11-08
+
+### Novedades
+
+- **github**: sign in with the system credential manager or GitHub CLI so no OAuth App has to be created (6b2e95c)
+- **updates**: configure the updater with the public key and the release endpoint (50f4907)
+- **rescue**: save a safety copy before destructive actions and recover it from a Rescue dialog (e720cc3)
+- **guard**: review staged changes for secrets, large files and conflict markers before committing and flag branches that would conflict (d9ce839)
+- **absorb**: send staged blocks to the unpushed commits that wrote them as fixups and fold them (586bc96)
+- **stack**: chain branches into a stack, restack it in one go, open chained pull requests and split unpushed commits by file (fda1dab)
+- **overview**: show the state of every recent repository and fetch or fast-forward pull them all with groups (f206dbe)
+- **commit**: add co-authors, issue number shortcut and per repository message templates (2fa4532)
+- **browse**: list, read and restore files at any revision and diff two revisions directly (f102c65)
+- **browse**: explore the files of any commit, restore one file and compare two selected commits (3608646)
+- **diff**: compare images side by side, with a swipe slider or as onion skin (1fa43e4)
+- **launch**: open folders and clone links from the system in the running window (8441361)
+- **github**: sync a fork with its original and add the upstream remote (9055b6e)
+- **stats**: compute activity, contributors, churn, bus factor and pending notes from the history (2ff79c3)
+- **stats**: add the repository statistics dialog with an activity calendar, contributors, files and pending notes (8c2b872)
+- **clone**: offer shallow and blobless clones for large repositories (b3d3202)
+- **health**: measure the git folder, find the largest blobs, manage sparse-checkout and run gc maintenance (d14e2d8)
+- **settings**: add custom themes with VS Code import, live preview and interface density (b8c859d)
+- **health**: add the repository health dialog with size, large files, sparse-checkout and maintenance (0a7828b)
+- **background**: fetch the open repository on a timer, keep a tray icon and start with the system (7474d47)
+
+### Mantenimiento
+
+- **launch**: add the launch argument and link parser for later wiring (7a68484)
+- **i18n**: reapply the texts of the merged blocks (6e19a34)
+- format the merged command imports (c0dace4)
+- **release**: bump the version to 0.7.0 and document the seventh phase (102cd3f)
+
 ## 0.6.0 - 2026-11-08
 
 ### Novedades
