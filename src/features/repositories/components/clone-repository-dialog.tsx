@@ -11,6 +11,7 @@ import { folderNameFromUrl, joinPath } from "@/shared/lib/paths";
 import { describeProgress } from "@/shared/lib/progress";
 import { reportError } from "@/shared/lib/report-error";
 import { Button } from "@/shared/ui/button";
+import { Checkbox } from "@/shared/ui/checkbox";
 import { Dialog } from "@/shared/ui/dialog";
 import { ProgressBar } from "@/shared/ui/progress-bar";
 import { TextField } from "@/shared/ui/text-field";
@@ -37,11 +38,16 @@ export function CloneRepositoryDialog({ open, preset, onClose }: CloneRepository
   const [url, setUrl] = useState(preset?.url ?? "");
   const [parentDirectory, setParentDirectory] = useState<string | null>(null);
   const [nameOverride, setNameOverride] = useState<string | null>(null);
+  const [shallow, setShallow] = useState(false);
+  const [depthText, setDepthText] = useState("1");
+  const [blobless, setBlobless] = useState(false);
+  const depth = Number.parseInt(depthText, 10);
+  const depthValid = !shallow || (/^\d+$/.test(depthText.trim()) && depth >= 1);
 
   const effectiveParent = parentDirectory ?? lastParentDirectory ?? "";
   const folderName = nameOverride ?? folderNameFromUrl(url);
   const destination = effectiveParent && folderName ? joinPath(effectiveParent, folderName) : "";
-  const canSubmit = url.trim().length > 0 && destination.length > 0;
+  const canSubmit = url.trim().length > 0 && destination.length > 0 && depthValid;
   const accountList = accounts.data ?? [];
   const activeAccountId = homeContext(profiles, activeProfileId, accountList).account?.id ?? null;
   const presetAccount = preset?.accountId ? accountList.find((item) => item.id === preset.accountId) : undefined;
@@ -61,7 +67,10 @@ export function CloneRepositoryDialog({ open, preset, onClose }: CloneRepository
     }
     try {
       const info = await run((jobId, onProgress) =>
-        cloneRepository(url.trim(), destination, jobId, cloneAccount?.id ?? null, onProgress),
+        cloneRepository(url.trim(), destination, jobId, cloneAccount?.id ?? null, onProgress, {
+          depth: shallow ? depth : null,
+          blobless,
+        }),
       );
       rememberParentDirectory(effectiveParent);
       activate(info);
@@ -128,6 +137,29 @@ export function CloneRepositoryDialog({ open, preset, onClose }: CloneRepository
           hint={destination ? t("repositories.clone.destination", { path: destination }) : undefined}
           spellCheck={false}
         />
+        <fieldset className="flex flex-col gap-2" disabled={running}>
+          <legend className="mb-1 text-xs font-medium text-muted">{t("repositories.clone.advanced")}</legend>
+          <label className="flex items-center gap-2 text-[13px]">
+            <Checkbox label={t("repositories.clone.shallow")} checked={shallow} onChange={(event) => setShallow(event.target.checked)} />
+            <span>{t("repositories.clone.shallow")}</span>
+          </label>
+          {shallow ? (
+            <TextField
+              label={t("repositories.clone.depth")}
+              value={depthText}
+              inputMode="numeric"
+              onChange={(event) => setDepthText(event.target.value)}
+              error={depthValid ? undefined : t("repositories.clone.depthInvalid")}
+              hint={t("repositories.clone.depthHint")}
+              className="w-28"
+            />
+          ) : null}
+          <label className="flex items-center gap-2 text-[13px]">
+            <Checkbox label={t("repositories.clone.blobless")} checked={blobless} onChange={(event) => setBlobless(event.target.checked)} />
+            <span>{t("repositories.clone.blobless")}</span>
+          </label>
+          {blobless ? <p className="text-xs text-muted">{t("repositories.clone.bloblessHint")}</p> : null}
+        </fieldset>
         {running ? (
           <div className="flex flex-col gap-1.5" role="status">
             <ProgressBar percent={progress ? progress.percent : null} label={t("repositories.clone.progress")} />

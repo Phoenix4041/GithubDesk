@@ -25,6 +25,7 @@ use commands::{
     patches, predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split, stack,
     stash, status, submodule, tag, terminal, watch, worktree,
 };
+use commands::{health, stats};
 use state::AppState;
 use tauri::Manager;
 
@@ -299,6 +300,15 @@ pub fn run() {
             rescue::rescue_branch,
             rescue::rescue_delete,
             rescue::rescue_snapshot,
+            stats::stats_collect,
+            stats::stats_todos,
+            stats::stats_line_author,
+            health::health_size,
+            health::health_large_blobs,
+            health::health_maintenance,
+            health::health_sparse_state,
+            health::health_sparse_set,
+            health::health_sparse_disable,
             app_update::app_update_check,
             app_update::app_update_install,
             worktree::worktree_list,

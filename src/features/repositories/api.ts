@@ -9,12 +9,18 @@ export function initRepository(parent: string, name: string, initialBranch: stri
   return call<RepositoryInfo>("repo_init", { parent, name, initialBranch });
 }
 
+export interface CloneOptions {
+  depth: number | null;
+  blobless: boolean;
+}
+
 export function cloneRepository(
   url: string,
   destination: string,
   jobId: string,
   accountId: string | null,
   onProgress: (progress: Progress) => void,
+  options: CloneOptions = { depth: null, blobless: false },
 ): Promise<RepositoryInfo> {
-  return callWithProgress<RepositoryInfo>("repo_clone", { url, destination, jobId, accountId }, onProgress);
+  return callWithProgress<RepositoryInfo>("repo_clone", { url, destination, jobId, accountId, options }, onProgress);
 }
