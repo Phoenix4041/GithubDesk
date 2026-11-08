@@ -121,6 +121,35 @@ pub async fn load_inbox(client: &GithubClient, login: &str, org: Option<&str>) -
     })
 }
 
+pub async fn load_mentions(
+    client: &GithubClient,
+    login: &str,
+    org: Option<&str>,
+) -> AppResult<Vec<InboxItem>> {
+    ensure_login(login)?;
+    if let Some(org) = org {
+        ensure_login(org)?;
+    }
+    search(client, &format!("is:open mentions:{login}"), org).await
+}
+
+pub async fn load_failing(
+    client: &GithubClient,
+    login: &str,
+    org: Option<&str>,
+) -> AppResult<Vec<InboxItem>> {
+    ensure_login(login)?;
+    if let Some(org) = org {
+        ensure_login(org)?;
+    }
+    search(
+        client,
+        &format!("is:open is:pr author:{login} status:failure"),
+        org,
+    )
+    .await
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

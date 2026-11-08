@@ -10,7 +10,7 @@ import { GrantScopesDialog } from "@/features/github/scopes/components/grant-sco
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
 import { ProfilesDialog } from "@/features/profiles/components/profiles-dialog";
 import { RepositoryDialogs } from "@/features/repositories/components/repository-dialogs";
-import { WelcomeScreen } from "@/features/repositories/components/welcome-screen";
+import { HomeDashboard } from "@/features/home/components/home-dashboard";
 import { useRepositoriesStore } from "@/features/repositories/store";
 import { stopRepoWatcher } from "@/features/repositories/use-repo-watcher";
 import { useTheme } from "@/features/settings/use-theme";
@@ -53,7 +53,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary fallback={(error, reset) => <RenderFailure error={error} onReset={reset} />}>
-        {activePath ? <Workspace key={activePath} repoPath={activePath} /> : <WelcomeScreen />}
+        {activePath ? <Workspace key={activePath} repoPath={activePath} /> : <HomeDashboard />}
       </ErrorBoundary>
       <RepositoryDialogs />
       <GrantScopesDialog />
