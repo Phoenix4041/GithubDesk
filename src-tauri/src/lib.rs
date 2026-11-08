@@ -13,10 +13,10 @@ pub mod watcher;
 
 use commands::diagnostics as diagnostics_commands;
 use commands::{
-    app_update, blame, branch, commit, commit_ops, compare, conflict, external, github_account,
-    github_actions, github_issues, github_pulls, github_repo, gitignore, history, job, lfs, merge,
-    operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash, status,
-    submodule, tag, terminal, watch, worktree,
+    app_update, bisect, blame, branch, commit, commit_ops, compare, conflict, external,
+    github_account, github_actions, github_issues, github_pulls, github_repo, gitignore, history,
+    job, lfs, merge, operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash,
+    status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -162,6 +162,10 @@ pub fn run() {
             patches::patch_export,
             patches::patch_preview,
             patches::patch_apply,
+            bisect::bisect_state_get,
+            bisect::bisect_start,
+            bisect::bisect_mark,
+            bisect::bisect_finish,
             lfs::lfs_status_get,
             lfs::lfs_install_local,
             lfs::lfs_track_pattern,

@@ -536,6 +536,30 @@ export interface MergePreview {
   conflicts: string[];
 }
 
+export type BisectVerdict = "good" | "bad" | "skip";
+
+export interface BisectStep {
+  verdict: BisectVerdict;
+  hash: string;
+  title: string;
+}
+
+export interface BisectCulprit {
+  hash: string;
+  title: string;
+}
+
+export interface BisectState {
+  active: boolean;
+  steps: BisectStep[];
+  currentHash: string | null;
+  currentTitle: string | null;
+  remaining: number | null;
+  estimatedSteps: number | null;
+  culprit: BisectCulprit | null;
+  startRef: string | null;
+}
+
 export type PatchApplyMode = "commit" | "workingTree";
 
 export interface PatchFileChange {

@@ -1,5 +1,18 @@
-import { Copy, FileDown, GitBranchPlus, GitCommitHorizontal, History, ListOrdered, RotateCcw, Tag, Undo2 } from "lucide-react";
+import {
+  Bug,
+  CircleCheck,
+  Copy,
+  FileDown,
+  GitBranchPlus,
+  GitCommitHorizontal,
+  History,
+  ListOrdered,
+  RotateCcw,
+  Tag,
+  Undo2,
+} from "lucide-react";
 import { i18next } from "@/i18n";
+import { markFromHistory } from "@/features/bisect/actions";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { exportCommitsAsPatches } from "@/features/patches/actions";
 import { useRebaseDialogStore } from "@/features/rebase/store";
@@ -78,6 +91,17 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
           repoPath,
           [...picks].reverse().map((candidate) => candidate.hash),
         ),
+    },
+    { kind: "separator" },
+    {
+      label: t("bisect.menu.bad"),
+      icon: <Bug className="size-4" />,
+      onSelect: () => void markFromHistory(repoPath, "bad", commit.hash),
+    },
+    {
+      label: t("bisect.menu.good"),
+      icon: <CircleCheck className="size-4" />,
+      onSelect: () => void markFromHistory(repoPath, "good", commit.hash),
     },
     { kind: "separator" },
     {

@@ -29,6 +29,8 @@ import { StashPanel } from "@/features/stash/components/stash-panel";
 import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
 import { GitignoreDialog } from "@/features/gitignore/components/gitignore-dialog";
+import { BisectBanner } from "@/features/bisect/components/bisect-banner";
+import { BisectDialog } from "@/features/bisect/components/bisect-dialog";
 import { MergeDialog } from "@/features/merge/components/merge-dialog";
 import { PatchDialog } from "@/features/patches/components/patch-dialog";
 import { SigningDialog } from "@/features/signing/components/signing-dialog";
@@ -94,6 +96,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
         />
         <section style={{ width: changesWidth }} className="flex shrink-0 flex-col bg-surface">
           <WorkspaceTabs repoPath={repoPath} />
+          <BisectBanner repoPath={repoPath} />
           <div
             role="tabpanel"
             id={`panel-${tab}`}
@@ -140,6 +143,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <SigningDialog repoPath={repoPath} />
       <MergeDialog repoPath={repoPath} />
       <PatchDialog repoPath={repoPath} />
+      <BisectDialog repoPath={repoPath} />
       <GitignoreDialog repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
       <RebaseOntoDialog repoPath={repoPath} />

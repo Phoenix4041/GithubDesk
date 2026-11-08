@@ -1424,6 +1424,9 @@
       },
       "patch": {
         "apply": "Apply a patch"
+      },
+      "bisect": {
+        "start": "Find with bisect the commit that broke something"
       }
     }
   },
@@ -1809,6 +1812,38 @@
         }
       },
       "submit": "Apply"
+    }
+  },
+  "bisect": {
+    "started": "Search started. Try the commit that was opened and mark it.",
+    "finished": "Search finished. You are back on your branch.",
+    "menu": {
+      "bad": "Bisect: this commit has the problem",
+      "good": "Bisect: this commit worked fine"
+    },
+    "dialog": {
+      "title": "Find the commit that broke something",
+      "description": "Git will open commits in between. You try each one and say whether it is fine or broken, until the first failing one is found.",
+      "bad": "Commit with the problem",
+      "badHint": "Usually the current commit (HEAD).",
+      "good": "Commit that worked",
+      "goodHint": "An earlier commit where everything was fine. Accepts a hash, a branch or a tag.",
+      "goodPlaceholder": "For example v1.2.0 or 3f9a1c2",
+      "cleanTree": "You need to have no unsaved changes. When you finish you go back to your branch.",
+      "submit": "Start"
+    },
+    "banner": {
+      "title": "Looking for the commit with the problem",
+      "testing": "Trying",
+      "needMarks": "Mark one good and one bad commit so git can narrow the search.",
+      "progress": "About {{steps}} steps left ({{count}} commits to check).",
+      "good": "This commit is fine",
+      "bad": "This commit is broken",
+      "skip": "Cannot test it",
+      "finish": "Finish",
+      "finishTo": "Finish and go back to {{ref}}",
+      "foundTitle": "This is the first commit with the problem",
+      "showInHistory": "Show in history"
     }
   }
 }

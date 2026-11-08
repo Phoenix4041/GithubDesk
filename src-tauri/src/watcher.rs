@@ -11,7 +11,7 @@ use crate::error::{AppError, AppResult, ErrorKind};
 const DEBOUNCE_MILLISECONDS: u64 = 400;
 const CHANGE_EVENT: &str = "repo-changed";
 
-const WATCHED_GIT_ENTRIES: [&str; 12] = [
+const WATCHED_GIT_ENTRIES: [&str; 14] = [
     "HEAD",
     "index",
     "refs",
@@ -24,6 +24,8 @@ const WATCHED_GIT_ENTRIES: [&str; 12] = [
     "ORIG_HEAD",
     "rebase-merge",
     "rebase-apply",
+    "BISECT_LOG",
+    "BISECT_START",
 ];
 
 #[derive(Clone, Serialize)]

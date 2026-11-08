@@ -5,6 +5,7 @@ import { useIssueStore } from "@/features/github/issues/store";
 import { usePullStore } from "@/features/github/pulls/store";
 import { useRunStore } from "@/features/github/actions/store";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { useBisectDialogStore } from "@/features/bisect/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { choosePatchesToApply } from "@/features/patches/actions";
 import { useRebaseOntoStore } from "@/features/rebase/store";
@@ -288,6 +289,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "rebase reaplicar linea recta historial rama",
       enabled: true,
       run: () => useRebaseOntoStore.getState().choose(),
+    },
+    {
+      id: "bisect.start",
+      titleKey: "commands.items.bisect.start",
+      group: "history",
+      keywords: "bisect buscar commit culpable error bug regresion romper",
+      enabled: true,
+      run: () => useBisectDialogStore.getState().show(),
     },
     {
       id: "patch.apply",

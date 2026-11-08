@@ -1424,6 +1424,9 @@
       },
       "patch": {
         "apply": "Aplicar un parche"
+      },
+      "bisect": {
+        "start": "Buscar con bisect el commit que rompió algo"
       }
     }
   },
@@ -1809,6 +1812,38 @@
         }
       },
       "submit": "Aplicar"
+    }
+  },
+  "bisect": {
+    "started": "Búsqueda iniciada. Prueba el commit que se abrió y márcalo.",
+    "finished": "Búsqueda terminada. Volviste a tu rama.",
+    "menu": {
+      "bad": "Bisect: este commit tiene el problema",
+      "good": "Bisect: este commit funcionaba bien"
+    },
+    "dialog": {
+      "title": "Buscar el commit que rompió algo",
+      "description": "Git irá abriendo commits intermedios. Tú pruebas cada uno y dices si está bien o mal, hasta dar con el primero que falla.",
+      "bad": "Commit con el problema",
+      "badHint": "Normalmente el commit actual (HEAD).",
+      "good": "Commit que funcionaba",
+      "goodHint": "Un commit anterior donde todo estaba bien. Acepta un hash, una rama o una etiqueta.",
+      "goodPlaceholder": "Por ejemplo v1.2.0 o 3f9a1c2",
+      "cleanTree": "Hace falta que no tengas cambios sin guardar. Al terminar vuelves a tu rama.",
+      "submit": "Empezar"
+    },
+    "banner": {
+      "title": "Buscando el commit con el problema",
+      "testing": "Probando",
+      "needMarks": "Marca un commit bueno y uno malo para que git pueda acotar la búsqueda.",
+      "progress": "Quedan unos {{steps}} pasos ({{count}} commits por revisar).",
+      "good": "Este commit está bien",
+      "bad": "Este commit está mal",
+      "skip": "No puedo probarlo",
+      "finish": "Terminar",
+      "finishTo": "Terminar y volver a {{ref}}",
+      "foundTitle": "Este es el primer commit con el problema",
+      "showInHistory": "Verlo en el historial"
     }
   }
 }
