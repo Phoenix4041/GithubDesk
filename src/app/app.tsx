@@ -2,6 +2,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CommandsHost } from "@/features/commands/components/commands-host";
+import { CreateGithubRepoDialog } from "@/features/github/home/components/create-github-repo-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
 import { ProfilesDialog } from "@/features/profiles/components/profiles-dialog";
@@ -48,6 +49,7 @@ export function App() {
       </ErrorBoundary>
       <RepositoryDialogs />
       <GrantScopesDialog />
+      <CreateGithubRepoDialog />
       <ProfilesDialog />
       <ProfilePickerDialog />
       <CommandsHost />

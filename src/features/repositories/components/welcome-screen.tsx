@@ -1,6 +1,7 @@
 import { Download, FolderOpen, FolderPlus, GitBranch } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { GithubHome } from "@/features/github/home/components/github-home";
 import { ProfileChips } from "@/features/profiles/components/profile-chips";
 import { pickAndOpenRepository } from "../actions";
 import { useRepositoryDialogStore } from "../dialog-store";
@@ -75,6 +76,8 @@ export function WelcomeScreen() {
             <RepositoryList />
           </div>
         </section>
+
+        <GithubHome />
       </div>
     </main>
   );

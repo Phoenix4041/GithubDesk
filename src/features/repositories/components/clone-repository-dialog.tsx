@@ -2,6 +2,9 @@ import { FolderOpen } from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { homeContext, pickCloneAccount } from "@/features/github/home/home-model";
+import { useAccounts } from "@/features/github/queries";
+import { useSettingsStore } from "@/features/settings/store";
 import { useCancellableJob } from "@/shared/hooks/use-cancellable-job";
 import { pickDirectory } from "@/shared/lib/dialogs";
 import { folderNameFromUrl, joinPath } from "@/shared/lib/paths";
@@ -12,21 +15,26 @@ import { Dialog } from "@/shared/ui/dialog";
 import { ProgressBar } from "@/shared/ui/progress-bar";
 import { TextField } from "@/shared/ui/text-field";
 import { cloneRepository } from "../api";
+import type { ClonePreset } from "../dialog-store";
 import { useRepositoriesStore } from "../store";
 
 interface CloneRepositoryDialogProps {
   open: boolean;
+  preset: ClonePreset | null;
   onClose: () => void;
 }
 
-export function CloneRepositoryDialog({ open, onClose }: CloneRepositoryDialogProps) {
+export function CloneRepositoryDialog({ open, preset, onClose }: CloneRepositoryDialogProps) {
   const { t } = useTranslation();
   const lastParentDirectory = useRepositoriesStore((state) => state.lastParentDirectory);
   const rememberParentDirectory = useRepositoriesStore((state) => state.rememberParentDirectory);
   const activate = useRepositoriesStore((state) => state.activate);
   const { run, cancel, running, progress } = useCancellableJob();
 
-  const [url, setUrl] = useState("");
+  const accounts = useAccounts();
+  const profiles = useSettingsStore((state) => state.profiles);
+  const activeProfileId = useSettingsStore((state) => state.activeProfileId);
+  const [url, setUrl] = useState(preset?.url ?? "");
   const [parentDirectory, setParentDirectory] = useState<string | null>(null);
   const [nameOverride, setNameOverride] = useState<string | null>(null);
 
@@ -34,6 +42,10 @@ export function CloneRepositoryDialog({ open, onClose }: CloneRepositoryDialogPr
   const folderName = nameOverride ?? folderNameFromUrl(url);
   const destination = effectiveParent && folderName ? joinPath(effectiveParent, folderName) : "";
   const canSubmit = url.trim().length > 0 && destination.length > 0;
+  const accountList = accounts.data ?? [];
+  const activeAccountId = homeContext(profiles, activeProfileId, accountList).account?.id ?? null;
+  const presetAccount = preset?.accountId ? accountList.find((item) => item.id === preset.accountId) : undefined;
+  const cloneAccount = presetAccount ?? pickCloneAccount(url, accountList, activeAccountId);
 
   async function chooseDirectory() {
     const selected = await pickDirectory(t("repositories.clone.chooseFolder"));
@@ -48,7 +60,9 @@ export function CloneRepositoryDialog({ open, onClose }: CloneRepositoryDialogPr
       return;
     }
     try {
-      const info = await run((jobId, onProgress) => cloneRepository(url.trim(), destination, jobId, onProgress));
+      const info = await run((jobId, onProgress) =>
+        cloneRepository(url.trim(), destination, jobId, cloneAccount?.id ?? null, onProgress),
+      );
       rememberParentDirectory(effectiveParent);
       activate(info);
       setUrl("");
@@ -89,6 +103,9 @@ export function CloneRepositoryDialog({ open, onClose }: CloneRepositoryDialogPr
           onChange={(event) => setUrl(event.target.value)}
           spellCheck={false}
         />
+        {cloneAccount ? (
+          <p className="text-xs text-muted">{t("repositories.clone.usingAccount", { login: cloneAccount.login })}</p>
+        ) : null}
         <div className="flex items-end gap-2">
           <div className="min-w-0 flex-1">
             <TextField

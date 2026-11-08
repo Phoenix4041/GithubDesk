@@ -4,7 +4,9 @@ use serde::Serialize;
 use tauri::ipc::Channel;
 use tauri::State;
 
+use crate::commands::github_repo::arm_git_account;
 use crate::error::{AppError, AppResult, ErrorKind};
+use crate::git::auth::set_repo_auth;
 use crate::git::parse::progress::Progress;
 use crate::git::runner::{git, git_streaming};
 use crate::git::validate::{ensure_folder_name, ensure_valid_branch_name};
@@ -144,11 +146,24 @@ pub async fn repo_clone(
     url: String,
     destination: String,
     job_id: String,
+    account_id: Option<String>,
     on_progress: Channel<Progress>,
 ) -> AppResult<RepositoryInfo> {
     let guard = state.jobs.register(&job_id);
-    clone_repository(&url, Path::new(&destination), guard.token(), &|progress| {
+    let parent = Path::new(&destination).parent().map(Path::to_path_buf);
+    let armed = match (&account_id, &parent) {
+        (Some(id), Some(directory)) => {
+            arm_git_account(&state, directory, Some(id)).await?;
+            true
+        }
+        _ => false,
+    };
+    let result = clone_repository(&url, Path::new(&destination), guard.token(), &|progress| {
         let _ = on_progress.send(progress);
     })
-    .await
+    .await;
+    if let (true, Some(directory)) = (armed, &parent) {
+        set_repo_auth(directory, None);
+    }
+    result
 }

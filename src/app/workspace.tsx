@@ -30,6 +30,7 @@ import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
 import { GitignoreDialog } from "@/features/gitignore/components/gitignore-dialog";
 import { BisectBanner } from "@/features/bisect/components/bisect-banner";
+import { PublishDialog } from "@/features/github/home/components/publish-dialog";
 import { CleanupDialog } from "@/features/cleanup/components/cleanup-dialog";
 import { BisectDialog } from "@/features/bisect/components/bisect-dialog";
 import { MergeDialog } from "@/features/merge/components/merge-dialog";
@@ -150,6 +151,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <BisectDialog repoPath={repoPath} />
       <CleanupDialog repoPath={repoPath} />
       <ApplyProfileDialog repoPath={repoPath} />
+      <PublishDialog repoPath={repoPath} />
       <GitignoreDialog repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
       <RebaseOntoDialog repoPath={repoPath} />

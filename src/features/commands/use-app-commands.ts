@@ -8,6 +8,7 @@ import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useMergeDialogStore } from "@/features/merge/store";
+import { useGithubHomeDialogStore } from "@/features/github/home/store";
 import { useProfileDialogStore } from "@/features/profiles/dialog-store";
 import { choosePatchesToApply } from "@/features/patches/actions";
 import { useRebaseOntoStore } from "@/features/rebase/store";
@@ -152,6 +153,14 @@ export function buildGlobalCommands(): AppCommand[] {
       defaultShortcut: "Mod+Shift+O",
       enabled: true,
       run: () => useRepositoryDialogStore.getState().show("clone"),
+    },
+    {
+      id: "github.createRepo",
+      titleKey: "commands.items.github.createRepo",
+      group: "github",
+      keywords: "crear repositorio github nuevo remoto create repository",
+      enabled: true,
+      run: () => useGithubHomeDialogStore.getState().showCreate(),
     },
     {
       id: "profile.switch",

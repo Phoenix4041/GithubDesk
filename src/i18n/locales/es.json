@@ -78,7 +78,8 @@
       "destination": "Se guardará en {{path}}",
       "submit": "Clonar",
       "progress": "Progreso de la clonación",
-      "connecting": "Conectando con el servidor..."
+      "connecting": "Conectando con el servidor...",
+      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados."
     },
     "create": {
       "title": "Crear repositorio",
@@ -1384,6 +1385,55 @@
           "description": "Cambiar tu nombre, descripción y datos públicos."
         }
       }
+    },
+    "home": {
+      "title": "GitHub",
+      "tabsLabel": "Secciones de GitHub",
+      "tabs": {
+        "repos": "Repositorios",
+        "inbox": "Pendientes"
+      },
+      "connectTitle": "Conecta tu cuenta de GitHub",
+      "connectDescription": "Así verás tus repositorios, podrás clonarlos con un clic y tendrás tus pendientes a la mano.",
+      "connectAction": "Conectar cuenta",
+      "search": "Buscar un repositorio por nombre",
+      "create": "Crear en GitHub",
+      "reposLabel": "Repositorios de GitHub",
+      "private": "Privado",
+      "fork": "Fork",
+      "archived": "Archivado",
+      "clone": "Clonar",
+      "cloneRepo": "Clonar {{name}}",
+      "loadMore": "Cargar más",
+      "noRepos": "No hay repositorios en este contexto.",
+      "noMatches": "Ningún repositorio coincide con la búsqueda.",
+      "reviewRequested": "Te piden una revisión",
+      "assigned": "Asignados a ti",
+      "authored": "Tus pull requests abiertas",
+      "inboxEmpty": "Nada pendiente aquí.",
+      "created": "Repositorio {{name}} creado",
+      "published": "Repositorio {{name}} publicado",
+      "publish": "Publicar en GitHub",
+      "createDialog": {
+        "title": "Crear un repositorio en GitHub",
+        "description": "Se crea con la cuenta @{{login}}. Si lo creas con un README, luego puedes clonarlo.",
+        "owner": "Dueño",
+        "name": "Nombre del repositorio",
+        "nameInvalid": "Usa solo letras, números, guiones, puntos y guiones bajos.",
+        "descriptionLabel": "Descripción (opcional)",
+        "private": "Repositorio privado",
+        "readme": "Crear con un README",
+        "readmeHint": "Con README se puede clonar de inmediato. Sin README queda vacío, listo para publicar uno que ya tengas.",
+        "submit": "Crear repositorio"
+      },
+      "publishDialog": {
+        "title": "Publicar este repositorio en GitHub",
+        "description": "Se crea el repositorio en GitHub, se agrega como remoto y se sube tu rama actual.",
+        "account": "Cuenta",
+        "submit": "Publicar",
+        "progress": "Subiendo",
+        "connecting": "Creando el repositorio y conectando..."
+      }
     }
   },
   "commands": {
@@ -1478,7 +1528,8 @@
       "github": {
         "issueNew": "Crear un issue",
         "pullNew": "Crear una pull request",
-        "workflowRun": "Ejecutar un workflow"
+        "workflowRun": "Ejecutar un workflow",
+        "createRepo": "Crear un repositorio en GitHub"
       },
       "terminal": {
         "toggle": "Mostrar u ocultar la terminal"

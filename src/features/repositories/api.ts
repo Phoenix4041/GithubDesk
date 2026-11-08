@@ -13,7 +13,8 @@ export function cloneRepository(
   url: string,
   destination: string,
   jobId: string,
+  accountId: string | null,
   onProgress: (progress: Progress) => void,
 ): Promise<RepositoryInfo> {
-  return callWithProgress<RepositoryInfo>("repo_clone", { url, destination, jobId }, onProgress);
+  return callWithProgress<RepositoryInfo>("repo_clone", { url, destination, jobId, accountId }, onProgress);
 }

@@ -78,7 +78,8 @@
       "destination": "It will be saved in {{path}}",
       "submit": "Clone",
       "progress": "Clone progress",
-      "connecting": "Connecting to the server..."
+      "connecting": "Connecting to the server...",
+      "usingAccount": "The account @{{login}} will be used to clone; it also works for private repositories."
     },
     "create": {
       "title": "Create repository",
@@ -1384,6 +1385,55 @@
           "description": "Change your name, bio and public details."
         }
       }
+    },
+    "home": {
+      "title": "GitHub",
+      "tabsLabel": "GitHub sections",
+      "tabs": {
+        "repos": "Repositories",
+        "inbox": "Waiting for you"
+      },
+      "connectTitle": "Connect your GitHub account",
+      "connectDescription": "That way you will see your repositories, clone them with a click and keep your pending items at hand.",
+      "connectAction": "Connect account",
+      "search": "Search a repository by name",
+      "create": "Create on GitHub",
+      "reposLabel": "GitHub repositories",
+      "private": "Private",
+      "fork": "Fork",
+      "archived": "Archived",
+      "clone": "Clone",
+      "cloneRepo": "Clone {{name}}",
+      "loadMore": "Load more",
+      "noRepos": "There are no repositories in this context.",
+      "noMatches": "No repository matches the search.",
+      "reviewRequested": "Review requested from you",
+      "assigned": "Assigned to you",
+      "authored": "Your open pull requests",
+      "inboxEmpty": "Nothing waiting here.",
+      "created": "Repository {{name}} created",
+      "published": "Repository {{name}} published",
+      "publish": "Publish to GitHub",
+      "createDialog": {
+        "title": "Create a repository on GitHub",
+        "description": "It is created with the account @{{login}}. If you create it with a README you can clone it afterwards.",
+        "owner": "Owner",
+        "name": "Repository name",
+        "nameInvalid": "Use only letters, numbers, hyphens, dots and underscores.",
+        "descriptionLabel": "Description (optional)",
+        "private": "Private repository",
+        "readme": "Create with a README",
+        "readmeHint": "With a README it can be cloned right away. Without one it stays empty, ready to publish one you already have.",
+        "submit": "Create repository"
+      },
+      "publishDialog": {
+        "title": "Publish this repository on GitHub",
+        "description": "The repository is created on GitHub, added as a remote and your current branch is pushed.",
+        "account": "Account",
+        "submit": "Publish",
+        "progress": "Uploading",
+        "connecting": "Creating the repository and connecting..."
+      }
     }
   },
   "commands": {
@@ -1478,7 +1528,8 @@
       "github": {
         "issueNew": "Create an issue",
         "pullNew": "Create a pull request",
-        "workflowRun": "Run a workflow"
+        "workflowRun": "Run a workflow",
+        "createRepo": "Create a repository on GitHub"
       },
       "terminal": {
         "toggle": "Show or hide the terminal"

@@ -3,6 +3,7 @@ pub mod actions;
 pub mod client;
 pub mod device_flow;
 pub mod host;
+pub mod inbox;
 pub mod issues;
 pub mod models;
 pub mod orgs;

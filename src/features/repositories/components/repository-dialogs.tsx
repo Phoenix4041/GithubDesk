@@ -5,10 +5,11 @@ import { CreateRepositoryDialog } from "./create-repository-dialog";
 export function RepositoryDialogs() {
   const dialog = useRepositoryDialogStore((state) => state.dialog);
   const hide = useRepositoryDialogStore((state) => state.hide);
+  const preset = useRepositoryDialogStore((state) => state.clonePreset);
 
   return (
     <>
-      <CloneRepositoryDialog open={dialog === "clone"} onClose={hide} />
+      <CloneRepositoryDialog key={preset?.url ?? "manual"} open={dialog === "clone"} preset={preset} onClose={hide} />
       <CreateRepositoryDialog open={dialog === "create"} onClose={hide} />
     </>
   );
