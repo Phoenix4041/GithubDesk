@@ -82,7 +82,14 @@
       "submit": "Clonar",
       "progress": "Progreso de la clonación",
       "connecting": "Conectando con el servidor...",
-      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados."
+      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados.",
+      "advanced": "Opciones para repositorios grandes",
+      "shallow": "Clonar sin historial completo (--depth)",
+      "depth": "Commits a descargar",
+      "depthHint": "1 trae solo el último commit.",
+      "depthInvalid": "Escribe un número entero mayor que 0.",
+      "blobless": "Clonar sin archivos grandes hasta que se necesiten (--filter=blob:none)",
+      "bloblessHint": "Se descarga toda la historia, pero el contenido de las versiones antiguas se pide al servidor solo cuando hace falta."
     },
     "create": {
       "title": "Crear repositorio",
@@ -2190,6 +2197,15 @@
       },
       "overview": {
         "open": "Abrir el panel de todos los repositorios"
+      },
+      "browse": {
+        "open": "Explorar archivos de una versión"
+      },
+      "stats": {
+        "open": "Ver estadísticas del repositorio"
+      },
+      "health": {
+        "open": "Ver la salud del repositorio"
       }
     }
   },
@@ -2770,7 +2786,8 @@
       "branch-delete": "Rama eliminada",
       "stash-drop": "Stash eliminado",
       "before-restore": "Antes de aplicar una copia",
-      "other": "Copia de seguridad"
+      "other": "Copia de seguridad",
+      "restore-file": "Archivo restaurado a otra versión"
     },
     "deleteShort": "Eliminar"
   },
@@ -2909,6 +2926,181 @@
       "tooltip": "GithubDesk",
       "tooltipPending_one": "GithubDesk: {{count}} pendiente",
       "tooltipPending_other": "GithubDesk: {{count}} pendientes"
+    }
+  },
+  "browse": {
+    "menu": {
+      "explore": "Explorar archivos en este commit",
+      "compareTwo": "Comparar estos dos commits"
+    },
+    "title": "Archivos en {{revision}}",
+    "description": "Recorre las carpetas de esta versión y abre cualquier archivo en modo de solo lectura.",
+    "treeLabel": "Carpetas y archivos",
+    "emptyFolder": "Carpeta vacía",
+    "submodule": "Submódulo: ábrelo como repositorio aparte",
+    "contentLabel": "Contenido de {{path}}",
+    "pick": {
+      "title": "Elige un archivo",
+      "description": "Abre las carpetas de la izquierda y selecciona un archivo para verlo."
+    },
+    "missing": {
+      "title": "El archivo no existe en esta versión",
+      "description": "Pudo haberse borrado o movido."
+    },
+    "binary": {
+      "title": "Archivo binario",
+      "description": "Este archivo no es de texto, así que no se puede mostrar aquí."
+    },
+    "tooLarge": {
+      "title": "Archivo demasiado grande",
+      "description": "Solo se muestran archivos de texto de hasta 1 MB."
+    },
+    "restore": "Restaurar este archivo a esta versión",
+    "restoreConfirm": {
+      "title": "Confirmar restauración",
+      "description": "{{path}} en tu carpeta de trabajo se reemplazará por la versión de {{revision}}. Antes se guarda una copia en Rescate por si la necesitas.",
+      "confirm": "Restaurar"
+    },
+    "restored": "{{path}} quedó como en {{revision}}"
+  },
+  "imageDiff": {
+    "modesLabel": "Forma de comparar la imagen",
+    "modes": {
+      "side": "Lado a lado",
+      "swipe": "Deslizador",
+      "onion": "Transparencia"
+    },
+    "before": "Antes",
+    "after": "Después",
+    "swipeLabel": "Posición del deslizador",
+    "opacityLabel": "Transparencia de la nueva versión",
+    "missing": "No existe en esta versión",
+    "tooLarge": "Imagen de más de 5 MB"
+  },
+  "stats": {
+    "title": "Estadísticas del repositorio",
+    "description": "Actividad, colaboradores y archivos según el historial de la rama actual.",
+    "open": "Estadísticas",
+    "tabsLabel": "Secciones de estadísticas",
+    "tabs": {
+      "activity": "Actividad",
+      "contributors": "Colaboradores",
+      "files": "Archivos",
+      "todos": "Pendientes"
+    },
+    "running": "Analizando el historial…",
+    "cancelled": "Se canceló el análisis.",
+    "retry": "Volver a analizar",
+    "truncated": "Solo se analizaron los últimos {{count}} commits; el historial es más largo.",
+    "emptyTitle": "Sin historial",
+    "empty": "Todavía no hay commits en esta rama.",
+    "activity": {
+      "label": "Commits por día en el último año",
+      "day_one": "{{count}} commit el {{date}}",
+      "day_other": "{{count}} commits el {{date}}",
+      "total_one": "{{count}} commit en el último año",
+      "total_other": "{{count}} commits en el último año",
+      "busiest": "Día con más actividad: {{date}} ({{count}})",
+      "less": "Menos",
+      "more": "Más"
+    },
+    "contributors": {
+      "listLabel": "Colaboradores",
+      "commits_one": "{{count}} commit",
+      "commits_other": "{{count}} commits",
+      "range": "Primero {{first}} · último {{last}}"
+    },
+    "files": {
+      "churnTitle": "Archivos más cambiados",
+      "churnHint": "Veces que se tocó cada archivo y líneas agregadas y borradas.",
+      "foldersTitle": "Carpetas con más actividad",
+      "busTitle": "Archivos que solo conoce una persona",
+      "busHint": "Archivos con al menos 5 commits y un solo autor (factor autobús). Los más grandes primero.",
+      "busNone": "Ningún archivo depende de una sola persona.",
+      "times_one": "{{count}} vez",
+      "times_other": "{{count}} veces",
+      "lines_one": "{{count}} línea",
+      "lines_other": "{{count}} líneas"
+    },
+    "todos": {
+      "listLabel": "Pendientes encontrados",
+      "emptyTitle": "Sin pendientes",
+      "empty": "No hay TODO, FIXME, HACK ni XXX en los archivos del repositorio.",
+      "count_one": "{{count}} pendiente encontrado",
+      "count_other": "{{count}} pendientes encontrados",
+      "truncated": "Hay más resultados; solo se muestran los primeros {{count}}.",
+      "who": "¿Quién?",
+      "whoLabel": "Ver quién escribió {{path}}:{{line}}",
+      "author": "{{author}} · {{date}}",
+      "notCommitted": "Sin confirmar todavía",
+      "authorFailed": "No se pudo saber",
+      "blameLimit": "El autor solo se puede consultar en los primeros {{count}} resultados."
+    }
+  },
+  "health": {
+    "title": "Salud del repositorio",
+    "description": "Tamaño, archivos grandes de la historia, sparse-checkout y mantenimiento.",
+    "open": "Salud del repositorio",
+    "tabsLabel": "Secciones de salud",
+    "tabs": {
+      "size": "Tamaño",
+      "blobs": "Archivos grandes",
+      "sparse": "Sparse-checkout",
+      "maintenance": "Mantenimiento"
+    },
+    "size": {
+      "total": "La carpeta .git ocupa {{size}}.",
+      "shallow": "Es un clon sin historial completo.",
+      "partial": "Es un clon parcial: los archivos se descargan cuando se necesitan.",
+      "objectsTitle": "Objetos",
+      "packed": "Empaquetados",
+      "packs": "Paquetes",
+      "loose": "Sueltos",
+      "garbage": "Basura",
+      "refsTitle": "Referencias",
+      "looseRefs": "Referencias sueltas",
+      "packedRefs": "Referencias empaquetadas",
+      "branches": "Ramas locales",
+      "unmerged": "Ramas sin combinar en la actual",
+      "stashes": "Cambios guardados (stash)",
+      "suggestGc": "Hay muchos objetos sueltos o paquetes. Optimizar el repositorio en Mantenimiento puede ayudar."
+    },
+    "blobs": {
+      "running": "Buscando los archivos más grandes de toda la historia…",
+      "cancelled": "Se canceló la búsqueda.",
+      "retry": "Buscar otra vez",
+      "empty": "La historia no tiene archivos.",
+      "hint": "Los 20 archivos más grandes guardados en la historia, aunque ya no estén en la rama actual.",
+      "listLabel": "Archivos más grandes",
+      "noPath": "(sin ruta)"
+    },
+    "sparse": {
+      "on_one": "Sparse-checkout activo: solo se descarga {{count}} carpeta además de los archivos de la raíz.",
+      "on_other": "Sparse-checkout activo: solo se descargan {{count}} carpetas además de los archivos de la raíz.",
+      "off": "Sparse-checkout desactivado: todas las carpetas están en el disco.",
+      "folders": "Carpetas que quieres en el disco",
+      "foldersHint": "Una por línea, relativa a la raíz del repositorio. Las demás carpetas desaparecen del disco pero siguen en Git.",
+      "invalid": "Ruta no válida: {{folder}}",
+      "enable": "Activar",
+      "update": "Actualizar carpetas",
+      "disable": "Desactivar",
+      "apply": "Aplicar",
+      "confirmSetTitle": "¿Dejar solo estas carpetas en el disco?",
+      "confirmSet_one": "Se mantendrá {{count}} carpeta y los archivos de la raíz. El resto se quitará del disco, pero no de Git: puedes traerlo de vuelta al desactivar.",
+      "confirmSet_other": "Se mantendrán {{count}} carpetas y los archivos de la raíz. El resto se quitará del disco, pero no de Git: puedes traerlo de vuelta al desactivar.",
+      "confirmDisableTitle": "¿Desactivar sparse-checkout?",
+      "confirmDisable": "Todas las carpetas volverán al disco. En repositorios grandes puede tardar."
+    },
+    "maintenance": {
+      "description": "Optimizar empaqueta los objetos sueltos y comprime el repositorio con git gc. No borra commits, ramas ni cambios guardados.",
+      "run": "Optimizar ahora",
+      "running": "Optimizando el repositorio…",
+      "cancelled": "Se canceló la optimización.",
+      "confirmTitle": "¿Optimizar el repositorio?",
+      "confirm": "Puede tardar varios minutos en repositorios grandes. Mientras tanto evita otras operaciones de Git.",
+      "resultTitle": "Resultado",
+      "result": "La carpeta .git pasó de {{before}} a {{after}} (se liberaron {{saved}}).",
+      "objects": "Ahora hay {{loose}} objetos sueltos en {{packs}} paquetes."
     }
   }
 }

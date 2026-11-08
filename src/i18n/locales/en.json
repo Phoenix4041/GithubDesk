@@ -82,7 +82,14 @@
       "submit": "Clone",
       "progress": "Clone progress",
       "connecting": "Connecting to the server...",
-      "usingAccount": "The account @{{login}} will be used to clone; it also works for private repositories."
+      "usingAccount": "The account @{{login}} will be used to clone; it also works for private repositories.",
+      "advanced": "Options for large repositories",
+      "shallow": "Clone without the full history (--depth)",
+      "depth": "Commits to download",
+      "depthHint": "1 brings only the latest commit.",
+      "depthInvalid": "Enter a whole number greater than 0.",
+      "blobless": "Skip file contents until they are needed (--filter=blob:none)",
+      "bloblessHint": "The whole history is downloaded, but the content of old versions is fetched from the server only when needed."
     },
     "create": {
       "title": "Create repository",
@@ -2190,6 +2197,15 @@
       },
       "overview": {
         "open": "Open the all repositories panel"
+      },
+      "browse": {
+        "open": "Browse files of a version"
+      },
+      "stats": {
+        "open": "Show repository statistics"
+      },
+      "health": {
+        "open": "Show repository health"
       }
     }
   },
@@ -2770,7 +2786,8 @@
       "branch-delete": "Deleted branch",
       "stash-drop": "Dropped stash",
       "before-restore": "Before applying a copy",
-      "other": "Safety copy"
+      "other": "Safety copy",
+      "restore-file": "File restored to another version"
     },
     "deleteShort": "Delete"
   },
@@ -2909,6 +2926,181 @@
       "tooltip": "GithubDesk",
       "tooltipPending_one": "GithubDesk: {{count}} pending",
       "tooltipPending_other": "GithubDesk: {{count}} pending"
+    }
+  },
+  "browse": {
+    "menu": {
+      "explore": "Browse files in this commit",
+      "compareTwo": "Compare these two commits"
+    },
+    "title": "Files at {{revision}}",
+    "description": "Walk through the folders of this version and open any file read-only.",
+    "treeLabel": "Folders and files",
+    "emptyFolder": "Empty folder",
+    "submodule": "Submodule: open it as its own repository",
+    "contentLabel": "Contents of {{path}}",
+    "pick": {
+      "title": "Pick a file",
+      "description": "Open the folders on the left and select a file to view it."
+    },
+    "missing": {
+      "title": "The file does not exist in this version",
+      "description": "It may have been deleted or moved."
+    },
+    "binary": {
+      "title": "Binary file",
+      "description": "This file is not text, so it cannot be shown here."
+    },
+    "tooLarge": {
+      "title": "File too large",
+      "description": "Only text files up to 1 MB are shown."
+    },
+    "restore": "Restore this file to this version",
+    "restoreConfirm": {
+      "title": "Confirm restore",
+      "description": "{{path}} in your working folder will be replaced with the version from {{revision}}. A copy is saved in Rescue first in case you need it.",
+      "confirm": "Restore"
+    },
+    "restored": "{{path}} now matches {{revision}}"
+  },
+  "imageDiff": {
+    "modesLabel": "How to compare the image",
+    "modes": {
+      "side": "Side by side",
+      "swipe": "Swipe",
+      "onion": "Onion skin"
+    },
+    "before": "Before",
+    "after": "After",
+    "swipeLabel": "Swipe position",
+    "opacityLabel": "Opacity of the new version",
+    "missing": "Not present in this version",
+    "tooLarge": "Image larger than 5 MB"
+  },
+  "stats": {
+    "title": "Repository statistics",
+    "description": "Activity, contributors and files from the history of the current branch.",
+    "open": "Statistics",
+    "tabsLabel": "Statistics sections",
+    "tabs": {
+      "activity": "Activity",
+      "contributors": "Contributors",
+      "files": "Files",
+      "todos": "To-dos"
+    },
+    "running": "Reading the history…",
+    "cancelled": "The analysis was cancelled.",
+    "retry": "Analyze again",
+    "truncated": "Only the last {{count}} commits were analyzed; the history is longer.",
+    "emptyTitle": "No history",
+    "empty": "This branch has no commits yet.",
+    "activity": {
+      "label": "Commits per day in the last year",
+      "day_one": "{{count}} commit on {{date}}",
+      "day_other": "{{count}} commits on {{date}}",
+      "total_one": "{{count}} commit in the last year",
+      "total_other": "{{count}} commits in the last year",
+      "busiest": "Busiest day: {{date}} ({{count}})",
+      "less": "Less",
+      "more": "More"
+    },
+    "contributors": {
+      "listLabel": "Contributors",
+      "commits_one": "{{count}} commit",
+      "commits_other": "{{count}} commits",
+      "range": "First {{first}} · last {{last}}"
+    },
+    "files": {
+      "churnTitle": "Most changed files",
+      "churnHint": "How often each file was touched and the lines added and removed.",
+      "foldersTitle": "Busiest folders",
+      "busTitle": "Files only one person knows",
+      "busHint": "Files with at least 5 commits and a single author (bus factor). Largest first.",
+      "busNone": "No file depends on a single person.",
+      "times_one": "{{count}} time",
+      "times_other": "{{count}} times",
+      "lines_one": "{{count}} line",
+      "lines_other": "{{count}} lines"
+    },
+    "todos": {
+      "listLabel": "To-dos found",
+      "emptyTitle": "No to-dos",
+      "empty": "There is no TODO, FIXME, HACK or XXX in the repository files.",
+      "count_one": "{{count}} to-do found",
+      "count_other": "{{count}} to-dos found",
+      "truncated": "There are more results; only the first {{count}} are shown.",
+      "who": "Who?",
+      "whoLabel": "See who wrote {{path}}:{{line}}",
+      "author": "{{author}} · {{date}}",
+      "notCommitted": "Not committed yet",
+      "authorFailed": "Unknown",
+      "blameLimit": "The author can only be looked up for the first {{count}} results."
+    }
+  },
+  "health": {
+    "title": "Repository health",
+    "description": "Size, large files in the history, sparse checkout and maintenance.",
+    "open": "Repository health",
+    "tabsLabel": "Health sections",
+    "tabs": {
+      "size": "Size",
+      "blobs": "Large files",
+      "sparse": "Sparse checkout",
+      "maintenance": "Maintenance"
+    },
+    "size": {
+      "total": "The .git folder takes {{size}}.",
+      "shallow": "This is a shallow clone.",
+      "partial": "This is a partial clone: files are downloaded when needed.",
+      "objectsTitle": "Objects",
+      "packed": "Packed",
+      "packs": "Packs",
+      "loose": "Loose",
+      "garbage": "Garbage",
+      "refsTitle": "References",
+      "looseRefs": "Loose references",
+      "packedRefs": "Packed references",
+      "branches": "Local branches",
+      "unmerged": "Branches not merged into the current one",
+      "stashes": "Stashes",
+      "suggestGc": "There are many loose objects or packs. Optimizing the repository under Maintenance can help."
+    },
+    "blobs": {
+      "running": "Looking for the largest files in the whole history…",
+      "cancelled": "The search was cancelled.",
+      "retry": "Search again",
+      "empty": "The history has no files.",
+      "hint": "The 20 largest files stored in the history, even if they are no longer in the current branch.",
+      "listLabel": "Largest files",
+      "noPath": "(no path)"
+    },
+    "sparse": {
+      "on_one": "Sparse checkout is on: only {{count}} folder is checked out besides the root files.",
+      "on_other": "Sparse checkout is on: only {{count}} folders are checked out besides the root files.",
+      "off": "Sparse checkout is off: every folder is on disk.",
+      "folders": "Folders you want on disk",
+      "foldersHint": "One per line, relative to the repository root. Other folders leave the disk but stay in Git.",
+      "invalid": "Invalid path: {{folder}}",
+      "enable": "Turn on",
+      "update": "Update folders",
+      "disable": "Turn off",
+      "apply": "Apply",
+      "confirmSetTitle": "Keep only these folders on disk?",
+      "confirmSet_one": "{{count}} folder and the root files will stay. The rest leaves the disk, not Git: turning this off brings it back.",
+      "confirmSet_other": "{{count}} folders and the root files will stay. The rest leaves the disk, not Git: turning this off brings it back.",
+      "confirmDisableTitle": "Turn off sparse checkout?",
+      "confirmDisable": "Every folder comes back to disk. It can take a while in large repositories."
+    },
+    "maintenance": {
+      "description": "Optimizing packs loose objects and compresses the repository with git gc. It does not delete commits, branches or stashes.",
+      "run": "Optimize now",
+      "running": "Optimizing the repository…",
+      "cancelled": "The optimization was cancelled.",
+      "confirmTitle": "Optimize the repository?",
+      "confirm": "It can take several minutes in large repositories. Avoid other Git operations meanwhile.",
+      "resultTitle": "Result",
+      "result": "The .git folder went from {{before}} to {{after}} ({{saved}} freed).",
+      "objects": "There are now {{loose}} loose objects and {{packs}} packs."
     }
   }
 }
