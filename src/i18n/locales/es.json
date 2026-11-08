@@ -53,6 +53,58 @@
     "cloneDescription": "Descarga un repositorio desde su dirección.",
     "recents": "Repositorios recientes"
   },
+  "dashboard": {
+    "greeting": {
+      "morning": "Buenos días, {{name}}",
+      "afternoon": "Buenas tardes, {{name}}",
+      "evening": "Buenas noches, {{name}}",
+      "night": "Es tarde, {{name}}"
+    },
+    "greetingAnonymous": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches",
+      "night": "Es tarde"
+    },
+    "subtitle": "Esto es lo que te espera hoy.",
+    "createRemote": {
+      "title": "Crear en GitHub",
+      "description": "Publica un repositorio nuevo en tu cuenta."
+    },
+    "recents": {
+      "title": "Repositorios recientes",
+      "empty": "Aún no abriste ningún repositorio.",
+      "noBranch": "Sin rama"
+    },
+    "status": {
+      "clean": "Al día",
+      "dirty": "Cambios sin commit",
+      "ahead": "Adelantado {{ahead}}",
+      "behind": "Atrasado {{behind}}",
+      "diverged": "Divergente +{{ahead}} -{{behind}}",
+      "missing": "No disponible"
+    },
+    "reviews": {
+      "title": "Esperan tu revisión",
+      "empty": "No tienes pull requests por revisar."
+    },
+    "failing": {
+      "title": "CI roto en tus ramas",
+      "empty": "Todos tus pull requests pasan el CI."
+    },
+    "issues": {
+      "title": "Issues asignados",
+      "empty": "No tienes issues asignados."
+    },
+    "mentions": {
+      "title": "Menciones recientes",
+      "empty": "Nadie te ha mencionado últimamente."
+    },
+    "connect": {
+      "title": "Conecta tu cuenta de GitHub",
+      "description": "Verás aquí tus revisiones, issues, menciones y el estado del CI."
+    }
+  },
   "repositories": {
     "title": "Repositorios",
     "search": "Buscar repositorio",
@@ -149,6 +201,26 @@
       "label": "Rama",
       "none": "No hay otras ramas para elegir.",
       "next": "Continuar"
+    }
+  },
+  "secretScan": {
+    "title": "Posibles secretos en el commit",
+    "description_one": "Se encontró {{count}} posible secreto entre los cambios preparados.",
+    "description_other": "Se encontraron {{count}} posibles secretos entre los cambios preparados.",
+    "listLabel": "Posibles secretos encontrados",
+    "ignoreHint": "Si es un falso positivo, agrega secretscan:ignore en esa línea.",
+    "unstage": "Sacar del staging",
+    "addToGitignore": "Agregar a .gitignore",
+    "commitAnyway": "Commitear igual",
+    "rules": {
+      "githubToken": "Token de GitHub",
+      "awsAccessKey": "Clave de acceso de AWS",
+      "privateKey": "Llave privada",
+      "slackToken": "Token de Slack",
+      "stripeKey": "Clave de Stripe",
+      "secretAssignment": "Contraseña o clave asignada en el código",
+      "envFile": "Archivo de variables de entorno",
+      "unknown": "Posible secreto"
     }
   },
   "changes": {
@@ -956,6 +1028,35 @@
     "createBranch": "Crear rama aquí",
     "restored": "Tu rama volvió a {{hash}}",
     "undone": "Operación deshecha",
+    "recovered": "Rama {{name}} creada",
+    "timeline": {
+      "branchFilter": "Rama",
+      "head": "HEAD (todos los movimientos)",
+      "from": "Desde",
+      "to": "Hasta",
+      "clear": "Quitar filtros",
+      "noMatches": "Ningún movimiento coincide con los filtros.",
+      "branchSwitchNote": "Pasaste de una rama a otra"
+    },
+    "recover": {
+      "title": "Recuperar {{hash}}",
+      "description": "Crea una rama nueva que apunta a este commit para que ya no se pierda.",
+      "name": "Nombre de la rama nueva",
+      "confirm": "Crear rama"
+    },
+    "undoPreview": {
+      "title": "Deshacer la última operación",
+      "description": "Se deshará: {{action}} \"{{message}}\".",
+      "switchBack": "Volverás a {{ref}}.",
+      "removed": "Commits que saldrán de tu rama ({{count}})",
+      "restored": "Commits que volverán ({{count}})",
+      "files": "Archivos que cambiarán ({{count}})",
+      "noFiles": "Ningún archivo cambiará.",
+      "dirty": "Tienes cambios sin guardar que este deshacer descartaría.",
+      "stash": "Guardar mis cambios primero (stash) y luego deshacer",
+      "needStash": "Marca la opción de arriba para continuar o guarda tus cambios antes.",
+      "loading": "Calculando lo que cambiará"
+    },
     "empty": {
       "title": "Sin movimientos",
       "description": "Cuando hagas commits o cambies de rama aparecerán aquí."
@@ -1948,6 +2049,15 @@
       "label": "Paleta de comandos",
       "placeholder": "Escribe un comando...",
       "empty": "Ningún comando coincide con tu búsqueda."
+    },
+    "jump": {
+      "groups": {
+        "repository": "Repositorios",
+        "branch": "Ramas",
+        "pull": "Pull requests",
+        "issue": "Issues",
+        "file": "Archivos"
+      }
     },
     "shortcuts": {
       "title": "Atajos de teclado",

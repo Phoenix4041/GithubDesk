@@ -53,6 +53,58 @@
     "cloneDescription": "Download a repository from its address.",
     "recents": "Recent repositories"
   },
+  "dashboard": {
+    "greeting": {
+      "morning": "Good morning, {{name}}",
+      "afternoon": "Good afternoon, {{name}}",
+      "evening": "Good evening, {{name}}",
+      "night": "Working late, {{name}}"
+    },
+    "greetingAnonymous": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening",
+      "night": "Working late"
+    },
+    "subtitle": "Here is what is waiting for you today.",
+    "createRemote": {
+      "title": "Create on GitHub",
+      "description": "Publish a new repository to your account."
+    },
+    "recents": {
+      "title": "Recent repositories",
+      "empty": "You have not opened any repository yet.",
+      "noBranch": "No branch"
+    },
+    "status": {
+      "clean": "Up to date",
+      "dirty": "Uncommitted changes",
+      "ahead": "Ahead {{ahead}}",
+      "behind": "Behind {{behind}}",
+      "diverged": "Diverged +{{ahead}} -{{behind}}",
+      "missing": "Unavailable"
+    },
+    "reviews": {
+      "title": "Waiting for your review",
+      "empty": "You have no pull requests to review."
+    },
+    "failing": {
+      "title": "Broken CI on your branches",
+      "empty": "All your pull requests pass CI."
+    },
+    "issues": {
+      "title": "Assigned issues",
+      "empty": "You have no assigned issues."
+    },
+    "mentions": {
+      "title": "Recent mentions",
+      "empty": "Nobody has mentioned you lately."
+    },
+    "connect": {
+      "title": "Connect your GitHub account",
+      "description": "You will see your reviews, issues, mentions and CI status here."
+    }
+  },
   "repositories": {
     "title": "Repositories",
     "search": "Search repositories",
@@ -149,6 +201,26 @@
       "label": "Branch",
       "none": "There are no other branches to pick.",
       "next": "Continue"
+    }
+  },
+  "secretScan": {
+    "title": "Possible secrets in the commit",
+    "description_one": "Found {{count}} possible secret among the staged changes.",
+    "description_other": "Found {{count}} possible secrets among the staged changes.",
+    "listLabel": "Possible secrets found",
+    "ignoreHint": "If it is a false positive, add secretscan:ignore on that line.",
+    "unstage": "Remove from staging",
+    "addToGitignore": "Add to .gitignore",
+    "commitAnyway": "Commit anyway",
+    "rules": {
+      "githubToken": "GitHub token",
+      "awsAccessKey": "AWS access key",
+      "privateKey": "Private key",
+      "slackToken": "Slack token",
+      "stripeKey": "Stripe key",
+      "secretAssignment": "Password or key assigned in code",
+      "envFile": "Environment variables file",
+      "unknown": "Possible secret"
     }
   },
   "changes": {
@@ -956,6 +1028,35 @@
     "createBranch": "Branch here",
     "restored": "Your branch went back to {{hash}}",
     "undone": "Operation undone",
+    "recovered": "Branch {{name}} created",
+    "timeline": {
+      "branchFilter": "Branch",
+      "head": "HEAD (all movements)",
+      "from": "From",
+      "to": "Until",
+      "clear": "Clear filters",
+      "noMatches": "No movements match the filters.",
+      "branchSwitchNote": "Moved from one branch to another"
+    },
+    "recover": {
+      "title": "Recover {{hash}}",
+      "description": "Creates a new branch pointing to this commit so it is no longer lost.",
+      "name": "Name of the new branch",
+      "confirm": "Create branch"
+    },
+    "undoPreview": {
+      "title": "Undo the last operation",
+      "description": "Undo: {{action}} \"{{message}}\".",
+      "switchBack": "You will go back to {{ref}}.",
+      "removed": "Commits that will leave your branch ({{count}})",
+      "restored": "Commits that will come back ({{count}})",
+      "files": "Files that will change ({{count}})",
+      "noFiles": "No files will change.",
+      "dirty": "You have unsaved changes that this undo would discard.",
+      "stash": "Save my changes first (stash) and then undo",
+      "needStash": "Check the option above to continue, or save your changes first.",
+      "loading": "Calculating what will change"
+    },
     "empty": {
       "title": "No movements",
       "description": "When you commit or switch branches they will show up here."
@@ -1948,6 +2049,15 @@
       "label": "Command palette",
       "placeholder": "Type a command...",
       "empty": "No command matches your search."
+    },
+    "jump": {
+      "groups": {
+        "repository": "Repositories",
+        "branch": "Branches",
+        "pull": "Pull requests",
+        "issue": "Issues",
+        "file": "Files"
+      }
     },
     "shortcuts": {
       "title": "Keyboard shortcuts",

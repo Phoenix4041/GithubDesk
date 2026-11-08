@@ -7,6 +7,7 @@ pub mod jobs;
 pub mod platform;
 pub mod pty;
 pub mod redact;
+pub mod secret_scan;
 pub mod self_update;
 pub mod state;
 pub mod update_check;
@@ -17,7 +18,7 @@ use commands::{
     app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
     github_account, github_actions, github_admin, github_collab, github_extras, github_home,
     github_issues, github_orgs, github_pulls, github_releases, github_repo, github_secrets,
-    gitignore, history, identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog,
+    gitignore, history, home, identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog,
     remote, repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
@@ -91,6 +92,10 @@ pub fn run() {
             reflog::reflog_undo_plan,
             reflog::reflog_restore,
             reflog::reflog_undo,
+            reflog::reflog_undo_preview,
+            reflog::reflog_refs,
+            reflog::reflog_list_ref,
+            reflog::reflog_recover,
             github_account::github_accounts_list,
             github_account::github_account_add_token,
             github_account::github_account_remove,
@@ -101,6 +106,10 @@ pub fn run() {
             github_orgs::github_context_repos,
             github_orgs::github_repo_create,
             github_home::github_inbox,
+            home::github_home_failing,
+            home::github_home_mentions,
+            home::home_list_files,
+            home::home_repo_states,
             github_collab::github_issue_edit,
             github_collab::github_pull_request_reviewers,
             github_collab::github_pull_remove_reviewers,
@@ -247,6 +256,9 @@ pub fn run() {
             gitignore::gitignore_check,
             gitignore::gitignore_tracked,
             gitignore::gitignore_untrack,
+            commands::secret_scan::secret_scan_staged,
+            commands::secret_scan::secret_scan_unstage,
+            commands::secret_scan::secret_scan_ignore,
             external::editors_list,
             external::editor_open,
             external::reveal_in_file_manager,
