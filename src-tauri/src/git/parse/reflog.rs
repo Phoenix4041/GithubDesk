@@ -36,6 +36,7 @@ pub struct ReflogEntry {
 pub enum UndoStrategy {
     KeepChangesStaged,
     RestoreAll,
+    SwitchBack,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -47,6 +48,7 @@ pub struct UndoPlan {
     pub current_hash: String,
     pub target_hash: String,
     pub target_short_hash: String,
+    pub switch_to: Option<String>,
 }
 
 fn classify(subject: &str) -> ReflogAction {
@@ -122,7 +124,19 @@ fn can_undo(action: ReflogAction) -> bool {
             | ReflogAction::CherryPick
             | ReflogAction::Revert
             | ReflogAction::Pull
+            | ReflogAction::Checkout
     )
+}
+
+fn previous_checkout_ref(message: &str) -> Option<String> {
+    let rest = message.strip_prefix("moving from ")?;
+    let (from, _) = rest.rsplit_once(" to ")?;
+    let from = from.trim();
+    if from.is_empty() || from.starts_with('-') {
+        None
+    } else {
+        Some(from.to_string())
+    }
 }
 
 pub fn plan_undo(entries: &[ReflogEntry]) -> Option<UndoPlan> {
@@ -139,8 +153,14 @@ pub fn plan_undo(entries: &[ReflogEntry]) -> Option<UndoPlan> {
         1
     };
     let target = entries.get(skip)?;
+    let switch_to = if latest.action == ReflogAction::Checkout {
+        Some(previous_checkout_ref(&latest.message)?)
+    } else {
+        None
+    };
     let strategy = match latest.action {
         ReflogAction::Commit | ReflogAction::CommitAmend => UndoStrategy::KeepChangesStaged,
+        ReflogAction::Checkout => UndoStrategy::SwitchBack,
         _ => UndoStrategy::RestoreAll,
     };
     Some(UndoPlan {
@@ -150,6 +170,7 @@ pub fn plan_undo(entries: &[ReflogEntry]) -> Option<UndoPlan> {
         current_hash: latest.hash.clone(),
         target_hash: target.hash.clone(),
         target_short_hash: target.short_hash.clone(),
+        switch_to,
     })
 }
 
@@ -241,12 +262,18 @@ mod tests {
     }
 
     #[test]
-    fn undo_is_not_offered_after_switching_branches_or_without_history() {
+    fn undo_switches_back_after_changing_branches() {
         let checkout = entries(&[
             ("aaaaaaa1", "checkout: moving from a to b"),
             ("bbbbbbb2", "commit: x"),
         ]);
-        assert_eq!(plan_undo(&checkout), None);
+        let plan = plan_undo(&checkout).expect("plan");
+        assert_eq!(plan.strategy, UndoStrategy::SwitchBack);
+        assert_eq!(plan.switch_to.as_deref(), Some("a"));
+    }
+
+    #[test]
+    fn undo_is_not_offered_without_history() {
 
         let single = entries(&[("aaaaaaa1", "commit (initial): first")]);
         assert_eq!(plan_undo(&single), None);

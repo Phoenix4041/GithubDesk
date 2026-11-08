@@ -1728,7 +1728,7 @@ async fn undoing_a_commit_keeps_its_changes_staged() {
     assert_eq!(plan.current_hash, second);
     assert_eq!(plan.strategy, UndoStrategy::KeepChangesStaged);
 
-    reflog::undo_last_operation(repo, &second)
+    reflog::undo_last_operation(repo, &second, false)
         .await
         .expect("undo");
     assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), first);
@@ -1757,7 +1757,7 @@ async fn undoing_a_hard_reset_brings_the_work_back() {
     assert_eq!(plan.target_hash, second);
     assert_eq!(plan.strategy, UndoStrategy::RestoreAll);
 
-    reflog::undo_last_operation(repo, &first)
+    reflog::undo_last_operation(repo, &first, false)
         .await
         .expect("undo");
     assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), second);
@@ -1783,7 +1783,7 @@ async fn undoing_a_merge_restores_the_previous_tip() {
     assert_eq!(plan.action, ReflogAction::Merge);
     assert_eq!(plan.target_hash, before);
 
-    reflog::undo_last_operation(repo, &merged)
+    reflog::undo_last_operation(repo, &merged, false)
         .await
         .expect("undo");
     assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), before);
@@ -1811,7 +1811,7 @@ async fn undoing_a_rebase_goes_back_before_its_first_step() {
     let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
     assert_eq!(plan.action, ReflogAction::Rebase);
     assert_eq!(plan.target_hash, before);
-    reflog::undo_last_operation(repo, &plan.current_hash)
+    reflog::undo_last_operation(repo, &plan.current_hash, false)
         .await
         .expect("undo");
     assert_eq!(git_output(repo, &["rev-parse", "HEAD"]).trim(), before);
@@ -1826,17 +1826,17 @@ async fn undo_is_refused_when_the_history_moved_or_local_work_would_be_lost() {
     commit_file(repo, "f.txt", "two\n", "second").await;
     git_output(repo, &["reset", "--hard", "HEAD~1"]);
 
-    let stale = reflog::undo_last_operation(repo, "0123456789abcdef")
+    let stale = reflog::undo_last_operation(repo, "0123456789abcdef", false)
         .await
         .expect_err("stale");
     assert_eq!(stale.kind, ErrorKind::InvalidInput);
 
     write_file(repo, "f.txt", "local edit\n");
     let plan = reflog::undo_plan(repo).await.expect("plan").expect("some");
-    let refused = reflog::undo_last_operation(repo, &plan.current_hash)
+    let refused = reflog::undo_last_operation(repo, &plan.current_hash, false)
         .await
         .expect_err("would overwrite local work");
-    assert_eq!(refused.kind, ErrorKind::LocalChangesWouldBeOverwritten);
+    assert_eq!(refused.kind, ErrorKind::InvalidInput);
     assert_eq!(
         std::fs::read_to_string(repo.join("f.txt")).expect("read"),
         "local edit\n"
