@@ -5,6 +5,7 @@ pub mod actions_secrets;
 pub mod client;
 pub mod collab;
 pub mod device_flow;
+pub mod forks;
 pub mod hooks;
 pub mod host;
 pub mod inbox;

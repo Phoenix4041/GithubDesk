@@ -1976,6 +1976,19 @@
         "ci_activity": "CI activity",
         "other": "update"
       }
+    },
+    "fork": {
+      "label": "Fork",
+      "parent": "This repository is a fork of {{name}}",
+      "hint": "Syncing brings the changes of the original {{parentBranch}} into {{branch}}, directly on GitHub.",
+      "sync": "Sync with the original",
+      "addRemote": "Add upstream remote",
+      "remoteAdded": "Upstream remote added",
+      "synced": "{{branch}} is now in sync with the original",
+      "upToDate": "{{branch}} was already up to date with the original",
+      "conflict": "Could not sync because of conflicts",
+      "conflictHint": "The branch has changes that clash with the original. Resolve them locally or on GitHub.",
+      "pullNow": "Pull now"
     }
   },
   "commands": {
