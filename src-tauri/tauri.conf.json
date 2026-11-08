@@ -26,8 +26,18 @@
       "devCsp": "default-src 'self' http://localhost:1420; script-src 'self' 'unsafe-inline' http://localhost:1420; style-src 'self' 'unsafe-inline' http://localhost:1420; img-src 'self' data: https://avatars.githubusercontent.com https://*.githubusercontent.com https://github.com; font-src 'self'; connect-src 'self' ipc: http://ipc.localhost http://localhost:1420 ws://localhost:1420"
     }
   },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhGQTNBRjkzMzA3NUMwRTAKUldUZ3dIVXdrNitqajJidVJaaWUyZmc0NGVPeXU3SVEzUlR5dElEV09tSGxvU3RwaWhBTm01bkQK",
+      "endpoints": [
+        "https://github.com/Phoenix4041/GithubDesk/releases/latest/download/latest.json"
+      ],
+      "windows": { "installMode": "passive" }
+    }
+  },
   "bundle": {
     "active": true,
+    "createUpdaterArtifacts": true,
     "targets": "all",
     "publisher": "GithubDesk",
     "category": "DeveloperTool",
