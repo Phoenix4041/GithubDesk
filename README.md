@@ -215,7 +215,7 @@ The repository needs the `TAURI_SIGNING_PRIVATE_KEY` secret (and `TAURI_SIGNING_
 | `src/shared/` | Shared components, utilities and hooks. |
 | `src/i18n/` | Interface texts per language. |
 
-The Spanish README keeps the detailed notes of each development phase: [README.es.md](README.es.md). Release notes are in [CHANGELOG.md](CHANGELOG.md).
+Design notes and known limits for each development phase are in [docs/notas-tecnicas.md](docs/notas-tecnicas.md), written in Spanish. Release notes are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
