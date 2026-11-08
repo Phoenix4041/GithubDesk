@@ -47,16 +47,47 @@ pub async fn compare_summary(repo: &Path, base: &str, head: &str) -> AppResult<C
     })
 }
 
-pub async fn compare_files(repo: &Path, base: &str, head: &str) -> AppResult<Vec<CommitFile>> {
-    ensure_revision(base)?;
-    ensure_revision(head)?;
-    let range = format!("{}...{}", base.trim(), head.trim());
+pub async fn range_files(repo: &Path, range: &str) -> AppResult<Vec<CommitFile>> {
     let output = git(
         repo,
-        &["diff", "--name-status", "-z", "-M", "--no-color", &range],
+        &["diff", "--name-status", "-z", "-M", "--no-color", range],
     )
     .await?;
     Ok(parse_name_status(&output.stdout))
+}
+
+pub async fn compare_files(repo: &Path, base: &str, head: &str) -> AppResult<Vec<CommitFile>> {
+    ensure_revision(base)?;
+    ensure_revision(head)?;
+    range_files(repo, &format!("{}...{}", base.trim(), head.trim())).await
+}
+
+pub async fn range_file_diff(
+    repo: &Path,
+    range: &str,
+    path: &str,
+    old_path: Option<&str>,
+    ignore_whitespace: bool,
+) -> AppResult<FileDiff> {
+    ensure_relative_path(path)?;
+    let mut args = vec![
+        "diff",
+        "--no-color",
+        "--no-ext-diff",
+        "--no-textconv",
+        "-U3",
+        "-M",
+    ];
+    if ignore_whitespace {
+        args.push("-w");
+    }
+    args.extend([range, "--", path]);
+    if let Some(old) = old_path {
+        ensure_relative_path(old)?;
+        args.push(old);
+    }
+    let output = git(repo, &args).await?;
+    Ok(parse_unified_diff(path, &output.text()))
 }
 
 pub async fn compare_file_diff(
@@ -69,27 +100,8 @@ pub async fn compare_file_diff(
 ) -> AppResult<FileDiff> {
     ensure_revision(base)?;
     ensure_revision(head)?;
-    ensure_relative_path(path)?;
     let range = format!("{}...{}", base.trim(), head.trim());
-
-    let mut args = vec![
-        "diff",
-        "--no-color",
-        "--no-ext-diff",
-        "--no-textconv",
-        "-U3",
-        "-M",
-    ];
-    if ignore_whitespace {
-        args.push("-w");
-    }
-    args.extend([range.as_str(), "--", path]);
-    if let Some(old) = old_path {
-        ensure_relative_path(old)?;
-        args.push(old);
-    }
-    let output = git(repo, &args).await?;
-    Ok(parse_unified_diff(path, &output.text()))
+    range_file_diff(repo, &range, path, old_path, ignore_whitespace).await
 }
 
 #[tauri::command]
