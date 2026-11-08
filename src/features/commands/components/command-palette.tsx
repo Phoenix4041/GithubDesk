@@ -8,25 +8,30 @@ import { cn } from "@/shared/lib/cn";
 import { IS_MAC } from "@/shared/lib/platform";
 import { reportError } from "@/shared/lib/report-error";
 import { COMMAND_GROUP_ORDER, rankItems } from "../command-model";
-import type { AppCommand } from "../command-model";
 import { flattenCommands, useCommandRegistry } from "../command-registry";
+import { rankJumpTargets } from "../jump-model";
+import { flattenJumpTargets, useJumpRegistry } from "../jump-registry";
 import { useCommandUiStore } from "../command-ui-store";
 import { effectiveShortcut, formatCombo } from "../shortcut-model";
 
 interface PaletteEntry {
-  command: AppCommand;
+  id: string;
   title: string;
+  subtitle: string;
   keywords: string;
   groupLabel: string;
   shortcut: string;
+  run: () => void | Promise<void>;
 }
 
 function PaletteBody({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation();
   const sources = useCommandRegistry((state) => state.sources);
+  const jumpSources = useJumpRegistry((state) => state.sources);
   const overrides = useSettingsStore((state) => state.shortcuts);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [openedAt] = useState(() => Date.now());
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -37,16 +42,30 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
     return available.map((command) => {
       const combo = effectiveShortcut(command, overrides);
       return {
-        command,
+        id: command.id,
         title: t(command.titleKey),
+        subtitle: "",
         keywords: command.keywords ?? "",
+        run: command.run,
         groupLabel: t(`commands.groups.${command.group}`),
         shortcut: combo ? formatCombo(combo, IS_MAC) : "",
       };
     });
   }, [sources, overrides, t]);
 
-  const results = useMemo(() => rankItems(entries, query), [entries, query]);
+  const results = useMemo(() => {
+    const commandResults = rankItems(entries, query);
+    const jumps = rankJumpTargets(flattenJumpTargets(jumpSources), query, openedAt).map<PaletteEntry>((target) => ({
+      id: `jump.${target.kind}.${target.id}`,
+      title: target.title,
+      subtitle: target.subtitle ?? "",
+      keywords: "",
+      groupLabel: t(`commands.jump.groups.${target.kind}`),
+      shortcut: "",
+      run: target.run,
+    }));
+    return [...commandResults, ...jumps];
+  }, [entries, jumpSources, query, openedAt, t]);
   const clampedIndex = Math.min(activeIndex, Math.max(results.length - 1, 0));
 
   useEffect(() => {
@@ -59,7 +78,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
       return;
     }
     onClose();
-    Promise.resolve(entry.command.run()).catch(reportError);
+    Promise.resolve(entry.run()).catch(reportError);
   }
 
   function handleKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
@@ -80,7 +99,7 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
     }
   }
 
-  const activeId = results[clampedIndex] ? `${listId}-${results[clampedIndex].command.id}` : undefined;
+  const activeId = results[clampedIndex] ? `${listId}-${results[clampedIndex].id}` : undefined;
 
   return (
     <div
@@ -125,8 +144,8 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
               const selected = index === clampedIndex;
               return (
                 <li
-                  key={entry.command.id}
-                  id={`${listId}-${entry.command.id}`}
+                  key={entry.id}
+                  id={`${listId}-${entry.id}`}
                   role="option"
                   aria-selected={selected}
                   onMouseMove={() => setActiveIndex(index)}
@@ -136,7 +155,10 @@ function PaletteBody({ onClose }: { onClose: () => void }) {
                     selected ? "bg-accent-soft text-fg" : "text-fg",
                   )}
                 >
-                  <span className="min-w-0 flex-1 truncate">{entry.title}</span>
+                  <span className="min-w-0 flex-1 truncate">
+                    {entry.title}
+                    {entry.subtitle ? <span className="ml-2 text-[11px] text-muted">{entry.subtitle}</span> : null}
+                  </span>
                   <span className="shrink-0 text-[11px] text-muted">{entry.groupLabel}</span>
                   {entry.shortcut ? (
                     <kbd className="shrink-0 rounded border border-line bg-canvas px-1.5 py-px font-mono text-[11px] text-muted">
