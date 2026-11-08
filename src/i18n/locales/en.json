@@ -2796,5 +2796,23 @@
   "launch": {
     "cloneTitle": "Link to clone",
     "cloneBranch": "The link asks for the {{branch}} branch. Switch to it once the clone finishes."
+  },
+  "background": {
+    "title": "Background",
+    "syncLabel": "Fetch remote changes periodically",
+    "syncHint": "Fetches the open repository while the app is open and visible.",
+    "minutesLabel": "Minutes between fetches",
+    "trayLabel": "Show a tray icon",
+    "trayHint": "Closing the window only hides it. Use Quit in the icon menu to close the app.",
+    "autostartLabel": "Start with the system",
+    "autostartHint": "Opens GithubDesk when you sign in.",
+    "tray": {
+      "open": "Open",
+      "fetch": "Fetch changes",
+      "quit": "Quit",
+      "tooltip": "GithubDesk",
+      "tooltipPending_one": "GithubDesk: {{count}} pending",
+      "tooltipPending_other": "GithubDesk: {{count}} pending"
+    }
   }
 }

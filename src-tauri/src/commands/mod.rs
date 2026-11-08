@@ -1,5 +1,6 @@
 pub mod absorb;
 pub mod app_update;
+pub mod background;
 pub mod bisect;
 pub mod blame;
 pub mod branch;

@@ -2796,5 +2796,23 @@
   "launch": {
     "cloneTitle": "Enlace para clonar",
     "cloneBranch": "El enlace pide la rama {{branch}}. Cámbiate a ella cuando termine de clonar."
+  },
+  "background": {
+    "title": "Segundo plano",
+    "syncLabel": "Buscar cambios remotos cada cierto tiempo",
+    "syncHint": "Hace fetch del repositorio abierto mientras la app está abierta y visible.",
+    "minutesLabel": "Minutos entre búsquedas",
+    "trayLabel": "Mostrar icono en la bandeja",
+    "trayHint": "Cerrar la ventana solo la oculta. Usa Salir en el menú del icono para cerrar la app.",
+    "autostartLabel": "Iniciar con el sistema",
+    "autostartHint": "Abre GithubDesk al iniciar sesión.",
+    "tray": {
+      "open": "Abrir",
+      "fetch": "Buscar cambios",
+      "quit": "Salir",
+      "tooltip": "GithubDesk",
+      "tooltipPending_one": "GithubDesk: {{count}} pendiente",
+      "tooltipPending_other": "GithubDesk: {{count}} pendientes"
+    }
   }
 }

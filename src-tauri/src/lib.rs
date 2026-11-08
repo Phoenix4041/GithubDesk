@@ -10,9 +10,11 @@ pub mod pty;
 pub mod redact;
 pub mod self_update;
 pub mod state;
+pub mod tray;
 pub mod update_check;
 pub mod watcher;
 
+use commands::background as background_commands;
 use commands::diagnostics as diagnostics_commands;
 use commands::launch as launch_commands;
 use commands::{
@@ -36,6 +38,20 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
+        .manage(tray::TrayState::default())
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                let active = window.state::<tray::TrayState>().is_active();
+                if tray::hides_on_close(active, window.label()) {
+                    api.prevent_close();
+                    let _ = window.hide();
+                }
+            }
+        })
         .setup(|app| {
             let directory = app.path().app_data_dir()?;
             diagnostics::init(directory.join("logs"));
@@ -325,6 +341,10 @@ pub fn run() {
             signing::commit_signature_get,
             job::job_cancel,
             launch_commands::launch_take_pending,
+            background_commands::tray_set_enabled,
+            background_commands::tray_set_pending,
+            background_commands::autostart_get,
+            background_commands::autostart_set,
             watch::watch_start,
             watch::watch_stop,
         ])

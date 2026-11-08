@@ -6,6 +6,7 @@ import { SUPPORTED_LANGUAGES, changeLanguage, isLanguage } from "@/i18n";
 import { cn } from "@/shared/lib/cn";
 import { IS_MAC } from "@/shared/lib/platform";
 import { Button } from "@/shared/ui/button";
+import { BackgroundSetting } from "@/features/background/components/background-setting";
 import { useCommandUiStore } from "@/features/commands/command-ui-store";
 import { formatCombo } from "@/features/commands/shortcut-model";
 import { useEditors } from "@/features/external/queries";
@@ -159,6 +160,7 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
         </div>
         <AccountsSection />
         <NotificationSetting />
+        <BackgroundSetting />
       </div>
     </Dialog>
   );

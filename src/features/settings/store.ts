@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Language } from "@/i18n";
+import { BACKGROUND_SYNC_MINUTES, clampSyncMinutes } from "@/features/background/background-model";
 import type { ShortcutOverrides } from "@/features/commands/shortcut-model";
 import { removeProfile } from "@/features/profiles/profile-model";
 import type { Profile } from "@/features/profiles/profile-model";
@@ -36,6 +37,14 @@ interface SettingsState {
   terminalShell: string | null;
   externalEditor: string | null;
   externalEditorCommand: string;
+  backgroundSyncEnabled: boolean;
+  backgroundSyncMinutes: number;
+  trayEnabled: boolean;
+  autostartEnabled: boolean;
+  setBackgroundSyncEnabled: (enabled: boolean) => void;
+  setBackgroundSyncMinutes: (minutes: number) => void;
+  setTrayEnabled: (enabled: boolean) => void;
+  setAutostartEnabled: (enabled: boolean) => void;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -81,6 +90,14 @@ export const useSettingsStore = create<SettingsState>()(
       terminalShell: null,
       externalEditor: null,
       externalEditorCommand: "",
+      backgroundSyncEnabled: false,
+      backgroundSyncMinutes: BACKGROUND_SYNC_MINUTES.initial,
+      trayEnabled: false,
+      autostartEnabled: false,
+      setBackgroundSyncEnabled: (backgroundSyncEnabled) => set({ backgroundSyncEnabled }),
+      setBackgroundSyncMinutes: (minutes) => set({ backgroundSyncMinutes: clampSyncMinutes(minutes) }),
+      setTrayEnabled: (trayEnabled) => set({ trayEnabled }),
+      setAutostartEnabled: (autostartEnabled) => set({ autostartEnabled }),
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),

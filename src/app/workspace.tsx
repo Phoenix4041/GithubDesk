@@ -29,6 +29,7 @@ import { RescueDialog } from "@/features/rescue/components/rescue-dialog";
 import { SplitDialog } from "@/features/split/components/split-dialog";
 import { StackDialog } from "@/features/stack/components/stack-dialog";
 import { useRescueNotice } from "@/features/rescue/use-rescue-notice";
+import { useBackgroundSync } from "@/features/background/use-background-sync";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
 import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
@@ -80,6 +81,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   useRepoWatcher(repoPath);
   useRescueNotice(repoPath);
   useGithubGitAuth(repoPath);
+  useBackgroundSync(repoPath);
 
   useEffect(() => {
     useChangesStore.getState().reset();

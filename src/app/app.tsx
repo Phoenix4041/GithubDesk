@@ -7,6 +7,7 @@ import { NotificationsDialog } from "@/features/github/notifications/components/
 import { OverviewDialog } from "@/features/overview/components/overview-dialog";
 import { useNotificationAlerts } from "@/features/github/notifications/use-notification-alerts";
 import { useLaunchRequests } from "@/features/launch/use-launch-requests";
+import { useTray } from "@/features/background/use-tray";
 import { OrgDialog } from "@/features/github/org-admin/components/org-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
@@ -28,6 +29,11 @@ const UPDATE_CHECK_DELAY_MS = 8000;
 
 function NotificationWatcher() {
   useNotificationAlerts();
+  return null;
+}
+
+function TrayWatcher() {
+  useTray();
   return null;
 }
 
@@ -61,6 +67,7 @@ export function App() {
       <RepositoryDialogs />
       <GrantScopesDialog />
       <NotificationWatcher />
+      <TrayWatcher />
       <CreateGithubRepoDialog />
       <OrgDialog />
       <NotificationsDialog />
