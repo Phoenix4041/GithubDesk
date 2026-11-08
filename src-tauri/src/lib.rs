@@ -7,6 +7,7 @@ pub mod jobs;
 pub mod platform;
 pub mod pty;
 pub mod redact;
+pub mod self_update;
 pub mod state;
 pub mod update_check;
 pub mod watcher;
@@ -32,6 +33,7 @@ pub fn run() {
             let directory = app.path().app_data_dir()?;
             diagnostics::init(directory.join("logs"));
             app.manage(AppState::new(directory));
+            self_update::register(app.handle())?;
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -228,6 +230,7 @@ pub fn run() {
             diagnostics_commands::diagnostics_log,
             diagnostics_commands::diagnostics_open_folder,
             app_update::app_update_check,
+            app_update::app_update_install,
             worktree::worktree_list,
             worktree::worktree_add,
             worktree::worktree_remove,

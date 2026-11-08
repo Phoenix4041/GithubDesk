@@ -2412,7 +2412,9 @@
     "current": "Tienes la {{version}}.",
     "view": "Ver novedades",
     "upToDate": "Ya tienes la última versión ({{version}})",
-    "notConfigured": "La búsqueda de versiones nuevas todavía no está activada en esta compilación."
+    "notConfigured": "La búsqueda de versiones nuevas todavía no está activada en esta compilación.",
+    "install": "Instalar y reiniciar",
+    "installing": "Descargando e instalando la versión nueva. La aplicación se reiniciará sola."
   },
   "patches": {
     "chooseFolder": "Elige la carpeta donde guardar los parches",

@@ -2,7 +2,7 @@ import { i18next } from "@/i18n";
 import { openExternal } from "@/shared/lib/external";
 import { reportError } from "@/shared/lib/report-error";
 import { showToast } from "@/shared/ui/toast-store";
-import { checkForUpdate } from "./api";
+import { checkForUpdate, installUpdate } from "./api";
 import type { UpdateStatus } from "./api";
 
 export const LAST_CHECK_KEY = "githubdesk.update-check";
@@ -17,13 +17,27 @@ function readLastCheck(): number | null {
   return stored === null ? null : Number(stored);
 }
 
+async function install(): Promise<void> {
+  showToast({ kind: "info", title: i18next.t("updates.installing") });
+  try {
+    await installUpdate();
+  } catch (error) {
+    reportError(error);
+  }
+}
+
 function announce(status: UpdateStatus): void {
   const url = status.url;
+  const actions = status.installable
+    ? [{ label: i18next.t("updates.install"), run: () => void install() }]
+    : url
+      ? [{ label: i18next.t("updates.view"), run: () => void openExternal(url) }]
+      : [];
   showToast({
     kind: "info",
     title: i18next.t("updates.available", { version: status.latest ?? "" }),
     message: i18next.t("updates.current", { version: status.current }),
-    actions: url ? [{ label: i18next.t("updates.view"), run: () => void openExternal(url) }] : [],
+    actions,
   });
 }
 

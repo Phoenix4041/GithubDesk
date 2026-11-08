@@ -1,5 +1,5 @@
 import { mockIPC } from "@tauri-apps/api/mocks";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useToastStore } from "@/shared/ui/toast-store";
 import type { UpdateStatus } from "./api";
 import { CHECK_INTERVAL_MS, LAST_CHECK_KEY, checkForUpdates, shouldCheck } from "./actions";
@@ -21,7 +21,7 @@ function serve(status: UpdateStatus | Error) {
   return () => calls;
 }
 
-const base: UpdateStatus = { configured: true, current: "0.5.0", latest: "0.5.0", updateAvailable: false, url: null };
+const base: UpdateStatus = { configured: true, installable: false, current: "0.5.0", latest: "0.5.0", updateAvailable: false, url: null };
 
 describe("shouldCheck", () => {
   it("checks when it never ran, when a day has passed or when the stored time is in the future", () => {
@@ -67,6 +67,25 @@ describe("checkForUpdates", () => {
     expect(toast?.title).toContain("0.6.0");
     expect(toast?.actions).toHaveLength(1);
     expect(window.localStorage.getItem(LAST_CHECK_KEY)).toBe(String(NOW));
+  });
+
+  it("offers to install in place when the updater is configured", async () => {
+    const installs: string[] = [];
+    mockIPC((command) => {
+      if (command === "app_update_check") {
+        return { ...base, installable: true, latest: "0.6.0", updateAvailable: true, url: null };
+      }
+      if (command === "app_update_install") {
+        installs.push(command);
+      }
+      return null;
+    });
+    await checkForUpdates(false, NOW);
+    const [toast] = useToastStore.getState().toasts;
+    expect(toast?.actions).toHaveLength(1);
+    toast?.actions[0]?.run();
+    await vi.waitFor(() => expect(installs).toHaveLength(1));
+    expect(useToastStore.getState().toasts.some((entry) => entry.title.includes("instalando"))).toBe(true);
   });
 
   it("does not ask again within a day unless the user asks", async () => {

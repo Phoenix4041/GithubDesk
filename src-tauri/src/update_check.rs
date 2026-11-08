@@ -11,6 +11,7 @@ pub const CURRENT_VERSION: &str = env!("CARGO_PKG_VERSION");
 #[serde(rename_all = "camelCase")]
 pub struct UpdateStatus {
     pub configured: bool,
+    pub installable: bool,
     pub current: String,
     pub latest: Option<String>,
     pub update_available: bool,
@@ -74,6 +75,7 @@ pub fn is_newer(candidate: &str, current: &str) -> bool {
 pub fn not_configured() -> UpdateStatus {
     UpdateStatus {
         configured: false,
+        installable: false,
         current: CURRENT_VERSION.to_string(),
         latest: None,
         update_available: false,
@@ -95,6 +97,7 @@ pub async fn check_latest(
         Err(error) if error.kind == ErrorKind::GithubNotFound => {
             return Ok(UpdateStatus {
                 configured: true,
+                installable: false,
                 current: current.to_string(),
                 latest: None,
                 update_available: false,
@@ -107,6 +110,7 @@ pub async fn check_latest(
     let update_available = usable && is_newer(&release.tag_name, current);
     Ok(UpdateStatus {
         configured: true,
+        installable: false,
         current: current.to_string(),
         latest: Some(release.tag_name.trim_start_matches(['v', 'V']).to_string()),
         update_available,

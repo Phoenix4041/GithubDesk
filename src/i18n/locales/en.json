@@ -2412,7 +2412,9 @@
     "current": "You have {{version}}.",
     "view": "See what is new",
     "upToDate": "You already have the latest version ({{version}})",
-    "notConfigured": "Checking for new versions is not turned on in this build yet."
+    "notConfigured": "Checking for new versions is not turned on in this build yet.",
+    "install": "Install and restart",
+    "installing": "Downloading and installing the new version. The app will restart by itself."
   },
   "patches": {
     "chooseFolder": "Choose the folder to save the patches in",
