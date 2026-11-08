@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "smoke": "node scripts/smoke.mjs",
+    "bump": "node scripts/bump-version.mjs",
     "tauri": "tauri"
   },
   "dependencies": {
