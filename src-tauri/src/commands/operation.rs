@@ -74,5 +74,8 @@ pub async fn operation_state(path: String) -> AppResult<Option<RepoOperation>> {
 
 #[tauri::command]
 pub async fn operation_run(path: String, action: OperationAction) -> AppResult<()> {
+    if matches!(action, OperationAction::Abort) {
+        crate::commands::rescue::guard_worktree(Path::new(&path), "abort").await;
+    }
     run_operation_action(Path::new(&path), action).await
 }

@@ -1,19 +1,24 @@
 import {
+  ArrowLeftRight,
   Bug,
   CircleCheck,
   Copy,
   FileDown,
+  FolderTree,
   GitBranchPlus,
   GitCommitHorizontal,
   History,
   ListOrdered,
   RotateCcw,
+  Scissors,
   Tag,
   Undo2,
 } from "lucide-react";
 import { i18next } from "@/i18n";
 import { markFromHistory } from "@/features/bisect/actions";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { useBrowseDialogStore } from "@/features/browse/store";
+import { openCompare } from "@/features/compare/actions";
 import { exportCommitsAsPatches } from "@/features/patches/actions";
 import { useRebaseDialogStore } from "@/features/rebase/store";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
@@ -25,12 +30,18 @@ import {
   resetCurrentBranchTo,
   revertSingleCommit,
 } from "./commit-actions";
+import { useSplitDialogStore } from "@/features/split/store";
 import { useCommitDialogStore } from "./commit-dialog-store";
 
 interface CommitMenuInput {
   repoPath: string;
   commit: CommitSummary;
   selectedNewestFirst: readonly CommitSummary[];
+}
+
+function comparePair(selectedNewestFirst: readonly CommitSummary[]): Array<[CommitSummary, CommitSummary]> {
+  const [newer, older] = selectedNewestFirst;
+  return selectedNewestFirst.length === 2 && newer && older ? [[older, newer]] : [];
 }
 
 export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: CommitMenuInput): ContextMenuEntry[] {
@@ -62,6 +73,19 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
     },
     { kind: "separator" },
     {
+      label: t("browse.menu.explore"),
+      icon: <FolderTree className="size-4" />,
+      onSelect: () => useBrowseDialogStore.getState().show({ revision: commit.hash, label: commit.shortHash }),
+    },
+    ...comparePair(selectedNewestFirst).map(
+      ([older, newer]): ContextMenuEntry => ({
+        label: t("browse.menu.compareTwo"),
+        icon: <ArrowLeftRight className="size-4" />,
+        onSelect: () => openCompare(older.hash, newer.hash, true),
+      }),
+    ),
+    { kind: "separator" },
+    {
       label: t("commitActions.menu.cherryPick", { count: picks.length }),
       icon: <GitCommitHorizontal className="size-4" />,
       disabled: !canCherryPick,
@@ -91,6 +115,12 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
           repoPath,
           [...picks].reverse().map((candidate) => candidate.hash),
         ),
+    },
+    {
+      label: t("split.menu"),
+      icon: <Scissors className="size-4" />,
+      disabled: commit.parents.length > 1,
+      onSelect: () => useSplitDialogStore.getState().show({ hash: commit.hash, shortHash: commit.shortHash, title: commit.subject }),
     },
     { kind: "separator" },
     {

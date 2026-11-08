@@ -10,6 +10,7 @@ import type { SettingsSection } from "../settings-model";
 import { useRepoSettingsStore } from "../store";
 import { CollaboratorsSection } from "./collaborators-section";
 import { DangerSection } from "./danger-section";
+import { ForkSyncCard } from "./fork-sync-card";
 import { GeneralSection } from "./general-section";
 import { HooksSection } from "./hooks-section";
 import { KeysSection } from "./keys-section";
@@ -99,10 +100,10 @@ export function SettingsPanel({ repoPath }: { repoPath: string }) {
   if (!target) {
     return null;
   }
-  return <PanelBody target={target} section={section} />;
+  return <PanelBody target={target} section={section} repoPath={repoPath} />;
 }
 
-function PanelBody({ target, section }: { target: GithubTarget; section: SettingsSection }) {
+function PanelBody({ target, section, repoPath }: { target: GithubTarget; section: SettingsSection; repoPath: string }) {
   const { t } = useTranslation();
   const info = useRepoInfo(target);
   const known = info.data !== undefined;
@@ -115,6 +116,7 @@ function PanelBody({ target, section }: { target: GithubTarget; section: Setting
             {t("github.settings.readOnly")}
           </p>
         ) : null}
+        {section === "general" ? <ForkSyncCard target={target} repoPath={repoPath} /> : null}
         <Content key={`${target.owner}/${target.repo}/${section}`} target={target} section={section} canAdmin={canAdmin} />
       </div>
     </div>

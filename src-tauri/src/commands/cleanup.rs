@@ -439,6 +439,9 @@ pub async fn cleanup_stale_remote_get(path: String) -> AppResult<Vec<StaleRemote
 
 #[tauri::command]
 pub async fn cleanup_run(path: String, request: CleanupRequest) -> AppResult<CleanupReport> {
+    if !request.untracked.is_empty() {
+        crate::commands::rescue::guard_worktree(Path::new(&path), "cleanup").await;
+    }
     run_cleanup(Path::new(&path), &request).await
 }
 

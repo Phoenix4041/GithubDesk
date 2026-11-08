@@ -1,9 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Language } from "@/i18n";
+import { BACKGROUND_SYNC_MINUTES, clampSyncMinutes } from "@/features/background/background-model";
+import type { IssuePrefixMode } from "@/features/changes/commit-message-model";
 import type { ShortcutOverrides } from "@/features/commands/shortcut-model";
 import { removeProfile } from "@/features/profiles/profile-model";
 import type { Profile } from "@/features/profiles/profile-model";
+import { cleanThemeName, sanitizeColors, upsertTheme } from "./theme-model";
+import type { CustomTheme, Density } from "./theme-model";
 
 export type ThemePreference = "system" | "light" | "dark";
 export type DiffMode = "unified" | "split";
@@ -30,11 +34,29 @@ interface SettingsState {
   profiles: Profile[];
   activeProfileId: string | null;
   repoProfiles: Record<string, string>;
+  repoGroups: Record<string, string>;
   ignoredProfileHints: string[];
   shortcuts: ShortcutOverrides;
   terminalShell: string | null;
   externalEditor: string | null;
   externalEditorCommand: string;
+  backgroundSyncEnabled: boolean;
+  backgroundSyncMinutes: number;
+  trayEnabled: boolean;
+  autostartEnabled: boolean;
+  setBackgroundSyncEnabled: (enabled: boolean) => void;
+  setBackgroundSyncMinutes: (minutes: number) => void;
+  setTrayEnabled: (enabled: boolean) => void;
+  setAutostartEnabled: (enabled: boolean) => void;
+  issuePrefixMode: IssuePrefixMode;
+  setIssuePrefixMode: (mode: IssuePrefixMode) => void;
+  customThemes: CustomTheme[];
+  activeThemeId: string | null;
+  density: Density;
+  saveCustomTheme: (theme: CustomTheme) => void;
+  deleteCustomTheme: (id: string) => void;
+  setActiveTheme: (id: string | null) => void;
+  setDensity: (density: Density) => void;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -50,6 +72,7 @@ interface SettingsState {
   deleteProfile: (id: string) => void;
   setActiveProfile: (id: string | null) => void;
   setRepoProfile: (repoPath: string, id: string | null) => void;
+  setRepoGroup: (repoPath: string, group: string) => void;
   ignoreProfileHint: (repoPath: string) => void;
   setShortcuts: (shortcuts: ShortcutOverrides) => void;
   setTerminalShell: (shell: string | null) => void;
@@ -73,11 +96,40 @@ export const useSettingsStore = create<SettingsState>()(
       profiles: [],
       activeProfileId: null,
       repoProfiles: {},
+      repoGroups: {},
       ignoredProfileHints: [],
       shortcuts: {},
       terminalShell: null,
       externalEditor: null,
       externalEditorCommand: "",
+      backgroundSyncEnabled: false,
+      backgroundSyncMinutes: BACKGROUND_SYNC_MINUTES.initial,
+      trayEnabled: false,
+      autostartEnabled: false,
+      setBackgroundSyncEnabled: (backgroundSyncEnabled) => set({ backgroundSyncEnabled }),
+      setBackgroundSyncMinutes: (minutes) => set({ backgroundSyncMinutes: clampSyncMinutes(minutes) }),
+      setTrayEnabled: (trayEnabled) => set({ trayEnabled }),
+      setAutostartEnabled: (autostartEnabled) => set({ autostartEnabled }),
+      issuePrefixMode: "off",
+      setIssuePrefixMode: (issuePrefixMode) => set({ issuePrefixMode }),
+      customThemes: [],
+      activeThemeId: null,
+      density: "normal",
+      saveCustomTheme: (theme) =>
+        set((state) => ({
+          customThemes: upsertTheme(state.customThemes, {
+            ...theme,
+            name: cleanThemeName(theme.name),
+            colors: sanitizeColors(theme.colors),
+          }),
+        })),
+      deleteCustomTheme: (id) =>
+        set((state) => ({
+          customThemes: state.customThemes.filter((theme) => theme.id !== id),
+          activeThemeId: state.activeThemeId === id ? null : state.activeThemeId,
+        })),
+      setActiveTheme: (activeThemeId) => set({ activeThemeId }),
+      setDensity: (density) => set({ density }),
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
@@ -118,6 +170,17 @@ export const useSettingsStore = create<SettingsState>()(
             delete next[repoPath];
           }
           return { repoProfiles: next };
+        }),
+      setRepoGroup: (repoPath, group) =>
+        set((state) => {
+          const next = { ...state.repoGroups };
+          const trimmed = group.trimStart();
+          if (trimmed.length > 0) {
+            next[repoPath] = trimmed;
+          } else {
+            delete next[repoPath];
+          }
+          return { repoGroups: next };
         }),
       ignoreProfileHint: (repoPath) =>
         set((state) =>

@@ -151,6 +151,7 @@ pub async fn stash_apply(path: String, hash: String, pop: bool) -> AppResult<()>
 
 #[tauri::command]
 pub async fn stash_drop(path: String, hash: String) -> AppResult<()> {
+    crate::commands::rescue::guard_stash(Path::new(&path), &hash).await;
     drop_stash(Path::new(&path), &hash).await
 }
 

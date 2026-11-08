@@ -1,8 +1,8 @@
 import { useUiStore } from "@/shared/lib/ui-store";
 import { useCompareStore } from "./store";
 
-export function openCompare(base: string, head: string): void {
-  useCompareStore.getState().open(base, head);
+export function openCompare(base: string, head: string, exact = false): void {
+  useCompareStore.getState().open(base, head, exact);
   useUiStore.getState().setTab("compare");
 }
 

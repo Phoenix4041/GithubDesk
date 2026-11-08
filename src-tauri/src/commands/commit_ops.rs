@@ -74,6 +74,9 @@ pub async fn commit_revert(path: String, hash: String, mainline: Option<u32>) ->
 
 #[tauri::command]
 pub async fn commit_reset(path: String, hash: String, mode: ResetMode) -> AppResult<()> {
+    if matches!(mode, ResetMode::Hard) {
+        crate::commands::rescue::guard_worktree(Path::new(&path), "reset").await;
+    }
     reset_to(Path::new(&path), &hash, mode).await
 }
 

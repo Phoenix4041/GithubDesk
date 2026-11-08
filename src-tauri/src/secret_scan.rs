@@ -86,9 +86,12 @@ fn after_each<'a>(line: &'a str, prefix: &'a str) -> impl Iterator<Item = &'a st
 }
 
 fn has_github_token(line: &str) -> bool {
-    let classic = ["ghp_", "gho_", "ghu_", "ghs_", "ghr_"].iter().any(|prefix| {
-        after_each(line, prefix).any(|rest| run_length(rest, |c| c.is_ascii_alphanumeric()) >= 36)
-    });
+    let classic = ["ghp_", "gho_", "ghu_", "ghs_", "ghr_"]
+        .iter()
+        .any(|prefix| {
+            after_each(line, prefix)
+                .any(|rest| run_length(rest, |c| c.is_ascii_alphanumeric()) >= 36)
+        });
     classic
         || after_each(line, "github_pat_")
             .any(|rest| run_length(rest, |c| c.is_ascii_alphanumeric() || c == '_') >= 22)
@@ -106,10 +109,12 @@ fn has_private_key(line: &str) -> bool {
 }
 
 fn has_slack_token(line: &str) -> bool {
-    ["xoxb-", "xoxa-", "xoxp-", "xoxr-", "xoxs-"].iter().any(|prefix| {
-        after_each(line, prefix)
-            .any(|rest| run_length(rest, |c| c.is_ascii_alphanumeric() || c == '-') >= 10)
-    })
+    ["xoxb-", "xoxa-", "xoxp-", "xoxr-", "xoxs-"]
+        .iter()
+        .any(|prefix| {
+            after_each(line, prefix)
+                .any(|rest| run_length(rest, |c| c.is_ascii_alphanumeric() || c == '-') >= 10)
+        })
 }
 
 fn has_stripe_key(line: &str) -> bool {
@@ -131,7 +136,8 @@ fn has_secret_assignment(line: &str) -> bool {
     SECRET_KEY_WORDS.iter().any(|word| {
         lower.match_indices(word).any(|(index, _)| {
             let tail = &line[index + word.len()..];
-            let tail = tail.trim_start_matches(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '-');
+            let tail = tail
+                .trim_start_matches(|c: char| c.is_ascii_alphanumeric() || c == '_' || c == '-');
             let tail = tail.trim_start_matches(['"', '\'', '`']).trim_start();
             let Some(tail) = tail.strip_prefix([':', '=']) else {
                 return false;
@@ -164,11 +170,16 @@ pub fn scan_line(line: &str) -> Option<&'static str> {
 pub fn is_env_file(path: &str) -> bool {
     let name = path.rsplit('/').next().unwrap_or(path);
     let is_env = name == ".env" || name.starts_with(".env.");
-    is_env && !ENV_TEMPLATE_SUFFIXES.iter().any(|suffix| name.ends_with(suffix))
+    is_env
+        && !ENV_TEMPLATE_SUFFIXES
+            .iter()
+            .any(|suffix| name.ends_with(suffix))
 }
 
 fn parse_new_start(header: &str) -> Option<u32> {
-    let plus = header.split_whitespace().find(|part| part.starts_with('+'))?;
+    let plus = header
+        .split_whitespace()
+        .find(|part| part.starts_with('+'))?;
     plus.trim_start_matches('+').split(',').next()?.parse().ok()
 }
 

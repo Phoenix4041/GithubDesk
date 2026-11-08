@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use tauri::ipc::Channel;
 use tauri::State;
 
@@ -85,12 +85,53 @@ fn clean_partial_clone(destination: &Path, created: bool) {
     }
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", default)]
+pub struct CloneOptions {
+    pub depth: Option<u32>,
+    pub blobless: bool,
+}
+
+const MAX_CLONE_DEPTH: u32 = 1_000_000;
+
+pub fn clone_arguments(options: CloneOptions) -> AppResult<Vec<String>> {
+    let mut arguments = Vec::new();
+    if let Some(depth) = options.depth {
+        if depth == 0 || depth > MAX_CLONE_DEPTH {
+            return Err(AppError::invalid_input("invalid clone depth"));
+        }
+        arguments.push(format!("--depth={depth}"));
+    }
+    if options.blobless {
+        arguments.push("--filter=blob:none".to_string());
+    }
+    Ok(arguments)
+}
+
 pub async fn clone_repository(
     url: &str,
     destination: &Path,
     cancel: CancelToken,
     on_progress: &(dyn Fn(Progress) + Send + Sync),
 ) -> AppResult<RepositoryInfo> {
+    clone_repository_with(
+        url,
+        destination,
+        CloneOptions::default(),
+        cancel,
+        on_progress,
+    )
+    .await
+}
+
+pub async fn clone_repository_with(
+    url: &str,
+    destination: &Path,
+    options: CloneOptions,
+    cancel: CancelToken,
+    on_progress: &(dyn Fn(Progress) + Send + Sync),
+) -> AppResult<RepositoryInfo> {
+    let extra = clone_arguments(options)?;
     let source = url.trim();
     if source.is_empty() || source.starts_with('-') {
         return Err(AppError::invalid_input("invalid repository url"));
@@ -109,13 +150,11 @@ pub async fn clone_repository(
     std::fs::create_dir_all(parent)?;
     let destination_text = destination.to_string_lossy().into_owned();
 
-    let result = git_streaming(
-        Some(parent),
-        &["clone", "--progress", "--", source, &destination_text],
-        cancel,
-        on_progress,
-    )
-    .await;
+    let mut arguments: Vec<&str> = vec!["clone", "--progress"];
+    arguments.extend(extra.iter().map(String::as_str));
+    arguments.extend(["--", source, &destination_text]);
+
+    let result = git_streaming(Some(parent), &arguments, cancel, on_progress).await;
 
     match result {
         Ok(_) => open_repository(destination).await,
@@ -147,8 +186,10 @@ pub async fn repo_clone(
     destination: String,
     job_id: String,
     account_id: Option<String>,
+    options: Option<CloneOptions>,
     on_progress: Channel<Progress>,
 ) -> AppResult<RepositoryInfo> {
+    let options = options.unwrap_or_default();
     let guard = state.jobs.register(&job_id);
     let parent = Path::new(&destination).parent().map(Path::to_path_buf);
     let armed = match (&account_id, &parent) {
@@ -158,9 +199,15 @@ pub async fn repo_clone(
         }
         _ => false,
     };
-    let result = clone_repository(&url, Path::new(&destination), guard.token(), &|progress| {
-        let _ = on_progress.send(progress);
-    })
+    let result = clone_repository_with(
+        &url,
+        Path::new(&destination),
+        options,
+        guard.token(),
+        &|progress| {
+            let _ = on_progress.send(progress);
+        },
+    )
     .await;
     if let (true, Some(directory)) = (armed, &parent) {
         set_repo_auth(directory, None);

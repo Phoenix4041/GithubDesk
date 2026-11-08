@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { DiffHeader } from "@/features/diff/components/diff-header";
 import { ConflictEditor } from "@/features/conflicts/components/conflict-editor";
 import { DiffViewer } from "@/features/diff/components/diff-viewer";
+import { ImageDiffSection } from "@/features/diff/components/image-diff-section";
+import type { ImageSides } from "@/features/diff/components/image-diff-section";
+import { isImagePath } from "@/features/browse/image-path";
 import type { StagingControls } from "@/features/diff/staging-controls";
 import { useSettingsStore } from "@/features/settings/store";
 import { describeError } from "@/shared/lib/report-error";
@@ -66,6 +69,24 @@ export function ChangesDiffPanel({ repoPath }: ChangesDiffPanelProps) {
     <DiffHeader path={row.entry.path} badge={<ChangeKindBadge kind={kind} label={t(`changes.kind.${kind}`)} />} />
   );
 
+  if (isImagePath(target.path)) {
+    const sides: ImageSides =
+      target.source === "staged"
+        ? {
+            before: { source: { kind: "revision", revision: "HEAD" }, path: target.originalPath ?? target.path },
+            after: { source: { kind: "index" }, path: target.path },
+          }
+        : {
+            before: target.source === "raw" ? null : { source: { kind: "index" }, path: target.path },
+            after: { source: { kind: "worktree" }, path: target.path },
+          };
+    return (
+      <>
+        {header}
+        <ImageDiffSection key={`${row.section}:${target.path}`} repoPath={repoPath} sides={sides} />
+      </>
+    );
+  }
   if (showSkeleton) {
     return (
       <>

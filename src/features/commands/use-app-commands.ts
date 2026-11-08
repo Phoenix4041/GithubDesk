@@ -7,9 +7,15 @@ import { useRunStore } from "@/features/github/actions/store";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
+import { useAbsorbDialogStore } from "@/features/absorb/store";
+import { useRescueDialogStore } from "@/features/rescue/store";
+import { useBrowseDialogStore } from "@/features/browse/store";
+import { useStackDialogStore } from "@/features/stack/store";
+import { useStatsDialogStore } from "@/features/stats/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
 import { useNotificationDialogStore } from "@/features/github/notifications/store";
+import { useOverviewDialogStore } from "@/features/overview/store";
 import { useOrgDialogStore } from "@/features/github/org-admin/store";
 import { useProfileDialogStore } from "@/features/profiles/dialog-store";
 import { choosePatchesToApply } from "@/features/patches/actions";
@@ -20,6 +26,7 @@ import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
 import { useSettingsStore } from "@/features/settings/store";
 import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
 import { useGitignoreDialogStore } from "@/features/gitignore/store";
+import { useHealthDialogStore } from "@/features/health/store";
 import { useSigningDialogStore } from "@/features/signing/store";
 import { useSubmoduleDialogStore } from "@/features/submodules/dialog-store";
 import { useTerminalStore } from "@/features/terminal/store";
@@ -163,6 +170,14 @@ export function buildGlobalCommands(): AppCommand[] {
       keywords: "crear repositorio github nuevo remoto create repository",
       enabled: true,
       run: () => useGithubHomeDialogStore.getState().showCreate(),
+    },
+    {
+      id: "overview.open",
+      titleKey: "commands.items.overview.open",
+      group: "repository",
+      keywords: "repositorios panel todos fetch pull espacios de trabajo grupos overview workspaces all",
+      enabled: true,
+      run: () => useOverviewDialogStore.getState().show(),
     },
     {
       id: "github.notifications",
@@ -345,12 +360,60 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       run: () => useRebaseOntoStore.getState().choose(),
     },
     {
+      id: "absorb.open",
+      titleKey: "commands.items.absorb.open",
+      group: "repository",
+      keywords: "absorber fixup autosquash corregir commit anterior absorb amend older",
+      enabled: true,
+      run: () => useAbsorbDialogStore.getState().show(),
+    },
+    {
+      id: "stack.open",
+      titleKey: "commands.items.stack.open",
+      group: "repository",
+      keywords: "pila ramas apiladas encadenadas reajustar stack stacked branches restack",
+      enabled: true,
+      run: () => useStackDialogStore.getState().show(),
+    },
+    {
+      id: "rescue.open",
+      titleKey: "commands.items.rescue.open",
+      group: "repository",
+      keywords: "rescate recuperar copia de seguridad deshacer descartar perdido rescue recover backup restore",
+      enabled: true,
+      run: () => useRescueDialogStore.getState().show(),
+    },
+    {
+      id: "browse.open",
+      titleKey: "commands.items.browse.open",
+      group: "repository",
+      keywords: "explorar archivos arbol revision commit ver archivo antiguo restaurar browse files tree revision",
+      enabled: true,
+      run: () => useBrowseDialogStore.getState().show({ revision: "HEAD", label: "HEAD" }),
+    },
+    {
       id: "cleanup.open",
       titleKey: "commands.items.cleanup.open",
       group: "repository",
       keywords: "limpiar borrar archivos sin seguimiento ramas combinadas remotas obsoletas clean prune",
       enabled: true,
       run: () => useCleanupDialogStore.getState().show(),
+    },
+    {
+      id: "stats.open",
+      titleKey: "commands.items.stats.open",
+      group: "repository",
+      keywords: "estadisticas actividad colaboradores autores archivos pendientes todo fixme stats contributors churn",
+      enabled: true,
+      run: () => useStatsDialogStore.getState().show(),
+    },
+    {
+      id: "health.open",
+      titleKey: "commands.items.health.open",
+      group: "repository",
+      keywords: "salud tamano espacio archivos grandes sparse checkout gc optimizar mantenimiento health size maintenance",
+      enabled: true,
+      run: () => useHealthDialogStore.getState().show(),
     },
     {
       id: "github.releases",

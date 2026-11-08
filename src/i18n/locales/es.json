@@ -134,7 +134,14 @@
       "submit": "Clonar",
       "progress": "Progreso de la clonación",
       "connecting": "Conectando con el servidor...",
-      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados."
+      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados.",
+      "advanced": "Opciones para repositorios grandes",
+      "shallow": "Clonar sin historial completo (--depth)",
+      "depth": "Commits a descargar",
+      "depthHint": "1 trae solo el último commit.",
+      "depthInvalid": "Escribe un número entero mayor que 0.",
+      "blobless": "Clonar sin archivos grandes hasta que se necesiten (--filter=blob:none)",
+      "bloblessHint": "Se descarga toda la historia, pero el contenido de las versiones antiguas se pide al servidor solo cuando hace falta."
     },
     "create": {
       "title": "Crear repositorio",
@@ -296,6 +303,27 @@
       "description": "El commit «{{title}}» saldrá del historial. Sus cambios volverán a quedar preparados y su mensaje se recupera en el cuadro de commit.",
       "pushedWarning": "Este commit ya está publicado. Para reflejar el cambio en el remoto tendrás que hacer un force push, que reescribe el historial compartido.",
       "confirm": "Deshacer commit"
+    },
+    "coauthors": {
+      "label": "Coautores",
+      "count_one": "{{count}} coautor",
+      "count_other": "{{count}} coautores",
+      "filter": "Buscar por nombre o correo",
+      "loading": "Buscando personas en el historial…",
+      "empty": "No hay otras personas en el historial."
+    },
+    "issue": {
+      "addTitle": "Anteponer #{{issue}}",
+      "addRefs": "Agregar Refs #{{issue}}",
+      "shortcut": "Atajo: Alt+I"
+    },
+    "template": {
+      "open": "Plantilla",
+      "title": "Plantilla de mensaje",
+      "description": "Se guarda en la configuración local de este repositorio y se usa cuando la descripción está vacía. Déjala en blanco para quitarla.",
+      "field": "Texto de la plantilla",
+      "save": "Guardar plantilla",
+      "saved": "Plantilla guardada"
     }
   },
   "diff": {
@@ -431,6 +459,68 @@
       "command": "Programa del editor",
       "commandHint": "La ruta del ejecutable o su nombre si está en el PATH. Se le pasa la carpeta o el archivo.",
       "none": "No se detectó ningún editor conocido. Puedes elegir otro programa."
+    },
+    "issuePrefix": {
+      "label": "Número de incidencia en el commit",
+      "off": "Apagado",
+      "title": "En el título",
+      "refs": "Refs en la descripción",
+      "hint": "Toma el número del nombre de la rama (por ejemplo 123-arreglo o gh-45) y lo agrega con un botón o con Alt+I."
+    },
+    "density": {
+      "label": "Densidad de la interfaz",
+      "compact": "Compacta",
+      "normal": "Normal",
+      "comfortable": "Cómoda"
+    },
+    "themes": {
+      "label": "Temas propios",
+      "hint": "Hasta {{count}} temas. Un tema propio reemplaza los colores del modo claro u oscuro en el que se basa.",
+      "none": "Ninguno (colores de la app)",
+      "new": "Nuevo tema",
+      "edit": "Editar {{name}}",
+      "delete": "Eliminar {{name}}",
+      "newTitle": "Nuevo tema",
+      "editTitle": "Editar tema",
+      "name": "Nombre",
+      "base": "Basado en",
+      "save": "Guardar y aplicar",
+      "preview": "Vista previa",
+      "invalid": "Hay colores no válidos. Usa #rrggbb o rgb(r, g, b).",
+      "lowContrast": "Contraste bajo",
+      "contrastPair": "Contraste bajo: {{foreground}} sobre {{background}} ({{ratio}}:1, se recomienda 4.5:1)",
+      "full": "Ya tienes {{count}} temas. Elimina uno para crear otro.",
+      "import": {
+        "action": "Importar de VS Code",
+        "file": "Archivo de tema de VS Code",
+        "done_one": "Se importó {{count}} color. Revisa la vista previa antes de guardar.",
+        "done_other": "Se importaron {{count}} colores. Revisa la vista previa antes de guardar.",
+        "invalid": "El archivo no es un JSON de tema válido.",
+        "noColors": "El archivo no tiene colores que se puedan usar.",
+        "tooLarge": "El archivo es demasiado grande para ser un tema."
+      },
+      "sample": {
+        "title": "Título de ejemplo",
+        "muted": "Texto secundario",
+        "subtle": "Fila resaltada",
+        "error": "Mensaje de error",
+        "button": "Botón principal"
+      },
+      "tokens": {
+        "canvas": "Fondo",
+        "surface": "Paneles",
+        "subtle": "Fondo suave",
+        "line": "Bordes",
+        "fg": "Texto",
+        "muted": "Texto secundario",
+        "accent": "Acento",
+        "accentHover": "Acento al pasar",
+        "accentFg": "Texto sobre acento",
+        "accentSoft": "Selección",
+        "danger": "Error",
+        "success": "Éxito",
+        "warning": "Advertencia"
+      }
     }
   },
   "progress": {
@@ -2049,6 +2139,19 @@
         "ci_activity": "actividad de CI",
         "other": "novedad"
       }
+    },
+    "fork": {
+      "label": "Fork",
+      "parent": "Este repositorio es un fork de {{name}}",
+      "hint": "Sincronizar trae a {{branch}} los cambios de {{parentBranch}} del original, directamente en GitHub.",
+      "sync": "Sincronizar con el original",
+      "addRemote": "Agregar remoto upstream",
+      "remoteAdded": "Remoto upstream agregado",
+      "synced": "{{branch}} quedó sincronizada con el original",
+      "upToDate": "{{branch}} ya estaba al día con el original",
+      "conflict": "No se pudo sincronizar por conflictos",
+      "conflictHint": "La rama tiene cambios que chocan con el original. Resuélvelos localmente o en GitHub.",
+      "pullNow": "Hacer pull"
     }
   },
   "commands": {
@@ -2192,6 +2295,27 @@
       "profile": {
         "switch": "Cambiar de perfil",
         "manage": "Administrar perfiles"
+      },
+      "rescue": {
+        "open": "Abrir el Rescate (copias de seguridad automáticas)"
+      },
+      "absorb": {
+        "open": "Absorber lo preparado en commits anteriores"
+      },
+      "stack": {
+        "open": "Abrir la pila de ramas apiladas"
+      },
+      "overview": {
+        "open": "Abrir el panel de todos los repositorios"
+      },
+      "browse": {
+        "open": "Explorar archivos de una versión"
+      },
+      "stats": {
+        "open": "Ver estadísticas del repositorio"
+      },
+      "health": {
+        "open": "Ver la salud del repositorio"
       }
     }
   },
@@ -2735,6 +2859,358 @@
       "title": "Cambiar de perfil",
       "forRepo": "Se aplicará a este repositorio.",
       "global": "Será tu perfil activo."
+    }
+  },
+  "rescue": {
+    "open": "Rescate: recuperar trabajo descartado",
+    "title": "Rescate",
+    "description": "Antes de descartar cambios, hacer un reset duro, borrar una rama a la fuerza, limpiar, abortar una operación o soltar un stash, la aplicación guarda una copia. Aquí la recuperas. Se conservan 30 días o las últimas 50.",
+    "saved": "Se guardó una copia de seguridad",
+    "view": "Ver el Rescate",
+    "empty": {
+      "title": "Todavía no hay copias",
+      "description": "Cuando hagas algo que pueda perder trabajo, la copia aparecerá aquí."
+    },
+    "listLabel": "Copias de seguridad",
+    "pick": "Elige una copia para ver qué contiene.",
+    "detail": "Contenido de la copia",
+    "summary_one": "{{count}} archivo, +{{additions}} -{{deletions}}",
+    "summary_other": "{{count}} archivos, +{{additions}} -{{deletions}}",
+    "binary": "binario",
+    "noPatch": "Esta copia solo guarda un commit; crea una rama para verlo.",
+    "truncated": "Se muestra solo el principio de los cambios.",
+    "apply": "Aplicar estos cambios",
+    "applyHint": "Aplicar vuelve a poner los cambios sobre tu carpeta de trabajo sin borrar nada. Si choca con lo que tienes ahora, avisa y no pierdes ninguna de las dos cosas.",
+    "branchHint": "Esta copia guarda un commit: crea una rama para volver a tenerlo.",
+    "branchName": "Nombre de la rama nueva",
+    "createBranch": "Crear rama aquí",
+    "applied": "Se aplicaron los cambios guardados",
+    "branchCreated": "Se creó la rama {{name}}",
+    "delete": "Eliminar la copia: {{reason}}",
+    "timeline": "Línea de tiempo de operaciones",
+    "reasons": {
+      "discard": "Cambios descartados",
+      "reset": "Reset duro",
+      "cleanup": "Limpieza de archivos",
+      "abort": "Operación abortada",
+      "branch-delete": "Rama eliminada",
+      "stash-drop": "Stash eliminado",
+      "before-restore": "Antes de aplicar una copia",
+      "other": "Copia de seguridad",
+      "restore-file": "Archivo restaurado a otra versión"
+    },
+    "deleteShort": "Eliminar"
+  },
+  "guard": {
+    "title": "Revisa antes de guardar el commit",
+    "description": "Lo que preparaste tiene cosas que suelen ser un error. Nada se ha guardado todavía.",
+    "listLabel": "Hallazgos",
+    "kinds": {
+      "secret": "Parece una clave o un secreto",
+      "largeFile": "Archivo muy grande",
+      "conflictMarker": "Marcador de conflicto sin resolver",
+      "riskyFile": "Archivo que normalmente no se sube"
+    },
+    "cancel": "Cancelar",
+    "unstage": "Quitar de lo preparado",
+    "commitAnyway": "Guardar el commit de todos modos",
+    "silence": "No avisar",
+    "silenceLabel": "No volver a avisar de {{path}}",
+    "largeHint": "GitHub rechaza archivos de más de 100 MB. Para archivos grandes conviene Git LFS.",
+    "limits": "Esta revisión busca patrones conocidos; no detecta todos los secretos y puede equivocarse. Un secreto que ya se subió hay que cambiarlo aunque se borre del historial.",
+    "unstaged_one": "Se quitó {{count}} archivo de lo preparado",
+    "unstaged_other": "Se quitaron {{count}} archivos de lo preparado"
+  },
+  "predict": {
+    "badge_one": "Combinarla con la rama actual daría conflicto en {{count}} archivo",
+    "badge_other": "Combinarla con la rama actual daría conflictos en {{count}} archivos"
+  },
+  "absorb": {
+    "title": "Absorber cambios",
+    "description": "Cada bloque preparado se manda al commit sin publicar que escribió esas líneas, como un fixup. Después se pueden fundir con su commit.",
+    "listLabel": "Bloques que se absorben",
+    "goesTo": "va a {{hash}} {{title}}",
+    "nothingToAbsorb": "Ninguno de los bloques preparados se puede mandar a un commit anterior.",
+    "skippedTitle_one": "{{count}} bloque se queda como está",
+    "skippedTitle_other": "{{count}} bloques se quedan como están",
+    "hint": "Solo se tocan commits que no están en ningún remoto. Antes de empezar se guarda una copia en Rescate. Si al fundir hay conflictos, aparece el aviso de operación en curso.",
+    "applyAndSquash": "Crear fixups y fundirlos",
+    "onlyFixups": "Solo crear los fixups",
+    "created_one": "Se creó {{count}} fixup",
+    "created_other": "Se crearon {{count}} fixups",
+    "squashed_one": "Se absorbió en {{count}} commit",
+    "squashed_other": "Se absorbió en {{count}} commits",
+    "empty": {
+      "title": "No hay nada preparado",
+      "description": "Prepara cambios sobre líneas que ya existían y vuelve a abrir esto."
+    },
+    "reasons": {
+      "onlyAdditions": "solo agrega líneas nuevas",
+      "manyCommits": "las líneas son de varios commits",
+      "published": "el commit ya está publicado",
+      "unsupported": "archivo nuevo, borrado, renombrado o binario",
+      "notFound": "no se encontró quién escribió esas líneas"
+    }
+  },
+  "stack": {
+    "title": "Ramas apiladas",
+    "description": "Encadena ramas: cada una parte de la anterior. Si la primera cambia, reajusta toda la pila de una vez y crea las pull requests en orden.",
+    "empty": {
+      "title": "Todavía no hay una pila",
+      "description": "Elige una rama y la rama sobre la que se apoya para empezar."
+    },
+    "listLabel": "Pila de ramas",
+    "current": "actual",
+    "ahead_one": "{{count}} commit propio",
+    "ahead_other": "{{count}} commits propios",
+    "needsRestack": "necesita reajuste",
+    "remove": "Quitar {{name}} de la pila",
+    "branch": "Rama",
+    "parent": "Se apoya en",
+    "place": "Poner en la pila",
+    "restack": "Reajustar la pila",
+    "restacked_one": "Se reajustó {{count}} rama",
+    "restacked_other": "Se reajustaron {{count}} ramas",
+    "openPulls": "Publicar y abrir pull requests encadenadas",
+    "prBody": "Esta pull request es parte de una pila. Orden de la pila:",
+    "hint": "La relación se guarda en la configuración local del repositorio. Reajustar reescribe las ramas de la pila, así que antes se guarda una copia en Rescate; si hay conflictos, resuélvelos y vuelve a pulsar Reajustar."
+  },
+  "split": {
+    "menu": "Dividir este commit...",
+    "title": "Dividir el commit {{hash}}",
+    "description": "Convierte un commit sin publicar en dos: primero los archivos que elijas y después el resto. El resultado final es idéntico.",
+    "pick": "Elige los archivos que van en el primer commit (no todos).",
+    "filesLabel": "Archivos del commit",
+    "firstMessage": "Mensaje del primer commit",
+    "secondMessage": "Mensaje del segundo commit",
+    "hint": "Los commits posteriores se vuelven a aplicar encima. Antes se guarda una copia en Rescate. Solo se dividen commits que no están en ningún remoto y la división es por archivos, no por líneas.",
+    "run": "Dividir",
+    "done": "El commit se dividió en dos"
+  },
+  "overview": {
+    "title": "Todos los repositorios",
+    "description": "El estado de tus repositorios recientes de un vistazo, con fetch y pull seguros para todos a la vez.",
+    "empty": {
+      "title": "Todavía no hay repositorios",
+      "description": "Abre o clona un repositorio y aparecerá aquí."
+    },
+    "filter": "Espacio de trabajo",
+    "allGroups": "Todos",
+    "group": "Grupo",
+    "refresh": "Actualizar estado",
+    "fetchAll": "Fetch a todos",
+    "pullAll": "Pull seguro a todos",
+    "open": "Abrir",
+    "listLabel": "Repositorios",
+    "resultsLabel": "Resultado",
+    "loading": "Consultando...",
+    "unavailable": "No se encontró la carpeta o no es un repositorio",
+    "changes_one": "{{count}} cambio",
+    "changes_other": "{{count}} cambios",
+    "outcome": {
+      "done": "listo",
+      "updated": "actualizado",
+      "upToDate": "al día",
+      "skipped": "omitido",
+      "failed": "falló"
+    },
+    "hint": "El pull seguro solo avanza ramas que no tienen commits propios; las que divergen o no tienen remoto se omiten con el motivo. Se revisan tres repositorios a la vez."
+  },
+  "launch": {
+    "cloneTitle": "Enlace para clonar",
+    "cloneBranch": "El enlace pide la rama {{branch}}. Cámbiate a ella cuando termine de clonar."
+  },
+  "background": {
+    "title": "Segundo plano",
+    "syncLabel": "Buscar cambios remotos cada cierto tiempo",
+    "syncHint": "Hace fetch del repositorio abierto mientras la app está abierta y visible.",
+    "minutesLabel": "Minutos entre búsquedas",
+    "trayLabel": "Mostrar icono en la bandeja",
+    "trayHint": "Cerrar la ventana solo la oculta. Usa Salir en el menú del icono para cerrar la app.",
+    "autostartLabel": "Iniciar con el sistema",
+    "autostartHint": "Abre GithubDesk al iniciar sesión.",
+    "tray": {
+      "open": "Abrir",
+      "fetch": "Buscar cambios",
+      "quit": "Salir",
+      "tooltip": "GithubDesk",
+      "tooltipPending_one": "GithubDesk: {{count}} pendiente",
+      "tooltipPending_other": "GithubDesk: {{count}} pendientes"
+    }
+  },
+  "browse": {
+    "menu": {
+      "explore": "Explorar archivos en este commit",
+      "compareTwo": "Comparar estos dos commits"
+    },
+    "title": "Archivos en {{revision}}",
+    "description": "Recorre las carpetas de esta versión y abre cualquier archivo en modo de solo lectura.",
+    "treeLabel": "Carpetas y archivos",
+    "emptyFolder": "Carpeta vacía",
+    "submodule": "Submódulo: ábrelo como repositorio aparte",
+    "contentLabel": "Contenido de {{path}}",
+    "pick": {
+      "title": "Elige un archivo",
+      "description": "Abre las carpetas de la izquierda y selecciona un archivo para verlo."
+    },
+    "missing": {
+      "title": "El archivo no existe en esta versión",
+      "description": "Pudo haberse borrado o movido."
+    },
+    "binary": {
+      "title": "Archivo binario",
+      "description": "Este archivo no es de texto, así que no se puede mostrar aquí."
+    },
+    "tooLarge": {
+      "title": "Archivo demasiado grande",
+      "description": "Solo se muestran archivos de texto de hasta 1 MB."
+    },
+    "restore": "Restaurar este archivo a esta versión",
+    "restoreConfirm": {
+      "title": "Confirmar restauración",
+      "description": "{{path}} en tu carpeta de trabajo se reemplazará por la versión de {{revision}}. Antes se guarda una copia en Rescate por si la necesitas.",
+      "confirm": "Restaurar"
+    },
+    "restored": "{{path}} quedó como en {{revision}}"
+  },
+  "imageDiff": {
+    "modesLabel": "Forma de comparar la imagen",
+    "modes": {
+      "side": "Lado a lado",
+      "swipe": "Deslizador",
+      "onion": "Transparencia"
+    },
+    "before": "Antes",
+    "after": "Después",
+    "swipeLabel": "Posición del deslizador",
+    "opacityLabel": "Transparencia de la nueva versión",
+    "missing": "No existe en esta versión",
+    "tooLarge": "Imagen de más de 5 MB"
+  },
+  "stats": {
+    "title": "Estadísticas del repositorio",
+    "description": "Actividad, colaboradores y archivos según el historial de la rama actual.",
+    "open": "Estadísticas",
+    "tabsLabel": "Secciones de estadísticas",
+    "tabs": {
+      "activity": "Actividad",
+      "contributors": "Colaboradores",
+      "files": "Archivos",
+      "todos": "Pendientes"
+    },
+    "running": "Analizando el historial…",
+    "cancelled": "Se canceló el análisis.",
+    "retry": "Volver a analizar",
+    "truncated": "Solo se analizaron los últimos {{count}} commits; el historial es más largo.",
+    "emptyTitle": "Sin historial",
+    "empty": "Todavía no hay commits en esta rama.",
+    "activity": {
+      "label": "Commits por día en el último año",
+      "day_one": "{{count}} commit el {{date}}",
+      "day_other": "{{count}} commits el {{date}}",
+      "total_one": "{{count}} commit en el último año",
+      "total_other": "{{count}} commits en el último año",
+      "busiest": "Día con más actividad: {{date}} ({{count}})",
+      "less": "Menos",
+      "more": "Más"
+    },
+    "contributors": {
+      "listLabel": "Colaboradores",
+      "commits_one": "{{count}} commit",
+      "commits_other": "{{count}} commits",
+      "range": "Primero {{first}} · último {{last}}"
+    },
+    "files": {
+      "churnTitle": "Archivos más cambiados",
+      "churnHint": "Veces que se tocó cada archivo y líneas agregadas y borradas.",
+      "foldersTitle": "Carpetas con más actividad",
+      "busTitle": "Archivos que solo conoce una persona",
+      "busHint": "Archivos con al menos 5 commits y un solo autor (factor autobús). Los más grandes primero.",
+      "busNone": "Ningún archivo depende de una sola persona.",
+      "times_one": "{{count}} vez",
+      "times_other": "{{count}} veces",
+      "lines_one": "{{count}} línea",
+      "lines_other": "{{count}} líneas"
+    },
+    "todos": {
+      "listLabel": "Pendientes encontrados",
+      "emptyTitle": "Sin pendientes",
+      "empty": "No hay TODO, FIXME, HACK ni XXX en los archivos del repositorio.",
+      "count_one": "{{count}} pendiente encontrado",
+      "count_other": "{{count}} pendientes encontrados",
+      "truncated": "Hay más resultados; solo se muestran los primeros {{count}}.",
+      "who": "¿Quién?",
+      "whoLabel": "Ver quién escribió {{path}}:{{line}}",
+      "author": "{{author}} · {{date}}",
+      "notCommitted": "Sin confirmar todavía",
+      "authorFailed": "No se pudo saber",
+      "blameLimit": "El autor solo se puede consultar en los primeros {{count}} resultados."
+    }
+  },
+  "health": {
+    "title": "Salud del repositorio",
+    "description": "Tamaño, archivos grandes de la historia, sparse-checkout y mantenimiento.",
+    "open": "Salud del repositorio",
+    "tabsLabel": "Secciones de salud",
+    "tabs": {
+      "size": "Tamaño",
+      "blobs": "Archivos grandes",
+      "sparse": "Sparse-checkout",
+      "maintenance": "Mantenimiento"
+    },
+    "size": {
+      "total": "La carpeta .git ocupa {{size}}.",
+      "shallow": "Es un clon sin historial completo.",
+      "partial": "Es un clon parcial: los archivos se descargan cuando se necesitan.",
+      "objectsTitle": "Objetos",
+      "packed": "Empaquetados",
+      "packs": "Paquetes",
+      "loose": "Sueltos",
+      "garbage": "Basura",
+      "refsTitle": "Referencias",
+      "looseRefs": "Referencias sueltas",
+      "packedRefs": "Referencias empaquetadas",
+      "branches": "Ramas locales",
+      "unmerged": "Ramas sin combinar en la actual",
+      "stashes": "Cambios guardados (stash)",
+      "suggestGc": "Hay muchos objetos sueltos o paquetes. Optimizar el repositorio en Mantenimiento puede ayudar."
+    },
+    "blobs": {
+      "running": "Buscando los archivos más grandes de toda la historia…",
+      "cancelled": "Se canceló la búsqueda.",
+      "retry": "Buscar otra vez",
+      "empty": "La historia no tiene archivos.",
+      "hint": "Los 20 archivos más grandes guardados en la historia, aunque ya no estén en la rama actual.",
+      "listLabel": "Archivos más grandes",
+      "noPath": "(sin ruta)"
+    },
+    "sparse": {
+      "on_one": "Sparse-checkout activo: solo se descarga {{count}} carpeta además de los archivos de la raíz.",
+      "on_other": "Sparse-checkout activo: solo se descargan {{count}} carpetas además de los archivos de la raíz.",
+      "off": "Sparse-checkout desactivado: todas las carpetas están en el disco.",
+      "folders": "Carpetas que quieres en el disco",
+      "foldersHint": "Una por línea, relativa a la raíz del repositorio. Las demás carpetas desaparecen del disco pero siguen en Git.",
+      "invalid": "Ruta no válida: {{folder}}",
+      "enable": "Activar",
+      "update": "Actualizar carpetas",
+      "disable": "Desactivar",
+      "apply": "Aplicar",
+      "confirmSetTitle": "¿Dejar solo estas carpetas en el disco?",
+      "confirmSet_one": "Se mantendrá {{count}} carpeta y los archivos de la raíz. El resto se quitará del disco, pero no de Git: puedes traerlo de vuelta al desactivar.",
+      "confirmSet_other": "Se mantendrán {{count}} carpetas y los archivos de la raíz. El resto se quitará del disco, pero no de Git: puedes traerlo de vuelta al desactivar.",
+      "confirmDisableTitle": "¿Desactivar sparse-checkout?",
+      "confirmDisable": "Todas las carpetas volverán al disco. En repositorios grandes puede tardar."
+    },
+    "maintenance": {
+      "description": "Optimizar empaqueta los objetos sueltos y comprime el repositorio con git gc. No borra commits, ramas ni cambios guardados.",
+      "run": "Optimizar ahora",
+      "running": "Optimizando el repositorio…",
+      "cancelled": "Se canceló la optimización.",
+      "confirmTitle": "¿Optimizar el repositorio?",
+      "confirm": "Puede tardar varios minutos en repositorios grandes. Mientras tanto evita otras operaciones de Git.",
+      "resultTitle": "Resultado",
+      "result": "La carpeta .git pasó de {{before}} a {{after}} (se liberaron {{saved}}).",
+      "objects": "Ahora hay {{loose}} objetos sueltos en {{packs}} paquetes."
     }
   }
 }

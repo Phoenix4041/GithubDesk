@@ -1,19 +1,22 @@
-import { Brush, EyeOff, FolderGit2, FolderSearch, GitBranch, Settings, ShieldCheck, SquarePen, Terminal } from "lucide-react";
+import { BarChart3, Brush, EyeOff, FolderGit2, FolderSearch, GitBranch, HeartPulse, Settings, ShieldCheck, SquarePen, Terminal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useStatus } from "@/features/changes/queries";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
 import { useGitignoreDialogStore } from "@/features/gitignore/store";
+import { useHealthDialogStore } from "@/features/health/store";
 import { BranchChecksButton } from "@/features/github/checks/components/branch-checks-button";
 import { GithubRepoChip } from "@/features/github/components/github-repo-chip";
 import { PublishButton } from "@/features/github/home/components/publish-button";
 import { NotificationsButton } from "@/features/github/notifications/components/notifications-button";
 import { ProfileSwitcher } from "@/features/profiles/components/profile-switcher";
 import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
+import { RescueButton } from "@/features/rescue/components/rescue-button";
 import { useRepositoriesStore } from "@/features/repositories/store";
 import { useSigningConfig } from "@/features/signing/queries";
 import { useSigningDialogStore } from "@/features/signing/store";
 import { SettingsDialog } from "@/features/settings/components/settings-dialog";
+import { useStatsDialogStore } from "@/features/stats/store";
 import { SyncButton } from "@/features/sync/components/sync-button";
 import { useTerminalStore } from "@/features/terminal/store";
 import { useUiStore } from "@/shared/lib/ui-store";
@@ -32,6 +35,8 @@ export function Toolbar({ repoPath }: ToolbarProps) {
   const showGitignore = useGitignoreDialogStore((state) => state.show);
   const showCleanup = useCleanupDialogStore((state) => state.show);
   const showSigning = useSigningDialogStore((state) => state.show);
+  const showStats = useStatsDialogStore((state) => state.show);
+  const showHealth = useHealthDialogStore((state) => state.show);
   const terminalOpen = useTerminalStore((state) => state.open);
   const toggleTerminal = useTerminalStore((state) => state.toggle);
   const settingsOpen = useUiStore((state) => state.settingsOpen);
@@ -75,6 +80,16 @@ export function Toolbar({ repoPath }: ToolbarProps) {
               icon: <Brush className="size-4" />,
               onSelect: showCleanup,
             },
+            {
+              label: t("stats.open"),
+              icon: <BarChart3 className="size-4" />,
+              onSelect: showStats,
+            },
+            {
+              label: t("health.open"),
+              icon: <HeartPulse className="size-4" />,
+              onSelect: showHealth,
+            },
           ]}
         />
       </div>
@@ -89,6 +104,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
       <BranchChecksButton repoPath={repoPath} />
       <div className="ml-auto flex items-center gap-2">
         <ReflogButtons repoPath={repoPath} />
+        <RescueButton />
         <SyncButton repoPath={repoPath} />
         <NotificationsButton />
         <ProfileSwitcher repoPath={repoPath} />

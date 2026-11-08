@@ -260,6 +260,7 @@ pub async fn changes_discard(
     tracked: Vec<String>,
     untracked: Vec<String>,
 ) -> AppResult<()> {
+    crate::commands::rescue::guard_worktree(Path::new(&path), "discard").await;
     discard_changes(Path::new(&path), &tracked, &untracked).await
 }
 

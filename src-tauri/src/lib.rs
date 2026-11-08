@@ -4,37 +4,80 @@ pub mod error;
 pub mod git;
 pub mod github;
 pub mod jobs;
+pub mod launch;
 pub mod platform;
 pub mod pty;
 pub mod redact;
 pub mod secret_scan;
 pub mod self_update;
 pub mod state;
+pub mod tray;
 pub mod update_check;
 pub mod watcher;
 
+use commands::background as background_commands;
 use commands::diagnostics as diagnostics_commands;
+use commands::launch as launch_commands;
 use commands::{
-    app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
-    github_account, github_actions, github_admin, github_collab, github_extras, github_home,
-    github_issues, github_orgs, github_pulls, github_releases, github_repo, github_secrets,
-    gitignore, history, home, identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog,
-    remote, repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
+    absorb, app_update, bisect, blame, branch, browse, cleanup, commit, commit_extras, commit_ops,
+    compare, conflict, external, github_account, github_actions, github_admin, github_collab,
+    github_extras, github_home, github_issues, github_orgs, github_pulls, github_releases,
+    github_repo, github_secrets, gitignore, guard, history, home, identity, job, lfs, merge, multi,
+    operation, patches, predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split,
+    stack, stash, status, submodule, tag, terminal, watch, worktree,
 };
+use commands::{health, stats};
 use state::AppState;
 use tauri::Manager;
 
 pub fn run() {
     platform::extend_search_path();
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|app, arguments, _| {
+            launch::handle_arguments(app, &arguments);
+        }))
+        .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
+        .manage(tray::TrayState::default())
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                let active = window.state::<tray::TrayState>().is_active();
+                if tray::hides_on_close(active, window.label()) {
+                    api.prevent_close();
+                    let _ = window.hide();
+                }
+            }
+        })
         .setup(|app| {
             let directory = app.path().app_data_dir()?;
             diagnostics::init(directory.join("logs"));
             app.manage(AppState::new(directory));
             self_update::register(app.handle())?;
+            let arguments: Vec<String> = std::env::args().collect();
+            if let Some(request) = launch::parse_arguments(&arguments) {
+                launch::remember(&app.state::<AppState>().launch, request);
+            }
+            #[cfg(target_os = "macos")]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                let handle = app.handle().clone();
+                app.deep_link().on_open_url(move |event| {
+                    let links: Vec<String> =
+                        event.urls().iter().map(|link| link.to_string()).collect();
+                    launch::handle_links(&handle, &links);
+                });
+            }
+            #[cfg(target_os = "linux")]
+            {
+                use tauri_plugin_deep_link::DeepLinkExt;
+                let _ = app.deep_link().register_all();
+            }
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -51,6 +94,9 @@ pub fn run() {
             commit::commit_head,
             commit::commit_create,
             commit::commit_undo,
+            commit_extras::commit_coauthors,
+            commit_extras::commit_template_get,
+            commit_extras::commit_template_set,
             branch::branch_list,
             branch::branch_create,
             branch::branch_switch,
@@ -82,6 +128,11 @@ pub fn run() {
             compare::compare_get_summary,
             compare::compare_changed_files,
             compare::compare_diff,
+            browse::browse_tree,
+            browse::browse_read_file,
+            browse::browse_restore_file,
+            browse::browse_diff_files,
+            browse::browse_diff_file,
             conflict::conflict_get,
             conflict::conflict_resolve,
             conflict::conflict_choose_side,
@@ -228,6 +279,9 @@ pub fn run() {
             github_actions::github_workflows_list,
             github_actions::github_workflow_dispatch,
             github_repo::github_set_git_account,
+            commands::github_forks::github_fork_info,
+            commands::github_forks::github_fork_sync,
+            commands::github_forks::github_fork_add_upstream,
             tag::tag_list,
             tag::tag_create,
             tag::tag_delete,
@@ -240,6 +294,36 @@ pub fn run() {
             terminal::terminal_close,
             diagnostics_commands::diagnostics_log,
             diagnostics_commands::diagnostics_open_folder,
+            absorb::absorb_preview,
+            absorb::absorb_run,
+            split::split_commit_files,
+            split::split_commit_run,
+            multi::multi_status,
+            multi::multi_fetch,
+            multi::multi_pull,
+            stack::stack_list,
+            stack::stack_set_parent,
+            stack::stack_restack,
+            guard::guard_scan,
+            guard::guard_silence,
+            predict::predict_merge_conflicts,
+            predict::predict_cherry_pick_conflicts,
+            predict::predict_branches_conflicts,
+            rescue::rescue_list,
+            rescue::rescue_preview,
+            rescue::rescue_restore,
+            rescue::rescue_branch,
+            rescue::rescue_delete,
+            rescue::rescue_snapshot,
+            stats::stats_collect,
+            stats::stats_todos,
+            stats::stats_line_author,
+            health::health_size,
+            health::health_large_blobs,
+            health::health_maintenance,
+            health::health_sparse_state,
+            health::health_sparse_set,
+            health::health_sparse_disable,
             app_update::app_update_check,
             app_update::app_update_install,
             worktree::worktree_list,
@@ -289,6 +373,11 @@ pub fn run() {
             signing::signing_test,
             signing::commit_signature_get,
             job::job_cancel,
+            launch_commands::launch_take_pending,
+            background_commands::tray_set_enabled,
+            background_commands::tray_set_pending,
+            background_commands::autostart_get,
+            background_commands::autostart_set,
             watch::watch_start,
             watch::watch_stop,
         ])

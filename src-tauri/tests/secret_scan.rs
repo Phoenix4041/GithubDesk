@@ -23,22 +23,46 @@ fn slack_token() -> String {
 
 #[test]
 fn known_token_formats_are_detected() {
-    assert_eq!(scan_line(&format!("token = \"{}\"", github_token())), Some("github-token"));
     assert_eq!(
-        scan_line(&format!("x {}", format_args!("github_pat_{}", "A".repeat(30)))),
+        scan_line(&format!("token = \"{}\"", github_token())),
         Some("github-token")
     );
-    assert_eq!(scan_line(&format!("key: {}", aws_key())), Some("aws-access-key"));
-    assert_eq!(scan_line("-----BEGIN RSA PRIVATE KEY-----"), Some("private-key"));
-    assert_eq!(scan_line(&format!("SLACK={}", slack_token())), Some("slack-token"));
-    assert_eq!(scan_line(&format!("stripe: {}", stripe_key())), Some("stripe-key"));
+    assert_eq!(
+        scan_line(&format!(
+            "x {}",
+            format_args!("github_pat_{}", "A".repeat(30))
+        )),
+        Some("github-token")
+    );
+    assert_eq!(
+        scan_line(&format!("key: {}", aws_key())),
+        Some("aws-access-key")
+    );
+    assert_eq!(
+        scan_line("-----BEGIN RSA PRIVATE KEY-----"),
+        Some("private-key")
+    );
+    assert_eq!(
+        scan_line(&format!("SLACK={}", slack_token())),
+        Some("slack-token")
+    );
+    assert_eq!(
+        scan_line(&format!("stripe: {}", stripe_key())),
+        Some("stripe-key")
+    );
 }
 
 #[test]
 fn secret_assignments_are_detected() {
-    assert_eq!(scan_line("password = \"hunter2hunter2\""), Some("secret-assignment"));
+    assert_eq!(
+        scan_line("password = \"hunter2hunter2\""),
+        Some("secret-assignment")
+    );
     assert_eq!(scan_line("API_KEY=9f8e7d6c5b4a"), Some("secret-assignment"));
-    assert_eq!(scan_line("\"client_secret\": \"Zx81kLmQ\""), Some("secret-assignment"));
+    assert_eq!(
+        scan_line("\"client_secret\": \"Zx81kLmQ\""),
+        Some("secret-assignment")
+    );
 }
 
 #[test]
@@ -121,11 +145,17 @@ async fn unstaging_and_ignoring_paths_work() {
     unstage_paths(&workspace.path, &[".env".to_string()])
         .await
         .expect("unstage");
-    assert_eq!(git_output(&workspace.path, &["diff", "--cached", "--name-only"]).trim(), "");
+    assert_eq!(
+        git_output(&workspace.path, &["diff", "--cached", "--name-only"]).trim(),
+        ""
+    );
 
     let added = ignore_paths(&workspace.path, &[".env".to_string()]).expect("ignore");
     assert_eq!(added, 1);
-    assert_eq!(read_ignore_file(&workspace.path).expect("read").content, "/.env\n");
+    assert_eq!(
+        read_ignore_file(&workspace.path).expect("read").content,
+        "/.env\n"
+    );
     assert!(ignore_paths(&workspace.path, &["../outside".to_string()]).is_err());
 }
 
@@ -138,5 +168,8 @@ async fn unstaging_works_before_the_first_commit() {
     unstage_paths(&workspace.path, &[".env".to_string()])
         .await
         .expect("unstage");
-    assert_eq!(git_output(&workspace.path, &["diff", "--cached", "--name-only"]).trim(), "");
+    assert_eq!(
+        git_output(&workspace.path, &["diff", "--cached", "--name-only"]).trim(),
+        ""
+    );
 }

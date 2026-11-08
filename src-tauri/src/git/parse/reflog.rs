@@ -274,7 +274,6 @@ mod tests {
 
     #[test]
     fn undo_is_not_offered_without_history() {
-
         let single = entries(&[("aaaaaaa1", "commit (initial): first")]);
         assert_eq!(plan_undo(&single), None);
         assert_eq!(plan_undo(&[]), None);

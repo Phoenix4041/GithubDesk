@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 import { CommandsHost } from "@/features/commands/components/commands-host";
 import { CreateGithubRepoDialog } from "@/features/github/home/components/create-github-repo-dialog";
 import { NotificationsDialog } from "@/features/github/notifications/components/notifications-dialog";
+import { OverviewDialog } from "@/features/overview/components/overview-dialog";
 import { useNotificationAlerts } from "@/features/github/notifications/use-notification-alerts";
+import { useLaunchRequests } from "@/features/launch/use-launch-requests";
+import { useTray } from "@/features/background/use-tray";
 import { OrgDialog } from "@/features/github/org-admin/components/org-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
 import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
@@ -29,11 +32,17 @@ function NotificationWatcher() {
   return null;
 }
 
+function TrayWatcher() {
+  useTray();
+  return null;
+}
+
 export function App() {
   const { i18n } = useTranslation();
   const activePath = useRepositoriesStore((state) => state.activePath);
 
   useTheme();
+  useLaunchRequests();
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -58,9 +67,11 @@ export function App() {
       <RepositoryDialogs />
       <GrantScopesDialog />
       <NotificationWatcher />
+      <TrayWatcher />
       <CreateGithubRepoDialog />
       <OrgDialog />
       <NotificationsDialog />
+      <OverviewDialog />
       <ProfilesDialog />
       <ProfilePickerDialog />
       <CommandsHost />

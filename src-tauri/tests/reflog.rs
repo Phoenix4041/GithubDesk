@@ -34,7 +34,9 @@ async fn each_branch_has_its_own_reflog() {
     assert!(refs.contains(&"main".to_string()));
     assert!(refs.contains(&"feature".to_string()));
 
-    let main = list_reflog_for(repo, "main", 50).await.expect("main reflog");
+    let main = list_reflog_for(repo, "main", 50)
+        .await
+        .expect("main reflog");
     let feature = list_reflog_for(repo, "feature", 50)
         .await
         .expect("feature reflog");

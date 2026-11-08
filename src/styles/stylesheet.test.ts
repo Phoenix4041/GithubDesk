@@ -116,6 +116,11 @@ describe("stylesheet behavior", () => {
     expect(upgrade).toBeGreaterThan(fallback);
   });
 
+  it("scales the spacing of rows with the density classes", () => {
+    expect(stylesheet).toMatch(/:root\.density-compact\s*{\s*--spacing:\s*0\.2\d*rem;/);
+    expect(stylesheet).toMatch(/:root\.density-comfortable\s*{\s*--spacing:\s*0\.2\d*rem;/);
+  });
+
   it("styles WebKit scrollbars only when the standard property is missing", () => {
     expect(stylesheet).toContain("@supports not (scrollbar-width: thin)");
     expect(stylesheet).toContain("::-webkit-scrollbar-thumb");

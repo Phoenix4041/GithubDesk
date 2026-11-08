@@ -46,6 +46,7 @@ function BranchSelect({ label, value, names, onChange }: BranchSelectProps) {
       {label}
       <select value={value ?? ""} onChange={(event) => onChange(event.target.value)} className={selectClasses}>
         {value === null ? <option value="" /> : null}
+        {value !== null && !names.includes(value) ? <option value={value}>{value.slice(0, 7)}</option> : null}
         {names.map((name) => (
           <option key={name} value={name}>
             {name}
@@ -74,7 +75,8 @@ export function ComparePanel({ repoPath }: ComparePanelProps) {
   const selectFile = useCompareStore((state) => state.selectFile);
   const branches = useBranches(repoPath);
 
-  const pair = useMemo(() => ({ base, head }), [base, head]);
+  const exact = useCompareStore((state) => state.exact);
+  const pair = useMemo(() => ({ base, head, exact }), [base, head, exact]);
   const summary = useCompareSummary(repoPath, pair);
   const files = useCompareFiles(repoPath, pair);
   const commitRange =

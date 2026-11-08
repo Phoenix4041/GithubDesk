@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { BranchDialogs } from "@/features/branches/components/branch-dialogs";
+import { BrowseDialog } from "@/features/browse/components/browse-dialog";
 import { ChangesDiffPanel } from "@/features/changes/components/changes-diff-panel";
 import { ChangesView } from "@/features/changes/components/changes-view";
 import { useStatus } from "@/features/changes/queries";
@@ -23,6 +24,15 @@ import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/fe
 import { RebaseOntoDialog } from "@/features/rebase/components/rebase-onto-dialog";
 import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
 import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
+import { AbsorbDialog } from "@/features/absorb/components/absorb-dialog";
+import { GuardDialog } from "@/features/guard/components/guard-dialog";
+import { HealthDialog } from "@/features/health/components/health-dialog";
+import { RescueDialog } from "@/features/rescue/components/rescue-dialog";
+import { SplitDialog } from "@/features/split/components/split-dialog";
+import { StackDialog } from "@/features/stack/components/stack-dialog";
+import { StatsDialog } from "@/features/stats/components/stats-dialog";
+import { useRescueNotice } from "@/features/rescue/use-rescue-notice";
+import { useBackgroundSync } from "@/features/background/use-background-sync";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
 import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
@@ -72,7 +82,9 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   const setChangesWidth = useSettingsStore((state) => state.setChangesWidth);
 
   useRepoWatcher(repoPath);
+  useRescueNotice(repoPath);
   useGithubGitAuth(repoPath);
+  useBackgroundSync(repoPath);
 
   useEffect(() => {
     useChangesStore.getState().reset();
@@ -162,6 +174,14 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <RebaseDialog repoPath={repoPath} />
       <RebaseOntoDialog repoPath={repoPath} />
       <ReflogDialogs repoPath={repoPath} />
+      <RescueDialog repoPath={repoPath} />
+      <BrowseDialog repoPath={repoPath} />
+      <GuardDialog />
+      <AbsorbDialog repoPath={repoPath} />
+      <StackDialog repoPath={repoPath} />
+      <SplitDialog repoPath={repoPath} />
+      <StatsDialog repoPath={repoPath} />
+      <HealthDialog repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>

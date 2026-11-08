@@ -1,7 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import { repoKeys } from "@/shared/lib/query-client";
 import type { DiffSource } from "@/shared/types/git";
-import { getFileDiff, getHeadCommit, getStatus } from "./api";
+import { getCommitTemplate, getFileDiff, getHeadCommit, getStatus, listCoauthors } from "./api";
+
+export const commitExtrasKeys = {
+  coauthors: (path: string) => ["repo", path, "coauthors"] as const,
+  template: (path: string) => ["repo", path, "commit-template"] as const,
+};
+
+export function useCoauthors(repoPath: string, enabled: boolean) {
+  return useQuery({
+    queryKey: commitExtrasKeys.coauthors(repoPath),
+    queryFn: () => listCoauthors(repoPath),
+    enabled,
+    staleTime: 60_000,
+  });
+}
+
+export function useCommitTemplate(repoPath: string) {
+  return useQuery({
+    queryKey: commitExtrasKeys.template(repoPath),
+    queryFn: () => getCommitTemplate(repoPath),
+  });
+}
 
 export function useStatus(repoPath: string) {
   return useQuery({
