@@ -16,6 +16,7 @@ const OAUTH: GithubAccount = {
   name: "Octo",
   avatarUrl: "",
   source: "oauth",
+  userId: 1,
 };
 const PERSONAL: GithubAccount = { ...OAUTH, source: "token" };
 

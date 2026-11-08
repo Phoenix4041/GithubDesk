@@ -1,5 +1,5 @@
 import { useId } from "react";
-import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
+import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { cn } from "@/shared/lib/cn";
 
 const controlClasses =
@@ -48,6 +48,30 @@ export function TextField({ label, hint, error, className, ...rest }: TextFieldP
           className={cn(controlClasses, "h-8", className)}
           {...rest}
         />
+      )}
+    </FieldShell>
+  );
+}
+
+interface SelectFieldProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "id"> {
+  label: string;
+  hint?: string;
+  error?: string;
+}
+
+export function SelectField({ label, hint, error, className, children, ...rest }: SelectFieldProps) {
+  return (
+    <FieldShell label={label} hint={hint} error={error}>
+      {({ controlId, describedBy }) => (
+        <select
+          id={controlId}
+          aria-describedby={describedBy}
+          aria-invalid={error ? true : undefined}
+          className={cn(controlClasses, "h-8 cursor-pointer", className)}
+          {...rest}
+        >
+          {children}
+        </select>
       )}
     </FieldShell>
   );

@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent, ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
@@ -6,6 +7,7 @@ import { IconButton } from "./icon-button";
 export interface MenuItem {
   label: string;
   icon?: ReactNode;
+  checked?: boolean;
   onSelect: () => void;
 }
 
@@ -36,7 +38,7 @@ export function Menu({ label, trigger, items, align = "right" }: MenuProps) {
 
   useEffect(() => {
     if (open) {
-      containerRef.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+      containerRef.current?.querySelector<HTMLElement>('[role^="menuitem"]')?.focus();
     }
   }, [open]);
 
@@ -50,7 +52,7 @@ export function Menu({ label, trigger, items, align = "right" }: MenuProps) {
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
       return;
     }
-    const entries = Array.from(containerRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
+    const entries = Array.from(containerRef.current?.querySelectorAll<HTMLElement>('[role^="menuitem"]') ?? []);
     const currentIndex = entries.findIndex((entry) => entry === document.activeElement);
     const step = event.key === "ArrowDown" ? 1 : -1;
     const next = entries[(currentIndex + step + entries.length) % entries.length];
@@ -85,7 +87,8 @@ export function Menu({ label, trigger, items, align = "right" }: MenuProps) {
             <button
               key={item.label}
               type="button"
-              role="menuitem"
+              role={item.checked === undefined ? "menuitem" : "menuitemradio"}
+              aria-checked={item.checked}
               className="flex cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-[13px] transition-colors duration-100 hover:bg-subtle focus-visible:bg-subtle"
               onClick={() => {
                 setOpen(false);
@@ -93,7 +96,8 @@ export function Menu({ label, trigger, items, align = "right" }: MenuProps) {
               }}
             >
               <span className="text-muted">{item.icon}</span>
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {item.checked ? <Check className="size-3.5 text-accent" aria-hidden="true" /> : null}
             </button>
           ))}
         </div>

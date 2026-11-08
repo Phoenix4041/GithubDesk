@@ -15,6 +15,7 @@ const ACCOUNT: GithubAccount = {
   name: "Octo Cat",
   avatarUrl: "",
   source: "oauth",
+  userId: 1,
 };
 
 function info(overrides: Partial<TokenInfo> = {}): TokenInfo {

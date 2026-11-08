@@ -1,6 +1,7 @@
 import { Download, FolderOpen, FolderPlus, GitBranch } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { ProfileChips } from "@/features/profiles/components/profile-chips";
 import { pickAndOpenRepository } from "../actions";
 import { useRepositoryDialogStore } from "../dialog-store";
 import { RepositoryList } from "./repository-list";
@@ -44,6 +45,8 @@ export function WelcomeScreen() {
             <p className="text-sm text-muted">{t("welcome.subtitle")}</p>
           </div>
         </header>
+
+        <ProfileChips />
 
         <section className="grid grid-cols-3 gap-3" aria-label={t("welcome.actions")}>
           <ActionCard

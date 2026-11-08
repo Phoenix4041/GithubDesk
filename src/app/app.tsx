@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CommandsHost } from "@/features/commands/components/commands-host";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
+import { ProfilePickerDialog } from "@/features/profiles/components/profile-picker-dialog";
+import { ProfilesDialog } from "@/features/profiles/components/profiles-dialog";
 import { RepositoryDialogs } from "@/features/repositories/components/repository-dialogs";
 import { WelcomeScreen } from "@/features/repositories/components/welcome-screen";
 import { useRepositoriesStore } from "@/features/repositories/store";
@@ -46,6 +48,8 @@ export function App() {
       </ErrorBoundary>
       <RepositoryDialogs />
       <GrantScopesDialog />
+      <ProfilesDialog />
+      <ProfilePickerDialog />
       <CommandsHost />
       <ToastRegion />
       <ContextMenuHost />

@@ -7,7 +7,7 @@ function remote(name: string, host: string, owner = "octo", repo = "hello"): Rem
 }
 
 function account(login: string, host = "github.com"): GithubAccount {
-  return { id: `${host}:${login}`, host, login, name: null, avatarUrl: "", source: "token" };
+  return { id: `${host}:${login}`, host, login, name: null, avatarUrl: "", source: "token", userId: null };
 }
 
 describe("pickGithubRemote", () => {

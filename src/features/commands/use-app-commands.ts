@@ -8,6 +8,7 @@ import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useMergeDialogStore } from "@/features/merge/store";
+import { useProfileDialogStore } from "@/features/profiles/dialog-store";
 import { choosePatchesToApply } from "@/features/patches/actions";
 import { useRebaseOntoStore } from "@/features/rebase/store";
 import { useReflogDialogStore } from "@/features/reflog/store";
@@ -151,6 +152,23 @@ export function buildGlobalCommands(): AppCommand[] {
       defaultShortcut: "Mod+Shift+O",
       enabled: true,
       run: () => useRepositoryDialogStore.getState().show("clone"),
+    },
+    {
+      id: "profile.switch",
+      titleKey: "commands.items.profile.switch",
+      group: "github",
+      keywords: "perfil cambiar cuenta organizacion identidad profile switch",
+      defaultShortcut: "Mod+Shift+U",
+      enabled: true,
+      run: () => useProfileDialogStore.getState().showPicker(),
+    },
+    {
+      id: "profile.manage",
+      titleKey: "commands.items.profile.manage",
+      group: "github",
+      keywords: "perfiles administrar crear editar identidad profiles manage",
+      enabled: true,
+      run: () => useProfileDialogStore.getState().showManage(),
     },
     {
       id: "repo.create",

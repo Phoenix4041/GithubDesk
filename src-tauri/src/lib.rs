@@ -14,9 +14,9 @@ pub mod watcher;
 use commands::diagnostics as diagnostics_commands;
 use commands::{
     app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
-    github_account, github_actions, github_issues, github_pulls, github_repo, gitignore, history,
-    job, lfs, merge, operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash,
-    status, submodule, tag, terminal, watch, worktree,
+    github_account, github_actions, github_issues, github_orgs, github_pulls, github_repo,
+    gitignore, history, identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog,
+    remote, repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -93,6 +93,11 @@ pub fn run() {
             github_account::github_device_start,
             github_account::github_device_finish,
             github_account::github_token_info,
+            github_orgs::github_orgs_list,
+            github_orgs::github_context_repos,
+            github_orgs::github_repo_create,
+            identity::identity_get,
+            identity::identity_apply,
             github_repo::github_repo_remotes,
             github_pulls::github_repo_info,
             github_pulls::github_pulls_list,

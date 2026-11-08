@@ -34,6 +34,8 @@ import { CleanupDialog } from "@/features/cleanup/components/cleanup-dialog";
 import { BisectDialog } from "@/features/bisect/components/bisect-dialog";
 import { MergeDialog } from "@/features/merge/components/merge-dialog";
 import { PatchDialog } from "@/features/patches/components/patch-dialog";
+import { ApplyProfileDialog } from "@/features/profiles/components/apply-profile-dialog";
+import { ProfileHint } from "@/features/profiles/components/profile-hint";
 import { SigningDialog } from "@/features/signing/components/signing-dialog";
 import { SubmoduleDialogs } from "@/features/submodules/components/submodule-dialogs";
 import { TagDialogs } from "@/features/tags/components/tag-dialogs";
@@ -98,6 +100,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
         <section style={{ width: changesWidth }} className="flex shrink-0 flex-col bg-surface">
           <WorkspaceTabs repoPath={repoPath} />
           <BisectBanner repoPath={repoPath} />
+          <ProfileHint repoPath={repoPath} />
           <div
             role="tabpanel"
             id={`panel-${tab}`}
@@ -146,6 +149,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <PatchDialog repoPath={repoPath} />
       <BisectDialog repoPath={repoPath} />
       <CleanupDialog repoPath={repoPath} />
+      <ApplyProfileDialog repoPath={repoPath} />
       <GitignoreDialog repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
       <RebaseOntoDialog repoPath={repoPath} />

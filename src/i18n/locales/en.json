@@ -1509,6 +1509,10 @@
       },
       "cleanup": {
         "open": "Clean up files and branches that are no longer needed"
+      },
+      "profile": {
+        "switch": "Switch profile",
+        "manage": "Manage profiles"
       }
     }
   },
@@ -1978,5 +1982,77 @@
     },
     "done": "Done: {{files}} files, {{branches}} local branches and {{pruned}} remote branches cleaned up.",
     "partial": "Something could not be cleaned up"
+  },
+  "profiles": {
+    "none": "No profile",
+    "switcher": "Profile: {{name}}",
+    "manage": "Manage profiles...",
+    "create": "Create a profile...",
+    "chipsLabel": "Active profile",
+    "dialog": {
+      "title": "Profiles",
+      "description": "A profile joins a GitHub account, an organization and your Git identity. When you pick it in a repository, commits carry that identity and changes are pushed with that account.",
+      "empty": "You have no profiles yet.",
+      "listLabel": "Your profiles",
+      "new": "New profile",
+      "edit": "Edit the profile {{label}}",
+      "remove": "Delete the profile {{label}}",
+      "removeTitle": "Delete the profile {{label}}?",
+      "removeDescription": "Repositories that use it no longer have a profile, but keep the name and email already written in them.",
+      "removeConfirm": "Delete profile"
+    },
+    "editor": {
+      "title": "Profile details",
+      "label": "Profile name",
+      "labelHint": "Short and easy to recognize, for example Work.",
+      "account": "GitHub account",
+      "context": "Context",
+      "contextPersonal": "Personal ({{login}})",
+      "orgsLoading": "Looking for your organizations...",
+      "orgsUnavailable": "Your organizations could not be read.",
+      "name": "Name for commits",
+      "email": "Email for commits",
+      "useNoreply": "Use the GitHub private email",
+      "signing": "Commit signing",
+      "signingNone": "No signing",
+      "signingUnavailable": "Your signing keys could not be read.",
+      "noAccounts": "Connect a GitHub account in Settings to create a profile.",
+      "save": "Save profile",
+      "errors": {
+        "required": "This field is required.",
+        "invalid": "Enter a valid email."
+      }
+    },
+    "apply": {
+      "title": "Use the profile {{label}}",
+      "description": "In this repository commits will carry this identity and changes will be pushed with the account {{login}}.",
+      "before": "Now",
+      "after": "With the profile",
+      "signing": "Signing",
+      "signingOn": "Will sign with {{key}}",
+      "signingOff": "No signing in this repository",
+      "missingIdentity": "No name or email",
+      "note": "It is written to the local configuration of this repository. Your global Git configuration does not change.",
+      "confirm": "Use this profile",
+      "done": "Profile {{label}} applied"
+    },
+    "hint": {
+      "message": "This repository belongs to {{owner}}. Use the profile \"{{label}}\"?",
+      "use": "Use the profile",
+      "never": "Do not ask again"
+    },
+    "identity": {
+      "label": "Commit identity",
+      "as": "Commit as {{name}} <{{email}}>",
+      "missing": "Git has no name or email for this repository.",
+      "choose": "Choose profile",
+      "mismatch": "It does not match the profile \"{{label}}\".",
+      "apply": "Apply \"{{label}}\""
+    },
+    "picker": {
+      "title": "Switch profile",
+      "forRepo": "It will be applied to this repository.",
+      "global": "It will become your active profile."
+    }
   }
 }

@@ -35,6 +35,7 @@ export const repoKeys = {
   patchPreview: (path: string, files: readonly string[]) => ["repo", path, "patch-preview", ...files] as const,
   bisect: (path: string) => ["repo", path, "bisect"] as const,
   cleanup: (path: string) => ["repo", path, "cleanup"] as const,
+  identity: (path: string) => ["repo", path, "identity"] as const,
   staleRemote: (path: string) => ["repo", path, "stale-remote"] as const,
   worktrees: (path: string) => ["repo", path, "worktrees"] as const,
   submodules: (path: string) => ["repo", path, "submodules"] as const,

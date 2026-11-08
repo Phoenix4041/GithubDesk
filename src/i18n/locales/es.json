@@ -1509,6 +1509,10 @@
       },
       "cleanup": {
         "open": "Limpiar archivos y ramas que ya no sirven"
+      },
+      "profile": {
+        "switch": "Cambiar de perfil",
+        "manage": "Administrar perfiles"
       }
     }
   },
@@ -1978,5 +1982,77 @@
     },
     "done": "Listo: {{files}} archivos, {{branches}} ramas locales y {{pruned}} ramas remotas limpiadas.",
     "partial": "Algo no se pudo limpiar"
+  },
+  "profiles": {
+    "none": "Sin perfil",
+    "switcher": "Perfil: {{name}}",
+    "manage": "Administrar perfiles...",
+    "create": "Crear un perfil...",
+    "chipsLabel": "Perfil activo",
+    "dialog": {
+      "title": "Perfiles",
+      "description": "Un perfil junta una cuenta de GitHub, una organización y tu identidad de Git. Al elegirlo en un repositorio, los commits salen con esos datos y los cambios se suben con esa cuenta.",
+      "empty": "Todavía no tienes perfiles.",
+      "listLabel": "Tus perfiles",
+      "new": "Nuevo perfil",
+      "edit": "Editar el perfil {{label}}",
+      "remove": "Borrar el perfil {{label}}",
+      "removeTitle": "¿Borrar el perfil {{label}}?",
+      "removeDescription": "Los repositorios que lo usan dejan de tener perfil, pero conservan el nombre y el correo que ya tenían escritos.",
+      "removeConfirm": "Borrar perfil"
+    },
+    "editor": {
+      "title": "Datos del perfil",
+      "label": "Nombre del perfil",
+      "labelHint": "Corto y fácil de reconocer, por ejemplo Trabajo.",
+      "account": "Cuenta de GitHub",
+      "context": "Contexto",
+      "contextPersonal": "Personal ({{login}})",
+      "orgsLoading": "Buscando tus organizaciones...",
+      "orgsUnavailable": "No se pudieron leer tus organizaciones.",
+      "name": "Nombre para los commits",
+      "email": "Correo para los commits",
+      "useNoreply": "Usar el correo privado de GitHub",
+      "signing": "Firma de commits",
+      "signingNone": "Sin firma",
+      "signingUnavailable": "No se pudieron leer tus llaves de firma.",
+      "noAccounts": "Conecta una cuenta de GitHub en Ajustes para poder crear un perfil.",
+      "save": "Guardar perfil",
+      "errors": {
+        "required": "Este dato es obligatorio.",
+        "invalid": "Escribe un correo válido."
+      }
+    },
+    "apply": {
+      "title": "Usar el perfil {{label}}",
+      "description": "En este repositorio los commits saldrán con esta identidad y los cambios se subirán con la cuenta {{login}}.",
+      "before": "Ahora",
+      "after": "Con el perfil",
+      "signing": "Firma",
+      "signingOn": "Firmará con {{key}}",
+      "signingOff": "Sin firma en este repositorio",
+      "missingIdentity": "Sin nombre ni correo",
+      "note": "Se escribe en la configuración local de este repositorio. Tu configuración global de Git no cambia.",
+      "confirm": "Usar este perfil",
+      "done": "Perfil {{label}} aplicado"
+    },
+    "hint": {
+      "message": "Este repositorio es de {{owner}}. ¿Usar el perfil «{{label}}»?",
+      "use": "Usar el perfil",
+      "never": "No volver a preguntar"
+    },
+    "identity": {
+      "label": "Identidad de los commits",
+      "as": "Commit como {{name}} <{{email}}>",
+      "missing": "Git no tiene tu nombre o correo para este repositorio.",
+      "choose": "Elegir perfil",
+      "mismatch": "No coincide con el perfil «{{label}}».",
+      "apply": "Aplicar «{{label}}»"
+    },
+    "picker": {
+      "title": "Cambiar de perfil",
+      "forRepo": "Se aplicará a este repositorio.",
+      "global": "Será tu perfil activo."
+    }
   }
 }

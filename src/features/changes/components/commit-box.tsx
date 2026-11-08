@@ -2,6 +2,7 @@ import { Undo2 } from "lucide-react";
 import { useState } from "react";
 import type { KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { IdentityLine } from "@/features/profiles/components/identity-line";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
@@ -118,6 +119,7 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
           {t("commit.resolveConflictsFirst")}
         </p>
       ) : null}
+      <IdentityLine repoPath={repoPath} />
       <Button variant="primary" onClick={() => void submit()} disabled={!canCommit} loading={committing}>
         {amend ? t("commit.submitAmend") : t("commit.submit", { branch: branchName ?? t("commit.currentBranch") })}
       </Button>

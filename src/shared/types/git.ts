@@ -377,6 +377,7 @@ export interface GithubAccount {
   name: string | null;
   avatarUrl: string;
   source: AccountSource;
+  userId: number | null;
 }
 
 export type CapabilityId =
@@ -409,6 +410,64 @@ export interface TokenInfo {
   expiresAt: string | null;
   rateLimit: RateLimit | null;
   capabilities: CapabilityStatus[];
+}
+
+export interface OrgSummary {
+  login: string;
+  description: string | null;
+  avatarUrl: string;
+}
+
+export interface RepoPermissions {
+  admin: boolean;
+  push: boolean;
+  pull: boolean;
+}
+
+export interface RepoSummary {
+  name: string;
+  fullName: string;
+  owner: { login: string };
+  description: string | null;
+  private: boolean;
+  fork: boolean;
+  archived: boolean;
+  defaultBranch: string;
+  pushedAt: string | null;
+  language: string | null;
+  htmlUrl: string;
+  cloneUrl: string;
+  sshUrl: string;
+  permissions: RepoPermissions | null;
+}
+
+export interface NewRepo {
+  name: string;
+  description: string;
+  private: boolean;
+  autoInit: boolean;
+  gitignoreTemplate: string | null;
+  licenseTemplate: string | null;
+}
+
+export interface IdentityValue {
+  value: string;
+  scope: string;
+}
+
+export interface Identity {
+  name: IdentityValue | null;
+  email: IdentityValue | null;
+  signingKey: IdentityValue | null;
+  signingEnabled: boolean;
+}
+
+export type SigningFormat = "openpgp" | "ssh" | "x509";
+
+export interface IdentityUpdate {
+  name: string;
+  email: string;
+  signing: { key: string; format: SigningFormat } | null;
 }
 
 export interface DeviceCode {

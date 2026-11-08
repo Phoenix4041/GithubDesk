@@ -5,6 +5,7 @@ pub mod device_flow;
 pub mod host;
 pub mod issues;
 pub mod models;
+pub mod orgs;
 pub mod pulls;
 pub mod remote;
 pub mod scopes;

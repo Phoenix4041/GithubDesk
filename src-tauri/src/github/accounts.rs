@@ -27,10 +27,14 @@ pub struct Account {
     pub name: Option<String>,
     pub avatar_url: String,
     pub source: AccountSource,
+    #[serde(default)]
+    pub user_id: Option<u64>,
 }
 
 #[derive(Debug, Deserialize)]
 struct UserResponse {
+    #[serde(default)]
+    id: Option<u64>,
     login: String,
     name: Option<String>,
     avatar_url: String,
@@ -180,6 +184,7 @@ impl AccountStore {
             name: user.name,
             avatar_url: user.avatar_url,
             source,
+            user_id: user.id,
         };
         self.save(account, token).await
     }
