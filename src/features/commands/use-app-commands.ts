@@ -13,6 +13,7 @@ import { useStackDialogStore } from "@/features/stack/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
 import { useNotificationDialogStore } from "@/features/github/notifications/store";
+import { useOverviewDialogStore } from "@/features/overview/store";
 import { useOrgDialogStore } from "@/features/github/org-admin/store";
 import { useProfileDialogStore } from "@/features/profiles/dialog-store";
 import { choosePatchesToApply } from "@/features/patches/actions";
@@ -166,6 +167,14 @@ export function buildGlobalCommands(): AppCommand[] {
       keywords: "crear repositorio github nuevo remoto create repository",
       enabled: true,
       run: () => useGithubHomeDialogStore.getState().showCreate(),
+    },
+    {
+      id: "overview.open",
+      titleKey: "commands.items.overview.open",
+      group: "repository",
+      keywords: "repositorios panel todos fetch pull espacios de trabajo grupos overview workspaces all",
+      enabled: true,
+      run: () => useOverviewDialogStore.getState().show(),
     },
     {
       id: "github.notifications",

@@ -2091,6 +2091,9 @@
       },
       "stack": {
         "open": "Open the stacked branches panel"
+      },
+      "overview": {
+        "open": "Open the all repositories panel"
       }
     }
   },
@@ -2760,5 +2763,34 @@
     "hint": "Later commits are replayed on top. A copy is saved in Rescue first. Only commits that are on no remote can be split, and the split is by file, not by line.",
     "run": "Split",
     "done": "The commit was split in two"
+  },
+  "overview": {
+    "title": "All repositories",
+    "description": "The state of your recent repositories at a glance, with safe fetch and pull for all of them at once.",
+    "empty": {
+      "title": "There are no repositories yet",
+      "description": "Open or clone a repository and it will appear here."
+    },
+    "filter": "Workspace",
+    "allGroups": "All",
+    "group": "Group",
+    "refresh": "Refresh state",
+    "fetchAll": "Fetch all",
+    "pullAll": "Safe pull all",
+    "open": "Open",
+    "listLabel": "Repositories",
+    "resultsLabel": "Result",
+    "loading": "Checking...",
+    "unavailable": "The folder was not found or is not a repository",
+    "changes_one": "{{count}} change",
+    "changes_other": "{{count}} changes",
+    "outcome": {
+      "done": "done",
+      "updated": "updated",
+      "upToDate": "up to date",
+      "skipped": "skipped",
+      "failed": "failed"
+    },
+    "hint": "Safe pull only fast-forwards branches with no commits of their own; diverged ones or ones without a remote are skipped with the reason. Three repositories are processed at a time."
   }
 }

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { CommandsHost } from "@/features/commands/components/commands-host";
 import { CreateGithubRepoDialog } from "@/features/github/home/components/create-github-repo-dialog";
 import { NotificationsDialog } from "@/features/github/notifications/components/notifications-dialog";
+import { OverviewDialog } from "@/features/overview/components/overview-dialog";
 import { useNotificationAlerts } from "@/features/github/notifications/use-notification-alerts";
 import { OrgDialog } from "@/features/github/org-admin/components/org-dialog";
 import { GrantScopesDialog } from "@/features/github/scopes/components/grant-scopes-dialog";
@@ -61,6 +62,7 @@ export function App() {
       <CreateGithubRepoDialog />
       <OrgDialog />
       <NotificationsDialog />
+      <OverviewDialog />
       <ProfilesDialog />
       <ProfilePickerDialog />
       <CommandsHost />

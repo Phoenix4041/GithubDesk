@@ -17,9 +17,9 @@ use commands::{
     absorb, app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict,
     external, github_account, github_actions, github_admin, github_collab, github_extras,
     github_home, github_issues, github_orgs, github_pulls, github_releases, github_repo,
-    github_secrets, gitignore, guard, history, identity, job, lfs, merge, operation, patches,
-    predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split, stack, stash,
-    status, submodule, tag, terminal, watch, worktree,
+    github_secrets, gitignore, guard, history, identity, job, lfs, merge, multi, operation,
+    patches, predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split, stack,
+    stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -236,6 +236,9 @@ pub fn run() {
             absorb::absorb_run,
             split::split_commit_files,
             split::split_commit_run,
+            multi::multi_status,
+            multi::multi_fetch,
+            multi::multi_pull,
             stack::stack_list,
             stack::stack_set_parent,
             stack::stack_restack,

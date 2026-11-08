@@ -2091,6 +2091,9 @@
       },
       "stack": {
         "open": "Abrir la pila de ramas apiladas"
+      },
+      "overview": {
+        "open": "Abrir el panel de todos los repositorios"
       }
     }
   },
@@ -2760,5 +2763,34 @@
     "hint": "Los commits posteriores se vuelven a aplicar encima. Antes se guarda una copia en Rescate. Solo se dividen commits que no están en ningún remoto y la división es por archivos, no por líneas.",
     "run": "Dividir",
     "done": "El commit se dividió en dos"
+  },
+  "overview": {
+    "title": "Todos los repositorios",
+    "description": "El estado de tus repositorios recientes de un vistazo, con fetch y pull seguros para todos a la vez.",
+    "empty": {
+      "title": "Todavía no hay repositorios",
+      "description": "Abre o clona un repositorio y aparecerá aquí."
+    },
+    "filter": "Espacio de trabajo",
+    "allGroups": "Todos",
+    "group": "Grupo",
+    "refresh": "Actualizar estado",
+    "fetchAll": "Fetch a todos",
+    "pullAll": "Pull seguro a todos",
+    "open": "Abrir",
+    "listLabel": "Repositorios",
+    "resultsLabel": "Resultado",
+    "loading": "Consultando...",
+    "unavailable": "No se encontró la carpeta o no es un repositorio",
+    "changes_one": "{{count}} cambio",
+    "changes_other": "{{count}} cambios",
+    "outcome": {
+      "done": "listo",
+      "updated": "actualizado",
+      "upToDate": "al día",
+      "skipped": "omitido",
+      "failed": "falló"
+    },
+    "hint": "El pull seguro solo avanza ramas que no tienen commits propios; las que divergen o no tienen remoto se omiten con el motivo. Se revisan tres repositorios a la vez."
   }
 }

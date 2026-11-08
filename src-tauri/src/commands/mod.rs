@@ -29,6 +29,7 @@ pub mod identity;
 pub mod job;
 pub mod lfs;
 pub mod merge;
+pub mod multi;
 pub mod operation;
 pub mod patches;
 pub mod predict;

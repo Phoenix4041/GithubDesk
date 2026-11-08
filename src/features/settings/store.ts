@@ -30,6 +30,7 @@ interface SettingsState {
   profiles: Profile[];
   activeProfileId: string | null;
   repoProfiles: Record<string, string>;
+  repoGroups: Record<string, string>;
   ignoredProfileHints: string[];
   shortcuts: ShortcutOverrides;
   terminalShell: string | null;
@@ -50,6 +51,7 @@ interface SettingsState {
   deleteProfile: (id: string) => void;
   setActiveProfile: (id: string | null) => void;
   setRepoProfile: (repoPath: string, id: string | null) => void;
+  setRepoGroup: (repoPath: string, group: string) => void;
   ignoreProfileHint: (repoPath: string) => void;
   setShortcuts: (shortcuts: ShortcutOverrides) => void;
   setTerminalShell: (shell: string | null) => void;
@@ -73,6 +75,7 @@ export const useSettingsStore = create<SettingsState>()(
       profiles: [],
       activeProfileId: null,
       repoProfiles: {},
+      repoGroups: {},
       ignoredProfileHints: [],
       shortcuts: {},
       terminalShell: null,
@@ -118,6 +121,17 @@ export const useSettingsStore = create<SettingsState>()(
             delete next[repoPath];
           }
           return { repoProfiles: next };
+        }),
+      setRepoGroup: (repoPath, group) =>
+        set((state) => {
+          const next = { ...state.repoGroups };
+          const trimmed = group.trimStart();
+          if (trimmed.length > 0) {
+            next[repoPath] = trimmed;
+          } else {
+            delete next[repoPath];
+          }
+          return { repoGroups: next };
         }),
       ignoreProfileHint: (repoPath) =>
         set((state) =>
