@@ -35,7 +35,18 @@ Cliente de Git y GitHub de escritorio hecho con Tauri 2, React y TypeScript.
 - Resaltado de las palabras que cambiaron dentro de cada línea modificada.
 - Estado de las comprobaciones de GitHub en cada commit y en la rama actual, junto al nombre del repositorio.
 - Comentarios en línea en las pull requests: ver los hilos de cada línea del diff, responderlos y empezar uno nuevo, en vista unificada y dividida.
-- Aviso de versión nueva, apagado hasta que se indica de qué repositorio de GitHub salen las versiones.
+- Aviso de versión nueva y actualización dentro de la aplicación, apagados hasta que se indica el repositorio de versiones y la clave de firma.
+- Parches: exportar commits con `git format-patch` y aplicar un `.patch` con vista previa, en modo normal o con `git am`.
+- Bisect guiado: marcar commits buenos y malos hasta dar con el primero que rompió algo.
+- Limpieza: archivos sin seguimiento, ramas ya combinadas o sin remoto y ramas remotas obsoletas, con vista previa y casillas.
+- Perfiles: cada perfil junta una cuenta de GitHub, un contexto (personal u organización) y una identidad de Git; se cambia desde la barra, la pantalla de inicio o la paleta, y cada repositorio recuerda el suyo.
+- Inicio de GitHub: repositorios del contexto activo para clonar con un clic, crear repositorios, publicar uno local y una bandeja de pull requests e issues que esperan tu respuesta.
+- Pull requests e issues completos: revisores, etiquetas, asignados, hito, editar título y descripción, actualizar la rama y pasar a borrador o a lista.
+- Ajustes del repositorio en GitHub: datos generales, colaboradores e invitaciones, equipos, ramas protegidas, webhooks, llaves de despliegue, secretos y variables de Actions, etiquetas, hitos, alertas de seguridad en lectura y zona de peligro con confirmación escrita.
+- Releases: crear con notas generadas por GitHub, editar, borrar y subir archivos adjuntos.
+- Cuenta de GitHub: perfil público, llaves SSH, de firma y GPG, correos y permisos del token, con un botón para pedir permisos que falten.
+- Organizaciones: miembros, invitaciones, equipos, colaboradores externos y secretos, para quien es propietario.
+- Notificaciones de GitHub con bandeja, marcar como leídas y avisos del sistema (apagados por defecto).
 - Registro local de errores con los secretos ya quitados, y un comando en la paleta para abrir su carpeta.
 
 ## Conectar GitHub
@@ -67,13 +78,13 @@ Todos se pueden cambiar en Ajustes, Personalizar atajos, o desde la paleta de co
 
 ## Instalar
 
-El instalador de Windows (`GithubDesk_0.5.0_x64-setup.exe`) instala solo para tu usuario, sin permisos de administrador, y se ofrece en español e inglés. Para generarlo:
+El instalador de Windows (`GithubDesk_0.6.0_x64-setup.exe`) instala solo para tu usuario, sin permisos de administrador, y se ofrece en español e inglés. Para generarlo:
 
 ```bash
 pnpm tauri build --bundles nsis
 ```
 
-El instalador queda en `src-tauri/target/release/bundle/nsis/`. Si el equipo no tiene WebView2, el instalador lo descarga. Para instalar y desinstalar sin ventanas: `GithubDesk_0.5.0_x64-setup.exe /S` y `uninstall.exe /S` dentro de la carpeta de instalación.
+El instalador queda en `src-tauri/target/release/bundle/nsis/`. Si el equipo no tiene WebView2, el instalador lo descarga. Para instalar y desinstalar sin ventanas: `GithubDesk_0.6.0_x64-setup.exe /S` y `uninstall.exe /S` dentro de la carpeta de instalación.
 
 Los instaladores no están firmados con un certificado de firma de código. Windows (SmartScreen) y macOS (Gatekeeper) van a mostrar un aviso la primera vez; en Windows se pulsa Más información y Ejecutar de todas formas, y en macOS se abre con clic derecho y Abrir.
 
@@ -94,7 +105,7 @@ Los instaladores no están firmados con un certificado de firma de código. Wind
 
 - Git instalado y disponible en el PATH
 - Node.js 24 o superior y pnpm
-- Rust estable 1.81 o superior (toolchain MSVC en Windows)
+- Rust estable 1.90 o superior (toolchain MSVC en Windows)
 - Windows: Visual Studio Build Tools con la carga de trabajo de C++ y WebView2
 
 ## Comandos
@@ -169,6 +180,23 @@ pnpm tauri build
 - Seguridad: la ventana solo puede abrir enlaces `https://` y los de `localhost`, elegir carpetas y escuchar eventos. Los tokens no aparecen en los mensajes de depuración. `cargo audit` no encuentra vulnerabilidades (solo avisos de paquetes sin mantenimiento que trae Tauri en Linux) y `pnpm audit --prod` no encuentra nada; la única alerta de `pnpm audit` es de `minimatch` dentro de eslint, una herramienta de desarrollo que no viaja en la aplicación.
 - Registro de errores: `errors.log` en la carpeta `logs` del directorio de datos de la aplicación, con una línea por error (hora UTC, origen, tipo y detalle). Se quitan tokens de GitHub, credenciales dentro de direcciones, cabeceras de autorización y parámetros secretos. Rota a `errors.1.log` al llegar a 1 MB. También guarda los pánicos del backend y los errores de pantalla. Nada sale del equipo.
 - Rendimiento medido con la versión release: unos 111 MB en la pantalla de bienvenida, unos 144 MB con un repositorio abierto, unos 158 MB con el historial de un repositorio de 100000 commits recorrido por 25 páginas y unos 158 a 162 MB con las pestañas de pull requests y Actions abiertas. Abrir el repositorio de 100000 commits y dibujar la interfaz tarda unos 1,3 s, contando la recarga completa de la ventana de la prueba, y al pasar a Historial las primeras filas aparecen en menos de 40 ms. De esa memoria, el montón de JavaScript de la aplicación son unos 8 MB y el proceso de Rust unos 5 MB; el resto es el motor web del sistema.
-- Aviso de versión nueva: está apagado. Para activarlo, escribe `Some("dueno/repositorio")` en `UPDATE_REPOSITORY` de `src-tauri/src/update_check.rs`. Consulta la última versión publicada una vez al día y también con el comando Buscar versiones nuevas de la paleta. La actualización automática dentro de la aplicación necesita una clave de firma (`pnpm tauri signer generate`) y un repositorio de versiones, y no está incluida.
+- Aviso de versión nueva: está apagado. Para activarlo, escribe `Some("dueno/repositorio")` en `UPDATE_REPOSITORY` de `src-tauri/src/update_check.rs`. Consulta la última versión publicada una vez al día y también con el comando Buscar versiones nuevas de la paleta. La actualización dentro de la aplicación se explica en las notas de la Fase 6.
 - Integración continua: `.github/workflows/ci.yml` prueba en Windows, macOS y Linux, y `.github/workflows/release.yml` genera los instaladores al subir una etiqueta `v*` y los deja en un borrador de release. Ninguno de los dos se pudo ejecutar fuera de GitHub; la sintaxis está validada y los mismos comandos se ejecutaron en Windows y en Linux.
 - `CHANGELOG.md` se genera con `node scripts/changelog.mjs <versión> [desde-etiqueta]` a partir de los commits convencionales.
+
+## Notas de la Fase 6
+
+- Permisos: el token pide al principio `repo`, `workflow` y `read:org`. Las funciones que necesitan más (`admin:org`, `admin:public_key`, `admin:gpg_key`, `delete_repo`, `notifications`, `user:email`) muestran un botón Dar permiso que repite el flujo de dispositivo con los permisos actuales más el nuevo. Con un token personal, la aplicación abre la página de GitHub con los permisos ya marcados.
+- Tokens: la API de GitHub no deja crear, listar ni revocar tokens personales. La aplicación muestra los permisos y el vencimiento de cada token, pide permisos extra y quita la cuenta y su token del almacén de credenciales; revocarlo en GitHub se hace en su página de tokens.
+- Perfiles: un perfil guarda cuenta, contexto e identidad (nombre, correo y llave de firma opcional) en los ajustes locales, sin secretos. Al elegir un perfil para un repositorio se escribe `user.name`, `user.email` y la firma en la configuración local de ese repositorio, y la aplicación avisa cuando el correo de los commits no coincide con el del perfil.
+- Acciones destructivas (borrar o transferir un repositorio, quitar miembros, borrar secretos, webhooks o llaves) piden escribir el nombre para confirmar.
+- Administración: la de organización exige ser propietario y los ajustes de un repositorio exigen ser administrador; si no lo eres, se muestran en solo lectura. Los secretos de Actions se cifran en la aplicación con una caja sellada compatible con libsodium antes de enviarlos; GitHub nunca devuelve el valor.
+- GraphQL se usa solo para pasar una pull request a borrador o a lista; todo lo demás es REST. Las subidas de archivos de un release se leen en memoria, hasta 256 MB por archivo.
+- Notificaciones: se consultan cada dos minutos como mucho mientras la aplicación está abierta y solo si el aviso de escritorio está activado en Ajustes. La primera consulta no avisa de lo que ya estaba pendiente.
+- Fuera de alcance: Discussions, Projects v2, facturación, SAML y SSO, rulesets, Pages, entornos de despliegue, Codespaces, Packages, Gists y escaneo de código.
+- Actualización dentro de la aplicación: viene desactivada. Para activarla hacen falta una clave de firma y un repositorio donde publicar las versiones:
+  1. Genera la clave con `pnpm tauri signer generate -w ~/.tauri/githubdesk.key` y guarda la clave privada y su contraseña como secretos del repositorio con los nombres `TAURI_SIGNING_PRIVATE_KEY` y `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
+  2. En `src-tauri/tauri.conf.json` agrega `"plugins": { "updater": { "pubkey": "<contenido del archivo .pub>", "endpoints": ["https://github.com/dueno/repositorio/releases/latest/download/latest.json"] } }` y, dentro de `bundle`, `"createUpdaterArtifacts": true`.
+  3. Al subir una etiqueta `v*`, `release.yml` firma los instaladores y publica `latest.json` junto a ellos.
+  Mientras `plugins.updater` no exista en la configuración, el plugin ni siquiera se carga y el aviso de versión nueva sigue funcionando como antes. Cuando existe, el aviso ofrece Instalar y reiniciar. La firma se comprueba con una clave de usar y tirar en las pruebas de integración (`src-tauri/tests/self_update.rs`); no se probó una actualización completa contra un repositorio real de GitHub.
+- Firma de los instaladores: Windows necesita un certificado de firma de código (por ejemplo de Azure Trusted Signing o de una autoridad como DigiCert) y se configura en `bundle.windows` con `certificateThumbprint` o `signCommand`; macOS necesita una cuenta de Apple Developer y los secretos `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD` y `APPLE_TEAM_ID`, que `tauri-action` lee del entorno. Sin ellos los instaladores siguen sin firmar.

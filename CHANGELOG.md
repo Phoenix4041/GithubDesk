@@ -2,6 +2,24 @@
 
 Todos los cambios importantes de GithubDesk. Este archivo se genera a partir de los commits con `node scripts/changelog.mjs <version> [desde-etiqueta]`.
 
+## 0.6.0 - 2026-11-08
+
+### Novedades
+
+- **patches**: export commits as patches and apply patch files with a preview and a banner for conflicts (9afeaf6)
+- **bisect**: guide the search for the first bad commit with a banner, a start dialog and history menu entries (de31439)
+- **cleanup**: remove untracked files, merged branches and stale remote branches from one dialog with a preview (71f8074)
+- **github**: report token permissions and expiry, ask for missing permissions in place and keep the same account when widening them (ae2e99f)
+- **profiles**: switch between accounts and organizations with a profile that sets the Git identity, the push account and the signing key per repository (a9ea81a)
+- **github**: browse the repositories of the active context, clone with the chosen account, create and publish repositories and see what waits for you (35e43c7)
+- **github**: edit titles, labels, assignees, milestones and reviewers, mark pull requests as draft or ready and update their branch (eaf1018)
+- **github**: manage repository settings, collaborators, team access, protected branches, webhooks, deploy keys and the danger zone with typed confirmations (ce740e0)
+- **github**: manage Actions secrets and variables for repositories and organizations, encrypting secrets with a sealed box that libsodium can open (a6a0417)
+- **github**: create releases with generated notes and attached files, and manage labels and milestones from the repository settings (cf5f918)
+- **github**: manage the account profile, SSH and GPG keys, emails and organizations with members, invitations, teams and outside collaborators (5b86785)
+- **github**: add the notifications inbox with desktop alerts and a read-only list of Dependabot security alerts (739e39f)
+- **updates**: install new versions inside the app once a signing key and a release repository are configured (1e0386b)
+
 ## 0.5.0 - 2026-11-07
 
 ### Novedades
