@@ -28,6 +28,7 @@ export const repoKeys = {
   rescue: (path: string) => ["repo", path, "rescue"] as const,
   absorb: (path: string) => ["repo", path, "absorb"] as const,
   stack: (path: string) => ["repo", path, "stack"] as const,
+  todos: (path: string) => ["repo", path, "todos"] as const,
   splitFiles: (path: string, hash: string) => ["repo", path, "split-files", hash] as const,
   predictions: (path: string, sources: readonly string[]) => ["repo", path, "predictions", ...sources] as const,
   rescueDetail: (path: string, id: string) => ["repo", path, "rescue-detail", id] as const,

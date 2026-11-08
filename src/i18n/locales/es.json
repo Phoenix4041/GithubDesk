@@ -2094,6 +2094,9 @@
       },
       "overview": {
         "open": "Abrir el panel de todos los repositorios"
+      },
+      "stats": {
+        "open": "Ver estadísticas del repositorio"
       }
     }
   },
@@ -2792,5 +2795,65 @@
       "failed": "falló"
     },
     "hint": "El pull seguro solo avanza ramas que no tienen commits propios; las que divergen o no tienen remoto se omiten con el motivo. Se revisan tres repositorios a la vez."
+  },
+  "stats": {
+    "title": "Estadísticas del repositorio",
+    "description": "Actividad, colaboradores y archivos según el historial de la rama actual.",
+    "open": "Estadísticas",
+    "tabsLabel": "Secciones de estadísticas",
+    "tabs": {
+      "activity": "Actividad",
+      "contributors": "Colaboradores",
+      "files": "Archivos",
+      "todos": "Pendientes"
+    },
+    "running": "Analizando el historial…",
+    "cancelled": "Se canceló el análisis.",
+    "retry": "Volver a analizar",
+    "truncated": "Solo se analizaron los últimos {{count}} commits; el historial es más largo.",
+    "emptyTitle": "Sin historial",
+    "empty": "Todavía no hay commits en esta rama.",
+    "activity": {
+      "label": "Commits por día en el último año",
+      "day_one": "{{count}} commit el {{date}}",
+      "day_other": "{{count}} commits el {{date}}",
+      "total_one": "{{count}} commit en el último año",
+      "total_other": "{{count}} commits en el último año",
+      "busiest": "Día con más actividad: {{date}} ({{count}})",
+      "less": "Menos",
+      "more": "Más"
+    },
+    "contributors": {
+      "listLabel": "Colaboradores",
+      "commits_one": "{{count}} commit",
+      "commits_other": "{{count}} commits",
+      "range": "Primero {{first}} · último {{last}}"
+    },
+    "files": {
+      "churnTitle": "Archivos más cambiados",
+      "churnHint": "Veces que se tocó cada archivo y líneas agregadas y borradas.",
+      "foldersTitle": "Carpetas con más actividad",
+      "busTitle": "Archivos que solo conoce una persona",
+      "busHint": "Archivos con al menos 5 commits y un solo autor (factor autobús). Los más grandes primero.",
+      "busNone": "Ningún archivo depende de una sola persona.",
+      "times_one": "{{count}} vez",
+      "times_other": "{{count}} veces",
+      "lines_one": "{{count}} línea",
+      "lines_other": "{{count}} líneas"
+    },
+    "todos": {
+      "listLabel": "Pendientes encontrados",
+      "emptyTitle": "Sin pendientes",
+      "empty": "No hay TODO, FIXME, HACK ni XXX en los archivos del repositorio.",
+      "count_one": "{{count}} pendiente encontrado",
+      "count_other": "{{count}} pendientes encontrados",
+      "truncated": "Hay más resultados; solo se muestran los primeros {{count}}.",
+      "who": "¿Quién?",
+      "whoLabel": "Ver quién escribió {{path}}:{{line}}",
+      "author": "{{author}} · {{date}}",
+      "notCommitted": "Sin confirmar todavía",
+      "authorFailed": "No se pudo saber",
+      "blameLimit": "El autor solo se puede consultar en los primeros {{count}} resultados."
+    }
   }
 }

@@ -2094,6 +2094,9 @@
       },
       "overview": {
         "open": "Open the all repositories panel"
+      },
+      "stats": {
+        "open": "Show repository statistics"
       }
     }
   },
@@ -2792,5 +2795,65 @@
       "failed": "failed"
     },
     "hint": "Safe pull only fast-forwards branches with no commits of their own; diverged ones or ones without a remote are skipped with the reason. Three repositories are processed at a time."
+  },
+  "stats": {
+    "title": "Repository statistics",
+    "description": "Activity, contributors and files from the history of the current branch.",
+    "open": "Statistics",
+    "tabsLabel": "Statistics sections",
+    "tabs": {
+      "activity": "Activity",
+      "contributors": "Contributors",
+      "files": "Files",
+      "todos": "To-dos"
+    },
+    "running": "Reading the history…",
+    "cancelled": "The analysis was cancelled.",
+    "retry": "Analyze again",
+    "truncated": "Only the last {{count}} commits were analyzed; the history is longer.",
+    "emptyTitle": "No history",
+    "empty": "This branch has no commits yet.",
+    "activity": {
+      "label": "Commits per day in the last year",
+      "day_one": "{{count}} commit on {{date}}",
+      "day_other": "{{count}} commits on {{date}}",
+      "total_one": "{{count}} commit in the last year",
+      "total_other": "{{count}} commits in the last year",
+      "busiest": "Busiest day: {{date}} ({{count}})",
+      "less": "Less",
+      "more": "More"
+    },
+    "contributors": {
+      "listLabel": "Contributors",
+      "commits_one": "{{count}} commit",
+      "commits_other": "{{count}} commits",
+      "range": "First {{first}} · last {{last}}"
+    },
+    "files": {
+      "churnTitle": "Most changed files",
+      "churnHint": "How often each file was touched and the lines added and removed.",
+      "foldersTitle": "Busiest folders",
+      "busTitle": "Files only one person knows",
+      "busHint": "Files with at least 5 commits and a single author (bus factor). Largest first.",
+      "busNone": "No file depends on a single person.",
+      "times_one": "{{count}} time",
+      "times_other": "{{count}} times",
+      "lines_one": "{{count}} line",
+      "lines_other": "{{count}} lines"
+    },
+    "todos": {
+      "listLabel": "To-dos found",
+      "emptyTitle": "No to-dos",
+      "empty": "There is no TODO, FIXME, HACK or XXX in the repository files.",
+      "count_one": "{{count}} to-do found",
+      "count_other": "{{count}} to-dos found",
+      "truncated": "There are more results; only the first {{count}} are shown.",
+      "who": "Who?",
+      "whoLabel": "See who wrote {{path}}:{{line}}",
+      "author": "{{author}} · {{date}}",
+      "notCommitted": "Not committed yet",
+      "authorFailed": "Unknown",
+      "blameLimit": "The author can only be looked up for the first {{count}} results."
+    }
   }
 }

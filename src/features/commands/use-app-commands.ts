@@ -10,6 +10,7 @@ import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useAbsorbDialogStore } from "@/features/absorb/store";
 import { useRescueDialogStore } from "@/features/rescue/store";
 import { useStackDialogStore } from "@/features/stack/store";
+import { useStatsDialogStore } from "@/features/stats/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
 import { useNotificationDialogStore } from "@/features/github/notifications/store";
@@ -387,6 +388,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "limpiar borrar archivos sin seguimiento ramas combinadas remotas obsoletas clean prune",
       enabled: true,
       run: () => useCleanupDialogStore.getState().show(),
+    },
+    {
+      id: "stats.open",
+      titleKey: "commands.items.stats.open",
+      group: "repository",
+      keywords: "estadisticas actividad colaboradores autores archivos pendientes todo fixme stats contributors churn",
+      enabled: true,
+      run: () => useStatsDialogStore.getState().show(),
     },
     {
       id: "github.releases",
