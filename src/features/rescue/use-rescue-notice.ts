@@ -20,6 +20,8 @@ export function reasonLabel(reason: string): string {
       return i18next.t("rescue.reasons.stash-drop");
     case "before-restore":
       return i18next.t("rescue.reasons.before-restore");
+    case "restore-file":
+      return i18next.t("rescue.reasons.restore-file");
     default:
       return i18next.t("rescue.reasons.other");
   }

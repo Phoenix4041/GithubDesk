@@ -2094,6 +2094,9 @@
       },
       "overview": {
         "open": "Abrir el panel de todos los repositorios"
+      },
+      "browse": {
+        "open": "Explorar archivos de una versión"
       }
     }
   },
@@ -2674,7 +2677,8 @@
       "branch-delete": "Rama eliminada",
       "stash-drop": "Stash eliminado",
       "before-restore": "Antes de aplicar una copia",
-      "other": "Copia de seguridad"
+      "other": "Copia de seguridad",
+      "restore-file": "Archivo restaurado a otra versión"
     },
     "deleteShort": "Eliminar"
   },
@@ -2792,5 +2796,54 @@
       "failed": "falló"
     },
     "hint": "El pull seguro solo avanza ramas que no tienen commits propios; las que divergen o no tienen remoto se omiten con el motivo. Se revisan tres repositorios a la vez."
+  },
+  "browse": {
+    "menu": {
+      "explore": "Explorar archivos en este commit",
+      "compareTwo": "Comparar estos dos commits"
+    },
+    "title": "Archivos en {{revision}}",
+    "description": "Recorre las carpetas de esta versión y abre cualquier archivo en modo de solo lectura.",
+    "treeLabel": "Carpetas y archivos",
+    "emptyFolder": "Carpeta vacía",
+    "submodule": "Submódulo: ábrelo como repositorio aparte",
+    "contentLabel": "Contenido de {{path}}",
+    "pick": {
+      "title": "Elige un archivo",
+      "description": "Abre las carpetas de la izquierda y selecciona un archivo para verlo."
+    },
+    "missing": {
+      "title": "El archivo no existe en esta versión",
+      "description": "Pudo haberse borrado o movido."
+    },
+    "binary": {
+      "title": "Archivo binario",
+      "description": "Este archivo no es de texto, así que no se puede mostrar aquí."
+    },
+    "tooLarge": {
+      "title": "Archivo demasiado grande",
+      "description": "Solo se muestran archivos de texto de hasta 1 MB."
+    },
+    "restore": "Restaurar este archivo a esta versión",
+    "restoreConfirm": {
+      "title": "Confirmar restauración",
+      "description": "{{path}} en tu carpeta de trabajo se reemplazará por la versión de {{revision}}. Antes se guarda una copia en Rescate por si la necesitas.",
+      "confirm": "Restaurar"
+    },
+    "restored": "{{path}} quedó como en {{revision}}"
+  },
+  "imageDiff": {
+    "modesLabel": "Forma de comparar la imagen",
+    "modes": {
+      "side": "Lado a lado",
+      "swipe": "Deslizador",
+      "onion": "Transparencia"
+    },
+    "before": "Antes",
+    "after": "Después",
+    "swipeLabel": "Posición del deslizador",
+    "opacityLabel": "Transparencia de la nueva versión",
+    "missing": "No existe en esta versión",
+    "tooLarge": "Imagen de más de 5 MB"
   }
 }

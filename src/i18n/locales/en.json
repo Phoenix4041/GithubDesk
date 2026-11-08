@@ -2094,6 +2094,9 @@
       },
       "overview": {
         "open": "Open the all repositories panel"
+      },
+      "browse": {
+        "open": "Browse files of a version"
       }
     }
   },
@@ -2674,7 +2677,8 @@
       "branch-delete": "Deleted branch",
       "stash-drop": "Dropped stash",
       "before-restore": "Before applying a copy",
-      "other": "Safety copy"
+      "other": "Safety copy",
+      "restore-file": "File restored to another version"
     },
     "deleteShort": "Delete"
   },
@@ -2792,5 +2796,54 @@
       "failed": "failed"
     },
     "hint": "Safe pull only fast-forwards branches with no commits of their own; diverged ones or ones without a remote are skipped with the reason. Three repositories are processed at a time."
+  },
+  "browse": {
+    "menu": {
+      "explore": "Browse files in this commit",
+      "compareTwo": "Compare these two commits"
+    },
+    "title": "Files at {{revision}}",
+    "description": "Walk through the folders of this version and open any file read-only.",
+    "treeLabel": "Folders and files",
+    "emptyFolder": "Empty folder",
+    "submodule": "Submodule: open it as its own repository",
+    "contentLabel": "Contents of {{path}}",
+    "pick": {
+      "title": "Pick a file",
+      "description": "Open the folders on the left and select a file to view it."
+    },
+    "missing": {
+      "title": "The file does not exist in this version",
+      "description": "It may have been deleted or moved."
+    },
+    "binary": {
+      "title": "Binary file",
+      "description": "This file is not text, so it cannot be shown here."
+    },
+    "tooLarge": {
+      "title": "File too large",
+      "description": "Only text files up to 1 MB are shown."
+    },
+    "restore": "Restore this file to this version",
+    "restoreConfirm": {
+      "title": "Confirm restore",
+      "description": "{{path}} in your working folder will be replaced with the version from {{revision}}. A copy is saved in Rescue first in case you need it.",
+      "confirm": "Restore"
+    },
+    "restored": "{{path}} now matches {{revision}}"
+  },
+  "imageDiff": {
+    "modesLabel": "How to compare the image",
+    "modes": {
+      "side": "Side by side",
+      "swipe": "Swipe",
+      "onion": "Onion skin"
+    },
+    "before": "Before",
+    "after": "After",
+    "swipeLabel": "Swipe position",
+    "opacityLabel": "Opacity of the new version",
+    "missing": "Not present in this version",
+    "tooLarge": "Image larger than 5 MB"
   }
 }

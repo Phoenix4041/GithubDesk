@@ -9,6 +9,7 @@ import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useAbsorbDialogStore } from "@/features/absorb/store";
 import { useRescueDialogStore } from "@/features/rescue/store";
+import { useBrowseDialogStore } from "@/features/browse/store";
 import { useStackDialogStore } from "@/features/stack/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
@@ -379,6 +380,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "rescate recuperar copia de seguridad deshacer descartar perdido rescue recover backup restore",
       enabled: true,
       run: () => useRescueDialogStore.getState().show(),
+    },
+    {
+      id: "browse.open",
+      titleKey: "commands.items.browse.open",
+      group: "repository",
+      keywords: "explorar archivos arbol revision commit ver archivo antiguo restaurar browse files tree revision",
+      enabled: true,
+      run: () => useBrowseDialogStore.getState().show({ revision: "HEAD", label: "HEAD" }),
     },
     {
       id: "cleanup.open",
