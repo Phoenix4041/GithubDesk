@@ -2,6 +2,7 @@
 name = "githubdesk"
 version = "0.6.0"
 description = "Cliente de Git y GitHub de escritorio"
+license = "MIT"
 edition = "2021"
 rust-version = "1.90"
 
