@@ -387,6 +387,61 @@
       "title": "In the title",
       "refs": "Refs in the description",
       "hint": "Takes the number from the branch name (for example 123-fix or gh-45) and adds it with a button or Alt+I."
+    },
+    "density": {
+      "label": "Interface density",
+      "compact": "Compact",
+      "normal": "Normal",
+      "comfortable": "Comfortable"
+    },
+    "themes": {
+      "label": "Custom themes",
+      "hint": "Up to {{count}} themes. A custom theme replaces the colors of the light or dark mode it is based on.",
+      "none": "None (app colors)",
+      "new": "New theme",
+      "edit": "Edit {{name}}",
+      "delete": "Delete {{name}}",
+      "newTitle": "New theme",
+      "editTitle": "Edit theme",
+      "name": "Name",
+      "base": "Based on",
+      "save": "Save and apply",
+      "preview": "Preview",
+      "invalid": "Some colors are not valid. Use #rrggbb or rgb(r, g, b).",
+      "lowContrast": "Low contrast",
+      "contrastPair": "Low contrast: {{foreground}} on {{background}} ({{ratio}}:1, 4.5:1 recommended)",
+      "full": "You already have {{count}} themes. Delete one to create another.",
+      "import": {
+        "action": "Import from VS Code",
+        "file": "VS Code theme file",
+        "done_one": "Imported {{count}} color. Check the preview before saving.",
+        "done_other": "Imported {{count}} colors. Check the preview before saving.",
+        "invalid": "The file is not a valid theme JSON.",
+        "noColors": "The file has no colors that can be used.",
+        "tooLarge": "The file is too large to be a theme."
+      },
+      "sample": {
+        "title": "Sample title",
+        "muted": "Secondary text",
+        "subtle": "Highlighted row",
+        "error": "Error message",
+        "button": "Primary button"
+      },
+      "tokens": {
+        "canvas": "Background",
+        "surface": "Panels",
+        "subtle": "Soft background",
+        "line": "Borders",
+        "fg": "Text",
+        "muted": "Secondary text",
+        "accent": "Accent",
+        "accentHover": "Accent on hover",
+        "accentFg": "Text on accent",
+        "accentSoft": "Selection",
+        "danger": "Error",
+        "success": "Success",
+        "warning": "Warning"
+      }
     }
   },
   "progress": {

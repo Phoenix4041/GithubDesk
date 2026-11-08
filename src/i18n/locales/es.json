@@ -387,6 +387,61 @@
       "title": "En el título",
       "refs": "Refs en la descripción",
       "hint": "Toma el número del nombre de la rama (por ejemplo 123-arreglo o gh-45) y lo agrega con un botón o con Alt+I."
+    },
+    "density": {
+      "label": "Densidad de la interfaz",
+      "compact": "Compacta",
+      "normal": "Normal",
+      "comfortable": "Cómoda"
+    },
+    "themes": {
+      "label": "Temas propios",
+      "hint": "Hasta {{count}} temas. Un tema propio reemplaza los colores del modo claro u oscuro en el que se basa.",
+      "none": "Ninguno (colores de la app)",
+      "new": "Nuevo tema",
+      "edit": "Editar {{name}}",
+      "delete": "Eliminar {{name}}",
+      "newTitle": "Nuevo tema",
+      "editTitle": "Editar tema",
+      "name": "Nombre",
+      "base": "Basado en",
+      "save": "Guardar y aplicar",
+      "preview": "Vista previa",
+      "invalid": "Hay colores no válidos. Usa #rrggbb o rgb(r, g, b).",
+      "lowContrast": "Contraste bajo",
+      "contrastPair": "Contraste bajo: {{foreground}} sobre {{background}} ({{ratio}}:1, se recomienda 4.5:1)",
+      "full": "Ya tienes {{count}} temas. Elimina uno para crear otro.",
+      "import": {
+        "action": "Importar de VS Code",
+        "file": "Archivo de tema de VS Code",
+        "done_one": "Se importó {{count}} color. Revisa la vista previa antes de guardar.",
+        "done_other": "Se importaron {{count}} colores. Revisa la vista previa antes de guardar.",
+        "invalid": "El archivo no es un JSON de tema válido.",
+        "noColors": "El archivo no tiene colores que se puedan usar.",
+        "tooLarge": "El archivo es demasiado grande para ser un tema."
+      },
+      "sample": {
+        "title": "Título de ejemplo",
+        "muted": "Texto secundario",
+        "subtle": "Fila resaltada",
+        "error": "Mensaje de error",
+        "button": "Botón principal"
+      },
+      "tokens": {
+        "canvas": "Fondo",
+        "surface": "Paneles",
+        "subtle": "Fondo suave",
+        "line": "Bordes",
+        "fg": "Texto",
+        "muted": "Texto secundario",
+        "accent": "Acento",
+        "accentHover": "Acento al pasar",
+        "accentFg": "Texto sobre acento",
+        "accentSoft": "Selección",
+        "danger": "Error",
+        "success": "Éxito",
+        "warning": "Advertencia"
+      }
     }
   },
   "progress": {

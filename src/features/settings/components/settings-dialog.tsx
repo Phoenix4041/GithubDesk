@@ -16,6 +16,8 @@ import { Dialog } from "@/shared/ui/dialog";
 import { TextField } from "@/shared/ui/text-field";
 import { useSettingsStore } from "../store";
 import type { ThemePreference } from "../store";
+import type { Density } from "../theme-model";
+import { ThemesSection } from "./themes-section";
 
 interface SettingsDialogProps {
   open: boolean;
@@ -81,6 +83,14 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const editors = useEditors();
   const issuePrefixMode = useSettingsStore((state) => state.issuePrefixMode);
   const setIssuePrefixMode = useSettingsStore((state) => state.setIssuePrefixMode);
+  const density = useSettingsStore((state) => state.density);
+  const setDensity = useSettingsStore((state) => state.setDensity);
+
+  const densityOptions: SegmentOption<Density>[] = [
+    { value: "compact", label: t("settings.density.compact") },
+    { value: "normal", label: t("settings.density.normal") },
+    { value: "comfortable", label: t("settings.density.comfortable") },
+  ];
 
   const issuePrefixOptions: SegmentOption<IssuePrefixMode>[] = [
     { value: "off", label: t("settings.issuePrefix.off") },
@@ -110,6 +120,8 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
     >
       <div className="flex flex-col gap-5">
         <SegmentedControl label={t("settings.theme.label")} value={theme} options={themeOptions} onChange={setTheme} />
+        <SegmentedControl label={t("settings.density.label")} value={density} options={densityOptions} onChange={setDensity} />
+        <ThemesSection />
         <SegmentedControl
           label={t("settings.languageLabel")}
           value={language}
