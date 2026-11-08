@@ -43,6 +43,7 @@ pub mod signing;
 pub mod split;
 pub mod stack;
 pub mod stash;
+pub mod stats;
 pub mod status;
 pub mod submodule;
 pub mod tag;

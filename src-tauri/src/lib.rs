@@ -21,6 +21,7 @@ use commands::{
     patches, predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split, stack,
     stash, status, submodule, tag, terminal, watch, worktree,
 };
+use commands::stats;
 use state::AppState;
 use tauri::Manager;
 
@@ -253,6 +254,9 @@ pub fn run() {
             rescue::rescue_branch,
             rescue::rescue_delete,
             rescue::rescue_snapshot,
+            stats::stats_collect,
+            stats::stats_todos,
+            stats::stats_line_author,
             app_update::app_update_check,
             app_update::app_update_install,
             worktree::worktree_list,
