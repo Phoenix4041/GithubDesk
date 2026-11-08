@@ -13,6 +13,7 @@ pub mod orgs;
 pub mod path;
 pub mod protection;
 pub mod pulls;
+pub mod releases;
 pub mod remote;
 pub mod repo_admin;
 pub mod scopes;

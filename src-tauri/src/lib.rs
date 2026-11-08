@@ -15,9 +15,9 @@ use commands::diagnostics as diagnostics_commands;
 use commands::{
     app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict, external,
     github_account, github_actions, github_admin, github_collab, github_home, github_issues,
-    github_orgs, github_pulls, github_repo, github_secrets, gitignore, history, identity, job, lfs,
-    merge, operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash, status,
-    submodule, tag, terminal, watch, worktree,
+    github_orgs, github_pulls, github_releases, github_repo, github_secrets, gitignore, history,
+    identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog, remote, repo,
+    signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -137,6 +137,19 @@ pub fn run() {
             github_secrets::github_actions_variable_create,
             github_secrets::github_actions_variable_update,
             github_secrets::github_actions_variable_delete,
+            github_releases::github_label_create,
+            github_releases::github_label_update,
+            github_releases::github_label_delete,
+            github_releases::github_milestone_create,
+            github_releases::github_milestone_update,
+            github_releases::github_milestone_delete,
+            github_releases::github_releases_list,
+            github_releases::github_release_create,
+            github_releases::github_release_update,
+            github_releases::github_release_delete,
+            github_releases::github_release_notes,
+            github_releases::github_release_asset_delete,
+            github_releases::github_release_asset_upload,
             github_home::github_publish_repository,
             identity::identity_get,
             identity::identity_apply,

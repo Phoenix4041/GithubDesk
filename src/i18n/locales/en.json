@@ -41,7 +41,8 @@
     "pulls": "Pull requests",
     "issues": "Issues",
     "actions": "Actions",
-    "repoSettings": "Settings"
+    "repoSettings": "Settings",
+    "releases": "Releases"
   },
   "welcome": {
     "title": "Welcome to GithubDesk",
@@ -1487,7 +1488,9 @@
         "hooks": "Webhooks",
         "keys": "Deploy keys",
         "danger": "Danger zone",
-        "actions": "Secrets and variables"
+        "actions": "Secrets and variables",
+        "labels": "Labels",
+        "milestones": "Milestones"
       },
       "roles": {
         "pull": "Read",
@@ -1700,7 +1703,98 @@
         "secretDeleted": "Secret {{name}} deleted",
         "variableSaved": "Variable {{name}} saved",
         "variableDeleted": "Variable {{name}} deleted"
+      },
+      "labels": {
+        "intro": "Labels sort issues and pull requests.",
+        "new": "New label",
+        "none": "This repository has no labels.",
+        "newTitle": "Create a label",
+        "editTitle": "Edit the label {{name}}",
+        "name": "Name",
+        "nameRequired": "Enter a name.",
+        "color": "Color",
+        "colorHint": "Six hexadecimal digits, for example d73a4a.",
+        "colorInvalid": "Use six hexadecimal digits.",
+        "description": "Description (optional)",
+        "edit": "Edit the label {{name}}",
+        "remove": "Delete the label {{name}}",
+        "removeTitle": "Delete the label {{name}}?",
+        "removeDescription": "It is also removed from every issue and pull request that has it.",
+        "removeConfirm": "Delete label",
+        "created": "Label {{name}} created",
+        "updated": "Label {{name}} updated",
+        "deleted": "Label {{name}} deleted"
+      },
+      "milestones": {
+        "intro": "Milestones group issues and pull requests towards a goal or a date.",
+        "new": "New milestone",
+        "none": "This repository has no milestones.",
+        "newTitle": "Create a milestone",
+        "editTitle": "Edit the milestone {{title}}",
+        "titleLabel": "Title",
+        "titleRequired": "Enter a title.",
+        "description": "Description (optional)",
+        "due": "Due date (optional)",
+        "closed": "Closed milestone",
+        "closedBadge": "closed",
+        "edit": "Edit the milestone {{title}}",
+        "remove": "Delete the milestone {{title}}",
+        "removeTitle": "Delete the milestone {{title}}?",
+        "removeDescription": "The issues and pull requests in it are left without a milestone.",
+        "removeConfirm": "Delete milestone",
+        "created": "Milestone {{title}} created",
+        "updated": "Milestone updated",
+        "deleted": "Milestone deleted"
       }
+    },
+    "releases": {
+      "title_plural": "Releases",
+      "new": "New release",
+      "listLabel": "Repository releases",
+      "empty": {
+        "title": "No releases",
+        "description": "Publish a version so others have a place to download your work."
+      },
+      "status": {
+        "draft": "draft",
+        "prerelease": "pre-release"
+      },
+      "nothingSelected": "Choose a release to see it",
+      "noNotes": "This release has no notes.",
+      "assets": "Attached files",
+      "noAssets": "There are no attached files.",
+      "downloads_one": "{{count}} download",
+      "downloads_other": "{{count}} downloads",
+      "deleteAsset": "Delete the file {{name}}",
+      "attach": "Attach files",
+      "chooseFiles": "Choose the files to attach (up to 256 MB each)",
+      "publishDraft": "Publish the draft",
+      "delete": "Delete release",
+      "deleteTitle": "Delete the release {{tag}}?",
+      "deleteDescription": "The release and its attached files are deleted. The Git tag stays.",
+      "newTitle": "New release",
+      "editTitle": "Edit the release {{tag}}",
+      "tag": "Tag",
+      "tagHint": "Choose an existing tag or type a new one; GitHub creates it when publishing.",
+      "tagProblems": {
+        "empty": "Enter a tag.",
+        "invalid": "That tag is not valid for Git."
+      },
+      "target": "Source branch",
+      "targetHint": "Only for a new tag. Empty uses the default branch.",
+      "title": "Title",
+      "notes": "Notes",
+      "generate": "Generate notes with GitHub",
+      "draft": "Save as draft",
+      "draftHint": "Nobody sees it until you publish it.",
+      "prerelease": "Mark as pre-release",
+      "publish": "Publish release",
+      "saveDraft": "Save draft",
+      "created": "Release {{tag}} created",
+      "updated": "Release updated",
+      "deleted": "Release deleted",
+      "assetUploaded": "File {{name}} uploaded",
+      "assetDeleted": "File deleted"
     }
   },
   "commands": {
@@ -1797,7 +1891,8 @@
         "pullNew": "Create a pull request",
         "workflowRun": "Run a workflow",
         "createRepo": "Create a repository on GitHub",
-        "repoSettings": "Open the repository settings on GitHub"
+        "repoSettings": "Open the repository settings on GitHub",
+        "releases": "Open the GitHub releases"
       },
       "terminal": {
         "toggle": "Show or hide the terminal"

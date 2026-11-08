@@ -3,7 +3,8 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 use reqwest::header::{
-    HeaderMap, HeaderValue, ACCEPT, AUTHORIZATION, ETAG, IF_NONE_MATCH, LINK, USER_AGENT,
+    HeaderMap, HeaderValue, ACCEPT, AUTHORIZATION, CONTENT_TYPE, ETAG, IF_NONE_MATCH, LINK,
+    USER_AGENT,
 };
 use reqwest::{Method, RequestBuilder, Response, StatusCode};
 use serde::de::DeserializeOwned;
@@ -17,6 +18,7 @@ const CLIENT_USER_AGENT: &str = concat!("GithubDesk/", env!("CARGO_PKG_VERSION")
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(30);
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
 const MAX_CACHED_BODIES: usize = 256;
+const UPLOAD_TIMEOUT: Duration = Duration::from_secs(30 * 60);
 
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -57,6 +59,16 @@ pub struct GithubClient {
     api_base: String,
     token: Option<String>,
     cache: Option<(Arc<EtagCache>, String)>,
+}
+
+pub fn uploads_endpoint(api_base: &str) -> String {
+    if api_base == "https://api.github.com" {
+        return "https://uploads.github.com".to_string();
+    }
+    match api_base.strip_suffix("/api/v3") {
+        Some(root) => format!("{root}/api/uploads"),
+        None => api_base.to_string(),
+    }
 }
 
 pub fn graphql_endpoint(api_base: &str) -> String {
@@ -294,6 +306,29 @@ impl GithubClient {
         envelope
             .data
             .ok_or_else(|| AppError::new(ErrorKind::GithubServerError, "empty GraphQL response"))
+    }
+
+    pub async fn upload_binary<T: DeserializeOwned>(
+        &self,
+        path: &str,
+        query: &[(&str, String)],
+        content_type: &str,
+        bytes: Vec<u8>,
+    ) -> AppResult<T> {
+        let url = format!(
+            "{}/{}",
+            uploads_endpoint(&self.api_base),
+            path.trim_start_matches('/')
+        );
+        let builder = self
+            .request(Method::POST, &url)
+            .timeout(UPLOAD_TIMEOUT)
+            .query(query)
+            .header(CONTENT_TYPE, content_type)
+            .body(bytes);
+        let response = self.dispatch(builder).await?;
+        let text = response.text().await.map_err(map_transport_error)?;
+        parse_json(&text)
     }
 
     pub async fn get_text(&self, path: &str) -> AppResult<String> {
@@ -540,6 +575,22 @@ mod tests {
         assert!(GithubClient::new("http://localhost:3000", None).is_ok());
         assert!(GithubClient::new("http://api.github.com", None).is_err());
         assert!(GithubClient::new("not a url", None).is_err());
+    }
+
+    #[test]
+    fn the_uploads_endpoint_follows_the_api_address() {
+        assert_eq!(
+            uploads_endpoint("https://api.github.com"),
+            "https://uploads.github.com"
+        );
+        assert_eq!(
+            uploads_endpoint("https://git.corp.example/api/v3"),
+            "https://git.corp.example/api/uploads"
+        );
+        assert_eq!(
+            uploads_endpoint("http://127.0.0.1:8080"),
+            "http://127.0.0.1:8080"
+        );
     }
 
     #[test]

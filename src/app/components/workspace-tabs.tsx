@@ -36,6 +36,7 @@ export function WorkspaceTabs({ repoPath }: WorkspaceTabsProps) {
       { id: "pulls", label: t("tabs.pulls") },
       { id: "issues", label: t("tabs.issues") },
       { id: "actions", label: t("tabs.actions") },
+      { id: "releases", label: t("tabs.releases") },
       { id: "repoSettings", label: t("tabs.repoSettings") },
     );
   }

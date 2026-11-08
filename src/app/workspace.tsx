@@ -31,6 +31,7 @@ import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
 import { GitignoreDialog } from "@/features/gitignore/components/gitignore-dialog";
 import { BisectBanner } from "@/features/bisect/components/bisect-banner";
 import { PublishDialog } from "@/features/github/home/components/publish-dialog";
+import { ReleaseDetailPanel, ReleasesPanel } from "@/features/github/releases/components/releases-panels";
 import { SettingsPanel, SettingsSectionsPanel } from "@/features/github/settings/components/settings-panels";
 import { CleanupDialog } from "@/features/cleanup/components/cleanup-dialog";
 import { BisectDialog } from "@/features/bisect/components/bisect-dialog";
@@ -116,6 +117,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
             {tab === "pulls" ? <PullsPanel repoPath={repoPath} /> : null}
             {tab === "issues" ? <IssuesPanel repoPath={repoPath} /> : null}
             {tab === "actions" ? <ActionsPanel repoPath={repoPath} /> : null}
+            {tab === "releases" ? <ReleasesPanel repoPath={repoPath} /> : null}
             {tab === "repoSettings" ? <SettingsSectionsPanel repoPath={repoPath} /> : null}
           </div>
         </section>
@@ -135,6 +137,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
           {!blameOpen && tab === "pulls" ? <PullDetailPanel repoPath={repoPath} /> : null}
           {!blameOpen && tab === "issues" ? <IssueDetailPanel repoPath={repoPath} /> : null}
           {!blameOpen && tab === "actions" ? <RunDetailPanel repoPath={repoPath} /> : null}
+          {!blameOpen && tab === "releases" ? <ReleaseDetailPanel repoPath={repoPath} /> : null}
           {!blameOpen && tab === "repoSettings" ? <SettingsPanel repoPath={repoPath} /> : null}
         </main>
       </div>

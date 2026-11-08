@@ -17,6 +17,7 @@ pub mod github_home;
 pub mod github_issues;
 pub mod github_orgs;
 pub mod github_pulls;
+pub mod github_releases;
 pub mod github_repo;
 pub mod github_secrets;
 pub mod gitignore;

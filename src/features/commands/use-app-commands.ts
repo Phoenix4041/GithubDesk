@@ -327,6 +327,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       run: () => useCleanupDialogStore.getState().show(),
     },
     {
+      id: "github.releases",
+      titleKey: "commands.items.github.releases",
+      group: "github",
+      keywords: "releases versiones publicar lanzamiento",
+      enabled: githubReady,
+      run: () => goToTab("releases"),
+    },
+    {
       id: "github.repoSettings",
       titleKey: "commands.items.github.repoSettings",
       group: "github",

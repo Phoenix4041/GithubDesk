@@ -8,6 +8,7 @@ export type WorkspaceTab =
   | "pulls"
   | "issues"
   | "actions"
+  | "releases"
   | "repoSettings";
 export type SidebarTab = "branches" | "tags" | "stashes" | "worktrees" | "submodules" | "lfs";
 
