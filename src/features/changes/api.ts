@@ -52,3 +52,21 @@ export function createCommit(path: string, title: string, description: string, a
 export function undoLastCommit(path: string): Promise<HeadCommit> {
   return call<HeadCommit>("commit_undo", { path });
 }
+
+export interface CoauthorCandidate {
+  name: string;
+  email: string;
+  commits: number;
+}
+
+export function listCoauthors(path: string): Promise<CoauthorCandidate[]> {
+  return call<CoauthorCandidate[]>("commit_coauthors", { path, limit: null });
+}
+
+export function getCommitTemplate(path: string): Promise<string> {
+  return call<string>("commit_template_get", { path });
+}
+
+export function setCommitTemplate(path: string, template: string): Promise<void> {
+  return call<void>("commit_template_set", { path, template });
+}

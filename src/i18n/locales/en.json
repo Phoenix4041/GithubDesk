@@ -224,6 +224,27 @@
       "description": "The commit \"{{title}}\" will leave the history. Its changes will be staged again and its message restored in the commit box.",
       "pushedWarning": "This commit is already published. To reflect the change on the remote you will need to force push, which rewrites shared history.",
       "confirm": "Undo commit"
+    },
+    "coauthors": {
+      "label": "Co-authors",
+      "count_one": "{{count}} co-author",
+      "count_other": "{{count}} co-authors",
+      "filter": "Search by name or email",
+      "loading": "Looking for people in the history…",
+      "empty": "No other people in the history."
+    },
+    "issue": {
+      "addTitle": "Prefix #{{issue}}",
+      "addRefs": "Add Refs #{{issue}}",
+      "shortcut": "Shortcut: Alt+I"
+    },
+    "template": {
+      "open": "Template",
+      "title": "Message template",
+      "description": "Saved in this repository's local config and used when the description is empty. Leave it blank to remove it.",
+      "field": "Template text",
+      "save": "Save template",
+      "saved": "Template saved"
     }
   },
   "diff": {
@@ -359,6 +380,68 @@
       "command": "Editor program",
       "commandHint": "The executable path, or its name if it is on the PATH. It receives the folder or the file.",
       "none": "No known editor was detected. You can pick another program."
+    },
+    "issuePrefix": {
+      "label": "Issue number in the commit",
+      "off": "Off",
+      "title": "In the title",
+      "refs": "Refs in the description",
+      "hint": "Takes the number from the branch name (for example 123-fix or gh-45) and adds it with a button or Alt+I."
+    },
+    "density": {
+      "label": "Interface density",
+      "compact": "Compact",
+      "normal": "Normal",
+      "comfortable": "Comfortable"
+    },
+    "themes": {
+      "label": "Custom themes",
+      "hint": "Up to {{count}} themes. A custom theme replaces the colors of the light or dark mode it is based on.",
+      "none": "None (app colors)",
+      "new": "New theme",
+      "edit": "Edit {{name}}",
+      "delete": "Delete {{name}}",
+      "newTitle": "New theme",
+      "editTitle": "Edit theme",
+      "name": "Name",
+      "base": "Based on",
+      "save": "Save and apply",
+      "preview": "Preview",
+      "invalid": "Some colors are not valid. Use #rrggbb or rgb(r, g, b).",
+      "lowContrast": "Low contrast",
+      "contrastPair": "Low contrast: {{foreground}} on {{background}} ({{ratio}}:1, 4.5:1 recommended)",
+      "full": "You already have {{count}} themes. Delete one to create another.",
+      "import": {
+        "action": "Import from VS Code",
+        "file": "VS Code theme file",
+        "done_one": "Imported {{count}} color. Check the preview before saving.",
+        "done_other": "Imported {{count}} colors. Check the preview before saving.",
+        "invalid": "The file is not a valid theme JSON.",
+        "noColors": "The file has no colors that can be used.",
+        "tooLarge": "The file is too large to be a theme."
+      },
+      "sample": {
+        "title": "Sample title",
+        "muted": "Secondary text",
+        "subtle": "Highlighted row",
+        "error": "Error message",
+        "button": "Primary button"
+      },
+      "tokens": {
+        "canvas": "Background",
+        "surface": "Panels",
+        "subtle": "Soft background",
+        "line": "Borders",
+        "fg": "Text",
+        "muted": "Secondary text",
+        "accent": "Accent",
+        "accentHover": "Accent on hover",
+        "accentFg": "Text on accent",
+        "accentSoft": "Selection",
+        "danger": "Error",
+        "success": "Success",
+        "warning": "Warning"
+      }
     }
   },
   "progress": {
@@ -1948,6 +2031,19 @@
         "ci_activity": "CI activity",
         "other": "update"
       }
+    },
+    "fork": {
+      "label": "Fork",
+      "parent": "This repository is a fork of {{name}}",
+      "hint": "Syncing brings the changes of the original {{parentBranch}} into {{branch}}, directly on GitHub.",
+      "sync": "Sync with the original",
+      "addRemote": "Add upstream remote",
+      "remoteAdded": "Upstream remote added",
+      "synced": "{{branch}} is now in sync with the original",
+      "upToDate": "{{branch}} was already up to date with the original",
+      "conflict": "Could not sync because of conflicts",
+      "conflictHint": "The branch has changes that clash with the original. Resolve them locally or on GitHub.",
+      "pullNow": "Pull now"
     }
   },
   "commands": {

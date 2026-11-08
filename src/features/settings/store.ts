@@ -2,9 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Language } from "@/i18n";
 import { BACKGROUND_SYNC_MINUTES, clampSyncMinutes } from "@/features/background/background-model";
+import type { IssuePrefixMode } from "@/features/changes/commit-message-model";
 import type { ShortcutOverrides } from "@/features/commands/shortcut-model";
 import { removeProfile } from "@/features/profiles/profile-model";
 import type { Profile } from "@/features/profiles/profile-model";
+import { cleanThemeName, sanitizeColors, upsertTheme } from "./theme-model";
+import type { CustomTheme, Density } from "./theme-model";
 
 export type ThemePreference = "system" | "light" | "dark";
 export type DiffMode = "unified" | "split";
@@ -45,6 +48,15 @@ interface SettingsState {
   setBackgroundSyncMinutes: (minutes: number) => void;
   setTrayEnabled: (enabled: boolean) => void;
   setAutostartEnabled: (enabled: boolean) => void;
+  issuePrefixMode: IssuePrefixMode;
+  setIssuePrefixMode: (mode: IssuePrefixMode) => void;
+  customThemes: CustomTheme[];
+  activeThemeId: string | null;
+  density: Density;
+  saveCustomTheme: (theme: CustomTheme) => void;
+  deleteCustomTheme: (id: string) => void;
+  setActiveTheme: (id: string | null) => void;
+  setDensity: (density: Density) => void;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -98,6 +110,26 @@ export const useSettingsStore = create<SettingsState>()(
       setBackgroundSyncMinutes: (minutes) => set({ backgroundSyncMinutes: clampSyncMinutes(minutes) }),
       setTrayEnabled: (trayEnabled) => set({ trayEnabled }),
       setAutostartEnabled: (autostartEnabled) => set({ autostartEnabled }),
+      issuePrefixMode: "off",
+      setIssuePrefixMode: (issuePrefixMode) => set({ issuePrefixMode }),
+      customThemes: [],
+      activeThemeId: null,
+      density: "normal",
+      saveCustomTheme: (theme) =>
+        set((state) => ({
+          customThemes: upsertTheme(state.customThemes, {
+            ...theme,
+            name: cleanThemeName(theme.name),
+            colors: sanitizeColors(theme.colors),
+          }),
+        })),
+      deleteCustomTheme: (id) =>
+        set((state) => ({
+          customThemes: state.customThemes.filter((theme) => theme.id !== id),
+          activeThemeId: state.activeThemeId === id ? null : state.activeThemeId,
+        })),
+      setActiveTheme: (activeThemeId) => set({ activeThemeId }),
+      setDensity: (density) => set({ density }),
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),

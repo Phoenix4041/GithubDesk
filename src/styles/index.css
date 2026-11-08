@@ -102,6 +102,14 @@
   }
 }
 
+:root.density-compact {
+  --spacing: 0.21rem;
+}
+
+:root.density-comfortable {
+  --spacing: 0.29rem;
+}
+
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);

@@ -1,14 +1,19 @@
-import { Undo2 } from "lucide-react";
-import { useState } from "react";
+import { FileText, Hash, Undo2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { IdentityLine } from "@/features/profiles/components/identity-line";
+import { useSettingsStore } from "@/features/settings/store";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { commitStagedChanges, undoHeadCommit } from "../actions";
-import { useHeadCommit } from "../queries";
+import { appendCoauthors, applyIssueRefs, applyIssueToTitle, issueNumberFromBranch } from "../commit-message-model";
+import type { Coauthor } from "../commit-message-model";
+import { useCommitTemplate, useHeadCommit } from "../queries";
 import { useChangesStore } from "../store";
+import { CoauthorPicker } from "./coauthor-picker";
+import { CommitTemplateDialog } from "./commit-template-dialog";
 
 const TITLE_SOFT_LIMIT = 72;
 
@@ -37,6 +42,25 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
   const [committing, setCommitting] = useState(false);
   const [confirmingUndo, setConfirmingUndo] = useState(false);
   const [undoing, setUndoing] = useState(false);
+  const [coauthors, setCoauthors] = useState<Coauthor[]>([]);
+  const [editingTemplate, setEditingTemplate] = useState(false);
+  const [templateRound, setTemplateRound] = useState(0);
+  const appliedTemplate = useRef<string | null>(null);
+
+  const issuePrefixMode = useSettingsStore((state) => state.issuePrefixMode);
+  const issue = issuePrefixMode === "off" ? null : issueNumberFromBranch(branchName);
+  const template = useCommitTemplate(repoPath).data ?? "";
+
+  useEffect(() => {
+    const key = `${repoPath}\u0000${template}\u0000${templateRound}`;
+    if (template.length === 0 || amend || appliedTemplate.current === key) {
+      return;
+    }
+    appliedTemplate.current = key;
+    if (useChangesStore.getState().draft.description.trim().length === 0) {
+      setDescription(template);
+    }
+  }, [repoPath, template, amend, templateRound, setDescription]);
 
   const titleLength = draft.title.trim().length;
   const hasConflicts = conflictCount > 0;
@@ -47,10 +71,24 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
       return;
     }
     setCommitting(true);
-    const succeeded = await commitStagedChanges(repoPath, draft.title, draft.description, amend);
+    const description = appendCoauthors(draft.description, coauthors);
+    const succeeded = await commitStagedChanges(repoPath, draft.title, description, amend);
     setCommitting(false);
     if (succeeded) {
       clearDraft();
+      setCoauthors([]);
+      setTemplateRound((round) => round + 1);
+    }
+  }
+
+  function applyIssue() {
+    if (issue === null) {
+      return;
+    }
+    if (issuePrefixMode === "title") {
+      setTitle(applyIssueToTitle(draft.title, issue));
+    } else {
+      setDescription(applyIssueRefs(draft.description, issue));
     }
   }
 
@@ -58,6 +96,9 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
     if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
       event.preventDefault();
       void submit();
+    } else if (event.altKey && event.key.toLowerCase() === "i" && issue !== null) {
+      event.preventDefault();
+      applyIssue();
     }
   }
 
@@ -103,6 +144,28 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
         className={cn(fieldClasses, "resize-none py-1.5")}
         spellCheck
       />
+      <div className="flex flex-wrap items-start gap-1">
+        <CoauthorPicker repoPath={repoPath} selected={coauthors} onChange={setCoauthors} />
+        {issue !== null ? (
+          <Button
+            size="sm"
+            variant="ghost"
+            icon={<Hash className="size-3.5" />}
+            title={t("commit.issue.shortcut")}
+            onClick={applyIssue}
+          >
+            {issuePrefixMode === "title" ? t("commit.issue.addTitle", { issue }) : t("commit.issue.addRefs", { issue })}
+          </Button>
+        ) : null}
+        <Button
+          size="sm"
+          variant="ghost"
+          icon={<FileText className="size-3.5" />}
+          onClick={() => setEditingTemplate(true)}
+        >
+          {t("commit.template.open")}
+        </Button>
+      </div>
       {head ? (
         <label className="flex cursor-pointer items-center gap-2 text-xs text-muted">
           <input
@@ -144,6 +207,9 @@ export function CommitBox({ repoPath, branchName, stagedCount, conflictCount }: 
         onConfirm={() => void confirmUndo()}
         onCancel={() => setConfirmingUndo(false)}
       />
+      {editingTemplate ? (
+        <CommitTemplateDialog repoPath={repoPath} initial={template} onClose={() => setEditingTemplate(false)} />
+      ) : null}
     </section>
   );
 }

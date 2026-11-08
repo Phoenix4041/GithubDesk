@@ -224,6 +224,27 @@
       "description": "El commit «{{title}}» saldrá del historial. Sus cambios volverán a quedar preparados y su mensaje se recupera en el cuadro de commit.",
       "pushedWarning": "Este commit ya está publicado. Para reflejar el cambio en el remoto tendrás que hacer un force push, que reescribe el historial compartido.",
       "confirm": "Deshacer commit"
+    },
+    "coauthors": {
+      "label": "Coautores",
+      "count_one": "{{count}} coautor",
+      "count_other": "{{count}} coautores",
+      "filter": "Buscar por nombre o correo",
+      "loading": "Buscando personas en el historial…",
+      "empty": "No hay otras personas en el historial."
+    },
+    "issue": {
+      "addTitle": "Anteponer #{{issue}}",
+      "addRefs": "Agregar Refs #{{issue}}",
+      "shortcut": "Atajo: Alt+I"
+    },
+    "template": {
+      "open": "Plantilla",
+      "title": "Plantilla de mensaje",
+      "description": "Se guarda en la configuración local de este repositorio y se usa cuando la descripción está vacía. Déjala en blanco para quitarla.",
+      "field": "Texto de la plantilla",
+      "save": "Guardar plantilla",
+      "saved": "Plantilla guardada"
     }
   },
   "diff": {
@@ -359,6 +380,68 @@
       "command": "Programa del editor",
       "commandHint": "La ruta del ejecutable o su nombre si está en el PATH. Se le pasa la carpeta o el archivo.",
       "none": "No se detectó ningún editor conocido. Puedes elegir otro programa."
+    },
+    "issuePrefix": {
+      "label": "Número de incidencia en el commit",
+      "off": "Apagado",
+      "title": "En el título",
+      "refs": "Refs en la descripción",
+      "hint": "Toma el número del nombre de la rama (por ejemplo 123-arreglo o gh-45) y lo agrega con un botón o con Alt+I."
+    },
+    "density": {
+      "label": "Densidad de la interfaz",
+      "compact": "Compacta",
+      "normal": "Normal",
+      "comfortable": "Cómoda"
+    },
+    "themes": {
+      "label": "Temas propios",
+      "hint": "Hasta {{count}} temas. Un tema propio reemplaza los colores del modo claro u oscuro en el que se basa.",
+      "none": "Ninguno (colores de la app)",
+      "new": "Nuevo tema",
+      "edit": "Editar {{name}}",
+      "delete": "Eliminar {{name}}",
+      "newTitle": "Nuevo tema",
+      "editTitle": "Editar tema",
+      "name": "Nombre",
+      "base": "Basado en",
+      "save": "Guardar y aplicar",
+      "preview": "Vista previa",
+      "invalid": "Hay colores no válidos. Usa #rrggbb o rgb(r, g, b).",
+      "lowContrast": "Contraste bajo",
+      "contrastPair": "Contraste bajo: {{foreground}} sobre {{background}} ({{ratio}}:1, se recomienda 4.5:1)",
+      "full": "Ya tienes {{count}} temas. Elimina uno para crear otro.",
+      "import": {
+        "action": "Importar de VS Code",
+        "file": "Archivo de tema de VS Code",
+        "done_one": "Se importó {{count}} color. Revisa la vista previa antes de guardar.",
+        "done_other": "Se importaron {{count}} colores. Revisa la vista previa antes de guardar.",
+        "invalid": "El archivo no es un JSON de tema válido.",
+        "noColors": "El archivo no tiene colores que se puedan usar.",
+        "tooLarge": "El archivo es demasiado grande para ser un tema."
+      },
+      "sample": {
+        "title": "Título de ejemplo",
+        "muted": "Texto secundario",
+        "subtle": "Fila resaltada",
+        "error": "Mensaje de error",
+        "button": "Botón principal"
+      },
+      "tokens": {
+        "canvas": "Fondo",
+        "surface": "Paneles",
+        "subtle": "Fondo suave",
+        "line": "Bordes",
+        "fg": "Texto",
+        "muted": "Texto secundario",
+        "accent": "Acento",
+        "accentHover": "Acento al pasar",
+        "accentFg": "Texto sobre acento",
+        "accentSoft": "Selección",
+        "danger": "Error",
+        "success": "Éxito",
+        "warning": "Advertencia"
+      }
     }
   },
   "progress": {
@@ -1948,6 +2031,19 @@
         "ci_activity": "actividad de CI",
         "other": "novedad"
       }
+    },
+    "fork": {
+      "label": "Fork",
+      "parent": "Este repositorio es un fork de {{name}}",
+      "hint": "Sincronizar trae a {{branch}} los cambios de {{parentBranch}} del original, directamente en GitHub.",
+      "sync": "Sincronizar con el original",
+      "addRemote": "Agregar remoto upstream",
+      "remoteAdded": "Remoto upstream agregado",
+      "synced": "{{branch}} quedó sincronizada con el original",
+      "upToDate": "{{branch}} ya estaba al día con el original",
+      "conflict": "No se pudo sincronizar por conflictos",
+      "conflictHint": "La rama tiene cambios que chocan con el original. Resuélvelos localmente o en GitHub.",
+      "pullNow": "Hacer pull"
     }
   },
   "commands": {

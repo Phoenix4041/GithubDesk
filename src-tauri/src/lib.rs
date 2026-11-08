@@ -18,7 +18,8 @@ use commands::background as background_commands;
 use commands::diagnostics as diagnostics_commands;
 use commands::launch as launch_commands;
 use commands::{
-    absorb, app_update, bisect, blame, branch, browse, cleanup, commit, commit_ops, compare,
+    absorb, app_update, bisect, blame, branch, browse, cleanup, commit, commit_extras,
+    commit_ops, compare,
     conflict, external, github_account, github_actions, github_admin, github_collab, github_extras,
     github_home, github_issues, github_orgs, github_pulls, github_releases, github_repo,
     github_secrets, gitignore, guard, history, identity, job, lfs, merge, multi, operation,
@@ -93,6 +94,9 @@ pub fn run() {
             commit::commit_head,
             commit::commit_create,
             commit::commit_undo,
+            commit_extras::commit_coauthors,
+            commit_extras::commit_template_get,
+            commit_extras::commit_template_set,
             branch::branch_list,
             branch::branch_create,
             branch::branch_switch,
@@ -267,6 +271,9 @@ pub fn run() {
             github_actions::github_workflows_list,
             github_actions::github_workflow_dispatch,
             github_repo::github_set_git_account,
+            commands::github_forks::github_fork_info,
+            commands::github_forks::github_fork_sync,
+            commands::github_forks::github_fork_add_upstream,
             tag::tag_list,
             tag::tag_create,
             tag::tag_delete,
