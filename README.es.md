@@ -1,4 +1,18 @@
-# GithubDesk
+<div align="center">
+
+<img src="assets/banner.svg" alt="GithubDesk" width="100%">
+
+<br>
+
+[![Última versión](https://img.shields.io/github/v/release/Phoenix4041/GithubDesk?style=for-the-badge&color=6366f1&label=versión)](https://github.com/Phoenix4041/GithubDesk/releases/latest)
+[![CI](https://img.shields.io/github/actions/workflow/status/Phoenix4041/GithubDesk/ci.yml?branch=main&style=for-the-badge&label=CI)](https://github.com/Phoenix4041/GithubDesk/actions/workflows/ci.yml)
+[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-6366f1?style=for-the-badge)](LICENSE)
+
+**[Descargar](https://github.com/Phoenix4041/GithubDesk/releases/latest)** &nbsp;|&nbsp; **[Read in English](README.md)**
+
+</div>
+
+---
 
 Cliente de Git y GitHub de escritorio hecho con Tauri 2, React y TypeScript.
 
