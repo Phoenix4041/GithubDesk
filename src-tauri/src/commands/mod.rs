@@ -24,6 +24,7 @@ pub mod github_repo;
 pub mod github_secrets;
 pub mod gitignore;
 pub mod guard;
+pub mod health;
 pub mod history;
 pub mod identity;
 pub mod job;
