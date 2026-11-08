@@ -51,6 +51,7 @@ export type ErrorKind =
   | "githubDeviceExpired"
   | "githubMissingScope"
   | "githubAccountMismatch"
+  | "systemLoginUnavailable"
   | "githubNotARepository"
   | "credentialStoreUnavailable"
   | "terminalUnavailable"
@@ -368,7 +369,7 @@ export interface UndoPlan {
   targetShortHash: string;
 }
 
-export type AccountSource = "oauth" | "token";
+export type AccountSource = "oauth" | "token" | "system" | "cli";
 
 export interface GithubAccount {
   id: string;

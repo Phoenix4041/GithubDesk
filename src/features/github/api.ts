@@ -1,6 +1,14 @@
 import { call } from "@/shared/lib/tauri-client";
 import type { DeviceCode, GithubAccount, RemoteRepo } from "@/shared/types/git";
 
+export type LoginMethod = "system" | "cli";
+
+export interface LoginOptions {
+  system: boolean;
+  cli: boolean;
+  embeddedClientId: string | null;
+}
+
 export function listAccounts(): Promise<GithubAccount[]> {
   return call<GithubAccount[]>("github_accounts_list");
 }
@@ -33,4 +41,12 @@ export function listGithubRemotes(path: string): Promise<RemoteRepo[]> {
 
 export function setGitAccount(path: string, accountId: string | null): Promise<void> {
   return call<void>("github_set_git_account", { path, accountId });
+}
+
+export function getLoginOptions(): Promise<LoginOptions> {
+  return call<LoginOptions>("github_login_options");
+}
+
+export function loginWithSystem(host: string, method: LoginMethod, jobId: string): Promise<GithubAccount> {
+  return call<GithubAccount>("github_login_system", { host, method, jobId });
 }

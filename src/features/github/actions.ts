@@ -4,7 +4,8 @@ import { reportError } from "@/shared/lib/report-error";
 import { cancelJob } from "@/shared/lib/tauri-client";
 import type { DeviceCode, GithubAccount } from "@/shared/types/git";
 import { showToast } from "@/shared/ui/toast-store";
-import { addAccountWithToken, finishDeviceFlow, removeAccount } from "./api";
+import { addAccountWithToken, finishDeviceFlow, loginWithSystem, removeAccount } from "./api";
+import type { LoginMethod } from "./api";
 import { accountKeys } from "./queries";
 
 function announceAdded(account: GithubAccount): void {
@@ -14,6 +15,18 @@ function announceAdded(account: GithubAccount): void {
 export async function connectWithToken(host: string, token: string): Promise<GithubAccount | null> {
   try {
     const account = await addAccountWithToken(host, token);
+    await queryClient.invalidateQueries({ queryKey: accountKeys.all });
+    announceAdded(account);
+    return account;
+  } catch (error) {
+    reportError(error);
+    return null;
+  }
+}
+
+export async function signInWithSystem(host: string, method: LoginMethod, jobId: string): Promise<GithubAccount | null> {
+  try {
+    const account = await loginWithSystem(host, method, jobId);
     await queryClient.invalidateQueries({ queryKey: accountKeys.all });
     announceAdded(account);
     return account;
