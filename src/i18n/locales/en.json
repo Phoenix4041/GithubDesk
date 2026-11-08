@@ -374,7 +374,8 @@
       "retry": "Retry",
       "showChanges": "View changes",
       "forceDelete": "Force delete",
-      "forcePush": "Push with overwrite"
+      "forcePush": "Push with overwrite",
+      "grantScopes": "Grant permission"
     },
     "gitNotFound": {
       "title": "Git is not installed",
@@ -636,6 +637,14 @@
     "patchNotApplicable": {
       "title": "The patch cannot be applied",
       "message": "It does not fit the files in this repository. Check it is the right patch or try applying it as changes only."
+    },
+    "githubMissingScope": {
+      "title": "Your token lacks a permission",
+      "message": "GitHub asks for the {{scopes}} permission for this. You can give it to GithubDesk now."
+    },
+    "githubAccountMismatch": {
+      "title": "You authorized a different account",
+      "message": "On GitHub you were signed in as {{login}}, but the already connected account was needed. Switch account on GitHub and try again."
     }
   },
   "operation": {
@@ -1305,6 +1314,76 @@
       },
       "toggle": "Show or hide the checks",
       "branchTooltip": "Checks of the latest commit of {{branch}}. Click to see its runs."
+    },
+    "scopes": {
+      "title": "Give GithubDesk more permissions",
+      "description": "Tick what you need. Your account stays connected and keeps the permissions it already has.",
+      "accountLabel": "Account",
+      "choicesLabel": "Missing permissions",
+      "nothingMissing": "This token already has every permission GithubDesk can use.",
+      "hiddenToken": "This token does not show its permissions (it is a fine-grained token). To change them, edit the token on GitHub.",
+      "openTokens": "Open tokens on GitHub",
+      "grant": "Grant permission",
+      "grantOne": "Grant: {{name}}",
+      "tokenSteps": "Personal tokens cannot be widened from an application. Create a new one on GitHub with these permissions and paste it here to replace the current one.",
+      "createToken": "Create a token with these permissions",
+      "newToken": "New token",
+      "newTokenHint": "It must belong to the account {{login}}. It is stored in the system keychain.",
+      "replaceToken": "Replace the token",
+      "updated": "Permissions for {{login}} updated",
+      "toggle": "Show the permissions of {{login}}",
+      "detailsLabel": "Permissions of {{login}}",
+      "expires": "Expires on {{date}} ({{relative}})",
+      "noExpiry": "GitHub reports no expiry date for this token.",
+      "expiresSoon_one": "This token expires in {{count}} day. Create another before it stops working.",
+      "expiresSoon_other": "This token expires in {{count}} days. Create another before it stops working.",
+      "expired": "This token has expired.",
+      "rateLimit": "{{remaining}} of {{limit}} GitHub calls left; they reset at {{time}}.",
+      "moreAccess": "Give more permissions",
+      "revokeOnGithub": "Revoke access on GitHub",
+      "revokeNote": "GitHub does not let an application create, list or revoke tokens. Revoking is done on its page; removing the account here deletes the token from this computer's keychain.",
+      "capabilities": {
+        "repos": {
+          "name": "Repositories",
+          "description": "Read and write your repositories, private ones too."
+        },
+        "workflows": {
+          "name": "Actions workflows",
+          "description": "Change workflow files and run them."
+        },
+        "orgRead": {
+          "name": "See organizations",
+          "description": "See which organizations you belong to, their members and teams."
+        },
+        "orgAdmin": {
+          "name": "Manage organizations",
+          "description": "Invite or remove members and manage teams in organizations you own."
+        },
+        "sshKeys": {
+          "name": "SSH keys",
+          "description": "See, add and delete the SSH keys of your account."
+        },
+        "gpgKeys": {
+          "name": "GPG keys",
+          "description": "See, add and delete the GPG keys of your account."
+        },
+        "deleteRepo": {
+          "name": "Delete repositories",
+          "description": "Let GithubDesk delete a repository when you confirm it."
+        },
+        "notifications": {
+          "name": "Notifications",
+          "description": "Read your GitHub notifications."
+        },
+        "emails": {
+          "name": "Account emails",
+          "description": "See your account emails to choose which one to commit with."
+        },
+        "profile": {
+          "name": "Public profile",
+          "description": "Change your name, bio and public details."
+        }
+      }
     }
   },
   "commands": {

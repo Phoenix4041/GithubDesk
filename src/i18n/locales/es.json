@@ -374,7 +374,8 @@
       "retry": "Reintentar",
       "showChanges": "Ver cambios",
       "forceDelete": "Forzar eliminación",
-      "forcePush": "Subir con sobrescritura"
+      "forcePush": "Subir con sobrescritura",
+      "grantScopes": "Dar permiso"
     },
     "gitNotFound": {
       "title": "Git no está instalado",
@@ -636,6 +637,14 @@
     "patchNotApplicable": {
       "title": "El parche no se puede aplicar",
       "message": "No encaja con los archivos de este repositorio. Revisa que sea el parche correcto o prueba aplicarlo solo como cambios."
+    },
+    "githubMissingScope": {
+      "title": "Falta un permiso en tu token",
+      "message": "GitHub pide el permiso {{scopes}} para esto. Puedes dárselo a GithubDesk ahora."
+    },
+    "githubAccountMismatch": {
+      "title": "Autorizaste otra cuenta",
+      "message": "En GitHub iniciaste sesión como {{login}}, pero hacía falta la cuenta que ya estaba conectada. Cambia de cuenta en GitHub y repite."
     }
   },
   "operation": {
@@ -1305,6 +1314,76 @@
       },
       "toggle": "Mostrar u ocultar las comprobaciones",
       "branchTooltip": "Comprobaciones del último commit de {{branch}}. Pulsa para ver sus ejecuciones."
+    },
+    "scopes": {
+      "title": "Dar más permisos a GithubDesk",
+      "description": "Marca lo que necesitas. Tu cuenta sigue conectada y conserva los permisos que ya tiene.",
+      "accountLabel": "Cuenta",
+      "choicesLabel": "Permisos que faltan",
+      "nothingMissing": "Este token ya tiene todos los permisos que GithubDesk puede usar.",
+      "hiddenToken": "Este token no muestra sus permisos (es un token de acceso fino). Para cambiarlos hay que editar el token en GitHub.",
+      "openTokens": "Abrir los tokens en GitHub",
+      "grant": "Dar permiso",
+      "grantOne": "Dar permiso: {{name}}",
+      "tokenSteps": "Los tokens personales no se pueden ampliar desde una aplicación. Crea uno nuevo en GitHub con estos permisos y pégalo aquí para reemplazar el actual.",
+      "createToken": "Crear un token con estos permisos",
+      "newToken": "Token nuevo",
+      "newTokenHint": "Debe ser de la cuenta {{login}}. Se guarda en el llavero del sistema.",
+      "replaceToken": "Reemplazar el token",
+      "updated": "Permisos de {{login}} actualizados",
+      "toggle": "Ver los permisos de {{login}}",
+      "detailsLabel": "Permisos de {{login}}",
+      "expires": "Vence el {{date}} ({{relative}})",
+      "noExpiry": "GitHub no informa ninguna fecha de vencimiento para este token.",
+      "expiresSoon_one": "Este token vence en {{count}} día. Crea otro antes de que deje de funcionar.",
+      "expiresSoon_other": "Este token vence en {{count}} días. Crea otro antes de que deje de funcionar.",
+      "expired": "Este token ya venció.",
+      "rateLimit": "Quedan {{remaining}} de {{limit}} llamadas a GitHub; se renuevan a las {{time}}.",
+      "moreAccess": "Dar más permisos",
+      "revokeOnGithub": "Revocar el acceso en GitHub",
+      "revokeNote": "GitHub no deja que una aplicación cree, liste ni revoque tokens. Revocar se hace en su página; quitar la cuenta aquí borra el token del llavero de este equipo.",
+      "capabilities": {
+        "repos": {
+          "name": "Repositorios",
+          "description": "Leer y escribir en tus repositorios, también los privados."
+        },
+        "workflows": {
+          "name": "Workflows de Actions",
+          "description": "Cambiar los archivos de workflows y lanzarlos."
+        },
+        "orgRead": {
+          "name": "Ver organizaciones",
+          "description": "Ver a qué organizaciones perteneces, sus miembros y sus equipos."
+        },
+        "orgAdmin": {
+          "name": "Administrar organizaciones",
+          "description": "Invitar o quitar miembros y manejar equipos en las organizaciones donde eres propietario."
+        },
+        "sshKeys": {
+          "name": "Llaves SSH",
+          "description": "Ver, agregar y borrar las llaves SSH de tu cuenta."
+        },
+        "gpgKeys": {
+          "name": "Llaves GPG",
+          "description": "Ver, agregar y borrar las llaves GPG de tu cuenta."
+        },
+        "deleteRepo": {
+          "name": "Borrar repositorios",
+          "description": "Dejar que GithubDesk borre un repositorio cuando tú lo confirmes."
+        },
+        "notifications": {
+          "name": "Notificaciones",
+          "description": "Leer tus notificaciones de GitHub."
+        },
+        "emails": {
+          "name": "Correos de la cuenta",
+          "description": "Ver los correos de tu cuenta para elegir con cuál hacer commits."
+        },
+        "profile": {
+          "name": "Perfil público",
+          "description": "Cambiar tu nombre, descripción y datos públicos."
+        }
+      }
     }
   },
   "commands": {

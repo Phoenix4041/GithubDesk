@@ -13,12 +13,18 @@ export function removeAccount(id: string): Promise<void> {
   return call<void>("github_account_remove", { id });
 }
 
-export function startDeviceFlow(host: string, clientId: string): Promise<DeviceCode> {
-  return call<DeviceCode>("github_device_start", { host, clientId });
+export function startDeviceFlow(host: string, clientId: string, scopes: string[] | null): Promise<DeviceCode> {
+  return call<DeviceCode>("github_device_start", { host, clientId, scopes });
 }
 
-export function finishDeviceFlow(host: string, clientId: string, code: DeviceCode, jobId: string): Promise<GithubAccount> {
-  return call<GithubAccount>("github_device_finish", { host, clientId, code, jobId });
+export function finishDeviceFlow(
+  host: string,
+  clientId: string,
+  code: DeviceCode,
+  jobId: string,
+  expectedLogin: string | null,
+): Promise<GithubAccount> {
+  return call<GithubAccount>("github_device_finish", { host, clientId, code, jobId, expectedLogin });
 }
 
 export function listGithubRemotes(path: string): Promise<RemoteRepo[]> {

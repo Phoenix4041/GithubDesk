@@ -7,4 +7,5 @@ pub mod issues;
 pub mod models;
 pub mod pulls;
 pub mod remote;
+pub mod scopes;
 pub mod secrets;

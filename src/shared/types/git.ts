@@ -49,6 +49,8 @@ export type ErrorKind =
   | "githubNotConfigured"
   | "githubDeviceDenied"
   | "githubDeviceExpired"
+  | "githubMissingScope"
+  | "githubAccountMismatch"
   | "githubNotARepository"
   | "credentialStoreUnavailable"
   | "terminalUnavailable"
@@ -65,7 +67,7 @@ export type ErrorKind =
   | "io"
   | "unknown";
 
-export type SuggestedAction = "pull" | "publishBranch" | "retry" | "showChanges" | "forceDelete";
+export type SuggestedAction = "pull" | "publishBranch" | "retry" | "showChanges" | "forceDelete" | "grantScopes";
 
 export interface AppError {
   kind: ErrorKind;
@@ -375,6 +377,38 @@ export interface GithubAccount {
   name: string | null;
   avatarUrl: string;
   source: AccountSource;
+}
+
+export type CapabilityId =
+  | "repos"
+  | "workflows"
+  | "orgRead"
+  | "orgAdmin"
+  | "sshKeys"
+  | "gpgKeys"
+  | "deleteRepo"
+  | "notifications"
+  | "emails"
+  | "profile";
+
+export interface CapabilityStatus {
+  id: CapabilityId;
+  request: string[];
+  granted: boolean | null;
+}
+
+export interface RateLimit {
+  limit: number;
+  remaining: number;
+  resetAt: number;
+}
+
+export interface TokenInfo {
+  login: string;
+  scopes: string[] | null;
+  expiresAt: string | null;
+  rateLimit: RateLimit | null;
+  capabilities: CapabilityStatus[];
 }
 
 export interface DeviceCode {

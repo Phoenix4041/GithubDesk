@@ -1,18 +1,16 @@
 import { Copy, ExternalLink } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "@/features/settings/store";
 import { cn } from "@/shared/lib/cn";
 import { openExternal } from "@/shared/lib/external";
-import { reportError } from "@/shared/lib/report-error";
-import type { DeviceCode } from "@/shared/types/git";
 import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui/dialog";
 import { Spinner } from "@/shared/ui/spinner";
 import { TextField } from "@/shared/ui/text-field";
-import { cancelDeviceFlow, completeDeviceFlow, connectWithToken } from "../actions";
-import { startDeviceFlow } from "../api";
+import { connectWithToken } from "../actions";
+import { useDeviceFlow } from "../use-device-flow";
 
 type Method = "browser" | "token";
 
@@ -30,22 +28,14 @@ export function AddAccountDialog({ open, onClose }: AddAccountDialogProps) {
   const [method, setMethod] = useState<Method>("browser");
   const [host, setHost] = useState(DEFAULT_HOST);
   const [token, setToken] = useState("");
-  const [code, setCode] = useState<DeviceCode | null>(null);
-  const [busy, setBusy] = useState(false);
-  const jobId = useRef<string | null>(null);
-
-  function reset() {
-    setCode(null);
-    setToken("");
-    setBusy(false);
-    jobId.current = null;
-  }
+  const [savingToken, setSavingToken] = useState(false);
+  const device = useDeviceFlow();
+  const code = device.code;
+  const busy = device.busy || savingToken;
 
   function close() {
-    if (jobId.current) {
-      cancelDeviceFlow(jobId.current);
-    }
-    reset();
+    device.cancel();
+    setToken("");
     onClose();
   }
 
@@ -54,25 +44,9 @@ export function AddAccountDialog({ open, onClose }: AddAccountDialogProps) {
     if (busy || clientId.trim().length === 0) {
       return;
     }
-    setBusy(true);
-    try {
-      const device = await startDeviceFlow(host.trim(), clientId.trim());
-      setCode(device);
-      const currentJob = crypto.randomUUID();
-      jobId.current = currentJob;
-      void openExternal(device.verificationUri);
-      const account = await completeDeviceFlow(host.trim(), clientId.trim(), device, currentJob);
-      if (jobId.current === currentJob) {
-        jobId.current = null;
-        setCode(null);
-        setBusy(false);
-        if (account) {
-          onClose();
-        }
-      }
-    } catch (error) {
-      reportError(error);
-      reset();
+    const account = await device.start(host.trim(), clientId.trim());
+    if (account) {
+      onClose();
     }
   }
 
@@ -81,11 +55,11 @@ export function AddAccountDialog({ open, onClose }: AddAccountDialogProps) {
     if (busy || token.trim().length === 0) {
       return;
     }
-    setBusy(true);
+    setSavingToken(true);
     const account = await connectWithToken(host.trim(), token.trim());
-    setBusy(false);
+    setSavingToken(false);
     if (account) {
-      reset();
+      setToken("");
       onClose();
     }
   }
@@ -164,7 +138,7 @@ export function AddAccountDialog({ open, onClose }: AddAccountDialogProps) {
                 autoComplete="off"
               />
               <div>
-                <Button type="submit" variant="primary" disabled={clientId.trim().length === 0} loading={busy}>
+                <Button type="submit" variant="primary" disabled={clientId.trim().length === 0} loading={device.busy}>
                   {t("github.add.start")}
                 </Button>
               </div>
@@ -183,7 +157,7 @@ export function AddAccountDialog({ open, onClose }: AddAccountDialogProps) {
               autoComplete="off"
             />
             <div>
-              <Button type="submit" variant="primary" disabled={token.trim().length === 0} loading={busy}>
+              <Button type="submit" variant="primary" disabled={token.trim().length === 0} loading={savingToken}>
                 {t("github.add.connect")}
               </Button>
             </div>

@@ -10,6 +10,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 
 use crate::error::{AppError, AppResult, ErrorKind};
+use crate::github::scopes::missing_scopes;
 
 const API_VERSION: &str = "2022-11-28";
 const CLIENT_USER_AGENT: &str = concat!("GithubDesk/", env!("CARGO_PKG_VERSION"));
@@ -142,6 +143,22 @@ impl GithubClient {
     ) -> AppResult<T> {
         let (body, _) = self.get_body(path, query).await?;
         parse_json(&body)
+    }
+
+    pub async fn get_json_with_headers<T: DeserializeOwned>(
+        &self,
+        path: &str,
+        query: &[(&str, String)],
+    ) -> AppResult<(T, HeaderMap)> {
+        let url = self.url(path);
+        let mut builder = self.request(Method::GET, &url);
+        if !query.is_empty() {
+            builder = builder.query(query);
+        }
+        let response = self.dispatch(builder).await?;
+        let headers = response.headers().clone();
+        let text = response.text().await.map_err(map_transport_error)?;
+        Ok((parse_json(&text)?, headers))
     }
 
     async fn get_body(
@@ -342,6 +359,7 @@ pub fn map_status_error(status: StatusCode, headers: &HeaderMap, body: &str) -> 
         .and_then(|value| value.to_str().ok())
         == Some("0");
     let limited_text = message.to_lowercase().contains("rate limit");
+    let missing = missing_scopes(headers);
 
     match status.as_u16() {
         401 => AppError::new(ErrorKind::GithubUnauthorized, message),
@@ -352,6 +370,10 @@ pub fn map_status_error(status: StatusCode, headers: &HeaderMap, body: &str) -> 
                 .unwrap_or_default();
             AppError::new(ErrorKind::GithubRateLimited, reset.to_string())
         }
+        403 | 404 if missing.is_some() => AppError::new(
+            ErrorKind::GithubMissingScope,
+            missing.unwrap_or_default().join(","),
+        ),
         403 => AppError::new(ErrorKind::GithubForbidden, message),
         404 => AppError::new(ErrorKind::GithubNotFound, message),
         405 | 409 => AppError::new(ErrorKind::GithubNotMergeable, message),

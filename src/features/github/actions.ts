@@ -28,11 +28,14 @@ export async function completeDeviceFlow(
   clientId: string,
   code: DeviceCode,
   jobId: string,
+  expectedLogin: string | null = null,
 ): Promise<GithubAccount | null> {
   try {
-    const account = await finishDeviceFlow(host, clientId, code, jobId);
+    const account = await finishDeviceFlow(host, clientId, code, jobId, expectedLogin);
     await queryClient.invalidateQueries({ queryKey: accountKeys.all });
-    announceAdded(account);
+    if (expectedLogin === null) {
+      announceAdded(account);
+    }
     return account;
   } catch (error) {
     reportError(error);

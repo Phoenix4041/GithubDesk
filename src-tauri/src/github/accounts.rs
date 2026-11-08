@@ -148,6 +148,17 @@ impl AccountStore {
         token: &str,
         source: AccountSource,
     ) -> AppResult<Account> {
+        self.add_with_token_expecting(host, token, source, None)
+            .await
+    }
+
+    pub async fn add_with_token_expecting(
+        &self,
+        host: &str,
+        token: &str,
+        source: AccountSource,
+        expected_login: Option<&str>,
+    ) -> AppResult<Account> {
         let token = token.trim();
         if token.is_empty() || token.chars().any(char::is_whitespace) {
             return Err(AppError::invalid_input(
@@ -157,6 +168,11 @@ impl AccountStore {
         let endpoints = Endpoints::for_host(host)?;
         let client = GithubClient::new(&endpoints.api_base, Some(token.to_string()))?;
         let user: UserResponse = client.get_json("/user", &[]).await?;
+        if let Some(expected) = expected_login {
+            if !user.login.eq_ignore_ascii_case(expected) {
+                return Err(AppError::new(ErrorKind::GithubAccountMismatch, user.login));
+            }
+        }
         let account = Account {
             id: account_id(&endpoints.host, &user.login),
             host: endpoints.host,

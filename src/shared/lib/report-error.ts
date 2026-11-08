@@ -3,6 +3,7 @@ import { showToast } from "@/shared/ui/toast-store";
 import type { ToastAction } from "@/shared/ui/toast-store";
 import type { AppError, ErrorKind } from "@/shared/types/git";
 import { logClientError } from "./diagnostics";
+import { useGrantScopesStore } from "./grant-scopes-store";
 import { CommandError, isCancelled } from "./tauri-client";
 import { useUiStore } from "./ui-store";
 
@@ -39,7 +40,11 @@ export function describeError(error: unknown): ErrorDescription {
   const appError = error instanceof CommandError ? error.appError : null;
   const kind: ErrorKind = appError?.kind ?? "unknown";
   const title = i18next.t(`errors.${kind}.title`);
-  let message = i18next.t(`errors.${kind}.message`);
+  const detailText = appError?.detail ?? "";
+  let message = i18next.t(`errors.${kind}.message`, {
+    scopes: detailText.split(",").join(", "),
+    login: detailText,
+  });
   if (DETAILED_KINDS.has(kind)) {
     const detail = appError?.detail ?? (error instanceof Error ? error.message : "");
     if (detail) {
@@ -84,6 +89,18 @@ function actionsFor(appError: AppError | null, handlers: ErrorHandlers): ToastAc
       if (handlers.forceDelete) {
         actions.push({ label: i18next.t("errors.actions.forceDelete"), run: handlers.forceDelete });
       }
+      break;
+    case "grantScopes":
+      actions.push({
+        label: i18next.t("errors.actions.grantScopes"),
+        run: () =>
+          useGrantScopesStore.getState().show({
+            scopes: appError.detail
+              .split(",")
+              .map((scope) => scope.trim())
+              .filter((scope) => scope.length > 0),
+          }),
+      });
       break;
     default:
       break;

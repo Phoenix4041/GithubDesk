@@ -56,6 +56,8 @@ pub enum ErrorKind {
     GithubNotConfigured,
     GithubDeviceDenied,
     GithubDeviceExpired,
+    GithubMissingScope,
+    GithubAccountMismatch,
     GithubNotARepository,
     CredentialStoreUnavailable,
     TerminalUnavailable,
@@ -81,6 +83,7 @@ pub enum SuggestedAction {
     Retry,
     ShowChanges,
     ForceDelete,
+    GrantScopes,
 }
 
 #[derive(Debug, Clone, Serialize, Error)]
@@ -149,6 +152,7 @@ pub fn suggested_action_for(kind: ErrorKind) -> Option<SuggestedAction> {
         | ErrorKind::UnstagedChanges
         | ErrorKind::LocalChangesWouldBeOverwritten => Some(SuggestedAction::ShowChanges),
         ErrorKind::BranchNotFullyMerged => Some(SuggestedAction::ForceDelete),
+        ErrorKind::GithubMissingScope => Some(SuggestedAction::GrantScopes),
         _ => None,
     }
 }
