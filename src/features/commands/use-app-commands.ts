@@ -9,6 +9,7 @@ import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
 import { useAbsorbDialogStore } from "@/features/absorb/store";
 import { useRescueDialogStore } from "@/features/rescue/store";
+import { useStackDialogStore } from "@/features/stack/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
 import { useNotificationDialogStore } from "@/features/github/notifications/store";
@@ -353,6 +354,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "absorber fixup autosquash corregir commit anterior absorb amend older",
       enabled: true,
       run: () => useAbsorbDialogStore.getState().show(),
+    },
+    {
+      id: "stack.open",
+      titleKey: "commands.items.stack.open",
+      group: "repository",
+      keywords: "pila ramas apiladas encadenadas reajustar stack stacked branches restack",
+      enabled: true,
+      run: () => useStackDialogStore.getState().show(),
     },
     {
       id: "rescue.open",

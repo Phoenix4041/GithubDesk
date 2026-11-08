@@ -2088,6 +2088,9 @@
       },
       "absorb": {
         "open": "Absorb staged changes into earlier commits"
+      },
+      "stack": {
+        "open": "Open the stacked branches panel"
       }
     }
   },
@@ -2722,5 +2725,40 @@
       "unsupported": "new, deleted, renamed or binary file",
       "notFound": "could not find who wrote those lines"
     }
+  },
+  "stack": {
+    "title": "Stacked branches",
+    "description": "Chain branches: each one starts from the previous. If the first changes, restack everything at once and open the pull requests in order.",
+    "empty": {
+      "title": "There is no stack yet",
+      "description": "Pick a branch and the branch it builds on to start."
+    },
+    "listLabel": "Branch stack",
+    "current": "current",
+    "ahead_one": "{{count}} own commit",
+    "ahead_other": "{{count}} own commits",
+    "needsRestack": "needs restack",
+    "remove": "Remove {{name}} from the stack",
+    "branch": "Branch",
+    "parent": "Builds on",
+    "place": "Put in the stack",
+    "restack": "Restack",
+    "restacked_one": "{{count}} branch was restacked",
+    "restacked_other": "{{count}} branches were restacked",
+    "openPulls": "Publish and open chained pull requests",
+    "prBody": "This pull request is part of a stack. Stack order:",
+    "hint": "The relation is kept in the repository's local configuration. Restacking rewrites the stack's branches, so a copy is saved in Rescue first; if there are conflicts, resolve them and press Restack again."
+  },
+  "split": {
+    "menu": "Split this commit...",
+    "title": "Split commit {{hash}}",
+    "description": "Turns an unpushed commit into two: first the files you choose and then the rest. The final result is identical.",
+    "pick": "Choose the files that go in the first commit (not all of them).",
+    "filesLabel": "Files in the commit",
+    "firstMessage": "First commit message",
+    "secondMessage": "Second commit message",
+    "hint": "Later commits are replayed on top. A copy is saved in Rescue first. Only commits that are on no remote can be split, and the split is by file, not by line.",
+    "run": "Split",
+    "done": "The commit was split in two"
   }
 }

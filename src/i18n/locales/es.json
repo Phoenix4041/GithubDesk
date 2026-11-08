@@ -2088,6 +2088,9 @@
       },
       "absorb": {
         "open": "Absorber lo preparado en commits anteriores"
+      },
+      "stack": {
+        "open": "Abrir la pila de ramas apiladas"
       }
     }
   },
@@ -2722,5 +2725,40 @@
       "unsupported": "archivo nuevo, borrado, renombrado o binario",
       "notFound": "no se encontró quién escribió esas líneas"
     }
+  },
+  "stack": {
+    "title": "Ramas apiladas",
+    "description": "Encadena ramas: cada una parte de la anterior. Si la primera cambia, reajusta toda la pila de una vez y crea las pull requests en orden.",
+    "empty": {
+      "title": "Todavía no hay una pila",
+      "description": "Elige una rama y la rama sobre la que se apoya para empezar."
+    },
+    "listLabel": "Pila de ramas",
+    "current": "actual",
+    "ahead_one": "{{count}} commit propio",
+    "ahead_other": "{{count}} commits propios",
+    "needsRestack": "necesita reajuste",
+    "remove": "Quitar {{name}} de la pila",
+    "branch": "Rama",
+    "parent": "Se apoya en",
+    "place": "Poner en la pila",
+    "restack": "Reajustar la pila",
+    "restacked_one": "Se reajustó {{count}} rama",
+    "restacked_other": "Se reajustaron {{count}} ramas",
+    "openPulls": "Publicar y abrir pull requests encadenadas",
+    "prBody": "Esta pull request es parte de una pila. Orden de la pila:",
+    "hint": "La relación se guarda en la configuración local del repositorio. Reajustar reescribe las ramas de la pila, así que antes se guarda una copia en Rescate; si hay conflictos, resuélvelos y vuelve a pulsar Reajustar."
+  },
+  "split": {
+    "menu": "Dividir este commit...",
+    "title": "Dividir el commit {{hash}}",
+    "description": "Convierte un commit sin publicar en dos: primero los archivos que elijas y después el resto. El resultado final es idéntico.",
+    "pick": "Elige los archivos que van en el primer commit (no todos).",
+    "filesLabel": "Archivos del commit",
+    "firstMessage": "Mensaje del primer commit",
+    "secondMessage": "Mensaje del segundo commit",
+    "hint": "Los commits posteriores se vuelven a aplicar encima. Antes se guarda una copia en Rescate. Solo se dividen commits que no están en ningún remoto y la división es por archivos, no por líneas.",
+    "run": "Dividir",
+    "done": "El commit se dividió en dos"
   }
 }

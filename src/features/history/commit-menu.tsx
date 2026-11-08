@@ -8,6 +8,7 @@ import {
   History,
   ListOrdered,
   RotateCcw,
+  Scissors,
   Tag,
   Undo2,
 } from "lucide-react";
@@ -25,6 +26,7 @@ import {
   resetCurrentBranchTo,
   revertSingleCommit,
 } from "./commit-actions";
+import { useSplitDialogStore } from "@/features/split/store";
 import { useCommitDialogStore } from "./commit-dialog-store";
 
 interface CommitMenuInput {
@@ -91,6 +93,12 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
           repoPath,
           [...picks].reverse().map((candidate) => candidate.hash),
         ),
+    },
+    {
+      label: t("split.menu"),
+      icon: <Scissors className="size-4" />,
+      disabled: commit.parents.length > 1,
+      onSelect: () => useSplitDialogStore.getState().show({ hash: commit.hash, shortHash: commit.shortHash, title: commit.subject }),
     },
     { kind: "separator" },
     {

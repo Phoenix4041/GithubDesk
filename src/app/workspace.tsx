@@ -26,6 +26,8 @@ import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
 import { AbsorbDialog } from "@/features/absorb/components/absorb-dialog";
 import { GuardDialog } from "@/features/guard/components/guard-dialog";
 import { RescueDialog } from "@/features/rescue/components/rescue-dialog";
+import { SplitDialog } from "@/features/split/components/split-dialog";
+import { StackDialog } from "@/features/stack/components/stack-dialog";
 import { useRescueNotice } from "@/features/rescue/use-rescue-notice";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
 import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
@@ -170,6 +172,8 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <RescueDialog repoPath={repoPath} />
       <GuardDialog />
       <AbsorbDialog repoPath={repoPath} />
+      <StackDialog repoPath={repoPath} />
+      <SplitDialog repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>

@@ -39,6 +39,8 @@ pub mod remote;
 pub mod repo;
 pub mod rescue;
 pub mod signing;
+pub mod split;
+pub mod stack;
 pub mod stash;
 pub mod status;
 pub mod submodule;
