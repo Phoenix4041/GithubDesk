@@ -82,7 +82,14 @@
       "submit": "Clone",
       "progress": "Clone progress",
       "connecting": "Connecting to the server...",
-      "usingAccount": "The account @{{login}} will be used to clone; it also works for private repositories."
+      "usingAccount": "The account @{{login}} will be used to clone; it also works for private repositories.",
+      "advanced": "Options for large repositories",
+      "shallow": "Clone without the full history (--depth)",
+      "depth": "Commits to download",
+      "depthHint": "1 brings only the latest commit.",
+      "depthInvalid": "Enter a whole number greater than 0.",
+      "blobless": "Skip file contents until they are needed (--filter=blob:none)",
+      "bloblessHint": "The whole history is downloaded, but the content of old versions is fetched from the server only when needed."
     },
     "create": {
       "title": "Create repository",

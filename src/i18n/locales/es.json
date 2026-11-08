@@ -82,7 +82,14 @@
       "submit": "Clonar",
       "progress": "Progreso de la clonación",
       "connecting": "Conectando con el servidor...",
-      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados."
+      "usingAccount": "Se usará la cuenta @{{login}} para clonar; sirve también para repositorios privados.",
+      "advanced": "Opciones para repositorios grandes",
+      "shallow": "Clonar sin historial completo (--depth)",
+      "depth": "Commits a descargar",
+      "depthHint": "1 trae solo el último commit.",
+      "depthInvalid": "Escribe un número entero mayor que 0.",
+      "blobless": "Clonar sin archivos grandes hasta que se necesiten (--filter=blob:none)",
+      "bloblessHint": "Se descarga toda la historia, pero el contenido de las versiones antiguas se pide al servidor solo cuando hace falta."
     },
     "create": {
       "title": "Crear repositorio",
