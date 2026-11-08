@@ -19,6 +19,15 @@ export function HistoryDiffPanel({ repoPath }: HistoryDiffPanelProps) {
       ? { hash: selectedHash, path: selectedFile.path, oldPath: selectedFile.oldPath }
       : null;
   const query = useCommitFileDiff(repoPath, target, ignoreWhitespace);
+  const images = target
+    ? {
+        repoPath,
+        sides: {
+          before: { source: { kind: "revision", revision: `${target.hash}^` } as const, path: target.oldPath ?? target.path },
+          after: { source: { kind: "revision", revision: target.hash } as const, path: target.path },
+        },
+      }
+    : null;
 
-  return <FileDiffPanel target={target} query={query} placeholder={t("history.selectFile")} />;
+  return <FileDiffPanel target={target} query={query} placeholder={t("history.selectFile")} images={images} />;
 }
