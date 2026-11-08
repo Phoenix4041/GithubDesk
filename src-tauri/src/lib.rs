@@ -14,8 +14,8 @@ pub mod watcher;
 
 use commands::diagnostics as diagnostics_commands;
 use commands::{
-    absorb, app_update, bisect, blame, branch, cleanup, commit, commit_ops, compare, conflict,
-    external, github_account, github_actions, github_admin, github_collab, github_extras,
+    absorb, app_update, bisect, blame, branch, cleanup, commit, commit_extras, commit_ops, compare,
+    conflict, external, github_account, github_actions, github_admin, github_collab, github_extras,
     github_home, github_issues, github_orgs, github_pulls, github_releases, github_repo,
     github_secrets, gitignore, guard, history, identity, job, lfs, merge, multi, operation,
     patches, predict, rebase, rebase_onto, reflog, remote, repo, rescue, signing, split, stack,
@@ -51,6 +51,9 @@ pub fn run() {
             commit::commit_head,
             commit::commit_create,
             commit::commit_undo,
+            commit_extras::commit_coauthors,
+            commit_extras::commit_template_get,
+            commit_extras::commit_template_set,
             branch::branch_list,
             branch::branch_create,
             branch::branch_switch,

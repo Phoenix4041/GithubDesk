@@ -224,6 +224,27 @@
       "description": "The commit \"{{title}}\" will leave the history. Its changes will be staged again and its message restored in the commit box.",
       "pushedWarning": "This commit is already published. To reflect the change on the remote you will need to force push, which rewrites shared history.",
       "confirm": "Undo commit"
+    },
+    "coauthors": {
+      "label": "Co-authors",
+      "count_one": "{{count}} co-author",
+      "count_other": "{{count}} co-authors",
+      "filter": "Search by name or email",
+      "loading": "Looking for people in the history…",
+      "empty": "No other people in the history."
+    },
+    "issue": {
+      "addTitle": "Prefix #{{issue}}",
+      "addRefs": "Add Refs #{{issue}}",
+      "shortcut": "Shortcut: Alt+I"
+    },
+    "template": {
+      "open": "Template",
+      "title": "Message template",
+      "description": "Saved in this repository's local config and used when the description is empty. Leave it blank to remove it.",
+      "field": "Template text",
+      "save": "Save template",
+      "saved": "Template saved"
     }
   },
   "diff": {
@@ -359,6 +380,13 @@
       "command": "Editor program",
       "commandHint": "The executable path, or its name if it is on the PATH. It receives the folder or the file.",
       "none": "No known editor was detected. You can pick another program."
+    },
+    "issuePrefix": {
+      "label": "Issue number in the commit",
+      "off": "Off",
+      "title": "In the title",
+      "refs": "Refs in the description",
+      "hint": "Takes the number from the branch name (for example 123-fix or gh-45) and adds it with a button or Alt+I."
     }
   },
   "progress": {

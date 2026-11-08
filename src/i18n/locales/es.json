@@ -224,6 +224,27 @@
       "description": "El commit «{{title}}» saldrá del historial. Sus cambios volverán a quedar preparados y su mensaje se recupera en el cuadro de commit.",
       "pushedWarning": "Este commit ya está publicado. Para reflejar el cambio en el remoto tendrás que hacer un force push, que reescribe el historial compartido.",
       "confirm": "Deshacer commit"
+    },
+    "coauthors": {
+      "label": "Coautores",
+      "count_one": "{{count}} coautor",
+      "count_other": "{{count}} coautores",
+      "filter": "Buscar por nombre o correo",
+      "loading": "Buscando personas en el historial…",
+      "empty": "No hay otras personas en el historial."
+    },
+    "issue": {
+      "addTitle": "Anteponer #{{issue}}",
+      "addRefs": "Agregar Refs #{{issue}}",
+      "shortcut": "Atajo: Alt+I"
+    },
+    "template": {
+      "open": "Plantilla",
+      "title": "Plantilla de mensaje",
+      "description": "Se guarda en la configuración local de este repositorio y se usa cuando la descripción está vacía. Déjala en blanco para quitarla.",
+      "field": "Texto de la plantilla",
+      "save": "Guardar plantilla",
+      "saved": "Plantilla guardada"
     }
   },
   "diff": {
@@ -359,6 +380,13 @@
       "command": "Programa del editor",
       "commandHint": "La ruta del ejecutable o su nombre si está en el PATH. Se le pasa la carpeta o el archivo.",
       "none": "No se detectó ningún editor conocido. Puedes elegir otro programa."
+    },
+    "issuePrefix": {
+      "label": "Número de incidencia en el commit",
+      "off": "Apagado",
+      "title": "En el título",
+      "refs": "Refs en la descripción",
+      "hint": "Toma el número del nombre de la rama (por ejemplo 123-arreglo o gh-45) y lo agrega con un botón o con Alt+I."
     }
   },
   "progress": {

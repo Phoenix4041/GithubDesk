@@ -5,6 +5,7 @@ pub mod blame;
 pub mod branch;
 pub mod cleanup;
 pub mod commit;
+pub mod commit_extras;
 pub mod commit_ops;
 pub mod compare;
 pub mod conflict;

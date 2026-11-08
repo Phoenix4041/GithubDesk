@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Language } from "@/i18n";
+import type { IssuePrefixMode } from "@/features/changes/commit-message-model";
 import type { ShortcutOverrides } from "@/features/commands/shortcut-model";
 import { removeProfile } from "@/features/profiles/profile-model";
 import type { Profile } from "@/features/profiles/profile-model";
@@ -36,6 +37,8 @@ interface SettingsState {
   terminalShell: string | null;
   externalEditor: string | null;
   externalEditorCommand: string;
+  issuePrefixMode: IssuePrefixMode;
+  setIssuePrefixMode: (mode: IssuePrefixMode) => void;
   setTheme: (theme: ThemePreference) => void;
   setLanguage: (language: Language) => void;
   setSidebarWidth: (width: number) => void;
@@ -81,6 +84,8 @@ export const useSettingsStore = create<SettingsState>()(
       terminalShell: null,
       externalEditor: null,
       externalEditorCommand: "",
+      issuePrefixMode: "off",
+      setIssuePrefixMode: (issuePrefixMode) => set({ issuePrefixMode }),
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => set({ language }),
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
