@@ -25,6 +25,7 @@ import { useRepositoryDialogStore } from "@/features/repositories/dialog-store";
 import { useSettingsStore } from "@/features/settings/store";
 import { openRepositoryInEditor, revealRepositoryPath } from "@/features/external/actions";
 import { useGitignoreDialogStore } from "@/features/gitignore/store";
+import { useHealthDialogStore } from "@/features/health/store";
 import { useSigningDialogStore } from "@/features/signing/store";
 import { useSubmoduleDialogStore } from "@/features/submodules/dialog-store";
 import { useTerminalStore } from "@/features/terminal/store";
@@ -396,6 +397,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "estadisticas actividad colaboradores autores archivos pendientes todo fixme stats contributors churn",
       enabled: true,
       run: () => useStatsDialogStore.getState().show(),
+    },
+    {
+      id: "health.open",
+      titleKey: "commands.items.health.open",
+      group: "repository",
+      keywords: "salud tamano espacio archivos grandes sparse checkout gc optimizar mantenimiento health size maintenance",
+      enabled: true,
+      run: () => useHealthDialogStore.getState().show(),
     },
     {
       id: "github.releases",

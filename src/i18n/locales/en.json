@@ -2104,6 +2104,9 @@
       },
       "stats": {
         "open": "Show repository statistics"
+      },
+      "health": {
+        "open": "Show repository health"
       }
     }
   },
@@ -2861,6 +2864,72 @@
       "notCommitted": "Not committed yet",
       "authorFailed": "Unknown",
       "blameLimit": "The author can only be looked up for the first {{count}} results."
+    }
+  },
+  "health": {
+    "title": "Repository health",
+    "description": "Size, large files in the history, sparse checkout and maintenance.",
+    "open": "Repository health",
+    "tabsLabel": "Health sections",
+    "tabs": {
+      "size": "Size",
+      "blobs": "Large files",
+      "sparse": "Sparse checkout",
+      "maintenance": "Maintenance"
+    },
+    "size": {
+      "total": "The .git folder takes {{size}}.",
+      "shallow": "This is a shallow clone.",
+      "partial": "This is a partial clone: files are downloaded when needed.",
+      "objectsTitle": "Objects",
+      "packed": "Packed",
+      "packs": "Packs",
+      "loose": "Loose",
+      "garbage": "Garbage",
+      "refsTitle": "References",
+      "looseRefs": "Loose references",
+      "packedRefs": "Packed references",
+      "branches": "Local branches",
+      "unmerged": "Branches not merged into the current one",
+      "stashes": "Stashes",
+      "suggestGc": "There are many loose objects or packs. Optimizing the repository under Maintenance can help."
+    },
+    "blobs": {
+      "running": "Looking for the largest files in the whole history…",
+      "cancelled": "The search was cancelled.",
+      "retry": "Search again",
+      "empty": "The history has no files.",
+      "hint": "The 20 largest files stored in the history, even if they are no longer in the current branch.",
+      "listLabel": "Largest files",
+      "noPath": "(no path)"
+    },
+    "sparse": {
+      "on_one": "Sparse checkout is on: only {{count}} folder is checked out besides the root files.",
+      "on_other": "Sparse checkout is on: only {{count}} folders are checked out besides the root files.",
+      "off": "Sparse checkout is off: every folder is on disk.",
+      "folders": "Folders you want on disk",
+      "foldersHint": "One per line, relative to the repository root. Other folders leave the disk but stay in Git.",
+      "invalid": "Invalid path: {{folder}}",
+      "enable": "Turn on",
+      "update": "Update folders",
+      "disable": "Turn off",
+      "apply": "Apply",
+      "confirmSetTitle": "Keep only these folders on disk?",
+      "confirmSet_one": "{{count}} folder and the root files will stay. The rest leaves the disk, not Git: turning this off brings it back.",
+      "confirmSet_other": "{{count}} folders and the root files will stay. The rest leaves the disk, not Git: turning this off brings it back.",
+      "confirmDisableTitle": "Turn off sparse checkout?",
+      "confirmDisable": "Every folder comes back to disk. It can take a while in large repositories."
+    },
+    "maintenance": {
+      "description": "Optimizing packs loose objects and compresses the repository with git gc. It does not delete commits, branches or stashes.",
+      "run": "Optimize now",
+      "running": "Optimizing the repository…",
+      "cancelled": "The optimization was cancelled.",
+      "confirmTitle": "Optimize the repository?",
+      "confirm": "It can take several minutes in large repositories. Avoid other Git operations meanwhile.",
+      "resultTitle": "Result",
+      "result": "The .git folder went from {{before}} to {{after}} ({{saved}} freed).",
+      "objects": "There are now {{loose}} loose objects and {{packs}} packs."
     }
   }
 }

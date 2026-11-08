@@ -2104,6 +2104,9 @@
       },
       "stats": {
         "open": "Ver estadísticas del repositorio"
+      },
+      "health": {
+        "open": "Ver la salud del repositorio"
       }
     }
   },
@@ -2861,6 +2864,72 @@
       "notCommitted": "Sin confirmar todavía",
       "authorFailed": "No se pudo saber",
       "blameLimit": "El autor solo se puede consultar en los primeros {{count}} resultados."
+    }
+  },
+  "health": {
+    "title": "Salud del repositorio",
+    "description": "Tamaño, archivos grandes de la historia, sparse-checkout y mantenimiento.",
+    "open": "Salud del repositorio",
+    "tabsLabel": "Secciones de salud",
+    "tabs": {
+      "size": "Tamaño",
+      "blobs": "Archivos grandes",
+      "sparse": "Sparse-checkout",
+      "maintenance": "Mantenimiento"
+    },
+    "size": {
+      "total": "La carpeta .git ocupa {{size}}.",
+      "shallow": "Es un clon sin historial completo.",
+      "partial": "Es un clon parcial: los archivos se descargan cuando se necesitan.",
+      "objectsTitle": "Objetos",
+      "packed": "Empaquetados",
+      "packs": "Paquetes",
+      "loose": "Sueltos",
+      "garbage": "Basura",
+      "refsTitle": "Referencias",
+      "looseRefs": "Referencias sueltas",
+      "packedRefs": "Referencias empaquetadas",
+      "branches": "Ramas locales",
+      "unmerged": "Ramas sin combinar en la actual",
+      "stashes": "Cambios guardados (stash)",
+      "suggestGc": "Hay muchos objetos sueltos o paquetes. Optimizar el repositorio en Mantenimiento puede ayudar."
+    },
+    "blobs": {
+      "running": "Buscando los archivos más grandes de toda la historia…",
+      "cancelled": "Se canceló la búsqueda.",
+      "retry": "Buscar otra vez",
+      "empty": "La historia no tiene archivos.",
+      "hint": "Los 20 archivos más grandes guardados en la historia, aunque ya no estén en la rama actual.",
+      "listLabel": "Archivos más grandes",
+      "noPath": "(sin ruta)"
+    },
+    "sparse": {
+      "on_one": "Sparse-checkout activo: solo se descarga {{count}} carpeta además de los archivos de la raíz.",
+      "on_other": "Sparse-checkout activo: solo se descargan {{count}} carpetas además de los archivos de la raíz.",
+      "off": "Sparse-checkout desactivado: todas las carpetas están en el disco.",
+      "folders": "Carpetas que quieres en el disco",
+      "foldersHint": "Una por línea, relativa a la raíz del repositorio. Las demás carpetas desaparecen del disco pero siguen en Git.",
+      "invalid": "Ruta no válida: {{folder}}",
+      "enable": "Activar",
+      "update": "Actualizar carpetas",
+      "disable": "Desactivar",
+      "apply": "Aplicar",
+      "confirmSetTitle": "¿Dejar solo estas carpetas en el disco?",
+      "confirmSet_one": "Se mantendrá {{count}} carpeta y los archivos de la raíz. El resto se quitará del disco, pero no de Git: puedes traerlo de vuelta al desactivar.",
+      "confirmSet_other": "Se mantendrán {{count}} carpetas y los archivos de la raíz. El resto se quitará del disco, pero no de Git: puedes traerlo de vuelta al desactivar.",
+      "confirmDisableTitle": "¿Desactivar sparse-checkout?",
+      "confirmDisable": "Todas las carpetas volverán al disco. En repositorios grandes puede tardar."
+    },
+    "maintenance": {
+      "description": "Optimizar empaqueta los objetos sueltos y comprime el repositorio con git gc. No borra commits, ramas ni cambios guardados.",
+      "run": "Optimizar ahora",
+      "running": "Optimizando el repositorio…",
+      "cancelled": "Se canceló la optimización.",
+      "confirmTitle": "¿Optimizar el repositorio?",
+      "confirm": "Puede tardar varios minutos en repositorios grandes. Mientras tanto evita otras operaciones de Git.",
+      "resultTitle": "Resultado",
+      "result": "La carpeta .git pasó de {{before}} a {{after}} (se liberaron {{saved}}).",
+      "objects": "Ahora hay {{loose}} objetos sueltos en {{packs}} paquetes."
     }
   }
 }

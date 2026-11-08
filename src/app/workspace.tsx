@@ -25,6 +25,7 @@ import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
 import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
 import { AbsorbDialog } from "@/features/absorb/components/absorb-dialog";
 import { GuardDialog } from "@/features/guard/components/guard-dialog";
+import { HealthDialog } from "@/features/health/components/health-dialog";
 import { RescueDialog } from "@/features/rescue/components/rescue-dialog";
 import { SplitDialog } from "@/features/split/components/split-dialog";
 import { StackDialog } from "@/features/stack/components/stack-dialog";
@@ -176,6 +177,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <StackDialog repoPath={repoPath} />
       <SplitDialog repoPath={repoPath} />
       <StatsDialog repoPath={repoPath} />
+      <HealthDialog repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>
