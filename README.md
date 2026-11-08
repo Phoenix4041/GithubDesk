@@ -200,3 +200,11 @@ pnpm tauri build
   3. Al subir una etiqueta `v*`, `release.yml` firma los instaladores y publica `latest.json` junto a ellos.
   Mientras `plugins.updater` no exista en la configuración, el plugin ni siquiera se carga y el aviso de versión nueva sigue funcionando como antes. Cuando existe, el aviso ofrece Instalar y reiniciar. La firma se comprueba con una clave de usar y tirar en las pruebas de integración (`src-tauri/tests/self_update.rs`); no se probó una actualización completa contra un repositorio real de GitHub.
 - Firma de los instaladores: Windows necesita un certificado de firma de código (por ejemplo de Azure Trusted Signing o de una autoridad como DigiCert) y se configura en `bundle.windows` con `certificateThumbprint` o `signCommand`; macOS necesita una cuenta de Apple Developer y los secretos `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD` y `APPLE_TEAM_ID`, que `tauri-action` lee del entorno. Sin ellos los instaladores siguen sin firmar.
+
+## Notas de la Fase 8
+
+- Inicio: al no haber repositorio abierto se muestra un panel con saludo, acciones rápidas, repositorios recientes con su estado, pull requests por revisar, CI roto, issues asignados y menciones.
+- Paleta: con `Ctrl+K` escribe para saltar a repositorios, ramas, pull requests, issues y archivos, con prioridad a lo reciente.
+- Secretos: antes de confirmar se revisan las líneas agregadas en staging. Se puede sacar el archivo del staging, agregarlo a `.gitignore` o commitear igual. Una línea con `secretscan:ignore` se omite.
+- Deshacer: ahora cubre también el cambio de rama, muestra una vista previa y se niega si hay cambios sin guardar, salvo que se guarden antes en un stash.
+- Reflog: línea de tiempo de HEAD y de cada rama con filtros por fecha, y recuperación de un commit creando una rama nueva.
