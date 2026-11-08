@@ -30,6 +30,7 @@ import { useStashStore } from "@/features/stash/store";
 import { ForcePushDialog } from "@/features/sync/components/force-push-dialog";
 import { GitignoreDialog } from "@/features/gitignore/components/gitignore-dialog";
 import { MergeDialog } from "@/features/merge/components/merge-dialog";
+import { PatchDialog } from "@/features/patches/components/patch-dialog";
 import { SigningDialog } from "@/features/signing/components/signing-dialog";
 import { SubmoduleDialogs } from "@/features/submodules/components/submodule-dialogs";
 import { TagDialogs } from "@/features/tags/components/tag-dialogs";
@@ -138,6 +139,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <SubmoduleDialogs repoPath={repoPath} />
       <SigningDialog repoPath={repoPath} />
       <MergeDialog repoPath={repoPath} />
+      <PatchDialog repoPath={repoPath} />
       <GitignoreDialog repoPath={repoPath} />
       <RebaseDialog repoPath={repoPath} />
       <RebaseOntoDialog repoPath={repoPath} />

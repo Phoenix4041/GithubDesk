@@ -32,6 +32,7 @@ export const repoKeys = {
   conflict: (path: string, file: string) => ["repo", path, "conflict", file] as const,
   stashes: (path: string) => ["repo", path, "stashes"] as const,
   mergePreview: (path: string, source: string) => ["repo", path, "merge-preview", source] as const,
+  patchPreview: (path: string, files: readonly string[]) => ["repo", path, "patch-preview", ...files] as const,
   worktrees: (path: string) => ["repo", path, "worktrees"] as const,
   submodules: (path: string) => ["repo", path, "submodules"] as const,
   ignoreFile: (path: string) => ["repo", path, "ignore-file"] as const,

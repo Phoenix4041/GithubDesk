@@ -632,6 +632,10 @@
     "nothingToMerge": {
       "title": "There is nothing to merge",
       "message": "The current branch already has every change of the other one."
+    },
+    "patchNotApplicable": {
+      "title": "The patch cannot be applied",
+      "message": "It does not fit the files in this repository. Check it is the right patch or try applying it as changes only."
     }
   },
   "operation": {
@@ -639,7 +643,8 @@
       "merge": "merge",
       "cherryPick": "cherry-pick",
       "revert": "revert",
-      "rebase": "rebase"
+      "rebase": "rebase",
+      "am": "patch"
     },
     "title": "{{name}} in progress",
     "progress": "Step {{step}} of {{total}}",
@@ -719,7 +724,9 @@
       "resetMixed": "Mixed reset to this commit",
       "resetHard": "Hard reset to this commit...",
       "copyHash": "Copy hash",
-      "rebase": "Interactive rebase from here..."
+      "rebase": "Interactive rebase from here...",
+      "exportPatch_one": "Export as patch",
+      "exportPatch_other": "Export {{count}} commits as patches"
     },
     "reset": {
       "soft": {
@@ -1414,6 +1421,9 @@
       },
       "gitignore": {
         "edit": "Edit the .gitignore"
+      },
+      "patch": {
+        "apply": "Apply a patch"
       }
     }
   },
@@ -1762,5 +1772,43 @@
     "view": "See what is new",
     "upToDate": "You already have the latest version ({{version}})",
     "notConfigured": "Checking for new versions is not turned on in this build yet."
+  },
+  "patches": {
+    "chooseFolder": "Choose the folder to save the patches in",
+    "chooseFiles": "Choose one or more patches",
+    "fileFilter": "Patches",
+    "exported_one": "Saved {{count}} patch in the chosen folder",
+    "exported_other": "Saved {{count}} patches in the chosen folder",
+    "done": {
+      "commit_one": "Created {{count}} commit from the patch",
+      "commit_other": "Created {{count}} commits from the patches",
+      "workingTree_one": "Applied the changes from the patch",
+      "workingTree_other": "Applied the changes from the patches"
+    },
+    "conflictTitle": "The patch clashed with your changes",
+    "conflictMessage": "Resolve the conflicts and continue from the banner above.",
+    "dialog": {
+      "title_one": "Apply patch",
+      "title_other": "Apply {{count}} patches",
+      "description": "Check what each patch changes before applying it.",
+      "filesLabel": "Chosen patches",
+      "filesCount_one": "{{count}} file",
+      "filesCount_other": "{{count}} files",
+      "applies": "Applies as it is",
+      "doesNotFit": "Does not apply as it is; git will try to merge it",
+      "needsMailbox": "Some files carry no commit data, so they can only be applied as changes.",
+      "modeLabel": "How to apply",
+      "modes": {
+        "commit": {
+          "label": "Create one commit per patch",
+          "hint": "Keeps the author and message of each patch."
+        },
+        "workingTree": {
+          "label": "Only apply the changes",
+          "hint": "Leaves the changes staged without committing. If they clash, they are marked as conflicts."
+        }
+      },
+      "submit": "Apply"
+    }
   }
 }

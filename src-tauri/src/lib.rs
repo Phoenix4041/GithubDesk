@@ -15,8 +15,8 @@ use commands::diagnostics as diagnostics_commands;
 use commands::{
     app_update, blame, branch, commit, commit_ops, compare, conflict, external, github_account,
     github_actions, github_issues, github_pulls, github_repo, gitignore, history, job, lfs, merge,
-    operation, rebase, rebase_onto, reflog, remote, repo, signing, stash, status, submodule, tag,
-    terminal, watch, worktree,
+    operation, patches, rebase, rebase_onto, reflog, remote, repo, signing, stash, status,
+    submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -159,6 +159,9 @@ pub fn run() {
             rebase_onto::rebase_onto_run,
             merge::merge_preview_get,
             merge::merge_branch_into_current,
+            patches::patch_export,
+            patches::patch_preview,
+            patches::patch_apply,
             lfs::lfs_status_get,
             lfs::lfs_install_local,
             lfs::lfs_track_pattern,

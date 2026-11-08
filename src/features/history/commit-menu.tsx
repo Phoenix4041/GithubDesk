@@ -1,6 +1,7 @@
-import { Copy, GitBranchPlus, GitCommitHorizontal, History, ListOrdered, RotateCcw, Tag, Undo2 } from "lucide-react";
+import { Copy, FileDown, GitBranchPlus, GitCommitHorizontal, History, ListOrdered, RotateCcw, Tag, Undo2 } from "lucide-react";
 import { i18next } from "@/i18n";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
+import { exportCommitsAsPatches } from "@/features/patches/actions";
 import { useRebaseDialogStore } from "@/features/rebase/store";
 import { useTagDialogStore } from "@/features/tags/dialog-store";
 import type { CommitSummary } from "@/shared/types/git";
@@ -67,6 +68,16 @@ export function buildCommitMenu({ repoPath, commit, selectedNewestFirst }: Commi
           void revertSingleCommit(repoPath, commit.hash, null);
         }
       },
+    },
+    {
+      label: t("commitActions.menu.exportPatch", { count: picks.length }),
+      icon: <FileDown className="size-4" />,
+      disabled: picks.some((candidate) => candidate.parents.length > 1),
+      onSelect: () =>
+        void exportCommitsAsPatches(
+          repoPath,
+          [...picks].reverse().map((candidate) => candidate.hash),
+        ),
     },
     { kind: "separator" },
     {

@@ -632,6 +632,10 @@
     "nothingToMerge": {
       "title": "No hay nada que combinar",
       "message": "La rama actual ya tiene todos los cambios de la otra."
+    },
+    "patchNotApplicable": {
+      "title": "El parche no se puede aplicar",
+      "message": "No encaja con los archivos de este repositorio. Revisa que sea el parche correcto o prueba aplicarlo solo como cambios."
     }
   },
   "operation": {
@@ -639,7 +643,8 @@
       "merge": "merge",
       "cherryPick": "cherry-pick",
       "revert": "revert",
-      "rebase": "rebase"
+      "rebase": "rebase",
+      "am": "parche"
     },
     "title": "{{name}} en curso",
     "progress": "Paso {{step}} de {{total}}",
@@ -719,7 +724,9 @@
       "resetMixed": "Reset mixto a este commit",
       "resetHard": "Reset duro a este commit...",
       "copyHash": "Copiar hash",
-      "rebase": "Rebase interactivo desde aquí..."
+      "rebase": "Rebase interactivo desde aquí...",
+      "exportPatch_one": "Exportar como parche",
+      "exportPatch_other": "Exportar {{count}} commits como parches"
     },
     "reset": {
       "soft": {
@@ -1414,6 +1421,9 @@
       },
       "gitignore": {
         "edit": "Editar el .gitignore"
+      },
+      "patch": {
+        "apply": "Aplicar un parche"
       }
     }
   },
@@ -1762,5 +1772,43 @@
     "view": "Ver novedades",
     "upToDate": "Ya tienes la última versión ({{version}})",
     "notConfigured": "La búsqueda de versiones nuevas todavía no está activada en esta compilación."
+  },
+  "patches": {
+    "chooseFolder": "Elige la carpeta donde guardar los parches",
+    "chooseFiles": "Elige uno o más parches",
+    "fileFilter": "Parches",
+    "exported_one": "Se guardó {{count}} parche en la carpeta elegida",
+    "exported_other": "Se guardaron {{count}} parches en la carpeta elegida",
+    "done": {
+      "commit_one": "Se creó {{count}} commit desde el parche",
+      "commit_other": "Se crearon {{count}} commits desde los parches",
+      "workingTree_one": "Se aplicaron los cambios del parche",
+      "workingTree_other": "Se aplicaron los cambios de los parches"
+    },
+    "conflictTitle": "El parche chocó con tus cambios",
+    "conflictMessage": "Resuelve los conflictos y continúa desde el aviso de arriba.",
+    "dialog": {
+      "title_one": "Aplicar parche",
+      "title_other": "Aplicar {{count}} parches",
+      "description": "Revisa qué cambia cada parche antes de aplicarlo.",
+      "filesLabel": "Parches elegidos",
+      "filesCount_one": "{{count}} archivo",
+      "filesCount_other": "{{count}} archivos",
+      "applies": "Se aplica sin cambios",
+      "doesNotFit": "No se aplica tal cual; git intentará combinarlo",
+      "needsMailbox": "Algunos archivos no traen datos de commit, así que solo se pueden aplicar como cambios.",
+      "modeLabel": "Cómo aplicar",
+      "modes": {
+        "commit": {
+          "label": "Crear un commit por parche",
+          "hint": "Conserva el autor y el mensaje de cada parche."
+        },
+        "workingTree": {
+          "label": "Solo aplicar los cambios",
+          "hint": "Deja los cambios preparados sin hacer commit. Si chocan, quedan marcados como conflicto."
+        }
+      },
+      "submit": "Aplicar"
+    }
   }
 }

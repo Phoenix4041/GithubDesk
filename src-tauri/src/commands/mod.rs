@@ -18,6 +18,7 @@ pub mod job;
 pub mod lfs;
 pub mod merge;
 pub mod operation;
+pub mod patches;
 pub mod rebase;
 pub mod rebase_onto;
 pub mod reflog;

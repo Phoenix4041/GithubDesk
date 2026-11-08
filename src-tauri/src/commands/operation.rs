@@ -35,6 +35,7 @@ fn verb_for(kind: OperationKind) -> &'static str {
         OperationKind::CherryPick => "cherry-pick",
         OperationKind::Revert => "revert",
         OperationKind::Rebase => "rebase",
+        OperationKind::Am => "am",
     }
 }
 

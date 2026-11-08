@@ -31,6 +31,7 @@ pub enum ErrorKind {
     RepositoryLocked,
     UnrelatedHistories,
     PatchRejected,
+    PatchNotApplicable,
     OperationInProgress,
     NoOperationInProgress,
     UnstagedChanges,
@@ -223,6 +224,7 @@ pub fn classify_failure(output: &str) -> ErrorKind {
         || has("already in progress")
         || has("already a rebase-merge directory")
         || has("already a rebase-apply directory")
+        || has("previous rebase directory")
     {
         return ErrorKind::OperationInProgress;
     }
@@ -250,6 +252,7 @@ pub fn classify_failure(output: &str) -> ErrorKind {
         || has("not uptodate. cannot merge")
         || has("please commit your changes or stash them")
         || has("local changes to the following files would be overwritten")
+        || has("dirty index")
     {
         return ErrorKind::LocalChangesWouldBeOverwritten;
     }
@@ -328,7 +331,12 @@ pub fn classify_failure(output: &str) -> ErrorKind {
     if has("refusing to merge unrelated histories") {
         return ErrorKind::UnrelatedHistories;
     }
-    if has("patch does not apply") || has("patch failed") || has("corrupt patch") {
+    if has("patch does not apply")
+        || has("patch failed")
+        || has("corrupt patch")
+        || has("no valid patches")
+        || has("patch format detection failed")
+    {
         return ErrorKind::PatchRejected;
     }
     ErrorKind::Unknown
@@ -345,6 +353,43 @@ mod tests {
         assert_eq!(
             suggested_action_for(ErrorKind::RemoteAhead),
             Some(SuggestedAction::Pull)
+        );
+    }
+
+    #[test]
+    fn patch_failures_are_told_apart_from_conflicts() {
+        assert_eq!(
+            classify_failure(
+                "error: patch failed: a.txt:1
+error: a.txt: patch does not apply"
+            ),
+            ErrorKind::PatchRejected
+        );
+        assert_eq!(
+            classify_failure("error: No valid patches in input (allow with \"--allow-empty\")"),
+            ErrorKind::PatchRejected
+        );
+        assert_eq!(
+            classify_failure("Patch format detection failed."),
+            ErrorKind::PatchRejected
+        );
+        assert_eq!(
+            classify_failure("fatal: Dirty index: cannot apply patches (dirty: a.txt)"),
+            ErrorKind::LocalChangesWouldBeOverwritten
+        );
+        assert_eq!(
+            classify_failure(
+                "Applying: x
+CONFLICT (content): Merge conflict in a.txt
+Patch failed at 0001 x"
+            ),
+            ErrorKind::MergeConflict
+        );
+        assert_eq!(
+            classify_failure(
+                "previous rebase directory .git/rebase-apply still exists but mbox given."
+            ),
+            ErrorKind::OperationInProgress
         );
     }
 

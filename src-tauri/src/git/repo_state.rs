@@ -9,6 +9,7 @@ pub enum OperationKind {
     CherryPick,
     Revert,
     Rebase,
+    Am,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
@@ -52,6 +53,15 @@ fn rebase_operation(directory: &Path, step_file: &str, total_file: &str) -> Repo
     }
 }
 
+fn am_operation(directory: &Path) -> RepoOperation {
+    RepoOperation {
+        kind: OperationKind::Am,
+        step: read_number(&directory.join("next")),
+        total: read_number(&directory.join("last")),
+        branch: None,
+    }
+}
+
 fn sequencer_kind(git_dir: &Path) -> Option<OperationKind> {
     let todo = std::fs::read_to_string(git_dir.join("sequencer").join("todo")).ok()?;
     let first = todo
@@ -74,6 +84,9 @@ pub fn read_operation(git_dir: &Path) -> Option<RepoOperation> {
     let rebase_apply = git_dir.join("rebase-apply");
     if rebase_apply.join("rebasing").exists() {
         return Some(rebase_operation(&rebase_apply, "next", "last"));
+    }
+    if rebase_apply.join("applying").exists() {
+        return Some(am_operation(&rebase_apply));
     }
     if git_dir.join("MERGE_HEAD").exists() {
         return Some(RepoOperation::simple(OperationKind::Merge));
@@ -152,11 +165,28 @@ mod tests {
     }
 
     #[test]
-    fn apply_directory_counts_only_when_rebasing() {
+    fn apply_directory_tells_a_mailbox_apply_from_a_rebase() {
         let dir = TempDir::new().expect("temp");
         write(dir.path(), "rebase-apply/applying", "");
-        assert_eq!(read_operation(dir.path()), None);
+        write(
+            dir.path(),
+            "rebase-apply/next",
+            "2
+",
+        );
+        write(
+            dir.path(),
+            "rebase-apply/last",
+            "4
+",
+        );
+        let applying = read_operation(dir.path()).expect("operation");
+        assert_eq!(applying.kind, OperationKind::Am);
+        assert_eq!(applying.step, Some(2));
+        assert_eq!(applying.total, Some(4));
+        assert_eq!(applying.branch, None);
 
+        let dir = TempDir::new().expect("temp");
         write(dir.path(), "rebase-apply/rebasing", "");
         write(dir.path(), "rebase-apply/next", "1\n");
         write(dir.path(), "rebase-apply/last", "3\n");

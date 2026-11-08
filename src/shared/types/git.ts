@@ -24,6 +24,7 @@ export type ErrorKind =
   | "repositoryLocked"
   | "unrelatedHistories"
   | "patchRejected"
+  | "patchNotApplicable"
   | "operationInProgress"
   | "noOperationInProgress"
   | "unstagedChanges"
@@ -214,7 +215,7 @@ export interface HeadCommit {
   parentCount: number;
 }
 
-export type OperationKind = "merge" | "cherryPick" | "revert" | "rebase";
+export type OperationKind = "merge" | "cherryPick" | "revert" | "rebase" | "am";
 
 export type OperationAction = "continue" | "skip" | "abort";
 
@@ -533,6 +534,24 @@ export interface MergePreview {
   canFastForward: boolean;
   unrelated: boolean;
   conflicts: string[];
+}
+
+export type PatchApplyMode = "commit" | "workingTree";
+
+export interface PatchFileChange {
+  path: string;
+  insertions: number | null;
+  deletions: number | null;
+}
+
+export interface PatchPreview {
+  file: string;
+  mailbox: boolean;
+  subject: string | null;
+  author: string | null;
+  changes: PatchFileChange[];
+  appliesCleanly: boolean;
+  problem: string | null;
 }
 
 export interface RebaseOntoPreview {
