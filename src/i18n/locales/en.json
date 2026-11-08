@@ -2082,6 +2082,9 @@
       "profile": {
         "switch": "Switch profile",
         "manage": "Manage profiles"
+      },
+      "rescue": {
+        "open": "Open Rescue (automatic safety copies)"
       }
     }
   },
@@ -2626,5 +2629,44 @@
       "forRepo": "It will be applied to this repository.",
       "global": "It will become your active profile."
     }
+  },
+  "rescue": {
+    "open": "Rescue: recover discarded work",
+    "title": "Rescue",
+    "description": "Before discarding changes, a hard reset, a forced branch delete, a cleanup, aborting an operation or dropping a stash, the app saves a copy. You can recover it here. Copies are kept for 30 days or the latest 50.",
+    "saved": "A safety copy was saved",
+    "view": "Open Rescue",
+    "empty": {
+      "title": "There are no copies yet",
+      "description": "When you do something that could lose work, the copy will appear here."
+    },
+    "listLabel": "Safety copies",
+    "pick": "Pick a copy to see what it contains.",
+    "detail": "Copy contents",
+    "summary_one": "{{count}} file, +{{additions}} -{{deletions}}",
+    "summary_other": "{{count}} files, +{{additions}} -{{deletions}}",
+    "binary": "binary",
+    "noPatch": "This copy only holds a commit; create a branch to see it.",
+    "truncated": "Only the start of the changes is shown.",
+    "apply": "Apply these changes",
+    "applyHint": "Applying puts the changes back on your working folder without deleting anything. If it clashes with what you have now, it tells you and neither side is lost.",
+    "branchHint": "This copy holds a commit: create a branch to get it back.",
+    "branchName": "New branch name",
+    "createBranch": "Create branch here",
+    "applied": "The saved changes were applied",
+    "branchCreated": "Branch {{name}} was created",
+    "delete": "Delete the copy: {{reason}}",
+    "timeline": "Operations timeline",
+    "reasons": {
+      "discard": "Discarded changes",
+      "reset": "Hard reset",
+      "cleanup": "File cleanup",
+      "abort": "Aborted operation",
+      "branch-delete": "Deleted branch",
+      "stash-drop": "Dropped stash",
+      "before-restore": "Before applying a copy",
+      "other": "Safety copy"
+    },
+    "deleteShort": "Delete"
   }
 }

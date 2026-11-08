@@ -23,6 +23,8 @@ import { CHANGES_WIDTH_RANGE, SIDEBAR_WIDTH_RANGE, useSettingsStore } from "@/fe
 import { RebaseOntoDialog } from "@/features/rebase/components/rebase-onto-dialog";
 import { RebaseDialog } from "@/features/rebase/components/rebase-dialog";
 import { ReflogDialogs } from "@/features/reflog/components/reflog-dialogs";
+import { RescueDialog } from "@/features/rescue/components/rescue-dialog";
+import { useRescueNotice } from "@/features/rescue/use-rescue-notice";
 import { StashDialogs } from "@/features/stash/components/stash-dialogs";
 import { StashDiffPanel } from "@/features/stash/components/stash-diff-panel";
 import { StashPanel } from "@/features/stash/components/stash-panel";
@@ -72,6 +74,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
   const setChangesWidth = useSettingsStore((state) => state.setChangesWidth);
 
   useRepoWatcher(repoPath);
+  useRescueNotice(repoPath);
   useGithubGitAuth(repoPath);
 
   useEffect(() => {
@@ -162,6 +165,7 @@ export function Workspace({ repoPath }: WorkspaceProps) {
       <RebaseDialog repoPath={repoPath} />
       <RebaseOntoDialog repoPath={repoPath} />
       <ReflogDialogs repoPath={repoPath} />
+      <RescueDialog repoPath={repoPath} />
       <CommitDialogs repoPath={repoPath} />
       <ForcePushDialog repoPath={repoPath} />
     </div>

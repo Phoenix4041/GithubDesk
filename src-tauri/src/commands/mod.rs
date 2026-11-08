@@ -34,6 +34,7 @@ pub mod rebase_onto;
 pub mod reflog;
 pub mod remote;
 pub mod repo;
+pub mod rescue;
 pub mod signing;
 pub mod stash;
 pub mod status;

@@ -18,7 +18,7 @@ use commands::{
     github_account, github_actions, github_admin, github_collab, github_extras, github_home,
     github_issues, github_orgs, github_pulls, github_releases, github_repo, github_secrets,
     gitignore, history, identity, job, lfs, merge, operation, patches, rebase, rebase_onto, reflog,
-    remote, repo, signing, stash, status, submodule, tag, terminal, watch, worktree,
+    remote, repo, rescue, signing, stash, status, submodule, tag, terminal, watch, worktree,
 };
 use state::AppState;
 use tauri::Manager;
@@ -231,6 +231,12 @@ pub fn run() {
             terminal::terminal_close,
             diagnostics_commands::diagnostics_log,
             diagnostics_commands::diagnostics_open_folder,
+            rescue::rescue_list,
+            rescue::rescue_preview,
+            rescue::rescue_restore,
+            rescue::rescue_branch,
+            rescue::rescue_delete,
+            rescue::rescue_snapshot,
             app_update::app_update_check,
             app_update::app_update_install,
             worktree::worktree_list,

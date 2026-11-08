@@ -10,6 +10,7 @@ import { PublishButton } from "@/features/github/home/components/publish-button"
 import { NotificationsButton } from "@/features/github/notifications/components/notifications-button";
 import { ProfileSwitcher } from "@/features/profiles/components/profile-switcher";
 import { ReflogButtons } from "@/features/reflog/components/reflog-buttons";
+import { RescueButton } from "@/features/rescue/components/rescue-button";
 import { useRepositoriesStore } from "@/features/repositories/store";
 import { useSigningConfig } from "@/features/signing/queries";
 import { useSigningDialogStore } from "@/features/signing/store";
@@ -89,6 +90,7 @@ export function Toolbar({ repoPath }: ToolbarProps) {
       <BranchChecksButton repoPath={repoPath} />
       <div className="ml-auto flex items-center gap-2">
         <ReflogButtons repoPath={repoPath} />
+        <RescueButton />
         <SyncButton repoPath={repoPath} />
         <NotificationsButton />
         <ProfileSwitcher repoPath={repoPath} />

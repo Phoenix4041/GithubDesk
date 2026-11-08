@@ -117,6 +117,9 @@ pub async fn branch_rename(path: String, old_name: String, new_name: String) -> 
 
 #[tauri::command]
 pub async fn branch_delete(path: String, name: String, force: bool) -> AppResult<()> {
+    if force {
+        crate::commands::rescue::guard_branch(Path::new(&path), &name).await;
+    }
     delete_branch(Path::new(&path), &name, force).await
 }
 

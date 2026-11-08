@@ -2082,6 +2082,9 @@
       "profile": {
         "switch": "Cambiar de perfil",
         "manage": "Administrar perfiles"
+      },
+      "rescue": {
+        "open": "Abrir el Rescate (copias de seguridad automáticas)"
       }
     }
   },
@@ -2626,5 +2629,44 @@
       "forRepo": "Se aplicará a este repositorio.",
       "global": "Será tu perfil activo."
     }
+  },
+  "rescue": {
+    "open": "Rescate: recuperar trabajo descartado",
+    "title": "Rescate",
+    "description": "Antes de descartar cambios, hacer un reset duro, borrar una rama a la fuerza, limpiar, abortar una operación o soltar un stash, la aplicación guarda una copia. Aquí la recuperas. Se conservan 30 días o las últimas 50.",
+    "saved": "Se guardó una copia de seguridad",
+    "view": "Ver el Rescate",
+    "empty": {
+      "title": "Todavía no hay copias",
+      "description": "Cuando hagas algo que pueda perder trabajo, la copia aparecerá aquí."
+    },
+    "listLabel": "Copias de seguridad",
+    "pick": "Elige una copia para ver qué contiene.",
+    "detail": "Contenido de la copia",
+    "summary_one": "{{count}} archivo, +{{additions}} -{{deletions}}",
+    "summary_other": "{{count}} archivos, +{{additions}} -{{deletions}}",
+    "binary": "binario",
+    "noPatch": "Esta copia solo guarda un commit; crea una rama para verlo.",
+    "truncated": "Se muestra solo el principio de los cambios.",
+    "apply": "Aplicar estos cambios",
+    "applyHint": "Aplicar vuelve a poner los cambios sobre tu carpeta de trabajo sin borrar nada. Si choca con lo que tienes ahora, avisa y no pierdes ninguna de las dos cosas.",
+    "branchHint": "Esta copia guarda un commit: crea una rama para volver a tenerlo.",
+    "branchName": "Nombre de la rama nueva",
+    "createBranch": "Crear rama aquí",
+    "applied": "Se aplicaron los cambios guardados",
+    "branchCreated": "Se creó la rama {{name}}",
+    "delete": "Eliminar la copia: {{reason}}",
+    "timeline": "Línea de tiempo de operaciones",
+    "reasons": {
+      "discard": "Cambios descartados",
+      "reset": "Reset duro",
+      "cleanup": "Limpieza de archivos",
+      "abort": "Operación abortada",
+      "branch-delete": "Rama eliminada",
+      "stash-drop": "Stash eliminado",
+      "before-restore": "Antes de aplicar una copia",
+      "other": "Copia de seguridad"
+    },
+    "deleteShort": "Eliminar"
   }
 }

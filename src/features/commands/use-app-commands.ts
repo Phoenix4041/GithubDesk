@@ -7,6 +7,7 @@ import { useRunStore } from "@/features/github/actions/store";
 import { useBranchDialogStore } from "@/features/branches/dialog-store";
 import { useBisectDialogStore } from "@/features/bisect/store";
 import { useCleanupDialogStore } from "@/features/cleanup/store";
+import { useRescueDialogStore } from "@/features/rescue/store";
 import { useMergeDialogStore } from "@/features/merge/store";
 import { useGithubHomeDialogStore } from "@/features/github/home/store";
 import { useNotificationDialogStore } from "@/features/github/notifications/store";
@@ -343,6 +344,14 @@ export function buildRepoCommands(repoPath: string, onGithub: boolean, hasGithub
       keywords: "rebase reaplicar linea recta historial rama",
       enabled: true,
       run: () => useRebaseOntoStore.getState().choose(),
+    },
+    {
+      id: "rescue.open",
+      titleKey: "commands.items.rescue.open",
+      group: "repository",
+      keywords: "rescate recuperar copia de seguridad deshacer descartar perdido rescue recover backup restore",
+      enabled: true,
+      run: () => useRescueDialogStore.getState().show(),
     },
     {
       id: "cleanup.open",
