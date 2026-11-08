@@ -47,6 +47,16 @@ Cliente de Git y GitHub de escritorio hecho con Tauri 2, React y TypeScript.
 - Cuenta de GitHub: perfil público, llaves SSH, de firma y GPG, correos y permisos del token, con un botón para pedir permisos que falten.
 - Organizaciones: miembros, invitaciones, equipos, colaboradores externos y secretos, para quien es propietario.
 - Notificaciones de GitHub con bandeja, marcar como leídas y avisos del sistema (apagados por defecto).
+- Iniciar sesión en GitHub sin crear una OAuth App: con el administrador de credenciales de Git (abre el navegador) o importando la sesión de GitHub CLI.
+- Rescate: antes de descartar cambios, un reset duro, borrar una rama a la fuerza, limpiar, abortar una operación o soltar un stash se guarda una copia que se recupera desde un diálogo.
+- Guardia previa al commit: avisa de secretos, archivos muy grandes, marcadores de conflicto y archivos que normalmente no se suben; se puede silenciar por archivo.
+- Predictor de conflictos: marca en la lista de ramas cuáles darían conflicto al combinarlas con la actual, sin tocar el árbol de trabajo.
+- Absorber cambios preparados en los commits sin publicar que escribieron esas líneas (fixups y fundirlos), dividir un commit sin publicar por archivos y ramas apiladas con reajuste en cascada y pull requests encadenadas.
+- Panel de todos los repositorios recientes con grupos, fetch y pull seguro por lote.
+- Explorar los archivos de cualquier commit, restaurar un archivo a esa versión, comparar dos commits y comparar imágenes (lado a lado, deslizador y transparencia).
+- Estadísticas del repositorio (actividad, colaboradores, archivos más cambiados, factor autobús, pendientes TODO) y salud (tamaño, blobs grandes, sparse-checkout, mantenimiento, clonado superficial o parcial).
+- Coautores, número de incidencia desde la rama y plantillas de mensaje en el commit; sincronizar un fork con el original; temas propios con importación de colores de VS Code y densidad de la interfaz.
+- Abrir la aplicación con una carpeta o con enlaces `githubdesk://clone?url=` y `x-github-client://`, instancia única, entrada "Abrir con GithubDesk" en el Explorador, fetch en segundo plano, icono de bandeja e inicio con Windows (todo apagado por defecto).
 - Registro local de errores con los secretos ya quitados, y un comando en la paleta para abrir su carpeta.
 
 ## Conectar GitHub
@@ -78,13 +88,13 @@ Todos se pueden cambiar en Ajustes, Personalizar atajos, o desde la paleta de co
 
 ## Instalar
 
-El instalador de Windows (`GithubDesk_0.6.0_x64-setup.exe`) instala solo para tu usuario, sin permisos de administrador, y se ofrece en español e inglés. Para generarlo:
+El instalador de Windows (`GithubDesk_0.7.0_x64-setup.exe`) instala solo para tu usuario, sin permisos de administrador, y se ofrece en español e inglés. Para generarlo:
 
 ```bash
 pnpm tauri build --bundles nsis
 ```
 
-El instalador queda en `src-tauri/target/release/bundle/nsis/`. Si el equipo no tiene WebView2, el instalador lo descarga. Para instalar y desinstalar sin ventanas: `GithubDesk_0.6.0_x64-setup.exe /S` y `uninstall.exe /S` dentro de la carpeta de instalación.
+El instalador queda en `src-tauri/target/release/bundle/nsis/`. Si el equipo no tiene WebView2, el instalador lo descarga. Para instalar y desinstalar sin ventanas: `GithubDesk_0.7.0_x64-setup.exe /S` y `uninstall.exe /S` dentro de la carpeta de instalación.
 
 Los instaladores no están firmados con un certificado de firma de código. Windows (SmartScreen) y macOS (Gatekeeper) van a mostrar un aviso la primera vez; en Windows se pulsa Más información y Ejecutar de todas formas, y en macOS se abre con clic derecho y Abrir.
 
@@ -200,3 +210,15 @@ pnpm tauri build
   3. `release.yml` firma los instaladores y publica `latest.json` en un borrador. Publica el borrador: mientras sea borrador, las aplicaciones instaladas no lo ven.
   La aplicación comprueba a los 8 segundos de abrir, como mucho una vez al día, y también con el comando Buscar versiones nuevas de la paleta. Ofrece Instalar y reiniciar. La firma se comprueba con una clave de usar y tirar en las pruebas de integración (`src-tauri/tests/self_update.rs`); no se probó una actualización completa contra un repositorio real de GitHub.
 - Firma de los instaladores: Windows necesita un certificado de firma de código (por ejemplo de Azure Trusted Signing o de una autoridad como DigiCert) y se configura en `bundle.windows` con `certificateThumbprint` o `signCommand`; macOS necesita una cuenta de Apple Developer y los secretos `APPLE_CERTIFICATE`, `APPLE_CERTIFICATE_PASSWORD`, `APPLE_SIGNING_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD` y `APPLE_TEAM_ID`, que `tauri-action` lee del entorno. Sin ellos los instaladores siguen sin firmar.
+
+## Notas de la Fase 7
+
+- Rescate: las copias viven como referencias `refs/githubdesk/rescue/*` del propio repositorio (no tocan el stash), se conservan 30 días o las últimas 50 y se aplican sin borrar nada; si chocan con lo que tienes, avisa y deja una copia previa.
+- Guardia previa al commit: revisa solo lo preparado y solo las líneas agregadas. Es una red de seguridad por patrones: no detecta todos los secretos y puede equivocarse. Un secreto ya subido hay que cambiarlo aunque se borre del historial.
+- Predictor de conflictos: usa `git merge-tree --write-tree` (git 2.38 o superior); con un git anterior la función se oculta.
+- Absorber, dividir y reajustar pilas solo reescriben commits que no están en ningún remoto, guardan antes una copia en Rescate y se detienen ante conflictos con el aviso de operación en curso. La división es por archivo, no por línea.
+- Iniciar sesión con el administrador de credenciales o GitHub CLI trae los permisos que ese programa pidió (por ejemplo `repo`, `gist` y `workflow`): para administrar organizaciones, llaves o borrar repositorios hace falta el código de dispositivo con un Client ID o un token con más permisos. Una compilación puede embeber un Client ID con la variable `GITHUBDESK_OAUTH_CLIENT_ID` al compilar.
+- Enlaces del sistema: solo se aceptan direcciones `https://` sin usuario ni contraseña, y un nombre de rama que empiece con guion se descarta.
+- Bandeja, inicio automático, instancia única y la entrada del Explorador se pueden comprobar solo en Windows y a mano.
+- Fuera de alcance: resaltado de líneas movidas en el diff, funciones con IA o en la nube, Discussions, Projects v2, Gists y facturación.
+
