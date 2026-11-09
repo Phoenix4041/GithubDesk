@@ -2,6 +2,12 @@
 
 Todos los cambios importantes de GithubDesk. Este archivo se genera a partir de los commits con `node scripts/changelog.mjs <version> [desde-etiqueta]`.
 
+## 0.7.1 - 2026-11-09
+
+### Correcciones
+
+- **ui**: scroll long dropdown menus (44230d4)
+
 ## 0.7.0 - 2026-11-08
 
 ### Novedades
