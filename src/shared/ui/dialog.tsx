@@ -110,7 +110,7 @@ export function Dialog({
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className={cn(
-          "flex max-h-full max-w-full animate-[pop-in_200ms_var(--ease-out-expo)] flex-col rounded-xl border border-line bg-surface shadow-2xl outline-none",
+          "flex max-h-[calc(100vh-3rem)] max-w-full animate-[pop-in_200ms_var(--ease-out-expo)] flex-col rounded-xl border border-line bg-surface shadow-2xl outline-none",
           widthClasses[width],
         )}
       >
