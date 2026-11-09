@@ -2,6 +2,12 @@
 
 Todos los cambios importantes de GithubDesk. Este archivo se genera a partir de los commits con `node scripts/changelog.mjs <version> [desde-etiqueta]`.
 
+## 0.7.2 - 2026-11-09
+
+### Correcciones
+
+- **ui**: keep dialogs inside the window so their content scrolls (78711be)
+
 ## 0.7.1 - 2026-11-09
 
 ### Correcciones
