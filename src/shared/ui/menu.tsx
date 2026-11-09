@@ -79,7 +79,7 @@ export function Menu({ label, trigger, items, align = "right" }: MenuProps) {
           id={menuId}
           role="menu"
           className={cn(
-            "absolute top-full z-40 mt-1 flex min-w-48 animate-[pop-in_150ms_var(--ease-out-expo)] flex-col rounded-lg border border-line bg-surface p-1 shadow-xl",
+            "absolute top-full z-40 mt-1 flex max-h-[min(70vh,28rem)] min-w-48 overflow-y-autoanimate-[pop-in_150ms_var(--ease-out-expo)] flex-col rounded-lg border border-line bg-surface p-1 shadow-xl",
             align === "right" ? "right-0" : "left-0",
           )}
         >
